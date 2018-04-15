@@ -1,0 +1,23 @@
+[core]
+    editor = vim
+[user]
+	email = jmp180@pitt.edu
+	name = Jon Povirk
+[alias]
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+[merge]
+    tool = meld
+[mergetool "meld"]
+    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+[tig]
+    main-view = id date author commit-title
+	main-view-author = abbreviated
+	main-view-commit-title = graph=yes,refs=yes
+	main-view-date = custom
+	main-view-date-format = "%Y-%m-%d"
