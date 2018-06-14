@@ -38,13 +38,23 @@ cp .zshrc ~/.zshrc
 
 # gitconfig
 cp .gitconfig ~/.gitconfig
+ssh-keygen -t rsa -C "jmp180@pitt.edu"
 
 # keyboard
 sudo cp zz /usr/share/X11/xkb/symbols/zz
 setxkbmap zz
 
-# Get QtCreator
+# vcpkg
+git clone https://github.com/Microsoft/vcpkg ~/.vcpkg
+cd ~/.vcpkg && ./bootstrap-vcpkg.sh
+cd ~/.vcpkg && git checkout 2ac7527b40b1dbeb7856b9f763362c1e139e2ca9
+
+# QtCreator
+mkdir -p .config/QtProject/qtcreator/styles
+cp QtJonStyle.xml .config/QtProject/qtcreator/styles/QtJonStyle.xml
 wget http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
 wget https://github.com/OneMoreGres/qtc-cppcheck/releases/download/4.6.0/QtcCppcheck-4.6.1-linux-x64.tar.gz
 wget https://github.com/fpoussin/qtcreator-doxygen/releases/download/v0.4.6/libDoxygen-0.4.6-qtc4.5.x-x86_64.so
 wget https://github.com/CJCombrink/SpellChecker-Plugin/releases/download/v1.2.0/SpellChecker-Plugin_v1.2.0_x64.tar.gz
+
+echo "My work here is done."
