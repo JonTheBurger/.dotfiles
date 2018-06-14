@@ -39,6 +39,7 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 
 colorscheme codedark
+set number
 set relativenumber
 set tabstop=4
 set shiftwidth=4
