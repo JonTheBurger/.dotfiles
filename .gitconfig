@@ -2,25 +2,15 @@
     editor = vim
 [user]
     email = jmp180@pitt.edu
-    name = Jon Povirk
+    name  = Jon
 [alias]
-    tree = log --graph --decorate --pretty=oneline --abbrev-commit
+    tree    = log --graph --decorate --pretty=oneline --abbrev-commit
     subinit = submodule update --init --recursive
-    amend = commit --amend --no-edit
-    delete-orig = "!find $(git rev-parse --show-toplevel) -name '*.orig' -delete"
-[diff]
-    tool = meld
-[difftool]
-    prompt = false
-[difftool "meld"]
-    cmd = meld "$LOCAL" "$REMOTE"
-[merge]
-    tool = meld
-[mergetool "meld"]
-    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+    amend   = commit --amend --no-edit
 [tig]
     main-view = id date author commit-title
     main-view-author = abbreviated
     main-view-commit-title = graph=yes,refs=yes
     main-view-date = custom
     main-view-date-format = "%Y-%m-%d"
+
