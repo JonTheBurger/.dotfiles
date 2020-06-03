@@ -1,3 +1,4 @@
+" https://vimhelp.org/options.txt.html
 set relativenumber
 set number
 set nowrap

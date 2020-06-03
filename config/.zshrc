@@ -1,3 +1,7 @@
+### zsh settings
+setopt rmstarsilent
+setopt nonomatch
+
 ### Auto setup
 ANTIGEN_DIR=~/.local/share/zsh/share
 if [[ ! -a ${ANTIGEN_DIR}/antigen.zsh ]]; then
