@@ -53,7 +53,7 @@ function ToggleHex()
   let &readonly=l:oldreadonly
   let &modifiable=l:oldmodifiable
 endfunction
-map <leader>] :call ToggleHex()<CR>
+map <leader>x :call ToggleHex()<CR>
 
 """ Auto-Download vim-plug
 let _is_first_plug_install = 0
@@ -66,11 +66,14 @@ endif
 call plug#begin(stdpath('data') . '/plugged')
   " Colorscheme
   Plug 'liuchengxu/space-vim-dark'
-  " Language Client (+fuzzyfind dependency)
-  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-  Plug 'junegunn/fzf'
-  " Completion
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " EasyMotion
+  Plug 'easymotion/vim-easymotion'
+  " Completion + LSP | :CocInstall coc-clangd | :CocInstall coc-python | :CocInstall coc-rls
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " C++ Semantic Highlighting
+  Plug 'jackguo380/vim-lsp-cxx-highlight'
+  " Vimwiki
+  Plug 'vimwiki/vimwiki'
 
   " Auto-Install Plugins
   if _is_first_plug_install == 1
@@ -84,28 +87,27 @@ call plug#end()
   colorscheme space-vim-dark
 
 " Language Client
-  set signcolumn=yes
-  " Required for operations modifying multiple buffers like rename.
-  set hidden
-  let g:LanguageClient_serverCommands = {
-      \ 'cpp':    ['clangd', '--background-index'],
-      \ 'python': ['pyls'],
-      \ 'rust':   ['~/.cargo/bin/rustup', 'run', 'stable', 'rls'],
-      \ }
+  "nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+  "nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+  "nnoremap <F2> :call LanguageClient#textDocument_definition()<CR>
+  ":command Dfn :call LanguageClient#textDocument_definition()<CR>
+  ":command Rename :call LanguageClient#textDocument_rename()
+  ":command Fmt :call LanguageClient#textDocument_formatting()<CR>
+  ":command Usages :call LanguageClient#textDocument_references()<CR>
+  ":command Doc :call LanguageClient_textDocument_documentSymbol()<CR>
 
-  nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
-  nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <F2> :call LanguageClient#textDocument_definition()<CR>
-  :command Dfn :call LanguageClient#textDocument_definition()<CR>
-  :command Rename :call LanguageClient#textDocument_rename()
-  :command Fmt :call LanguageClient#textDocument_formatting()<CR>
-  :command Usages :call LanguageClient#textDocument_references()<CR>
-  :command Doc :call LanguageClient_textDocument_documentSymbol()<CR>
+" Semantic Highlighting
 
-" Completion
-  let g:deoplete#enable_at_startup = 1
-  call deoplete#custom#option({
-    \ 'auto_complete_delay': 100,
-    \ 'smart_case': v:true,
-    \ })
+" Wiki
+" <leader>wi - diary index
+" <leader>w<leader>i - update diary index
+" <leader>w<leader>w - diary today
+  let g:vimwiki_hl_headers = 1
+  let g:vimwiki_global_ext = 0
+  let g:vimwiki_markdown_link_ext = 1
+  let g:vimwiki_folding='expr'
+  let g:vimwiki_list = [{ 'path': '~/Documents/wiki/',
+    \ 'syntax': 'markdown',
+    \ 'ext': '.md',
+    \ 'nested_syntaxes': {'python': 'python', 'cpp': 'cpp', 'bash': 'sh' } }]
 
