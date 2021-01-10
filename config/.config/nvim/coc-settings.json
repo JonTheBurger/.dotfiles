@@ -1,0 +1,13 @@
+{
+  "clangd.enabled": true,
+  "clangd.semanticHighlighting": true,
+  "clangd.filetypes": ["c", "cc", "cpp", "c++", "cxx", "objc", "objcpp"],
+  "languageserver": {
+    "cmake": {
+      "command": "cmake-language-server",
+      "filetypes": ["cmake"],
+      "rootPatterns": "compile_commands.json"
+    }
+  }
+}
+

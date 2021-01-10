@@ -1,0 +1,14 @@
+{
+  "configurations": {
+    "Launch": {
+      "adapter": "vscode-cpptools",
+      "default": true,
+      "configuration": {
+        "request": "launch",
+        "MIMode": "gdb",
+        "program": "${workspaceFolder}/build/bin/${fileBasenameNoExtension}"
+      }
+    }
+  }
+}
+

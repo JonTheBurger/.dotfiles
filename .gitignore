@@ -1,3 +1,5 @@
 config/.config/nvim/*
+!config/.config/nvim/.vimspector.json
+!config/.config/nvim/coc-settings.json
 !config/.config/nvim/init.vim
 
