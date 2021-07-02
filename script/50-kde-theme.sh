@@ -4,40 +4,64 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
+home="/home/$SUDO_USER"
+alias unsudo="sudo -Hu $SUDO_USER"
 
 if [ -f "/etc/apt/sources.list" ]; then
-    apt-get install -y papirus-icon-theme
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get install -y papirus-icon-theme extra-cmake-modules
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"
 else
     echo "unsupported"
 fi
 
-# SDDM Theme
-if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]
-    export DEBIAN_FRONTEND=noninteractive
-    wget https://framagit.org/MarianArlt/sddm-sugar-candy/-/archive/master/sddm-sugar-candy-master.tar.gz -O /tmp/sddm-sugar-candy-master.tar.gz
-    tar -xf /tmp/sddm-sugar-candy-master.tar.gz -C /usr/share/sddm/themes
-    cat << EOF >> /etc/sddm.conf
-[Theme]
-Current=sddm-sugar-candy-master
-EOF
+if [ ! -d /tmp/Layan ]; then
+    sudo -Hu $SUDO_USER git clone --depth 1 https://github.com/vinceliuice/Layan-kde.git /tmp/Layan
 fi
 
 # Look & Feel
-lookandfeeltool --apply org.kde.breezedark.desktop
+#sudo -Hu $SUDO_USER lookandfeeltool --apply org.kde.breezedark.desktop
+
+# SDDM Theme
+if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]
+    wget https://framagit.org/MarianArlt/sddm-sugar-candy/-/archive/master/sddm-sugar-candy-master.tar.gz -O /tmp/sddm-sugar-candy-master.tar.gz
+    tar -xf /tmp/sddm-sugar-candy-master.tar.gz -C /usr/share/sddm/themes
+    kwriteconfig5 --file /etc/sddm.conf --group Theme --key Current sddm-sugar-candy-master
+fi
+
+# Kvantum Theme
+if [ ! -d "${home}/.config/Kvantum/Layan" ]; then
+    sudo -Hu $SUDO_USER mkdir -P ${home}/.config/Kvantum/Layan
+    sudo -Hu $SUDO_USER cp /tmp/Layan/Kvantum/Layan/Layan.kvconfig ${home}/.config/Kvantum/Layan
+    sudo -Hu $SUDO_USER cp /tmp/Layan/Kvantum/Layan/Layan.svg ${home}/.config/Kvantum/Layan
+    #sudo -Hu $SUDO_USER wget -P ${home}/.config/Kvantum/Layan https://raw.githubusercontent.com/vinceliuice/Layan-kde/master/Kvantum/Layan/Layan.kvconfig
+    #sudo -Hu $SUDO_USER wget -P ${home}/.config/Kvantum/Layan https://raw.githubusercontent.com/vinceliuice/Layan-kde/master/Kvantum/Layan/Layan.svg
+fi
+sudo -Hu $SUDO_USER kwriteconfig5 --file ${home}/.config/Kvantum/kvantum.kvconfig --group General --key theme Layan
+sudo -Hu $SUDO_USER kwriteconfig5 --file ~/.config/Kvantum/Layan/Layan.kvconfig --group Hacks --key transparent_dolphin_view --type bool true
 
 # Widget Style
 kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle 'kvantum-dark'
 
-# Window Decorations
-if [ ! -d "${HOME}/.local/share/aurorae/themes/Sweet" ]
-    git clone --depth 1 --branch nova https://github.com/EliverLara/Sweet.git /tmp/Sweet
-    cp -r /tmp/Sweet/kde/aurorae/Sweet-Dark-transparent ${HOME}/.local/share/aurorae/themes/Sweet-Dark-transparent
+# Color Scheme
+if [ ! -d "${home}/.local/share/color-schemes/Layan.colors" ]; then
+    mkdir -p ${home}/.local/share/color-schemes
+    cp /tmp/Layan/color-schemes/Layan.colors ${home}/.local/share/color-schemes
+    #sudo -Hu $SUDO_USER wget -P ${home}/.local/share/color-schemes https://raw.githubusercontent.com/vinceliuice/Layan-kde/master/color-schemes/Layan.colors
 fi
-kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme '__aurorae__svg__Sweet-Dark-transparent'
+kwriteconfig5 --file kdeglobals --group General --key ColorScheme Layan
+
+# Window Decorations
+if [ ! -d "${home}/.local/share/aurorae/themes/Sweet" ]
+    git clone --depth 1 --branch nova https://github.com/EliverLara/Sweet.git /tmp/Sweet
+    cp -r /tmp/Sweet/kde/aurorae/Sweet-Dark-transparent ${home}/.local/share/aurorae/themes/Sweet-Dark-transparent
+    kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme '__aurorae__svg__Sweet-Dark-transparent'
+fi
 # Add "Keep Above" button on left side of window decoration
 kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft 'MF'
+# Slightly larger buttons
+kwriteconfig5 --file auroraerc --group Sweet-Dark-transparent --key ButtonSize 2
 
 # Icons
 kwriteconfig5 --file kdeglobals --group Icons --key Theme 'Papirus-Dark'
@@ -68,6 +92,7 @@ kwriteconfig5 --file kwinrc --group Plugins --key kwin4_effect_maximizeEnabled -
 kwriteconfig5 --file kwinrc --group Plugins --key kwin4_effect_morphingpopupsEnabled --type bool false
 kwriteconfig5 --file kwinrc --group Plugins --key kwin4_effect_squashEnabled --type bool false
 kwriteconfig5 --file kwinrc --group Plugins --key kwin4_effect_windowapertureEnabled --type bool false
+kwriteconfig5 --file kwinrc --group Plugins --key resizeEnabled --type bool true
 kwriteconfig5 --file kwinrc --group Plugins --key screenedgeEnabled --type bool false
 kwriteconfig5 --file kwinrc --group Plugins --key slidingpopupsEnabled --type bool false
 
@@ -142,6 +167,60 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch One Desktop t
 kwriteconfig5 --file kglobalshortcutsrc --group plasmashell --key "next activity" ",Meta+Tab,Walk through activities"
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key ShowDesktopGrid "Meta+Tab,Ctrl+F8,Show Desktop Grid"
 # Shortcuts - Present All Windows (Meta+Space)
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" "Meta+Space	Launch (C),Ctrl+F10	Launch (C),Toggle Present Windows (All desktops)"
+kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'Meta+Space\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)'
 
+# Install KWin Script Krohnkite Tiling
+wget -P /tmp https://github.com/esjeon/krohnkite/releases/download/v0.7/krohnkite-0.7.kwinscript
+kpackagetool5 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
+mkdir -p ~/.local/share/kservices5/
+ln -s ~/.local/share/kwin/scripts/krohnkite/metadata.desktop ~/.local/share/kservices5/krohnkite.desktop
+
+# Install plasmoids
+# System Load Viewer - https://store.kde.org/s/KDE%20Store/p/1474921
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1474921
+# Event Calendar - https://store.kde.org/s/KDE%20Store/p/998901
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/998901
+# Window Title Applet - https://store.kde.org/s/KDE%20Store/p/1274218
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1274218
+# Window Buttons Applet - https://store.kde.org/s/KDE%20Store/p/1272871
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1272871
+# Simple Menu - https://store.kde.org/s/KDE%20Store/p/1169537
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1169537
+# TODO: Edit ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
+
+# Setup latte-dock
+mkdir -p ~/.config/latte
+cat <<EOF > ~/.config/latte/JonTheBurger.layout.latte
+EOF
+kwriteconfig5 --file lattedockrc --group UniversalSettings --key currentLayout JonTheBurger
+kwriteconfig5 --file lattedockrc --group UniversalSettings --key lastNonAssignedLayout JonTheBurger
+
+# Remove default panel
+cat <<EOF > ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+[ActionPlugins][0]
+MidButton;NoModifier=org.kde.paste
+RightButton;NoModifier=org.kde.contextmenu
+wheel:Vertical;NoModifier=org.kde.switchdesktop
+
+[ActionPlugins][1]
+RightButton;NoModifier=org.kde.contextmenu
+
+[Containments][2]
+activityId=$(qdbus org.kde.ActivityManager /ActivityManager/Activities ListActivities)
+formfactor=0
+immutability=1
+lastScreen=0
+location=0
+plugin=org.kde.plasma.folder
+wallpaperplugin=org.kde.image
+
+[Containments][2][Wallpaper][org.kde.image][General]
+Image=file:///usr/share/wallpapers/Next/contents/images/1920x1080.jpg
+
+[ScreenMapping]
+itemsOnDisabledScreens=
+screenMapping=
+EOF
+
+qdbus org.kde.kwin /KWin reconfigure
 # TODO: ~/.gtkrc-2.0
