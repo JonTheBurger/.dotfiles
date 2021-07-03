@@ -9,7 +9,7 @@ if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
     echo "Running ${SCRIPT_DIR}/install.sh"
     sudo -H -u $SUDO_USER bash -c 'echo "on behalf of ${USER}:${UID}"'
-    stow config --no-folding
+    stow home --no-folding
 elif [ -f "/etc/arch-release" ]; then
     echo "Arch detected"
 else

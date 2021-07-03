@@ -1,38 +1,107 @@
-# Usage
-1. Clone
+.dotfiles
+=========
+Configuration scripts and symlink farm for `$HOME` for setting up a keyboard
+driven development environment. Contains configuration for:
+
+- KDE
+- NeoVim
+- QtCreator
+- TMux
+- Vim
+- Zsh
+
+Currently supports `ubuntu-20.04`+.
+
+Usage
+=====
+To install and run everything, use:
+
 ```bash
 cd $HOME
 git clone https://github.com/JonTheBurger/.dotfiles.git
-cd .dotfile
+cd .dotfiles
+sudo ./install.sh
 ```
 
-2. Distribute symlinks
-`stow config`
+Additionally, you will probably want to update your git config:
 
-# Background
-Config file management via GNU [stow](https://www.gnu.org/software/stow/)
-(`sudo apt install stow`). Stow allows users to create a "symlink farm", where
-config files are merely symlinks to a centralized location (read: git repo).
-This makes all edits trivial to sync across machines. Such files are located in
-the `config` directory.
+```bash
+git config --global user.name "Cools McRad"
+git config --global user.email "cool@nice.com"
+```
 
-Some configuration files do not play well when copied between systems, or have
-a common subset of text that can simply be appended. These live in the `append`
-directory. `stow` does not handle these files. Instead, use:
-`cat append/<file> >> <path-to-real-file>`
+Layout
+======
+This section describes the `.dotfiles` repository's layout.
 
-# Features
-- Plugin manager auto-install for zsh and neovim
-For these files, `zsh` uses the [antigen](https://github.com/zsh-users/antigen)
-plugin manager, and `neovim` uses the [vim-plug](https://github.com/junegunn/vim-plug)
-plugin manager. Rather than requiring the user to install the managers manually,
-these dotfiles check the filesystems for plugin managers, then auto-install both
-the and plugins and managers if not present. Note some plugins have additional 
-dependencies (e.g. `deoplete` requires `mpack` for python), and curl is required
-to download the plugin managers themselves.
-- vim and neovim settings isolation
-`.vimrc` is used as a bare minimum vim configuration. The intent is for vim to
-remain minimal and snappy. Because no plugins are used, IDEs are able to source
-this .vimrc and use its settings. init.vim sources this file and adds plugins,
-providing a much more complete editing experinece.
+`script`
+--------
+Contains scripts prefixed by number to denote execution order:
 
+- `10`: Basic utilities suitable for a headless server.
+    - `10-base.sh`:
+        - Network I/O { curl, wget }
+        - Apt { apt-transport-https, ca-certificates, software-properties-common }
+        - Development { git+lfs+tig, htop, neovim+vim, zsh }
+        - Filesystem { fzf, stow, tree, unzip }
+- `20`: Development tools intended for a specific language or project.
+    - `20-c++.sh`:
+        - System GCC+GDB
+        - Clang + Tools (latest)
+        - Build Systems { cmake (latest), ninja }
+        - Analyzers { cppcheck, valgrind }
+        - Docs { doxygen }
+- `30`: Desktop environment and bare minimum applications to give a proper
+    desktop experience.
+    - `30-kde.sh`: KDE Plasma Desktop with different presets than kubuntu
+        - dolphin
+        - gwenview
+        - kate
+        - konsole
+        - ksysguard
+        - kvantum
+        - latte-dock
+        - okular
+        - partitionmanager
+- `40`: Graphical tools suitable for installing on any given desktop
+    environment, organized by use. (Installing something like `firefox` before
+    a DE on ubuntu will drag in the entire gnome shell.)
+    - `40-desktop.sh`: Language Agnostic Programming Tools
+        - chromium
+        - dolphin
+        - konsole
+        - vim clipboard support
+        - vscode
+        - xmodmap (with CapsLock as vim-style Hyper)
+- `99`: Must be run after a desktop session is already running (typically to
+    a Desktop's DBus API).
+    - `99-kde-theme.sh`: 
+        - Kröhnkite
+        - Latte Dock
+
+`home`
+------
+Mirrors the user's `$HOME` directory. Only files are symlinked
+(`stow --no-folding`), not folders.
+
+`docs`
+------
+Graphics for markdown gallery.
+
+Shortcuts
+=========
+
+NeoVim
+------
+
+TMux
+----
+
+QtCreator
+---------
+
+KDE
+---
+
+Gallery
+=======

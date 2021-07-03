@@ -13,12 +13,20 @@ if [ -f "/etc/apt/sources.list" ]; then
 
     apt-get update -y
     apt-get install -y \
-      kubuntu-desktop \
+      kde-plasma-desktop \
       sddm
     apt-get install -y \
+      ark \
+      dolphin \
+      gwenview \
+      kate \
+      konsole \
+      ksysguard \
       kwin-addons \
       kwin-x11 \
       latte-dock \
+      okular \
+      partitionmanager \
       qt5-style-kvantum
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"

@@ -28,7 +28,6 @@ if [ -f "/etc/apt/sources.list" ]; then
       unzip \
       wget \
       vim \
-      x11-xserver-utils \
       zsh
     snap install node --classic
 elif [ -f "/etc/arch-release" ]; then
