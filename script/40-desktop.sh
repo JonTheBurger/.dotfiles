@@ -35,4 +35,3 @@ elif [ -f "/etc/arch-release" ]; then
 else
     echo "unsupported"
 fi
-

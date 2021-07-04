@@ -1,7 +1,16 @@
 ### zsh settings
 setopt rmstarsilent
 setopt nonomatch
+
+# Aliases & Functions
 alias look4='find . -name'
+alias grep4='rg -uu -i'
+function fsmon() {
+  inotifywait -r -m -e modify . |
+  while read p e f; do
+    echo "$p$f modified"
+  done
+}
 
 # Man Page Color
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green

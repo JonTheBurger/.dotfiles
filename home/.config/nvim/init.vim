@@ -50,7 +50,11 @@ map <leader>x :call ToggleHex()<CR>
 let _is_first_plug_install = 0
 if !filereadable(stdpath('data') . '/site/autoload/plug.vim')
   let _is_first_plug_install = 1
-  execute '!curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  if has("win64")
+    execute '!curl -fLo %USERPROFILE%/AppData/Local/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  else
+    execute '!curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  endif
 endif
 
 """ Install Plugins
