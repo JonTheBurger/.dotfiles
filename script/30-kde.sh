@@ -17,9 +17,13 @@ if [ -f "/etc/apt/sources.list" ]; then
       sddm
     apt-get install -y \
       ark \
+      breeze \
       dolphin \
+      dolphin-plugins \
       gwenview \
       kate \
+      kio \
+      kio-extras \
       konsole \
       ksysguard \
       kwin-addons \

@@ -60,8 +60,8 @@ fi
 
 # Stow
 if [ "$RUN_STOW" ]; then
-  echo "stowing"
-  #stow home --no-folding
+  echo "symlink farming"
+  stow home --no-folding
 fi
 
 # Run all scripts in `script`
@@ -94,6 +94,6 @@ do
     # Execute Script
     if [ "$RUN_SCRIPT" ]; then
         echo "Runnning $s"
-        #source $s
+        source $s
     fi
 done

@@ -9,6 +9,7 @@ if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
     apt-get install -y \
       dolphin \
+      dolphin-plugins \
       konsole \
       vim-gui-common \
       x11-xserver-utils \  # for xmodmap

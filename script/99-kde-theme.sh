@@ -29,7 +29,7 @@ fi
 #sudo -Hu $SUDO_USER lookandfeeltool --apply org.kde.breezedark.desktop
 
 # SDDM Theme
-if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]
+if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
     wget https://framagit.org/MarianArlt/sddm-sugar-candy/-/archive/master/sddm-sugar-candy-master.tar.gz -O /tmp/sddm-sugar-candy-master.tar.gz
     tar -xf /tmp/sddm-sugar-candy-master.tar.gz -C /usr/share/sddm/themes
     kwriteconfig5 --file /etc/sddm.conf --group Theme --key Current sddm-sugar-candy-master
@@ -37,7 +37,7 @@ fi
 
 # Kvantum Theme
 if [ ! -d "${home}/.config/Kvantum/Layan" ]; then
-    unsudo mkdir -P ${home}/.config/Kvantum/Layan
+    unsudo mkdir -p ${home}/.config/Kvantum/Layan
     unsudo cp /tmp/Layan/Kvantum/Layan/Layan.kvconfig ${home}/.config/Kvantum/Layan
     unsudo cp /tmp/Layan/Kvantum/Layan/Layan.svg ${home}/.config/Kvantum/Layan
 fi
@@ -55,7 +55,7 @@ fi
 unsudo kwriteconfig5 --file kdeglobals --group General --key ColorScheme Layan
 
 # Window Decorations
-if [ ! -d "${home}/.local/share/aurorae/themes/Sweet" ]
+if [ ! -d "${home}/.local/share/aurorae/themes/Sweet" ]; then
     git clone --depth 1 --branch nova https://github.com/EliverLara/Sweet.git /tmp/Sweet
     unsudo cp -r /tmp/Sweet/kde/aurorae/Sweet-Dark-transparent ${home}/.local/share/aurorae/themes/Sweet-Dark-transparent
     unsudo kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme '__aurorae__svg__Sweet-Dark-transparent'
@@ -180,7 +180,7 @@ unsudo kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'
 
 # Install KWin Script Krohnkite Tiling
 unsudo wget -P /tmp https://github.com/esjeon/krohnkite/releases/download/v0.7/krohnkite-0.7.kwinscript
-unsudo kpackagetool5 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
+unsudo plasmapkg2 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
 unsudo mkdir -p ${home}/.local/share/kservices5/
 unsudo ln -s ${home}/.local/share/kwin/scripts/krohnkite/metadata.desktop ${home}/.local/share/kservices5/krohnkite.desktop
 # Enable Krohnkite Plugin
@@ -297,6 +297,3 @@ chown $SUDO_USER:$SUDO_USER ${home}/.gtkrc-2.0
 # Desktop Wallpaper
 export WALLPAPER_NAME=NATURE.jpg
 unsudo qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops(); print(allDesktops); for (i=0;i<allDesktops.length;i++) { d = allDesktops[i]; d.wallpaperPlugin = 'org.kde.image'; d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General'); d.writeConfig('Image', 'file://${HOME}/.local/share/wallpapers/${WALLPAPER_NAME}'); }"
-
-# Reconfigure KWin to Apply Changes
-qdbus org.kde.kwin /KWin reconfigure
