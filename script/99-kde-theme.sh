@@ -33,6 +33,7 @@ if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
     wget https://framagit.org/MarianArlt/sddm-sugar-candy/-/archive/master/sddm-sugar-candy-master.tar.gz -O /tmp/sddm-sugar-candy-master.tar.gz
     tar -xf /tmp/sddm-sugar-candy-master.tar.gz -C /usr/share/sddm/themes
     kwriteconfig5 --file /etc/sddm.conf --group Theme --key Current sddm-sugar-candy-master
+    echo 'ForceHideCompletePassword="true"' > /usr/share/sddm/themes/sddm-sugar-candy-master/theme.conf.user
 fi
 
 # Kvantum Theme
