@@ -56,7 +56,8 @@ unsudo kwriteconfig5 --file kdeglobals --group General --key ColorScheme Layan
 
 # Window Decorations
 if [ ! -d "${home}/.local/share/aurorae/themes/Sweet" ]; then
-    git clone --depth 1 --branch nova https://github.com/EliverLara/Sweet.git /tmp/Sweet
+    unsudo git clone --depth 1 --branch nova https://github.com/EliverLara/Sweet.git /tmp/Sweet
+    unsudo mkdir -p ${home}/.local/share/aurorae/themes
     unsudo cp -r /tmp/Sweet/kde/aurorae/Sweet-Dark-transparent ${home}/.local/share/aurorae/themes/Sweet-Dark-transparent
     unsudo kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme '__aurorae__svg__Sweet-Dark-transparent'
 fi
@@ -179,10 +180,12 @@ unsudo kwriteconfig5 --file kglobalshortcutsrc --group kwin --key ShowDesktopGri
 unsudo kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'Meta+Space\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)'
 
 # Install KWin Script Krohnkite Tiling
-unsudo wget -P /tmp https://github.com/esjeon/krohnkite/releases/download/v0.7/krohnkite-0.7.kwinscript
-unsudo plasmapkg2 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
-unsudo mkdir -p ${home}/.local/share/kservices5/
-unsudo ln -s ${home}/.local/share/kwin/scripts/krohnkite/metadata.desktop ${home}/.local/share/kservices5/krohnkite.desktop
+if [ ! -d ${home}/.local/share/kwin/scripts/krohnkite ]; then
+    unsudo wget -P /tmp https://github.com/esjeon/krohnkite/releases/download/v0.7/krohnkite-0.7.kwinscript
+    unsudo plasmapkg2 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
+    unsudo mkdir -p ${home}/.local/share/kservices5/
+    unsudo ln -s ${home}/.local/share/kwin/scripts/krohnkite/metadata.desktop ${home}/.local/share/kservices5/krohnkite.desktop
+fi
 # Enable Krohnkite Plugin
 unsudo kwriteconfig5 --file kwinrc --group Plugins --key "krohnkiteEnabled" --type bool true
 # Configure Krohnkite
@@ -295,5 +298,7 @@ EOF
 chown $SUDO_USER:$SUDO_USER ${home}/.gtkrc-2.0
 
 # Desktop Wallpaper
-export WALLPAPER_NAME=NATURE.jpg
-unsudo qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops(); print(allDesktops); for (i=0;i<allDesktops.length;i++) { d = allDesktops[i]; d.wallpaperPlugin = 'org.kde.image'; d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General'); d.writeConfig('Image', 'file://${HOME}/.local/share/wallpapers/${WALLPAPER_NAME}'); }"
+WALLPAPER_NAME=NATURE.jpg
+unsudo qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops(); print(allDesktops); for (i=0;i<allDesktops.length;i++) { d = allDesktops[i]; d.wallpaperPlugin = 'org.kde.image'; d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General'); d.writeConfig('Image', 'file://${home}/.local/share/wallpapers/${WALLPAPER_NAME}'); }"
+
+echo "REBOOT NOW!"

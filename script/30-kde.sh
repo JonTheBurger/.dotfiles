@@ -12,18 +12,34 @@ if [ -f "/etc/apt/sources.list" ]; then
     apt update
 
     apt-get update -y
+    # Core Desktop
     apt-get install -y \
-      kde-plasma-desktop \
-      sddm
+      breeze-icon-theme \
+      fonts-hack \
+      fonts-noto \
+      kde-config-cron \
+      kde-config-gtk-style \
+      kde-config-gtk-style-preview \
+      kde-config-gtk-sddm \
+      kde-config-systemd \
+      kio-extras \
+      plasma-desktop \
+      plasma-workspace \
+      pulseaudio \
+      sddm \
+      systemsettings \
+      udisks2 \
+      upower \
+      zip
+    # Graphical Applications
     apt-get install -y \
       ark \
-      breeze \
       dolphin \
       dolphin-plugins \
       gwenview \
       kate \
-      kio \
-      kio-extras \
+      kcalc \
+      kde-spectacle \
       konsole \
       ksysguard \
       kwin-addons \
