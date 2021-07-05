@@ -51,6 +51,10 @@ Contains scripts prefixed by number to denote execution order:
         - Build Systems { cmake (latest), ninja }
         - Analyzers { cppcheck, valgrind }
         - Docs { doxygen }
+    - `20-python.sh`:
+        - System Python3
+        - Pip
+        - Venv
 - `30`: Desktop environment and bare minimum applications to give a proper
     desktop experience.
     - `30-kde.sh`: KDE Plasma Desktop with different presets than kubuntu
@@ -73,8 +77,10 @@ Contains scripts prefixed by number to denote execution order:
         - vim clipboard support
         - vscode
         - xmodmap (with CapsLock as vim-style Hyper)
-- `99`: Must be run after a desktop session is already running (typically to
-    a Desktop's DBus API).
+- `50`: Desktop environment configuration. Must be run before a desktop session
+    is running (e.g. Desktop saves settings upon shutdown).
+- `99`: Desktop environment configuration. Must be run after a desktop session
+    is already running (e.g. to use a Desktop's DBus API).
     - `99-kde-theme.sh`: 
         - Kröhnkite
         - Latte Dock

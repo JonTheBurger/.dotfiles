@@ -15,12 +15,17 @@ if [ -f "/etc/apt/sources.list" ]; then
       dolphin-plugins \
       papirus-icon-theme \
       xdotool
+    # Layan-GTK
+    snap install layan-themes
+    # Apply to all other snap applications
+    for i in $(snap connections | grep gtk-common-themes:gtk-3-themes | awk '{print $2}'); do snap connect $i layan-themes:gtk-3-themes; done
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"
 else
     echo "unsupported"
 fi
 
+# Download Layan KDE
 if [ ! -d /tmp/Layan ]; then
     unsudo git clone --depth 1 https://github.com/vinceliuice/Layan-kde.git /tmp/Layan
 fi
@@ -185,7 +190,7 @@ if [ ! -d ${home}/.local/share/kwin/scripts/krohnkite ]; then
     unsudo wget -P /tmp https://github.com/esjeon/krohnkite/releases/download/v0.7/krohnkite-0.7.kwinscript
     unsudo plasmapkg2 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
     unsudo mkdir -p ${home}/.local/share/kservices5/
-    unsudo ln -s ${home}/.local/share/kwin/scripts/krohnkite/metadata.desktop ${home}/.local/share/kservices5/krohnkite.desktop
+    unsudo ln -sf ${home}/.local/share/kwin/scripts/krohnkite/metadata.desktop ${home}/.local/share/kservices5/krohnkite.desktop
 fi
 # Enable Krohnkite Plugin
 unsudo kwriteconfig5 --file kwinrc --group Plugins --key "krohnkiteEnabled" --type bool true
@@ -227,14 +232,24 @@ unsudo kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Up
 
 # Install plasmoids
 # System Load Viewer - https://store.kde.org/s/KDE%20Store/p/1474921
-unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1474921
+if [ ! -d ${home}/.local/share/plasma/plasmoids/org.kde.plasma.systemloadviewer ]; then
+    unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1474921
+fi
 # Event Calendar - https://store.kde.org/s/KDE%20Store/p/998901
-unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/998901
+if [ ! -d ${home}/.local/share/plasma/plasmoids/org.kde.plasma.eventcalendar ]; then
+    unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/998901
+fi
 # Window Title Applet - https://store.kde.org/s/KDE%20Store/p/1274218
-unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1274218
+if [ ! -d ${home}/.local/share/plasma/plasmoids/org.kde.windowtitle ]; then
+    unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1274218
+fi
 # Simple Menu - https://store.kde.org/s/KDE%20Store/p/1169537
-unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1169537
-# TODO: Edit ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
+if [ ! -d ${home}/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu ]; then
+    unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1169537
+fi
+# Center SimpleMenu Above Dock
+sed -ie 's/x = (appletTopLeft.x < horizMidPoint) ? screen.x + offset : (screen.x + screen.width) - width - offset;/x = screen.x + (screen.width \/ 2) - (width \/ 2);/g' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
+sed -ie 's/y = screen.height - height - offset - panelSvg.margins.top;/y = screen.y + screen.height - height - appletTopLeft.y - offset;' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
 
 # Setup latte-dock
 unsudo kwriteconfig5 --file lattedockrc --group UniversalSettings --key currentLayout JonTheBurger
@@ -271,32 +286,40 @@ chown $SUDO_USER:$SUDO_USER ${home}/.config/plasma-org.kde.plasma.desktop-applet
 # Konsole
 unsudo kwriteconfig5 --file konsolerc --group "Desktop Entry" --key DefaultProfile JonTheBurger.profile
 
+# Kate
+unsudo kwriteconfig5 --file katerc --group General --key "Startup Session" last
+unsudo kwriteconfig5 --file katerc --group "KTextEditor Renderer" --key Schema "Breeze Dark"
+unsudo kwriteconfig5 --file katerc --group UiSettings --key ColorScheme Layan
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key externaltoolsplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katebacktracebrowserplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katebuildplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katecloseexceptplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katectagsplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katefilebrowserplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katefiletreeplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key kategdbplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katekonsoleplugin --type bool true
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key kateopenheaderplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key kateprojectplugin --type bool true
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katereplicodeplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesearchplugin --type bool true
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesnippetsplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesqlplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesymbolviewerplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katexmlcheckplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katexmltoolsplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key ktexteditorpreviewplugin --type bool true
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key lspclientplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key tabswitcherplugin --type bool false
+unsudo kwriteconfig5 --file ${home}/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key textfilterplugin --type bool true
+
 # Dolphin
 unsudo kwriteconfig5 --file dolphinrc --group VersionControl --key enabledPlugins Git
 
 # GTK
-cat <<EOF > ${home}/.gtkrc-2.0
-gtk-theme-name="Breeze-Dark"
-
-gtk-enable-animations=1
-
-gtk-primary-button-warps-slider=0
-
-gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ
-
-gtk-menu-images=1
-
-gtk-button-images=1
-
-gtk-cursor-theme-name="breeze_cursors"
-
-gtk-icon-theme-name="Papirus-Dark"
-
-gtk-font-name="Noto Sans,  10"
-
-gtk-modules=appmenu-gtk-module
-EOF
-chown $SUDO_USER:$SUDO_USER ${home}/.gtkrc-2.0
+unsudo mkdir -p ${home}/.themes/Layan-dark
+unsudo ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 ${home}/.themes/Layan-dark/gtk-2.0
+unsudo ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ ${home}/.themes/Layan-dark/gtk-3.0
 
 # Desktop Wallpaper
 WALLPAPER_NAME=NATURE.jpg
