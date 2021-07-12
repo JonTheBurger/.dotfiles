@@ -94,8 +94,12 @@ call plug#end()
   set termguicolors
   colorscheme space-vim-dark
 
+""" FZF
+:map <C-P> :FZF<CR>
+
 """ NERDTree
 nnoremap <leader>t :NERDTreeFocus<CR>
+:command Pwd NERDTree %:p:h
 
 """ Coc Begin
   " TextEdit might fail if hidden is not set.
@@ -295,6 +299,7 @@ let g:vimspector_enable_mappings='HUMAN'
 " <leader>wi - diary index
 " <leader>w<leader>i - update diary index
 " <leader>w<leader>w - diary today
+  let g:vimwiki_autochdir = 1
   let g:vimwiki_hl_headers = 1
   let g:vimwiki_global_ext = 0
   let g:vimwiki_markdown_link_ext = 1
