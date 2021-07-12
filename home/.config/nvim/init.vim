@@ -96,6 +96,8 @@ call plug#end()
 
 """ FZF
 :map <C-P> :FZF<CR>
+:map <S-F> :Rg<CR>
+:map <CS-F> :Rg<CR>
 
 """ NERDTree
 nnoremap <leader>t :NERDTreeFocus<CR>
