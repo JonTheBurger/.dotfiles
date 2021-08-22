@@ -4,13 +4,17 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
+home="/home/$SUDO_USER"
+function unsudo() {
+    sudo -Hu $SUDO_USER $@
+}
 
 ################################################################################
 # Check Operating System; Perform OS Specific Prerequisite Setup
 ################################################################################
 if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
-    #apt-get install -y stow
+    apt-get install -y stow
     os="ubuntu"
 elif [ -f "/etc/arch-release" ]; then
     os="arch"
@@ -28,22 +32,22 @@ function usage() {
 }
 
 while [[ $# -gt 0 ]]; do
-  key="$1"
-
-  case $key in
-    --non-interactive)
-      NON_INTERACTIVE=1
-      shift # past argument
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *) # unknown option
-      usage
-      exit 0
-      ;;
-  esac
+    key="$1"
+  
+    case $key in
+        --non-interactive)
+            NON_INTERACTIVE=1
+            shift # past argument
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *) # unknown option
+            usage
+            exit 0
+            ;;
+    esac
 done
 
 ################################################################################
@@ -51,7 +55,7 @@ done
 ################################################################################
 # Prompt Stow
 if [ -z "$NON_INTERACTIVE" ]; then
-    read -p "Stow to /home/$SUDO_USER? [Y/n] " -n 1 -r
+    read -p "Stow to $home? [Y/n] " -n 1 -r
     echo # move to a new line
     [[ $REPLY =~ ^[Yy]$ ]] && RUN_STOW=1
 else
@@ -60,8 +64,8 @@ fi
 
 # Stow
 if [ "$RUN_STOW" ]; then
-  echo "symlink farming"
-  stow home --no-folding
+    echo "symlink farming"
+    unsudo stow home --no-folding
 fi
 
 # Run all scripts in `script`
@@ -76,7 +80,7 @@ do
         if [ ! -z "$DESKTOP_SESSION" ]; then
             # If not, we exit
             echo "No Desktop Running, skipping 99-* scripts"
-            echo "Reboot your system! Check '/home/$SUDO_USER/.dotfiles/script/99-*' for desktop setups!"
+            echo "Reboot your system! Check '$SCRIPT_DIR/script/99-*' for desktop setups!"
             exit 0
         fi
     fi

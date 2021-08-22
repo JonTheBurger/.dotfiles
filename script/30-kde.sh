@@ -20,7 +20,7 @@ if [ -f "/etc/apt/sources.list" ]; then
       kde-config-cron \
       kde-config-gtk-style \
       kde-config-gtk-style-preview \
-      kde-config-gtk-sddm \
+      kde-config-sddm \
       kde-config-systemd \
       kio-extras \
       plasma-desktop \
@@ -53,4 +53,3 @@ elif [ -f "/etc/arch-release" ]; then
 else
     echo "unsupported"
 fi
-

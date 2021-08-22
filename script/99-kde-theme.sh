@@ -6,7 +6,7 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 home="/home/$SUDO_USER"
 function unsudo() {
-  sudo -Hu $SUDO_USER $@
+    sudo -Hu $SUDO_USER $@
 }
 
 if [ -f "/etc/apt/sources.list" ]; then
