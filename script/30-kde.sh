@@ -17,11 +17,11 @@ if [ -f "/etc/apt/sources.list" ]; then
       breeze-icon-theme \
       fonts-hack \
       fonts-noto \
+      kdebase-runtime \
       kde-config-cron \
       kde-config-gtk-style \
       kde-config-gtk-style-preview \
       kde-config-sddm \
-      kde-config-systemd \
       kio-extras \
       plasma-desktop \
       plasma-workspace \

@@ -1,8 +1,5 @@
 [core]
     editor = vim
-[user]
-    email = jmp180@pitt.edu
-    name  = Jon
 [alias]
     tree    = log --graph --decorate --pretty=oneline --abbrev-commit
     subinit = submodule update --init --recursive
@@ -13,4 +10,8 @@
     main-view-commit-title = graph=yes,refs=yes
     main-view-date = custom
     main-view-date-format = "%Y-%m-%d"
-
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true

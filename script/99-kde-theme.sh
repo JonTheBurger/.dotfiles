@@ -31,7 +31,8 @@ if [ ! -d /tmp/Layan ]; then
 fi
 
 # Look & Feel
-#sudo -Hu $SUDO_USER lookandfeeltool --apply org.kde.breezedark.desktop
+unsudo /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1325241
+sudo -Hu $SUDO_USER lookandfeeltool --apply Layan
 
 # SDDM Theme
 if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then

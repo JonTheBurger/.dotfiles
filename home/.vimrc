@@ -10,8 +10,9 @@ set smartcase
 set shiftwidth=2
 set expandtab
 set tabstop=2
+set fixeol
 
-set clipboard=unnamedplus
+set clipboard^=unnamed,unnamedplus
 set mouse=a
 syntax on
 

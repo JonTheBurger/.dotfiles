@@ -3,6 +3,7 @@ source ~/.vimrc
 set list
 set lcs+=space:·
 autocmd filetype make setlocal noexpandtab
+set statusline=%F\ %l:%c
 
 """ Hex Editor
 " helper function to toggle hex mode
@@ -96,8 +97,7 @@ call plug#end()
 
 """ FZF
 :map <C-P> :FZF<CR>
-:map <S-F> :Rg<CR>
-:map <CS-F> :Rg<CR>
+:map <C-K> :Rg<CR>
 
 """ NERDTree
 nnoremap <leader>t :NERDTreeFocus<CR>

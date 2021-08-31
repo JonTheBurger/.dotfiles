@@ -4,7 +4,9 @@ setopt nonomatch
 
 # Aliases & Functions
 alias look4='find . -name'
-alias grep4='rg -uu -i'
+alias gr='rg -S'
+alias grep4='rg -S -uu'
+alias sodu='sudo --preserve-env=PATH env'
 function fsmon() {
   inotifywait -r -m -e modify . |
   while read p e f; do
