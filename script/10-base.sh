@@ -1,15 +1,15 @@
 #!/bin/bash
-if [[ $EUID -ne 0 ]]; then
-    echo "This script must be run as root"
+if [[ $EUID -eq 0 ]]; then
+    echo "This script must be run as a non-root user"
     exit 1
 fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 
 if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
-    apt-get update
-    apt-get upgrade -y
-    apt-get install -y \
+    sudo apt-get update
+    sudo apt-get upgrade -y
+    sudo apt-get install -y \
       apt-transport-https \
       ca-certificates \
       curl \
@@ -29,10 +29,9 @@ if [ -f "/etc/apt/sources.list" ]; then
       wget \
       vim \
       zsh
-    snap install node --classic
+    sudo snap install node --classic
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"
 else
     echo "unsupported"
 fi
-

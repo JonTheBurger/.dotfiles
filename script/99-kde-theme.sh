@@ -22,15 +22,10 @@ else
     echo "unsupported"
 fi
 
-# Download Layan KDE
-if [ ! -d /tmp/Layan ]; then
-    mkdir -p ~/.local/src
-    git clone --depth 1 https://github.com/vinceliuice/Layan-kde.git ~/.local/src/Layan
-fi
-
 # Look & Feel
-/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1325241
-lookandfeeltool --apply Layan
+# Layan Global Theme https://store.kde.org/p/1325243/
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1325243
+lookandfeeltool --apply com.github.vinceliuice.Layan
 
 # SDDM Theme
 if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
@@ -248,11 +243,12 @@ if [ ! -d ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu ]; then
 fi
 # Center SimpleMenu Above Dock
 sed -ie 's/x = (appletTopLeft.x < horizMidPoint) ? screen.x + offset : (screen.x + screen.width) - width - offset;/x = screen.x + (screen.width \/ 2) - (width \/ 2);/g' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
-sed -ie 's/y = screen.height - height - offset - panelSvg.margins.top;/y = screen.y + screen.height - height - appletTopLeft.y - offset;' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
+sed -ie 's/y = screen.height - height - offset - panelSvg.margins.top;/y = screen.y + screen.height - height - appletTopLeft.y - offset;/g' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
 
 # Setup latte-dock
 kwriteconfig5 --file lattedockrc --group UniversalSettings --key currentLayout JonTheBurger
 kwriteconfig5 --file lattedockrc --group UniversalSettings --key lastNonAssignedLayout JonTheBurger
+latte-dock --layout JonTheBurger &
 
 # Remove default panel
 cat <<EOF > ~/.config/plasma-org.kde.plasma.desktop-appletsrc
