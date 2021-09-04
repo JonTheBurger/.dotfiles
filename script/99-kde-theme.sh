@@ -28,6 +28,16 @@ fi
 # Look & Feel
 lookandfeeltool --apply com.github.vinceliuice.Layan
 
+# Splash Screen
+# https://store.kde.org/p/1426182
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1426182
+# https://store.kde.org/p/1304256
+# https://store.kde.org/p/1424150
+# https://store.kde.org/p/1505562
+# https://store.kde.org/p/1447068
+# https://store.kde.org/p/1453401
+# https://store.kde.org/p/1460249
+
 # SDDM Theme
 if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
     sudo wget https://framagit.org/MarianArlt/sddm-sugar-candy/-/archive/master/sddm-sugar-candy-master.tar.gz -O /tmp/sddm-sugar-candy-master.tar.gz
@@ -185,6 +195,8 @@ kwriteconfig5 --file kglobalshortcutsrc --group plasmashell --key "next activity
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key ShowDesktopGrid "Meta+Tab,Ctrl+F8,Show Desktop Grid"
 # Shortcuts - Present All Windows (Meta+Space)
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'Meta+Space\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)'
+# Reload Keyboard Shortcuts https://www.reddit.com/r/kde/comments/6u0wo7/configuring_kde_by_editing_the_config_files/dlqzeop
+kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
 
 # Install KWin Script Krohnkite Tiling
 if [ ! -d ~/.local/share/kwin/scripts/krohnkite ]; then
@@ -230,6 +242,8 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Stair Lay
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Three Column Layout" "none,none,"
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Tile Layout" "none,none,"
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Up/Prev" "Meta+K,none,"
+# Reload Keyboard Shortcuts https://www.reddit.com/r/kde/comments/6u0wo7/configuring_kde_by_editing_the_config_files/dlqzeop
+kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
 
 # Force NumLock On
 kwriteconfig5 --file kcminputrc --group Keyboard --key "NumLock" 0
@@ -333,8 +347,6 @@ mkdir -p ~/.themes/Layan-dark
 ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 ~/.themes/Layan-dark/gtk-2.0
 ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ ~/.themes/Layan-dark/gtk-3.0
 
-# Reload Keyboard Shortcuts https://www.reddit.com/r/kde/comments/6u0wo7/configuring_kde_by_editing_the_config_files/dlqzeop
-kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
 # Finally, reload changes
 qdbus org.kde.KWin /KWin reconfigure
 
