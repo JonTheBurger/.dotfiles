@@ -1,5 +1,5 @@
 [Appearance]
-ColorScheme=Linux
+ColorScheme=JonTheBurger
 
 [General]
 Command=/usr/bin/tmux

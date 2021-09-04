@@ -14,16 +14,18 @@ if [ -f "/etc/apt/sources.list" ]; then
     # Layan-GTK
     sudo snap install layan-themes
     # Apply to all other snap applications
-    sudo bash -c 'for i in $(snap connections | grep gtk-common-themes:gtk-3-themes | awk '{print $2}'); do snap connect $i layan-themes:gtk-3-themes; done'
+    sudo bash -c 'for i in $(snap connections | grep gtk-common-themes:gtk-3-themes | awk "{print \$2}"); do snap connect $i layan-themes:gtk-3-themes; done'
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"
 else
     echo "unsupported"
 fi
 
-# Look & Feel
 # Layan Global Theme https://store.kde.org/p/1325243/
 /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1325243
+# Layan Plasma Theme https://store.kde.org/p/1325241/
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1325241
+# Look & Feel
 lookandfeeltool --apply com.github.vinceliuice.Layan
 
 # SDDM Theme
@@ -55,7 +57,7 @@ kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle 'kvantum-dark'
 # Color Scheme
 if [ ! -d "~/.local/share/color-schemes/Layan.colors" ]; then
     mkdir -p ~/.local/share/color-schemes
-    ln -s ~/.local/src/Layan/color-schemes/Layan.colors ~/.local/share/color-schemes
+    ln -s ~/.local/src/Layan/color-schemes/Layan.colors ~/.local/share/color-schemes/Layan.colors
 fi
 kwriteconfig5 --file kdeglobals --group General --key ColorScheme Layan
 
@@ -179,7 +181,7 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch Window Left" 
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch Window Right" $'Meta+Alt+Right\tMeta+Alt+L,Meta+Alt+Right,Switch to Window to the Right'
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch Window Up" $'Meta+Alt+Up\tMeta+Alt+K,Meta+Alt+Up,Switch to Window Above'
 # Shortcuts - Show Desktop Grid (Meta+Tab)
-kwriteconfig5 --file kglobalshortcutsrc --group plasmashell --key "next activity" ",Meta+Tab,Walk through activities"
+kwriteconfig5 --file kglobalshortcutsrc --group plasmashell --key "next activity" ",none,Walk through activities"
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key ShowDesktopGrid "Meta+Tab,Ctrl+F8,Show Desktop Grid"
 # Shortcuts - Present All Windows (Meta+Space)
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'Meta+Space\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)'
@@ -331,6 +333,8 @@ mkdir -p ~/.themes/Layan-dark
 ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 ~/.themes/Layan-dark/gtk-2.0
 ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ ~/.themes/Layan-dark/gtk-3.0
 
+# Reload Keyboard Shortcuts https://www.reddit.com/r/kde/comments/6u0wo7/configuring_kde_by_editing_the_config_files/dlqzeop
+kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
 # Finally, reload changes
 qdbus org.kde.KWin /KWin reconfigure
 

@@ -1,0 +1,13 @@
+[Animation]
+Frames=15
+
+[Appearance]
+BackgroundColorOpacity=80
+Translucency=true
+
+[Dialogs]
+FirstRun=false
+
+[Window]
+Height=90
+ShowTabBar=false
