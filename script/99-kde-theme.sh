@@ -258,9 +258,13 @@ kwriteconfig5 --file lattedockrc --group UniversalSettings --key currentLayout J
 kwriteconfig5 --file lattedockrc --group UniversalSettings --key lastNonAssignedLayout JonTheBurger
 if [ -f ~/.config/latte/Default.layout.latte ]; then
     mv ~/.config/latte/Default.layout.latte ~/.config/latte/Default.layout.latte.bkp
-    ln -s ~/.config/latte/JonTheBurger.layout.latte ~/.config/latte/Default.layout.latte
 fi
+ln -s ~/.config/latte/JonTheBurger.layout.latte ~/.config/latte/Default.layout.latte
 latte-dock --layout JonTheBurger &
+
+# Desktop Wallpaper
+WALLPAPER_NAME=NATURE.jpg
+qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops(); print(allDesktops); for (i=0;i<allDesktops.length;i++) { d = allDesktops[i]; d.wallpaperPlugin = 'org.kde.image'; d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General'); d.writeConfig('Image', 'file://${HOME}/.local/share/wallpapers/${WALLPAPER_NAME}'); }"
 
 # Remove default panel
 cat <<EOF > ~/.config/plasma-org.kde.plasma.desktop-appletsrc
@@ -282,7 +286,7 @@ plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
 
 [Containments][2][Wallpaper][org.kde.image][General]
-Image=file:///usr/share/wallpapers/Next/contents/images/1920x1080.jpg
+Image=file://${HOME}/.local/share/wallpapers/${WALLPAPER_NAME}
 
 [ScreenMapping]
 itemsOnDisabledScreens=
@@ -322,16 +326,12 @@ kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plu
 # Dolphin
 kwriteconfig5 --file dolphinrc --group VersionControl --key enabledPlugins Git
 
-# Finally, reload changes
-qdbus org.kde.kwin /KWin reconfigure
-
 # GTK
 mkdir -p ~/.themes/Layan-dark
 ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 ~/.themes/Layan-dark/gtk-2.0
 ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ ~/.themes/Layan-dark/gtk-3.0
 
-# Desktop Wallpaper
-WALLPAPER_NAME=NATURE.jpg
-qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops(); print(allDesktops); for (i=0;i<allDesktops.length;i++) { d = allDesktops[i]; d.wallpaperPlugin = 'org.kde.image'; d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General'); d.writeConfig('Image', 'file://${HOME}/.local/share/wallpapers/${WALLPAPER_NAME}'); }"
+# Finally, reload changes
+qdbus org.kde.KWin /KWin reconfigure
 
 echo "REBOOT NOW!"
