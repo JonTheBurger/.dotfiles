@@ -1,9 +1,25 @@
 [core]
     editor = vim
 [alias]
-    tree    = log --graph --decorate --pretty=oneline --abbrev-commit
+    a = add
+    amend = commit --amend --no-edit
+    b = branch
+    bD = branch -D
+    bd = branch -d
+    c = commit --verbose
+    co = checkout
+    cob = checkout -b
+    d = diff
+    dc = diff --cached
+    ds = diff --stat
+    f = fetch -p
+    g = grep
+    lasttag = describe --tags --abbrev=0
+    m = commit --amend --verbose
+    s = status -s
     subinit = submodule update --init --recursive
-    amend   = commit --amend --no-edit
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit
+    w = whatchanged
 [tig]
     main-view = id date author commit-title
     main-view-author = abbreviated

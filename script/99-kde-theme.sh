@@ -14,8 +14,7 @@ if [ -f "/etc/apt/sources.list" ]; then
     # Layan-GTK
     sudo snap install layan-themes
     # Apply to all other snap applications
-    # FIXME: which one of these bad boys gets sudo
-    #for i in $(snap connections | grep gtk-common-themes:gtk-3-themes | awk '{print $2}'); do snap connect $i layan-themes:gtk-3-themes; done
+    sudo bash -c 'for i in $(snap connections | grep gtk-common-themes:gtk-3-themes | awk '{print $2}'); do snap connect $i layan-themes:gtk-3-themes; done'
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"
 else
@@ -35,11 +34,17 @@ if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
     echo 'ForceHideCompletePassword="true"' | sudo tee -a /usr/share/sddm/themes/sddm-sugar-candy-master/theme.conf.user
 fi
 
+# Download Layan KDE
+if [ ! -d ~/.local/src/Layan ]; then
+    mkdir -p ~/.local/src
+    git clone --depth 1 https://github.com/vinceliuice/Layan-kde.git ~/.local/src/Layan
+fi
+
 # Kvantum Theme
 if [ ! -d "~/.config/Kvantum/Layan" ]; then
     mkdir -p ~/.config/Kvantum/Layan
-    cp /tmp/Layan/Kvantum/Layan/Layan.kvconfig ~/.config/Kvantum/Layan
-    cp /tmp/Layan/Kvantum/Layan/Layan.svg ~/.config/Kvantum/Layan
+    ln -s ~/.local/src/Layan/Kvantum/Layan/Layan.kvconfig ~/.config/Kvantum/Layan
+    ln -s ~/.local/src/Layan/Kvantum/Layan/Layan.svg ~/.config/Kvantum/Layan
 fi
 kwriteconfig5 --file ~/.config/Kvantum/kvantum.kvconfig --group General --key theme Layan
 kwriteconfig5 --file ~/.config/Kvantum/Layan/Layan.kvconfig --group Hacks --key transparent_dolphin_view --type bool true
@@ -50,7 +55,7 @@ kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle 'kvantum-dark'
 # Color Scheme
 if [ ! -d "~/.local/share/color-schemes/Layan.colors" ]; then
     mkdir -p ~/.local/share/color-schemes
-    cp /tmp/Layan/color-schemes/Layan.colors ~/.local/share/color-schemes
+    ln -s ~/.local/src/Layan/color-schemes/Layan.colors ~/.local/share/color-schemes
 fi
 kwriteconfig5 --file kdeglobals --group General --key ColorScheme Layan
 
@@ -224,6 +229,9 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Three Col
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Tile Layout" "none,none,"
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Up/Prev" "Meta+K,none,"
 
+# Force NumLock On
+kwriteconfig5 --file kcminputrc --group Keyboard --key "NumLock" 0
+
 # Install plasmoids
 # System Load Viewer - https://store.kde.org/s/KDE%20Store/p/1474921
 if [ ! -d ~/.local/share/plasma/plasmoids/org.kde.plasma.systemloadviewer ]; then
@@ -248,6 +256,10 @@ sed -ie 's/y = screen.height - height - offset - panelSvg.margins.top;/y = scree
 # Setup latte-dock
 kwriteconfig5 --file lattedockrc --group UniversalSettings --key currentLayout JonTheBurger
 kwriteconfig5 --file lattedockrc --group UniversalSettings --key lastNonAssignedLayout JonTheBurger
+if [ -f ~/.config/latte/Default.layout.latte ]; then
+    mv ~/.config/latte/Default.layout.latte ~/.config/latte/Default.layout.latte.bkp
+    ln -s ~/.config/latte/JonTheBurger.layout.latte ~/.config/latte/Default.layout.latte
+fi
 latte-dock --layout JonTheBurger &
 
 # Remove default panel
@@ -309,6 +321,9 @@ kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plu
 
 # Dolphin
 kwriteconfig5 --file dolphinrc --group VersionControl --key enabledPlugins Git
+
+# Finally, reload changes
+qdbus org.kde.kwin /KWin reconfigure
 
 # GTK
 mkdir -p ~/.themes/Layan-dark
