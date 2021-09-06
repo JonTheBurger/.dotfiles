@@ -37,6 +37,7 @@ lookandfeeltool --apply com.github.vinceliuice.Layan
 # https://store.kde.org/p/1447068
 # https://store.kde.org/p/1453401
 # https://store.kde.org/p/1460249
+kwriteconfig5 --file ksplashrc --group KSplash --key Theme AnimatedAbstract_nik78
 
 # SDDM Theme
 if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
@@ -180,6 +181,9 @@ kwriteconfig5 --file krunnerrc --group Plugins --key "unitconverterEnabled" --ty
 kwriteconfig5 --file krunnerrc --group Plugins --key "webshortcutsEnabled" --type bool false
 kwriteconfig5 --file krunnerrc --group Plugins --key "windowsEnabled" --type bool false
 
+# Reload changes
+qdbus org.kde.KWin /KWin reconfigure
+
 # Shortcuts - Switch Virtual Desktop (Meta+Ctrl+Shift+H/J/K/L || Meta+Ctrl+Arrows)
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch One Desktop Down" $'Meta+Ctrl+Down\tMeta+Ctrl+Shift+J,Meta+Ctrl+Down,Switch One Desktop Down'
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Switch One Desktop Up" $'Meta+Ctrl+Up\tMeta+Ctrl+Shift+K,Meta+Ctrl+Up,Switch One Desktop Up'
@@ -197,6 +201,7 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key ShowDesktopGrid "Meta
 kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'Meta+Space\tLaunch (C),Ctrl+F10\tLaunch (C),Toggle Present Windows (All desktops)'
 # Reload Keyboard Shortcuts https://www.reddit.com/r/kde/comments/6u0wo7/configuring_kde_by_editing_the_config_files/dlqzeop
 kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
+qdbus org.kde.KWin /KWin reconfigure
 
 # Install KWin Script Krohnkite Tiling
 if [ ! -d ~/.local/share/kwin/scripts/krohnkite ]; then
@@ -347,7 +352,7 @@ mkdir -p ~/.themes/Layan-dark
 ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 ~/.themes/Layan-dark/gtk-2.0
 ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ ~/.themes/Layan-dark/gtk-3.0
 
-# Finally, reload changes
+# Reload changes
 qdbus org.kde.KWin /KWin reconfigure
 
 echo "REBOOT NOW!"

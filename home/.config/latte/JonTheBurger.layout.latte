@@ -31,26 +31,10 @@ PreloadWeight=42
 
 [Containments][1][Applets][57][Configuration][General]
 isInLatteDock=true
-launchers59=applications:org.kde.konsole.desktop,applications:org.kde.dolphin.desktop,applications:firefox.desktop
-
-[Containments][1][Applets][87]
-immutability=1
-plugin=org.kde.plasma.simplemenu
-
-[Containments][1][Applets][87][Configuration]
-PreloadWeight=92
-
-[Containments][1][Applets][87][Configuration][ConfigDialog]
-DialogHeight=540
-DialogWidth=720
-
-[Containments][1][Applets][87][Configuration][General]
-customButtonImage=application-vnd.iccprofile
-favoritesPortedToKAstats=true
-useCustomButtonImage=true
+launchers59=applications:org.kde.konsole.desktop,applications:org.kde.dolphin.desktop
 
 [Containments][1][ConfigDialog]
-DialogHeight=921
+DialogHeight=715
 DialogWidth=539
 
 [Containments][1][Configuration]
@@ -58,13 +42,12 @@ PreloadWeight=42
 
 [Containments][1][General]
 advanced=false
-appletOrder=87;57
+appletOrder=57
 autoDecreaseIconSize=false
 blurEnabled=false
 hoverAction=PreviewAndHighlightWindows
 iconMargin=0
 iconSize=48
-inConfigureAppletsMode=true
 maxLength=90
 panelShadows=false
 panelSize=14
@@ -150,6 +133,10 @@ plugin=org.kde.plasma.systemloadviewer
 [Containments][61][Applets][69][Configuration]
 PreloadWeight=42
 
+[Containments][61][Applets][69][Configuration][ConfigDialog]
+DialogHeight=540
+DialogWidth=720
+
 [Containments][61][Applets][70]
 immutability=1
 plugin=org.kde.plasma.systemtray
@@ -173,8 +160,21 @@ DialogWidth=720
 containmentType=Latte
 filterActivityInfo=false
 
+[Containments][61][Applets][90]
+immutability=1
+plugin=org.kde.plasma.simplemenu
+
+[Containments][61][Applets][90][Configuration][ConfigDialog]
+DialogHeight=540
+DialogWidth=720
+
+[Containments][61][Applets][90][Configuration][General]
+customButtonImage=application-vnd.iccprofile
+favoritesPortedToKAstats=true
+useCustomButtonImage=true
+
 [Containments][61][ConfigDialog]
-DialogHeight=923
+DialogHeight=717
 DialogWidth=539
 
 [Containments][61][Configuration]
@@ -185,10 +185,11 @@ addLaunchersInTaskManager=false
 animationLauncherBouncing=false
 animationWindowAddedInGroup=false
 animationWindowInAttention=false
-appletOrder=88;64;67;70;69;68
+appletOrder=90;68;88;64;69;70;67
 dragActiveWindowEnabled=true
 groupTasksByDefault=false
 iconSize=16
+inConfigureAppletsMode=true
 panelPosition=10
 panelSize=100
 panelTransparency=35
@@ -199,8 +200,8 @@ showAudioBadge=false
 showInfoBadge=false
 showOnlyCurrentActivity=false
 showProgressBadge=false
-splitterPosition=2
-splitterPosition2=4
+splitterPosition=4
+splitterPosition2=5
 titleTooltips=false
 zoomLevel=0
 
@@ -311,9 +312,10 @@ activities=
 background=
 color=lightskyblue
 globalLaunchers=
-lastUsedActivity=$(qdbus org.kde.ActivityManager /ActivityManager/Activities ListActivities | head -n 1)
+lastUsedActivity=2948368f-5f44-4709-9436-0a5eb4a60f07
 launchers=
 preferredForShortcutsTouched=false
 showInMenu=true
 textColor=fcfcfc
-version=2 
+version=2
+
