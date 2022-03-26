@@ -1,17 +1,23 @@
 " https://vimhelp.org/options.txt.html
+" Line Number
 set relativenumber
 set number
 set nowrap
 
+" Searching
 set hlsearch
 set ignorecase
 set smartcase
 
+" Document Spacing
 set shiftwidth=2
 set expandtab
 set tabstop=2
 set fixeol
+set textwidth=120
+set colorcolumn=120
 
+" Host System Integration
 set clipboard^=unnamed,unnamedplus
 set mouse=a
 syntax on

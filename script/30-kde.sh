@@ -1,10 +1,4 @@
 #!/bin/bash
-if [[ $EUID -eq 0 ]]; then
-    echo "This script must be run as a non-root user"
-    exit 1
-fi
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
-
 if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
     # Kubuntu-Backports (minor version bumps)
@@ -13,41 +7,48 @@ if [ -f "/etc/apt/sources.list" ]; then
 
     sudo apt-get update -y
     # Core Desktop
-    sudo apt-get install -y \
-      breeze-icon-theme \
-      fonts-hack \
-      fonts-noto \
-      kdebase-runtime \
-      kde-config-cron \
-      kde-config-gtk-style \
-      kde-config-gtk-style-preview \
-      kde-config-sddm \
-      kio-extras \
-      plasma-desktop \
-      plasma-workspace \
-      pulseaudio \
-      sddm \
-      systemsettings \
-      udisks2 \
-      upower \
-      zip
+    apt-cache --generate pkgnames \
+      | grep --line-regexp --fixed-strings \
+      -e breeze-icon-theme \
+      -e fonts-hack \
+      -e fonts-noto \
+      -e kdebase-runtime \
+      -e kde-config-cron \
+      -e kde-config-gtk-style \
+      -e kde-config-gtk-style-preview \
+      -e kde-config-sddm \
+      -e kio-extras \
+      -e plasma-desktop \
+      -e plasma-workspace \
+      -e pulseaudio \
+      -e sddm \
+      -e systemsettings \
+      -e udisks2 \
+      -e unzip \
+      -e upower \
+      -e zip \
+    | xargs sudo apt-get install -y
+
     # Graphical Applications
-    sudo apt-get install -y \
-      ark \
-      dolphin \
-      dolphin-plugins \
-      gwenview \
-      kate \
-      kcalc \
-      kde-spectacle \
-      konsole \
-      ksysguard \
-      kwin-addons \
-      kwin-x11 \
-      latte-dock \
-      okular \
-      partitionmanager \
-      qt5-style-kvantum
+    apt-cache --generate pkgnames \
+      | grep --line-regexp --fixed-strings \
+      -e ark \
+      -e bismuth \
+      -e dolphin \
+      -e dolphin-plugins \
+      -e gwenview \
+      -e kate \
+      -e kcalc \
+      -e kde-spectacle \
+      -e konsole \
+      -e ksysguard \
+      -e kwin-addons \
+      -e kwin-x11 \
+      -e latte-dock \
+      -e okular \
+      -e partitionmanager \
+      -e qt5-style-kvantum \
+    | xargs sudo apt-get install -y
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"
 else

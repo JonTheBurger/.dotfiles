@@ -3,10 +3,12 @@ setopt rmstarsilent
 setopt nonomatch
 
 # Aliases & Functions
-alias look4='find . -name'
+alias :q='exit'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
+alias look4='find . -iname'
 alias sodu='sudo --preserve-env=PATH env'
+alias bat='batcat'
 function fsmon() {
   inotifywait -r -m -e modify . |
   while read p e f; do

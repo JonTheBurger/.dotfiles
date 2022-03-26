@@ -20,7 +20,7 @@ To install and run everything, use:
 cd $HOME
 git clone https://github.com/JonTheBurger/.dotfiles.git
 cd .dotfiles
-sudo ./install.sh
+./install.sh
 ```
 
 Additionally, you will probably want to update your git config:
@@ -77,11 +77,9 @@ Contains scripts prefixed by number to denote execution order:
         - vim clipboard support
         - vscode
         - xmodmap (with CapsLock as vim-style Hyper)
-- `50`: Desktop environment configuration. Must be run before a desktop session
-    is running (e.g. Desktop saves settings upon shutdown).
 - `99`: Desktop environment configuration. Must be run after a desktop session
     is already running (e.g. to use a Desktop's DBus API).
-    - `99-kde-theme.sh`: 
+    - `99-kde-theme.sh`:
         - Kröhnkite
         - Latte Dock
 

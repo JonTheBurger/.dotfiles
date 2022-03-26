@@ -1,34 +1,31 @@
 #!/bin/bash
-if [[ $EUID -eq 0 ]]; then
-    echo "This script must be run as a non-root user"
-    exit 1
-fi
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
-
 if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
     sudo apt-get update
     sudo apt-get upgrade -y
-    sudo apt-get install -y \
-      apt-transport-https \
-      ca-certificates \
-      curl \
-      fzf \
-      git \
-      git-lfs \
-      htop \
-      neovim \
-      python3-pynvim\
-      ripgrep \
-      software-properties-common \
-      stow \
-      tig \
-      tmux \
-      tree \
-      unzip \
-      wget \
-      vim \
-      zsh
+    apt-cache --generate pkgnames \
+      | grep --line-regexp --fixed-strings \
+      -e apt-transport-https \
+      -e batcat \
+      -e ca-certificates \
+      -e curl \
+      -e fzf \
+      -e git \
+      -e git-lfs \
+      -e htop \
+      -e neovim \
+      -e python3-pynvim\
+      -e ripgrep \
+      -e software-properties-common \
+      -e stow \
+      -e tig \
+      -e tmux \
+      -e tree \
+      -e unzip \
+      -e wget \
+      -e vim \
+      -e zsh \
+    | xargs sudo apt-get install -y
     sudo snap install node --classic
 elif [ -f "/etc/arch-release" ]; then
     echo "arch"

@@ -1,0 +1,15 @@
+" Tools -> Options -> Environment -> Keyboard
+nmap :A :vsc EditorContextMenus.CodeWindow.ToggleHeaderCodeFile<CR>
+nmap :Bk :vsc Debug.ToggleBreakpoint<CR>
+nmap :Bm :vsc Edit.ToggleBookmark<CR>
+nmap :Bn :vsc Edit.NextBookmark<CR>
+nmap :Bp :vsc Edit.PreviousBookmark<CR>
+nmap :Build :vsc Build.BuildSolution<CR>
+nmap :Debug :vsc Debug.Start<CR>
+nmap :Rename :vsc Refactor.Rename<CR>
+nmap :Run :vsc Debug.StartWithoutDebugging<CR>
+nmap :Stop :vsc Debug.StopDebugging<CR>
+nmap :Test :vsc TestExplorer.RunAllTestsInContext<CR>
+nmap :Usages :vsc Edit.FindAllReferences<CR>
+nmap <C-p> :vsc Edit.GoToFile<CR>
+nmap <F2> :vsc Edit.GoToDefinition<CR>

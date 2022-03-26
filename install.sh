@@ -5,9 +5,6 @@ if [[ $EUID -ne 0 ]]; then
 fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 home="/home/$SUDO_USER"
-function unsudo() {
-    sudo -Hu $SUDO_USER $@
-}
 
 ################################################################################
 # Check Operating System; Perform OS Specific Prerequisite Setup
@@ -28,17 +25,13 @@ fi
 # Parse Arguments
 ################################################################################
 function usage() {
-  echo "USAGE: sudo ./install.sh [--non-interactive]"
+  echo "USAGE: ./install.sh"
 }
 
 while [[ $# -gt 0 ]]; do
     key="$1"
-  
+
     case $key in
-        --non-interactive)
-            NON_INTERACTIVE=1
-            shift # past argument
-            ;;
         -h|--help)
             usage
             exit 0
@@ -54,18 +47,14 @@ done
 # Run Installation
 ################################################################################
 # Prompt Stow
-if [ -z "$NON_INTERACTIVE" ]; then
-    read -p "Stow to $home? [Y/n] " -n 1 -r
-    echo # move to a new line
-    [[ $REPLY =~ ^[Yy]$ ]] && RUN_STOW=1
-else
-    RUN_STOW=1
-fi
+read -p "Stow to $home? [Y/n] " -n 1 -r
+echo # move to a new line
+[[ $REPLY =~ ^[Yy]$ ]] && RUN_STOW=1
 
 # Stow
 if [ "$RUN_STOW" ]; then
     echo "symlink farming"
-    unsudo stow home --no-folding
+    stow home --no-folding
 fi
 
 # Run all scripts in `script`
@@ -87,17 +76,13 @@ do
 
     # Prompt Script
     unset RUN_SCRIPT
-    if [ -z "$NON_INTERACTIVE" ]; then
-        read -p "Run ${filename}? [Y/n] " -n 1 -r
-        echo # move to a new line
-        [[ $REPLY =~ ^[Yy]$ ]] && RUN_SCRIPT=1
-    else
-        RUN_SCRIPT=1
-    fi
+    read -p "Run ${filename}? [Y/n] " -n 1 -r
+    echo # move to a new line
+    [[ $REPLY =~ ^[Yy]$ ]] && RUN_SCRIPT=1
 
     # Execute Script
     if [ "$RUN_SCRIPT" ]; then
         echo "Runnning $s"
-        source $s
+        $s
     fi
 done

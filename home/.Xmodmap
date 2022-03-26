@@ -9,12 +9,12 @@ keysym l = l L Right sterling
 keysym u = u U Prior mu
 keysym d = d D Next
 keysym x = x X Delete
-keysym 0 = 0 parenright degree
+keysym 0 = 0 parenright Home degree
 keysym 4 = 4 dollar End onequarter
 
 ! Symbols
 keysym 1 = 1 exclam udiaeresis Udiaeresis
-keysym 2 = 2 at onehalf twothrids
+keysym 2 = 2 at onehalf
 keysym 3 = 3 numbersign onethird threequarters
 keysym a = a A adiaeresis Adiaeresis
 keysym b = b B Ediaeresis ssharp

@@ -62,8 +62,8 @@ endif
 call plug#begin(stdpath('data') . '/plugged')
   " Colorscheme
   Plug 'liuchengxu/space-vim-dark'
-  " NERDTree
-  Plug 'preservim/nerdtree'
+  " CHADTree
+  Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
   " EasyMotion
   Plug 'easymotion/vim-easymotion'
   " Fuzzy Finder
@@ -81,6 +81,8 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'alepez/vim-gtest'
   " Debug (:VimspectorInstall vscode-cpptools)
   Plug 'puremourning/vimspector'
+  " Ansi escape sequences with :ColorHighlight
+  Plug 'chrisbra/Colorizer'
   " Vimwiki
   Plug 'vimwiki/vimwiki'
 
@@ -96,12 +98,28 @@ call plug#end()
   colorscheme space-vim-dark
 
 """ FZF
+let $FZF_DEFAULT_COMMAND='rg --files --hidden -g "!.git"'
 :map <C-P> :FZF<CR>
-:map <C-K> :Rg<CR>
+function! RipgrepFzf(query, fullscreen)
+  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --sort path --hidden -g "!.git" -- %s || true'
+  let initial_command = printf(command_fmt, shellescape(a:query))
+  let reload_command = printf(command_fmt, '{q}')
+  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+:map <C-K> :RG<CR>
 
-""" NERDTree
-nnoremap <leader>t :NERDTreeFocus<CR>
-:command Pwd NERDTree %:p:h
+""" CHADTree
+nnoremap <leader>t <cmd>:CHADopen<cr>
+let g:chadtree_settings = {
+  \ 'keymap.toggle_version_control': ['g'],
+  \ 'theme.icon_glyph_set': 'ascii',
+  \ 'view.window_options.number': v:true,
+  \ 'view.window_options.relativenumber': v:true
+  \ }
+
+" 'chadtree_settings.theme.icon_glyph_set': 'ascii'
 
 """ Coc Begin
   " TextEdit might fail if hidden is not set.

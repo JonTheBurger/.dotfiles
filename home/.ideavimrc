@@ -1,0 +1,20 @@
+# source ~/.vimrc
+
+set number
+set relativenumber
+set ignorecase smartcase
+set hlsearch
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+command! Debug action Debug
+command! Format action ReformatCode
+command! NFile action NewFile
+command! Rename action RenameElement
+command! Replace action Replace
+command! Run action Run
+command! Stop action Stop
+command! Target action editRunConfigurations
+command! Test action RerunTests
+command! Usages action FindUsages

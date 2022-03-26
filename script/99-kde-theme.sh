@@ -1,10 +1,4 @@
 #!/bin/bash
-if [[ $EUID -eq 0 ]]; then
-    echo "This script must be run as a non-root user"
-    exit 1
-fi
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
-
 if [ -f "/etc/apt/sources.list" ]; then
     export DEBIAN_FRONTEND=noninteractive
     sudo apt-get install -y \
@@ -29,15 +23,15 @@ fi
 lookandfeeltool --apply com.github.vinceliuice.Layan
 
 # Splash Screen
-# https://store.kde.org/p/1426182
-/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1426182
+/usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://lookandfeel.knsrc/api.kde-look.org/1304256
 # https://store.kde.org/p/1304256
+# https://store.kde.org/p/1426182
 # https://store.kde.org/p/1424150
 # https://store.kde.org/p/1505562
 # https://store.kde.org/p/1447068
 # https://store.kde.org/p/1453401
 # https://store.kde.org/p/1460249
-kwriteconfig5 --file ksplashrc --group KSplash --key Theme AnimatedAbstract_nik78
+kwriteconfig5 --file ksplashrc --group KSplash --key Theme QuarksSplashDark
 
 # SDDM Theme
 if [ ! -d "/usr/share/sddm/themes/sddm-sugar-candy-master" ]; then
@@ -203,50 +197,6 @@ kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "ExposeAll" $'Meta+Sp
 kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
 qdbus org.kde.KWin /KWin reconfigure
 
-# Install KWin Script Krohnkite Tiling
-if [ ! -d ~/.local/share/kwin/scripts/krohnkite ]; then
-    wget -P /tmp https://github.com/esjeon/krohnkite/releases/download/v0.7/krohnkite-0.7.kwinscript
-    plasmapkg2 -t kwinscript -i /tmp/krohnkite-0.7.kwinscript
-    mkdir -p ~/.local/share/kservices5/
-    ln -sf ~/.local/share/kwin/scripts/krohnkite/metadata.desktop ~/.local/share/kservices5/krohnkite.desktop
-fi
-# Enable Krohnkite Plugin
-kwriteconfig5 --file kwinrc --group Plugins --key "krohnkiteEnabled" --type bool true
-# Configure Krohnkite
-kwriteconfig5 --file kwinrc --group Script-krohnkite --key enableFloatingLayout --type bool true
-kwriteconfig5 --file kwinrc --group Script-krohnkite --key enableQuarterLayout --type bool true
-kwriteconfig5 --file kwinrc --group Script-krohnkite --key layoutPerDesktop --type bool true
-kwriteconfig5 --file kwinrc --group Script-krohnkite --key maximizeSoleTile --type bool true
-kwriteconfig5 --file kwinrc --group Script-krohnkite --key noTileBorder --type bool true
-kwriteconfig5 --file kwinrc --group Script-krohnkite --key pollMouseXdotool --type bool true
-# Set Global Shortcuts
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Cycle Layout" "Meta+/,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Decrease" "Meta+Shift+O,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Down/Next" "Meta+J,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Float" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Float All" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Floating Layout" "Meta+Shift+F,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Grow Height" "Meta+Ctrl+J,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Grow Width" "Meta+Ctrl+L,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Increase" "Meta+Shift+I,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Left" "Meta+H,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Monocle Layout" ",none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Move Down/Next" "Meta+Shift+J,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Move Left" "Meta+Shift+H,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Move Right" "Meta+Shift+L,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Move Up/Prev" "Meta+Shift+K,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Next Layout" "Meta+\\,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Previous Layout" "Meta+|,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Quarter Layout" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Right" "Meta+G,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Set master" "Meta+Return,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Shrink Height" "Meta+Ctrl+K,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Shrink Width" "Meta+Ctrl+H,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Spread Layout" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Stair Layout" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Three Column Layout" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Tile Layout" "none,none,"
-kwriteconfig5 --file kglobalshortcutsrc --group kwin --key "Krohnkite: Up/Prev" "Meta+K,none,"
 # Reload Keyboard Shortcuts https://www.reddit.com/r/kde/comments/6u0wo7/configuring_kde_by_editing_the_config_files/dlqzeop
 kquitapp5 kglobalaccel && sleep 2s && kglobalaccel5 &
 
