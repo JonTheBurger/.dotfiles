@@ -75,6 +75,10 @@ call plug#begin(stdpath('data') . '/plugged')
   Plug 'jackguo380/vim-lsp-cxx-highlight'
   " vim-dispatch (CMake status in background)
   Plug 'tpope/vim-dispatch'
+  " Comment out lines
+  Plug 'tpope/vim-commentary'
+  " Surround selections with quotes, parens, etc.
+  Plug 'tpope/vim-surround'
   " CMake
   Plug 'ilyachur/cmake4vim'
   " Google Test
@@ -113,13 +117,15 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 """ CHADTree
 nnoremap <leader>t <cmd>:CHADopen<cr>
 let g:chadtree_settings = {
-  \ 'keymap.toggle_version_control': ['g'],
+  \ 'keymap.toggle_version_control': ['S'],
   \ 'theme.icon_glyph_set': 'ascii',
   \ 'view.window_options.number': v:true,
   \ 'view.window_options.relativenumber': v:true
   \ }
 
-" 'chadtree_settings.theme.icon_glyph_set': 'ascii'
+""" vim-commentary
+" Ctrl+/ toggle comment
+:map <C-_> gcc
 
 """ Coc Begin
   " TextEdit might fail if hidden is not set.
