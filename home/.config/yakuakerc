@@ -3,6 +3,7 @@ Frames=15
 
 [Appearance]
 BackgroundColorOpacity=80
+HideSkinBorders=true
 Translucency=true
 
 [Dialogs]

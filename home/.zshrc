@@ -4,17 +4,33 @@ setopt nonomatch
 
 # Aliases & Functions
 alias :q='exit'
+alias cls='for _ in {1..1000}; do echo; done; clear'
+alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
 alias look4='find . -iname'
 alias sodu='sudo --preserve-env=PATH env'
+alias mk='make -f bamboo.mk'
 alias bat='batcat'
+alias copy='rsync -ahpruzvP'
 function fsmon() {
   inotifywait -r -m -e modify . |
   while read p e f; do
     echo "$p$f modified"
   done
 }
+function xmlfmt() {
+  mv "$1" "$1.bkp"
+  xmllint --format "$1.bkp" > "$1"
+}
+
+# Bookmarks
+if [ -d "$HOME/.bookmarks" ]; then
+  export CDPATH=".:$HOME/.bookmarks:/"
+fi
+
+# Variables
+export CMAKE_GENERATOR="CodeBlocks - Ninja"
 
 # Man Page Color
 export LESS_TERMCAP_mb=$(tput bold; tput setaf 2) # green
@@ -48,6 +64,7 @@ antigen bundle command-not-found
 antigen bundle zsh-users/zsh-autosuggestions
 # tab completions for various programs
 antigen bundle zsh-users/zsh-completions
+autoload -U compinit; compinit
 # highlights shell commands. MUST BE LAST PLUGIN
 antigen bundle zsh-users/zsh-syntax-highlighting
 

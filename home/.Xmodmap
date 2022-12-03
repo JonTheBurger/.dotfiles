@@ -9,10 +9,11 @@ keysym l = l L Right sterling
 keysym u = u U Prior mu
 keysym d = d D Next
 keysym x = x X Delete
-keysym 0 = 0 parenright Home degree
+!keysym 0 = 0 parenright Home degree
 keysym 4 = 4 dollar End onequarter
 
 ! Symbols
+keysym equal = equal plus notequal plusminus
 keysym 1 = 1 exclam udiaeresis Udiaeresis
 keysym 2 = 2 at onehalf
 keysym 3 = 3 numbersign onethird threequarters
@@ -26,4 +27,3 @@ keysym p = p P p paragraph
 keysym r = r R r registered
 keysym s = s S s section
 keysym y = y Y y yen
-keysym equal = equal plus notequal plusminus

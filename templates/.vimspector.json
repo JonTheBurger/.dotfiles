@@ -1,0 +1,22 @@
+{
+  "configurations": {
+    "launch": {
+      "adapter": "CodeLLDB",
+      "variables": {
+        "workspaceFolderBasename": {
+          "shell": ["basename", "${PWD}"]
+        }
+      },
+      "configuration": {
+        "request": "launch",
+        "program": "${workspaceRoot}/target/debug/${workspaceFolderBasename}"
+      },
+      "breakpoints": {
+        "exception": {
+          "cpp_throw": "Y",
+          "cpp_catch": "N"
+        }
+      }
+    }
+  }
+}

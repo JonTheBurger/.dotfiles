@@ -1,6 +1,6 @@
 #!/bin/env python3
 # Imports
-from configparser import ConfigParser
+from configparser import RawConfigParser
 from dataclasses import dataclass
 from os import path
 from typing import Tuple
@@ -13,19 +13,20 @@ INI_PATHS = [
 ]
 
 # Functions
-def get_qtcreator_ini_config() -> Tuple[ConfigParser, str]:
+def get_qtcreator_ini_config() -> Tuple[RawConfigParser, str]:
     qt_creator_ini = next((p for p in INI_PATHS if path.exists(p)), None)
     if not qt_creator_ini:
         print(f"QtCreator.ini not found! Checked {INI_PATHS}; aborting!")
         exit(1)
 
-    config = ConfigParser()
+    config = RawConfigParser()
+    config.optionxform = str
     with open(qt_creator_ini, "r", encoding="utf-8") as f:
         config.read_file(f)
     return config, qt_creator_ini
 
 
-def set_fake_vim_ex_commands(config: ConfigParser):
+def set_fake_vim_ex_commands(config: RawConfigParser):
     SECTION = "FakeVimExCommand"
     SETTINGS = {
         "AutoTest.RunAll": "^Test$",
@@ -40,7 +41,7 @@ def set_fake_vim_ex_commands(config: ConfigParser):
         "ProjectExplorer.Build": "^Build$",
         "ProjectExplorer.Run": "^Run$",
         "ProjectExplorer.SelectTargetQuick": "^Target$",
-        "QtCreator.Close": "^Bdel$"
+        "QtCreator.Close": "^Bdel$",
         "QtCreator.CloseAllExceptVisible": "^Qaev$",
         "QtCreator.SplitNewWindow": "^NSplit$",
         "TextEditor.FindUsages": "^Usages$",
@@ -57,8 +58,8 @@ def set_fake_vim_ex_commands(config: ConfigParser):
 def main():
     config, qt_creator_ini = get_qtcreator_ini_config()
     set_fake_vim_ex_commands(config)
-    #with open(qt_creator_ini) as f:
-    #    config.write(f)
+    with open(qt_creator_ini, 'w', encoding="utf-8") as f:
+        config.write(f)
 
 
 if __name__ == "__main__":

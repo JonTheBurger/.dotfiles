@@ -5,6 +5,16 @@ set lcs+=space:·
 autocmd filetype make setlocal noexpandtab
 set statusline=%F\ %l:%c
 
+""" Ex Commands
+cnoreabbrev RRun execute '!cargo run'
+cnoreabbrev RBuild execute '!cargo build'
+cnoreabbrev RFmt execute '!rustfmt %'
+
+function! Build(target)
+  echo a:target
+endfunction
+command! -nargs=1 Build call Build(<q-args>)
+
 """ Hex Editor
 " helper function to toggle hex mode
 function ToggleHex()
@@ -69,7 +79,7 @@ call plug#begin(stdpath('data') . '/plugged')
   " Fuzzy Finder
   Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
   Plug 'junegunn/fzf.vim'
-  " Completion + LSP | :CocInstall coc-clangd | :CocInstall coc-cmake | :CocInstall coc-python | :CocInstall coc-rls
+  " Completion + LSP | :CocInstall coc-clangd | :CocInstall coc-cmake | :CocInstall coc-python | :CocInstall coc-rust-analyzer
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " C++ Semantic Highlighting
   Plug 'jackguo380/vim-lsp-cxx-highlight'
@@ -112,12 +122,13 @@ function! RipgrepFzf(query, fullscreen)
   call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-:map <C-K> :RG<CR>
+:map <C-K> :Rg<CR>
+" RG is fuzzier than Rg
 
 """ CHADTree
 nnoremap <leader>t <cmd>:CHADopen<cr>
 let g:chadtree_settings = {
-  \ 'keymap.toggle_version_control': ['S'],
+  \ 'keymap.toggle_version_control': [';'],
   \ 'theme.icon_glyph_set': 'ascii',
   \ 'view.window_options.number': v:true,
   \ 'view.window_options.relativenumber': v:true
@@ -308,8 +319,27 @@ cnoreabbrev Target CMakeSelectTarget
 cnoreabbrev Tgt FZFCMakeSelectTarget
 let g:cmake_build_type = 'Debug'
 let g:cmake_compile_commands = 1
-let g:cmake_compile_commands_link = './'
+let g:cmake_compile_commands = 1
+let g:cmake_compile_commands_link = './build/compile_commands.json'
 let g:cmake_project_generator = 'Ninja'
+let g:cmake_vimspector_support = 1
+let g:cmake_build_path_pattern = [ "build/%s", "g:cmake_build_type" ]
+let g:cmake_vimspector_default_configuration = {
+            \ 'adapter': 'vscode-cpptools',
+            \ 'configuration': {
+                \ 'request': 'launch',
+                \ 'cwd': '${workspaceRoot}',
+                \ 'MIMode': 'gdb',
+                \ 'setupCommands': [
+                \     {
+                \         'description': 'Enable pretty-printing for gdb',
+                \         'text': '-enable-pretty-printing'
+                \     }
+                \ ],
+                \ 'args': [],
+                \ 'program': ''
+                \ }
+            \ }
 
 """ gtest
 cnoreabbrev RunTest GTestRunUnderCursor

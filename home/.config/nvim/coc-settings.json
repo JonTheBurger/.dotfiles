@@ -2,7 +2,6 @@
   "clangd.enabled": true,
   "clangd.semanticHighlighting": true,
   "clangd.filetypes": ["c", "cc", "cpp", "c++", "cxx", "objc", "objcpp"],
-  "clangd.fallbackFlags": ["-std=c++17", "-Wall", "-Wextra", "-pedantic"],
   "languageserver": {
     "cmake": {
       "command": "cmake-language-server",
