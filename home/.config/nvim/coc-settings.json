@@ -6,7 +6,12 @@
     "cmake": {
       "command": "cmake-language-server",
       "filetypes": ["cmake"],
-      "rootPatterns": "compile_commands.json"
+      "rootPatterns": [
+        "build/"
+      ],
+      "initializationOptions": {
+        "buildDirectory": "build"
+      }
     }
   }
 }

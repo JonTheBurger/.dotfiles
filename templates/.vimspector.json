@@ -9,7 +9,7 @@
       },
       "configuration": {
         "request": "launch",
-        "program": "${workspaceRoot}/target/debug/${workspaceFolderBasename}"
+        "program": "${workspaceRoot}/build/bin/${workspaceFolderBasename}"
       },
       "breakpoints": {
         "exception": {

@@ -4,6 +4,14 @@ set relativenumber
 set number
 set nowrap
 
+" Whitespace
+set list
+set lcs+=space:·
+set listchars+=eol:\ 
+
+" Theme
+highlight SpecialKey ctermfg=darkgray
+
 " Searching
 set hlsearch
 set ignorecase

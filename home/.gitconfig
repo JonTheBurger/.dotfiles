@@ -1,33 +1,41 @@
 [core]
-    editor = vim
+  editor = vim
 [alias]
-    a = add
-    amend = commit --amend --no-edit
-    b = branch
-    bD = branch -D
-    bd = branch -d
-    c = commit --verbose
-    co = checkout
-    cob = checkout -b
-    d = diff
-    dc = diff --cached
-    ds = diff --stat
-    f = fetch -p
-    g = grep
-    lasttag = describe --tags --abbrev=0
-    m = commit --amend --verbose
-    s = status -s
-    subinit = submodule update --init --recursive
-    tree = log --graph --decorate --pretty=oneline --abbrev-commit
-    w = whatchanged
+  a = add
+  b = branch
+  bD = branch -D
+  bd = branch -d
+  c = commit --verbose
+  co = checkout
+  cob = checkout -b
+  d = diff
+  dc = diff --cached
+  ds = diff --stat
+  f = fetch --prune
+  g = grep
+  m = commit --amend --verbose
+  s = status -s
+  st = status
+  w = whatchanged
+  # Misspelling
+  stauts = status
+  # Custom
+  subinit = submodule update --init --recursive
+  amend = commit --amend --no-edit
+  ca = !git add -A && git commit --amend --no-edit
+  shove = !git add -A && git commit --amend --no-edit && git push --force
+  heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
+  force-apply = apply --reject --whitespace=fix
+  tree = log --graph --decorate --pretty=oneline --abbrev-commit
+  prune-branches = !git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
 [tig]
-    main-view = id date author commit-title
-    main-view-author = abbreviated
-    main-view-commit-title = graph=yes,refs=yes
-    main-view-date = custom
-    main-view-date-format = "%Y-%m-%d"
+  main-view = id date author commit-title
+  main-view-author = abbreviated
+  main-view-commit-title = graph=yes,refs=yes
+  main-view-date = custom
+  main-view-date-format = "%Y-%m-%d"
 [filter "lfs"]
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
-    process = git-lfs filter-process
-    required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true

@@ -7,6 +7,7 @@
   <style name="SearchResult" background="#000000"/>
   <style name="SearchResultAlt1" foreground="#000033" background="#b6ccff"/>
   <style name="SearchResultAlt2" foreground="#330000" background="#ffb6cc"/>
+  <style name="SearchResultContainingFunction"/>
   <style name="SearchScope"/>
   <style name="Parentheses" foreground="#fc1929" bold="true"/>
   <style name="ParenthesesMismatch" background="#fc1929"/>
@@ -19,6 +20,7 @@
   <style name="Number" foreground="#4ef278"/>
   <style name="String" foreground="#55ff00"/>
   <style name="Type" foreground="#00ffd5"/>
+  <style name="Namespace" foreground="#00ffd5"/>
   <style name="Local"/>
   <style name="Parameter" foreground="#ffe800"/>
   <style name="Global" foreground="#fc1929" bold="true"/>
@@ -31,7 +33,8 @@
   <style name="Operator" foreground="#ffc66d"/>
   <style name="Overloaded Operator" foreground="#fff7b8" bold="true"/>
   <style name="Punctuation" foreground="#ffc66d"/>
-  <style name="Preprocessor" foreground="#ffe800" bold="true"/>
+  <style name="Preprocessor" foreground="#ff539e" bold="true"/>
+  <style name="Macro" foreground="#ffe800" bold="true"/>
   <style name="Label" foreground="#834a0d" bold="true"/>
   <style name="Comment" foreground="#808080"/>
   <style name="Doxygen.Comment" foreground="#808080" italic="true"/>
@@ -72,5 +75,16 @@
   <style name="Declaration"/>
   <style name="FunctionDefinition" bold="true"/>
   <style name="OutputArgument" foreground="#ff6600" bold="true" italic="true"/>
+  <style name="StaticMember"/>
+  <style name="CocoCodeAdded"/>
+  <style name="CocoPartiallyCovered" foreground="#808000"/>
+  <style name="CocoNotCovered" foreground="#ff0000"/>
+  <style name="CocoFullyCovered" foreground="#00ff00"/>
+  <style name="CocoManuallyValidated" foreground="#0000ff"/>
+  <style name="CocoDeadCode" foreground="#ff00ff"/>
+  <style name="CocoExecutionCountTooLow" foreground="#ff0000"/>
+  <style name="CocoNotCoveredInfo" foreground="#ff0000"/>
+  <style name="CocoCoveredInfo" foreground="#00ff00"/>
+  <style name="CocoManuallyValidatedInfo" foreground="#0000ff"/>
   <style name="LastStyleSentinel"/>
 </style-scheme>

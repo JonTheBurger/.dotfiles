@@ -5,14 +5,25 @@ setopt nonomatch
 # Aliases & Functions
 alias :q='exit'
 alias cls='for _ in {1..1000}; do echo; done; clear'
+alias getmode='stat -c %a'
 alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
 alias look4='find . -iname'
 alias sodu='sudo --preserve-env=PATH env'
-alias mk='make -f bamboo.mk'
 alias bat='batcat'
 alias copy='rsync -ahpruzvP'
+alias mkpatch='git diff > ~/Desktop/$(basename $(pwd)).patch'
+alias buildtree='tree -I "CMakeFiles|Testing|external"'
+function mk() {
+  if [ -f "bamboo.mk" ]; then
+    make -f bamboo.mk "$@"
+  elif [ -f "Makefile" ]; then
+    make "$@"
+  else
+    ninja "$@"
+  fi
+}
 function fsmon() {
   inotifywait -r -m -e modify . |
   while read p e f; do
@@ -22,6 +33,15 @@ function fsmon() {
 function xmlfmt() {
   mv "$1" "$1.bkp"
   xmllint --format "$1.bkp" > "$1"
+}
+function new() {
+  copier copy ${HOME}/.new/$@ .
+}
+function dkr-rmgrep() {
+  docker rmi $(docker images --format '{{.Repository}}:{{.Tag}}' | grep $@)
+}
+function dkr-ims() {
+  docker images --format '{{.Repository}}' | uniq | sort
 }
 
 # Bookmarks
@@ -73,4 +93,12 @@ antigen theme awesomepanda
 
 ### Tell Antigen that you're done.
 antigen apply
+
+# Use fzf Ctrl+R command history, Ctrl+T file search, Alt+C cd to subdir
+source /usr/share/doc/fzf/examples/key-bindings.zsh
+source $HOME/.local/bin/fzf-git.sh
+
+export ARTIFACTORY=https://artifactory.wireless.msasafety.com
+alias l='ls -AhFl'
+alias ll='ls -AhFl --time-style="+%b %d %I:%M %p"'
 

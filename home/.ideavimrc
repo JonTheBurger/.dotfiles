@@ -1,4 +1,4 @@
-# source ~/.vimrc
+source ~/.vimrc
 
 set number
 set relativenumber

@@ -6,8 +6,14 @@ BackgroundColorOpacity=80
 HideSkinBorders=true
 Translucency=true
 
+[Desktop Entry]
+DefaultProfile=JonTheBurger.profile
+
 [Dialogs]
 FirstRun=false
+
+[Shortcuts]
+toggle-window-state=ScrollLock
 
 [Window]
 Height=90
