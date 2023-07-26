@@ -4,5 +4,6 @@ function! TrimWhitespace()
   keeppatterns %s/\s\+$//e
   call winrestview(l:save)
 endfunction
-command! TrimWhitespace call TrimWhitespace()
 
+command! TrimWhitespace call TrimWhitespace()
+map <leader>W :call TrimWhitespace()<CR>

@@ -15,6 +15,7 @@ alias bat='batcat'
 alias copy='rsync -ahpruzvP'
 alias mkpatch='git diff > ~/Desktop/$(basename $(pwd)).patch'
 alias buildtree='tree -I "CMakeFiles|Testing|external"'
+alias path='echo $PATH | sed "s#:#/\n#g"'
 function mk() {
   if [ -f "bamboo.mk" ]; then
     make -f bamboo.mk "$@"

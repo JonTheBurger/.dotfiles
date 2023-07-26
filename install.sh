@@ -6,6 +6,10 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)"
 home="/home/$SUDO_USER"
 
+# curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+# chmod u+x nvim.appimage
+# curl -LO https://github.com/junegunn/fzf/releases/latest/download/0.42.0/fzf-0.42.0-linux_arm64.tar.gz
+
 ################################################################################
 # Check Operating System; Perform OS Specific Prerequisite Setup
 ################################################################################

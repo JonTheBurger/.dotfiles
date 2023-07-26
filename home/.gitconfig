@@ -39,3 +39,8 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+[user]
+  name = Jon Povirk
+  email = jmp180@pitt.edu
+[includeIf "gitdir:~/.ssh/work.conf"]
+  path = ~/.ssh/work.conf

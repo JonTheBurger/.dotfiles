@@ -163,3 +163,16 @@ nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
+""" clangd
+" cnoreabbrev A CocCommand clangd.switchSourceHeader
+
+"nnoremap <leader>lm :call LanguageClient_contextMenu()<CR>
+  "nnoremap <leader>lh :call LanguageClient#textDocument_hover()<CR>
+  "nnoremap <F2> :call LanguageClient#textDocument_definition()<CR>
+  ":command Dfn :call LanguageClient#textDocument_definition()<CR>
+  ":command Rename :call LanguageClient#textDocument_rename()
+  ":command Fmt :call LanguageClient#textDocument_formatting()<CR>
+  ":command Usages :call LanguageClient#textDocument_references()<CR>
+  ":command Doc :call LanguageClient_textDocument_documentSymbol()<CR>
+  ":command Fix ????? :execute "normal \<Plug>coc-fix-current()"
+

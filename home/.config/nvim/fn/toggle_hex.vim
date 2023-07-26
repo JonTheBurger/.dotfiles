@@ -38,5 +38,6 @@ function ToggleHex()
   let &readonly=l:oldreadonly
   let &modifiable=l:oldmodifiable
 endfunction
+
 map <leader>x :call ToggleHex()<CR>
 
