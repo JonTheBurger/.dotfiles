@@ -37,39 +37,21 @@ return {
     }
   },
   config = function()
-    -- local icons = require("nvim-web-devicons")
+    local icons = require("nvim-web-devicons")
     require("nvim-tree").setup({
       renderer = {
-        highlight_opened_files = "all",
-        -- TODO:
+        highlight_opened_files = "icon",
         icons = {
-          glyphs = {
-            default = "📄",
-            symlink = "🔗",
-            bookmark = "🔖",
-            folder = {
-              arrow_closed = "→",
-              arrow_open = "↓",
-              default = "📁",
-              open = "📂",
-              empty = "📁",
-              empty_open = "📂",
-              symlink = "⛓️",
-              symlink_open = "🔗",
-            },
-            git = {
-              unmerged = "Ͱ",
-              deleted = "χ",
-            },
-          },
+          webdev_colors = true,
+          git_placement = "signcolumn",
         },
         special_files = {
-          "CMakeLists.txt",
-          "CMakePresets.json",
-          "Cargo.toml",
-          "Makefile",
-          "README.md",
-          "pyproject.toml",
+          -- "CMakeLists.txt",
+          -- "CMakePresets.json",
+          -- "Cargo.toml",
+          -- "Makefile",
+          -- "README.md",
+          -- "pyproject.toml",
         },
       },
       filters = {

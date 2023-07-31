@@ -214,7 +214,7 @@ ins_right {
 
 return {
   "nvim-lualine/lualine.nvim",
-  -- requires = { "nvim-tree/nvim-web-devicons", opt = true }
+  requires = { "nvim-tree/nvim-web-devicons", opt = true },
   event = "VeryLazy",
   opts = function(_, opts)
     return config

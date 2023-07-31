@@ -109,3 +109,8 @@ KDE
 
 Gallery
 =======
+
+TODO
+====
+* https://www.nerdfonts.com/font-downloads
+* https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
