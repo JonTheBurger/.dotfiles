@@ -25,11 +25,11 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
 
--- Navigate Popup
-vim.keymap.set("n", "<C-k>", "<CMD>cnext<CR>zz")
-vim.keymap.set("n", "<C-j>", "<CMD>cprev<CR>zz")
-vim.keymap.set("n", "<leader>k", "<CMD>lnext<CR>zz")
-vim.keymap.set("n", "<leader>j", "<CMD>lprev<CR>zz")
+-- Resize Splits
+vim.keymap.set("n", "<C-H>", ":vertical resize -1<CR>")
+vim.keymap.set("n", "<C-J>", ":resize +1<CR>")
+vim.keymap.set("n", "<C-K>", ":resize -1<CR>")
+vim.keymap.set("n", "<C-L>", ":vertical resize +1<CR>")
 
 -- Custom Functions
 local fn = require("jontheburger.functions")

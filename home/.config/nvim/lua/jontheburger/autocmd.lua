@@ -10,4 +10,20 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     vim.cmd([[silent! :%foldopen!]])
   end,
 })
-
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+  pattern = {
+    "*.bin",
+  },
+  callback = function()
+    vim.cmd([[:call ToggleHex()]])
+  end,
+})
+vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+  pattern = {
+    "*.a",
+  },
+  callback = function()
+    vim.cmd([[:%! ar -t ]] .. vim.fn.expand('%:p'))
+  end,
+})
+-- :%! xxd

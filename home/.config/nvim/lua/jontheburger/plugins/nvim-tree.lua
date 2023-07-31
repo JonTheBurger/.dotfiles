@@ -28,13 +28,21 @@ return {
   },
   keys = {
     {
+      "<leader>e",
+      function()
+        local api = require("nvim-tree.api")
+        api.tree.toggle()
+      end,
+      desc = "File Tree Toggle",
+    },
+    {
       "<leader>t",
       function()
         local api = require("nvim-tree.api")
         api.tree.toggle()
       end,
       desc = "File Tree Toggle",
-    }
+    },
   },
   config = function()
     local icons = require("nvim-web-devicons")

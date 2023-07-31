@@ -1,4 +1,5 @@
 -- https://github.com/folke/lazy.nvim
+-- https://www.lazyvim.org/
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   print("Setting up Lazy...")
@@ -32,3 +33,5 @@ require("lazy").setup("jontheburger.plugins", {
     -- },
   },
 })
+-- Interesting Plugins:
+-- https://github.com/stevearc/overseer.nvim

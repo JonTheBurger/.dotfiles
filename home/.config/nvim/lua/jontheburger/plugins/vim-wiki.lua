@@ -3,9 +3,9 @@ return {
   "vimwiki/vimwiki",
   version = "*",
   keys = {
-    { "<leader>ww", "<cmd>VimwikiIndex<CR>", desc = "Vim Wiki Diary Index" },
-    { "<leader>wi", "<cmd>VimwikiDiaryIndex<CR>", desc = "Vim Wiki Diary Index" },
-    { "<leader>wd", "<cmd>VimwikiMakeDiaryNote<CR>", desc = "Vim Wiki Diary Today" },
+    { "<leader>ww", "<CMD>VimwikiIndex<CR>", desc = "Vim Wiki Diary Index" },
+    { "<leader>wi", "<CMD>VimwikiDiaryIndex<CR>", desc = "Vim Wiki Diary Index" },
+    { "<leader>wd", "<CMD>VimwikiMakeDiaryNote<CR>", desc = "Vim Wiki Diary Today" },
   },
   init = function()
     vim.g.vimwiki_autochdir = 1
