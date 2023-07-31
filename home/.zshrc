@@ -99,7 +99,6 @@ antigen apply
 source /usr/share/doc/fzf/examples/key-bindings.zsh
 source $HOME/.local/bin/fzf-git.sh
 
-export ARTIFACTORY=https://artifactory.wireless.msasafety.com
 alias l='ls -AhFl'
 alias ll='ls -AhFl --time-style="+%b %d %I:%M %p"'
 
