@@ -2,11 +2,12 @@
 vim.g.mapleader = " "
 vim.g.modelines = 2
 vim.opt.compatible = false
-vim.opt.foldmethod = "syntax"
+vim.opt.cursorline = true
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 0
 vim.opt.spell = true
+vim.opt.spelllang = "en_us"
 vim.opt.syntax = "on"
 vim.opt.termguicolors = true
 vim.opt.updatetime = 750
@@ -36,7 +37,7 @@ vim.opt.textwidth = 0
 vim.opt.expandtab = true
 vim.opt.fixeol = true
 vim.opt.list = true
-vim.opt.listchars = { space = '·', }
+vim.opt.listchars = { space = '·', tab = "»»" }
 
 -- Undo File
 vim.opt.backup = false

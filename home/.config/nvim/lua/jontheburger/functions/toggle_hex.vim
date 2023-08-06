@@ -40,4 +40,3 @@ function ToggleHex()
 endfunction
 
 map <leader>x :call ToggleHex()<CR>
-

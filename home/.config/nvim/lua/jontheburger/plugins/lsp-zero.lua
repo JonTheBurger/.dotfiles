@@ -8,6 +8,34 @@ local format = function()
   end
 end
 
+local kind_icons = {
+  Text = "",
+  Method = "󰆧",
+  Function = "󰊕",
+  Constructor = "",
+  Field = "󰇽",
+  Variable = "󰂡",
+  Class = "󰠱",
+  Interface = "",
+  Module = "",
+  Property = "󰜢",
+  Unit = "",
+  Value = "󰎠",
+  Enum = "",
+  Keyword = "󰌋",
+  Snippet = "",
+  Color = "󰏘",
+  File = "󰈙",
+  Reference = "",
+  Folder = "󰉋",
+  EnumMember = "",
+  Constant = "󰏿",
+  Struct = "",
+  Event = "",
+  Operator = "󰆕",
+  TypeParameter = "󰅲",
+}
+
 return {
   -- https://github.com/VonHeikemen/lsp-zero.nvim
   {
@@ -39,7 +67,22 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
-        }
+        },
+        formatting = {
+          format = function(entry, vim_item)
+            -- Kind icons
+            vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+            -- Source
+            vim_item.menu = ({
+              buffer = "[Buffer]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[LuaSnip]",
+              nvim_lua = "[Lua]",
+              latex_symbols = "[LaTeX]",
+            })[entry.source.name]
+            return vim_item
+          end
+        },
       })
     end
   },
@@ -64,6 +107,7 @@ return {
       local telescope = require("telescope.builtin")
       lsp.on_attach(function(client, bufnr)
         local opts = { buffer = bufnr }
+        vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
         vim.keymap.set("n", "<F4>", vim.lsp.buf.code_action, opts)
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
@@ -75,12 +119,12 @@ return {
         vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
         vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
         -- Custom
-        vim.keymap.set("n", "<F2>", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+        vim.keymap.set("n", "gd", vim.diagnostic.open_float, opts)
         vim.keymap.set("n", "?", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "gr", telescope.lsp_references, {buffer = true})
-        vim.keymap.set({ "n", "i"}, "<C-H>", vim.lsp.buf.signature_help, opts)
-        vim.keymap.set({ "n", "v" }, "<TAB>", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("n", "<leader>fr", telescope.lsp_references, {buffer = true})
+        vim.keymap.set({"n", "i"}, "<C-S-SPACE>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("n", "gf", vim.lsp.buf.code_action, opts)
       end)
 
       -- Language Server Config: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md

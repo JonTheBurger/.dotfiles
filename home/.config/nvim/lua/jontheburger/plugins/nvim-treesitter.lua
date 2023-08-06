@@ -6,6 +6,7 @@ return {
   build = ":TSUpdate",
   event = { "BufReadPost", "BufNewFile" },
   dependencies = {
+    { "nvim-treesitter/playground", },
     {
       "nvim-treesitter/nvim-treesitter-textobjects",
       init = function()
@@ -76,5 +77,10 @@ return {
         end
       end
     end
+
+    -- Setup Folding
+    vim.opt.foldlevel=20
+    vim.opt.foldmethod="expr"
+    vim.opt.foldexpr="nvim_treesitter#foldexpr()"
   end,
 }

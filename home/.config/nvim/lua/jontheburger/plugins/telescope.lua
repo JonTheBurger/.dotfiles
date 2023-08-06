@@ -14,31 +14,22 @@ return {
       "<C-p>",
       function()
         require("telescope.builtin").find_files({
-          find_command={ "fd", "", fname }
+          find_command={ "fd", "--hidden", "-t", "f", fname }
         })
       end,
-      desc="Find Project Files",
-    },
-    {
-      "<leader>fp",
-      function()
-        require("telescope.builtin").find_files({
-          find_command={ "fd", fname }
-        })
-      end,
-      desc="Find Project Files",
+      desc="Find Files",
     },
     {
       "<leader>ff",
       function()
         require("telescope.builtin").find_files({
-          find_command={ "fd", "-HIi", fname }
+          find_command={ "fd", "-Luuu", fname }
         })
       end,
       desc="Find All Files",
     },
     {
-      "<leader>fg",
+      "<leader>fv",
       function()
         require("telescope.builtin").git_files()
       end,
@@ -52,11 +43,15 @@ return {
       desc="Find Grep",
     }, -- Requires ripgrep
     {
-      "<leader>fj",
+      "<leader>fg",
       function()
-        require("telescope.builtin").live_grep()
+        require("telescope.builtin").live_grep({
+          additional_args = {
+            "-Luuu",
+          },
+        })
       end,
-      desc="Find Grep",
+      desc="Find Grep All",
     }, -- Requires ripgrep
     {
       "<leader>fw",
@@ -152,5 +147,65 @@ return {
   },
   dependencies = {
     "nvim-lua/plenary.nvim",
+    {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+    },
   },
+  config = function()
+    require("telescope").setup({
+      defaults = {
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+        },
+        file_ignore_patterns = {
+          ".git/",
+        },
+      },
+    })
+    require("telescope").load_extension("fzf")
+
+    local finders = require("telescope.finders")
+    local pickers = require("telescope.pickers")
+    local make_entry = require("telescope.make_entry")
+    local conf = require("telescope.config").values
+    local cmake = require("cmake-tools")
+
+    local function create_picker(title, fn)
+      return function(opts)
+        opts = opts or {}
+        opts.cwd = opts.cwd or vim.fn.getcwd()
+
+        pickers
+          .new(opts, {
+            prompt_title = title,
+            finder = finders.new_table({
+              results = fn(),
+              entry_maker = make_entry.gen_from_file(opts),
+            }),
+            sorter = conf.file_sorter(opts),
+            previewer = conf.file_previewer(opts),
+          })
+          :find()
+      end
+    end
+    require("telescope").register_extension({
+      exports = {
+        cmake_tools = create_picker("CMake - Launch Targets", function()
+          local result = cmake.get_config():launch_targets()
+          targets = {}
+          for _, v in ipairs(result.targets) do
+            table.insert(targets, v)
+          end
+          return targets
+        end),
+      },
+    })
+  end,
 }

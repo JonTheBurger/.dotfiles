@@ -32,6 +32,10 @@ require("lazy").setup("jontheburger.plugins", {
     --   lazy = "💤 ",
     -- },
   },
+  change_detection = {
+    enabled = false,
+  },
+  -- colorscheme = { "space-vim-dark" },
 })
 -- Interesting Plugins:
 -- https://github.com/stevearc/overseer.nvim

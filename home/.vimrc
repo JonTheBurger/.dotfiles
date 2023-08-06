@@ -39,3 +39,10 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 15
 map <leader>t :Lexplore<CR>
 
+" function! SynStack()
+"   if !exists("*synstack")
+"     return
+"   endif
+"   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+" endfunc
+" nmap <F8> :call SynStack()<CR>

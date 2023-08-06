@@ -56,16 +56,16 @@ return {
       dapui.close()
     end
 
-    vim.fn.sign_define("DapBreakpoint", {text="●", texthl="", linehl="", numhl=""})
-    vim.fn.sign_define("DapBreakpointCondition", {text="🯄", texthl="", linehl="", numhl=""})
-    vim.fn.sign_define("DapBreakpointRejected", {text="ⓧ", texthl="", linehl="", numhl=""})
-    vim.fn.sign_define("DapLogPoint", {text="✎", texthl="", linehl="", numhl=""})
-    vim.fn.sign_define("DapStopped", {text="→", texthl="", linehl="", numhl=""})
+    vim.fn.sign_define("DapBreakpoint", {text="●", texthl="DiagnosticSignError", linehl="", numhl=""})
+    vim.fn.sign_define("DapBreakpointCondition", {text="🯄", texthl="DiagnosticSignError", linehl="", numhl=""})
+    vim.fn.sign_define("DapBreakpointRejected", {text="ⓧ", texthl="DiagnosticSignWarn", linehl="", numhl=""})
+    vim.fn.sign_define("DapLogPoint", {text="✎", texthl="DiagnosticSignInfo", linehl="", numhl=""})
+    vim.fn.sign_define("DapStopped", {text="→", texthl="DiagnosticSignWarn", linehl="DiagnosticSignError", numhl="DiagnosticSignError"})
 
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
     dap.adapters.lldb = {
       type = "executable",
-      command = "lldb-vscode",
+      command = "/home/vagrant/.local/bin/lldb-vscode",
       name = "lldb",
     }
     local lldb = {
@@ -73,9 +73,20 @@ return {
       type = "lldb", -- matches the adapter
       request = "launch", -- could also attach to a currently running process
       program = function()
+        local exe = vim.fn.getcwd() .. "/build/bin"
+
+        -- Attempt to get the current CMake Tools launch target
+        local has_cmake, cmake = pcall(require, "cmake-tools")
+        if has_cmake then
+          local tgt = cmake.get_config():get_launch_target()
+          if tgt.data ~= nil then
+            exe = tgt.data
+          end
+        end
+
         return vim.fn.input(
           "Path to executable: ",
-          vim.fn.getcwd() .. "/build/bin/",
+          exe,
           "file"
         )
       end,
@@ -93,6 +104,61 @@ return {
     }
     dap.configurations.c = dap.configurations.cpp
 
+    -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
+    local dap = require("dap")
+    dap.adapters.python = function(cb, config)
+      if config.request == "attach" then
+        ---@diagnostic disable-next-line: undefined-field
+        local port = (config.connect or config).port
+        ---@diagnostic disable-next-line: undefined-field
+        local host = (config.connect or config).host or "127.0.0.1"
+        cb({
+          type = "server",
+          port = assert(port, "`connect.port` is required for a python `attach` configuration"),
+          host = host,
+          options = {
+            source_filetype = "python",
+          },
+        })
+      else
+        cb({
+          type = "executable",
+          command =  vim.fn.expand("$HOME/.local/opt/debugpy/bin/python"),
+          -- command = "python",
+          args = { "-m", "debugpy.adapter" },
+          options = {
+            source_filetype = "python",
+          },
+        })
+      end
+    end
+    dap.configurations.python = {
+      {
+        -- The first three options are required by nvim-dap
+        type = "python"; -- the type here established the link to the adapter definition: `dap.adapters.python`
+        request = "launch";
+        name = "Launch file";
+
+        -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-setting
+        program = "${file}"; -- This configuration will launch the current file if used.
+        pythonPath = function()
+          -- "debugpy supports launching an application with a different interpreter then the one used to launch debugpy itself."
+          -- NOTE: This does not seem to work with the vscode launch.json extension
+          local cwd = vim.fn.getcwd()
+          if os.getenv("VIRTUAL_ENV") then
+            return os.getenv("VIRTUAL_ENV") .. "/bin/python"
+          elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+            return cwd .. "/.venv/bin/python"
+          elseif vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+            return cwd .. "/venv/bin/python"
+          else
+            return "python"
+          end
+        end;
+      }
+    }
+
+    require("dap.ext.vscode").load_launchjs()
     -- set up debugger
     for k, _ in pairs(opts.setup) do
       opts.setup[k](plugin, opts)

@@ -1,6 +1,9 @@
 ! Use CapsLock as ISO_Level3_Shift
 keycode 66 = Mode_switch
 
+! Prefix
+
+
 ! Vim Keys
 keysym h = h H Left
 keysym j = j J Down
@@ -9,7 +12,7 @@ keysym l = l L Right sterling
 keysym u = u U Prior mu
 keysym d = d D Next
 keysym x = x X Delete
-!keysym 0 = 0 parenright Home degree
+keysym 0 = 0 parenright Home degree
 keysym 4 = 4 dollar End onequarter
 
 ! Symbols

@@ -1,6 +1,7 @@
 -- Colorscheme
 -- vim.cmd("colorscheme molokai")
 vim.cmd("colorscheme space-vim-dark")
+-- require("jontheburger.colors.crystal").setup()
 
 -- Diagnostics
 local signs = {
@@ -24,8 +25,8 @@ vim.cmd([[highlight SpellBad cterm=underline]])
 vim.cmd([[highlight SpellBad gui=undercurl]])
 
 -- Whitespace
---vim.cmd([[highlight NonText guifg=DarkGray]])
---vim.cmd([[highlight SpecialKey guifg=DarkGray]])
+-- vim.cmd([[highlight NonText guifg=#534b5d]]])
+vim.cmd([[highlight SpecialKey guifg=#534b5d]])
 
 -- Transparency
 --vim.cmd([[highlight Normal guibg=none]])
