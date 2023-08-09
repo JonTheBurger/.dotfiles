@@ -3,6 +3,9 @@ local format = function()
   if vim.bo.filetype == "python" then
     -- pyright does not support formatting
     vim.cmd([[!black %]])
+  elseif vim.bo.filetype == "sh" then
+    -- bash-language-server does not support formatting
+    vim.cmd([[!shfmt -i 2 -s -w %]])
   else
     vim.lsp.buf.format()
   end

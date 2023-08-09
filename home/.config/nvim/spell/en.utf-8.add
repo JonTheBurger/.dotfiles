@@ -38,3 +38,5 @@ vscode
 lldb
 workspaceFolder
 json
+prepend
+integrations

@@ -1,0 +1,67 @@
+# https://github.com/alacritty/alacritty
+import:
+  - '~/.config/alacritty/alacritty-theme/themes/blood_moon.yaml'
+  - '~/AppData/Roaming/alacritty/alacritty-theme/themes/blood_moon.yaml'
+
+#env:
+  # Alacritty checks terminfo and uses `alacritty` if available, else `xterm-256color`
+  #TERM: alacritty
+
+window:
+  # full: Borders and title bar; none: Neither borders nor title bar
+  decorations: full
+  opacity: 0.97
+  dynamic_title: true
+  #class:
+    # Application instance name
+    #instance: Alacritty
+    # General application class
+    #general: Alacritty
+  # `Dark`, `Light`, `None`
+  #decorations_theme_variant: None
+  # Prefer resizing window by discrete steps equal to cell dimensions.
+  resize_increments: false
+
+scrolling:
+  # '0' will disable scrolling.
+  history: 0
+  multiplier: 3
+
+# Font configuration
+font:
+  normal:
+    family: "FiraMono Nerd Font Mono"
+    style: Regular
+  size: 11.0
+  # Extra space around each character.
+  offset:
+    x: 0
+    y: 0
+  # If `true`, Alacritty will use a custom built-in font for box drawing characters (Unicode points 2500 - 259f)
+  #builtin_box_drawing: true
+
+draw_bold_text_with_bright_colors: true
+
+bell:
+  # Ease, EaseOut, EaseOutSine, EaseOutQuad, EaseOutCubic, EaseOutQuart, EaseOutQuint, EaseOutExpo, EaseOutCirc, Linear
+  animation: EaseOutExpo
+  duration: 0 # 0 to disable
+  color: '#000000'
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
+  save_to_clipboard: false
+
+cursor:
+  style:
+    shape: Block
+    blinking: Off
+
+live_config_reload: true
+
+#shell:
+#  program: /bin/bash
+#  args:
+#    - --login
+
+ipc_socket: true

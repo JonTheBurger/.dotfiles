@@ -101,4 +101,5 @@ source $HOME/.local/bin/fzf-git.sh
 
 alias l='ls -AhFl'
 alias ll='ls -AhFl --time-style="+%b %d %I:%M %p"'
+PATH=~/.local/bin:$PATH
 

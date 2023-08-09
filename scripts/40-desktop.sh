@@ -4,6 +4,7 @@ if [ -f "/etc/apt/sources.list" ]; then
     sudo apt-get install -y \
       dolphin \
       dolphin-plugins \
+      kitty \
       konsole \
       fonts-noto-color-emoji \
       vim-gui-common \
