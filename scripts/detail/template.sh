@@ -11,13 +11,14 @@ main() {
 
 local::usage() {
   cat <<EOF
-Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
+Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-q] [-v] [-f] -p param_value arg1 [arg2...]
 
 SCRIPT DESCRIPTION HERE.
 
 Available options:
 
 -h, --help      Print this help and exit
+-q, --quiet     Suppress script info messages
 -v, --verbose   Print script debug info
 -f, --flag      Some flag description
 -p, --param     Some param description
@@ -34,6 +35,7 @@ local::parse_params() {
     case "${1-}" in
     -h | --help) local::usage ;;
     -v | --verbose) VERBOSE=1 ;;
+    -q | --quiet) QUIET=1 ;;
     --no-color) NO_COLOR=1 ;;
     -f | --flag) flag=1 ;; # example flag
     -p | --param) # example named parameter

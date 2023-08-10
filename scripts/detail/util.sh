@@ -96,7 +96,7 @@ util::apt_install() {
   )
 
   # Install
-  util::notice "I'm going to install the following packages:"
+  util::notice "I'm going to install apt packages:"
   for pkg in ${installable}; do
     util::info "- $pkg"
   done
@@ -109,6 +109,7 @@ util::apt_install() {
   else
     util::notice "-- Skipping --"
   fi
+  util::println
 }
 
 # --------------------------------------------------------------------------------------
@@ -144,11 +145,13 @@ util::debug() {
 # --------------------------------------------------------------------------------------
 ## @fn util::info()
 ## @brief Prints to stderr; use for output not intended to be parsed.
-## Use to inform the user of progress.
+## Use to inform the user of progress. Suppressed with --quiet.
 ## @param msg Message to display.
 # --------------------------------------------------------------------------------------
 util::info() {
-  util::println "${1-}"
+  if [ -z "${QUIET-}" ]; then
+    util::println "${1-}"
+  fi
 }
 
 # --------------------------------------------------------------------------------------
