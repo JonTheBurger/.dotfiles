@@ -246,6 +246,7 @@ util::on_trap() {
 # --------------------------------------------------------------------------------------
 util::trap() {
   for sig; do
+    # shellcheck disable=2064
     trap "util::on_trap ${sig}" "${sig}"
   done
 }
