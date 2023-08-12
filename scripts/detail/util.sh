@@ -77,9 +77,10 @@ util::prompt() {
 }
 
 # --------------------------------------------------------------------------------------
-## @fn util::print()
-## @brief Prints to stderr; use for output not intended to be parsed.
-## @param msg Message to display.
+## @fn util::apt_install()
+## @brief Installs apt packages, misnamed packages are ignored (useful for migrated
+## package names.
+## @param try_install List of packages to try and install.
 # --------------------------------------------------------------------------------------
 util::apt_install() {
   # Prepend '-e ' to each element
@@ -113,6 +114,54 @@ util::apt_install() {
 }
 
 # --------------------------------------------------------------------------------------
+## @fn util::snap_install()
+## @brief Installs snap packages in --classic mode.
+## @param packages List of packages to install.
+# --------------------------------------------------------------------------------------
+util::snap_install() {
+  util::notice "I'm going to install snap packages:"
+  for pkg in $@; do
+    util::info "- $pkg"
+  done
+
+  if util::prompt "Is this acceptable"; then
+    util::notice "... Installing ..."
+    for pkg in $@; do
+      util::info "- $pkg"
+      sudo snap install --classic ${pkg}
+    done
+    util::notice "-- Installation Complete! --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
+}
+
+# --------------------------------------------------------------------------------------
+## @fn util::pipx_install()
+## @brief Installs pip packages into separate virtual environments for the current user.
+## @param packages List of packages to install.
+# --------------------------------------------------------------------------------------
+util::pipx_install() {
+  util::notice "I'm going to install executables from pip into separated venvs:"
+  for pkg in $@; do
+    util::info "- $pkg"
+  done
+
+  if util::prompt "Is this acceptable"; then
+    util::notice "... Installing ..."
+    for pkg in $@; do
+      util::info "- $pkg"
+      pipx install ${pkg}
+    done
+    util::notice "-- Installation Complete! --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
+}
+
+# --------------------------------------------------------------------------------------
 ## @fn util::print()
 ## @brief Prints to stderr; use for output not intended to be parsed.
 ## @param msg Message to display.
@@ -134,8 +183,7 @@ util::println() {
 ## @fn util::debug()
 ## @brief Prints to stderr; use for output not intended to be parsed.
 ## Information only printed when VERBOSE is on.
-## @param msg Message to display.
-# --------------------------------------------------------------------------------------
+## @param msg Message to display. --------------------------------------------------------------------------------------
 util::debug() {
   if [ -n "${VERBOSE+x}" ]; then
     util::println "${PURPLE}${1-}${NOFMT}"

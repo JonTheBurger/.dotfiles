@@ -82,7 +82,7 @@ If you know what dotfiles are, you can skip this.
 
 Conveniently, many applications store user-specific configuration files within
 the user's `$HOME` directory (or `%UserProfile%` / `$env:UserProfile` for
-Windows, maybe %AppData%). We could copy paste our files between development
+Windows, maybe `%AppData%`). We could copy paste our files between development
 boxes, but the hallmark of any good `~/.dotfiles` is their ability to easily
 sync between machines. This is achieved by creating _soft-links_ from the
 config files' real locations on disk back to a centralized git repository
@@ -145,24 +145,16 @@ Notably the following programs are configured (among others):
 - https://www.nerdfonts.com/font-downloads
 - https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
 
-- lua5.4
-- shfmt
-- nodejs
-- python3-pynvim
+- lua5.4 nodejs python3-pynvim
+- docker, lazydocker, compose, buildx
 
-- snap
--   bash-language-server
--   pyright
+EDITOR
+updatedb exclude /mnt & /media
+PATH+=snap & .local
 
-- pipx, python3, ptpython, hatch, pydebug
-- docker, lazydocker
+if grep -q xmodmap "~/.profile"; then
+    echo "xmodmap ~/.Xmodmap" >> "~/.profile"
+fi
 
--   ripgrep
--   fonts
--   python3-pynvim?
--   python3-debugpy?
-
-- other
--   llvm-vscode softlink (update-alternatives for clang?)
 
 </details>

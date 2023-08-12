@@ -165,7 +165,9 @@ local::install_apt() {
   PKGS_APT+=(wget)
   PKGS_APT+=(xclip) # For Clipboard
   PKGS_APT+=(xsel)  # For Clipboard
+  PKGS_APT+=(zip)
   PKGS_APT+=(zsh)
+  sudo apt-get update
   util::apt_install "${PKGS_APT[@]}"
 }
 

@@ -41,3 +41,5 @@ json
 prepend
 integrations
 lua
+executables
+symlinks
