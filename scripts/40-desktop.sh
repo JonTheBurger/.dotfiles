@@ -8,6 +8,17 @@
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 . "${SCRIPT_DIR}/detail/util.sh"
 
+# ======================================================================================
+# CONSTANTS
+# ======================================================================================
+# Can be overridden from command line
+## @var ANY_TERM_DROPDOWN_URL .
+ANY_TERM_DROPDOWN_URL="${ANY_TERM_DROPDOWN_URL-https://raw.githubusercontent.com/gotbletu/shownotes/master/any_term_dropdown.sh}"
+## @var NERD_FONT_VERSION Version of nerd fonts to install.
+NERD_FONT_VERSION="${NERD_FONT_VERSION-3.0.2}"
+## @var NERD_FONT_URL Nerd font zipfile to download (https://www.nerdfonts.com/font-downloads).
+NERD_FONT_URL="${NERD_FONT_URL-https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraMono.zip}"
+
 main() {
   local::parse_params "$@"
   util::setup
@@ -31,6 +42,8 @@ tell you ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission befo
   # Install Packages
   local::install_apt
   local::install_editors
+  local::install_fonts
+  local::install_quake_term
 }
 
 local::usage() {
@@ -88,14 +101,14 @@ local::install_editors() {
   PKGS_SNAP=(chromium)
   util::notice "I'm going to install snap packages in strict mode:"
   for pkg in "${PKGS_SNAP[@]}"; do
-    util::info "- $pkg"
+    util::info "- ${pkg}"
   done
 
   if util::prompt "Is this acceptable"; then
     util::notice "... Installing ..."
     for pkg in "${PKGS_SNAP[@]}"; do
-      util::info "- $pkg"
-      sudo snap install ${pkg}
+      util::info "- ${pkg}"
+      sudo snap install "${pkg}"
     done
     util::notice "-- Installation Complete! --"
   else
@@ -116,11 +129,61 @@ local::install_editors() {
 }
 
 local::install_fonts() {
-  echo https://www.nerdfonts.com/font-downloads
+  # Print Preamble
+  util::notice "... Nerd Fonts ..."
+  util::info "${CYAN}Nerd Fonts${NOFMT} are ${CYAN}patched fonts${NOFMT} that contain additional symbols. These are frequently used by command
+line applications, including ${CYAN}nvim${NOFMT}, ${CYAN}zsh${NOFMT}, and ${CYAN}tmux${NOFMT}. I'll be downloading it from:
+${CYAN}${NERD_FONT_URL}${NOFMT}
+"
+
+  if util::prompt "Shall I install it"; then
+    util::notice "... Installing ..."
+
+    mkdir -p "${HOME}/.local/share/fonts"
+    curl -Lo "/tmp/nerdfont.zip" "${NERD_FONT_URL}"
+    unzip "/tmp/nerdfont.zip" '*.otf' -d "${HOME}/.local/share/fonts"
+
+    util::notice "-- Nerd Fonts: Installed --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
 }
 
+# --------------------------------------------------------------------------------------
+## @fn local::install_quake_term()
+## @brief Install terminal dropdown from git.
+# --------------------------------------------------------------------------------------
 local::install_quake_term() {
-  echo https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
+  # Print Preamble
+  util::notice "... Any Terminal Dropdown ..."
+  util::info "${CYAN}any_term_dropdown.sh${NOFMT}, enabling any terminal to be used in 'quake mode'. I'll be downloading it from:
+${CYAN}${ANY_TERM_DROPDOWN_URL}${NOFMT}
+"
+
+  if util::prompt "Shall I install it"; then
+    # Ask before removing an existing any_term_dropdown
+    if [ -f "${HOME}/.local/bin/any_term_dropdown.sh" ]; then
+      rm -i "${HOME}/.local/bin/any_term_dropdown.sh"
+    fi
+    # Only continue if any_term_dropdown is not installed / was removed
+    if [ ! -f "${HOME}/.local/bin/any_term_dropdown.sh" ]; then
+      curl -Lo "${HOME}/.local/bin/any_term_dropdown.sh" "${ANY_TERM_DROPDOWN_URL}"
+      chmod +x "${HOME}/.local/bin/any_term_dropdown.sh"
+    fi
+    util::notice "-- Any Term Dropdown: Installed --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
+}
+
+# --------------------------------------------------------------------------------------
+## @fn local::cleanup()
+## @brief Callback executed upon script exit, even if a signal is raised.
+# --------------------------------------------------------------------------------------
+local::cleanup() {
+  rm -f /tmp/nerdfont.zip
 }
 
 main "$@"

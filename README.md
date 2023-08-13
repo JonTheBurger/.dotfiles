@@ -1,8 +1,6 @@
 .dotfiles
 =========
 
-> **_NOTE:_** !This repository is still under construction!
-
 This repository contains all of the automation required to set up a new
 development environment with my preferred settings.
 
@@ -142,8 +140,6 @@ Notably the following programs are configured (among others):
 <details>
 <summary markdown="span">TODO</summary>
 
-- local::install_fonts()
-- local::install_quake_term()
 - updatedb exclude /mnt & /media
 - neocmake
 - if grep -q xmodmap "~/.profile"; then echo "xmodmap ~/.Xmodmap" >> "~/.profile" fi

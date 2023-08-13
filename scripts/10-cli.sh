@@ -30,6 +30,8 @@ FZF_GIT_URL="${FZF_GIT_URL-https://raw.githubusercontent.com/junegunn/fzf-git.sh
 LAZYGIT_VERSION="${LAZYGIT_VERSION-0.40.2}"
 ## @var LAZYGIT_URL Version of lazygit to install.
 LAZYGIT_URL="${LAZYGIT_URL-https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_$(uname -m).tar.gz}"
+## @var TPM_URL TMux Plugin Manager Git URL.
+TPM_URL="${TPM_URL-https://github.com/tmux-plugins/tpm}"
 
 main() {
   local::parse_params "$@"
@@ -58,6 +60,7 @@ tell you ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission befo
   local::install_fd
   local::install_fzf
   local::install_lazygit
+  local::install_tmux_plugin_manager
 }
 
 local::usage() {
@@ -170,7 +173,6 @@ local::install_apt() {
   PKGS_APT+=(zsh)
   PKGS_APT+=(zsh-autosuggestions)
   PKGS_APT+=(zsh-syntax-highlighting)
-  sudo apt-get update
   util::apt_install "${PKGS_APT[@]}"
 }
 
@@ -321,6 +323,31 @@ ${CYAN}${LAZYGIT_URL}${NOFMT}
 }
 
 # --------------------------------------------------------------------------------------
+## @fn local::install_tmux_plugin_manager()
+## @brief Install tpm from git.
+# --------------------------------------------------------------------------------------
+local::install_tmux_plugin_manager() {
+  # Print Preamble
+  util::notice "... TMux Plugin Manager ..."
+  util::info "${CYAN}tpm${NOFMT}, a plugin manager for tmux. I'll be downloading it from:
+${CYAN}${TPM_URL}${NOFMT}
+"
+
+  if util::prompt "Shall I install it"; then
+    if [ ! -d "${HOME}/.tmux/plugins/tpm" ]; then
+      util::notice "... Installing ..."
+      git clone "${TPM_URL}" "${HOME}/.tmux/plugins/tpm"
+    else
+      util::notice "... Already Installed ..."
+    fi
+    util::notice "-- TMUX Plugin Manager: Installed --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
+}
+
+# --------------------------------------------------------------------------------------
 ## @fn local::cleanup()
 ## @brief Callback executed upon script exit, even if a signal is raised.
 # --------------------------------------------------------------------------------------
@@ -330,8 +357,5 @@ local::cleanup() {
   rm -rf /tmp/fd
   rm -rf /tmp/lazygit
 }
-
-# TODO:
-#git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 main "$@"
