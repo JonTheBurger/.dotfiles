@@ -8,10 +8,6 @@
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 . "${SCRIPT_DIR}/detail/util.sh"
 
-# ======================================================================================
-# CONSTANTS
-# ======================================================================================
-
 main() {
   local::parse_params "$@"
   util::setup
@@ -77,7 +73,7 @@ local::install_apt() {
   PKGS_APT+=(dolphin)
   PKGS_APT+=(dolphin-plugins)
   PKGS_APT+=(kitty)
-  PKGS_APT+=(fonts-noto-color-emoji)
+  #PKGS_APT+=(fonts-noto-color-emoji)
   PKGS_APT+=(x11-xserver-utils)
   util::apt_install "${PKGS_APT[@]}"
 }
@@ -117,6 +113,14 @@ local::install_editors() {
   declare -a PKGS_APT
   PKGS_APT+=(qtcreator)
   util::apt_install "${PKGS_APT[@]}"
+}
+
+local::install_fonts() {
+  echo https://www.nerdfonts.com/font-downloads
+}
+
+local::install_quake_term() {
+  echo https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
 }
 
 main "$@"

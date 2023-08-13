@@ -137,6 +137,7 @@ local::install_apt() {
   ## @var PKGS_APT Apt packages to try and install. Names without a match are ignored.
   declare -a PKGS_APT
   PKGS_APT+=(apt-transport-https)
+  PKGS_APT+=(aptitude)
   PKGS_APT+=(bat)
   PKGS_APT+=(batcat) # "batcat" was renamed "bat"
   PKGS_APT+=(ca-certificates)
@@ -167,6 +168,8 @@ local::install_apt() {
   PKGS_APT+=(xsel)  # For Clipboard
   PKGS_APT+=(zip)
   PKGS_APT+=(zsh)
+  PKGS_APT+=(zsh-autosuggestions)
+  PKGS_APT+=(zsh-syntax-highlighting)
   sudo apt-get update
   util::apt_install "${PKGS_APT[@]}"
 }

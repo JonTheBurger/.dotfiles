@@ -1,7 +1,6 @@
 #!/bin/env python3
 # Imports
 from configparser import RawConfigParser
-from dataclasses import dataclass
 from os import path
 from typing import Tuple
 

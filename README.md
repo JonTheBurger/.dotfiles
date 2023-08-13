@@ -27,7 +27,7 @@ cd ~/.dotfiles
 
 --------------------------------------------------------------------------------
 
-scripts
+Scripts
 -------
 
 The scripts in this directory are designed to be user-friendly, and naively
@@ -73,7 +73,7 @@ Simply run with (e.g.) `./script/10-cli.sh`!
 
 --------------------------------------------------------------------------------
 
-home
+Home
 ----
 
 **Background:**
@@ -142,19 +142,11 @@ Notably the following programs are configured (among others):
 <details>
 <summary markdown="span">TODO</summary>
 
-- https://www.nerdfonts.com/font-downloads
-- https://github.com/gotbletu/shownotes/blob/master/any_term_dropdown.sh
-
-- lua5.4 nodejs python3-pynvim
-- docker, lazydocker, compose, buildx
-
-EDITOR
-updatedb exclude /mnt & /media
-PATH+=snap & .local
-
-if grep -q xmodmap "~/.profile"; then
-    echo "xmodmap ~/.Xmodmap" >> "~/.profile"
-fi
-
+- local::install_fonts()
+- local::install_quake_term()
+- updatedb exclude /mnt & /media
+- neocmake
+- if grep -q xmodmap "~/.profile"; then echo "xmodmap ~/.Xmodmap" >> "~/.profile" fi
+- vim commentary bash #
 
 </details>
