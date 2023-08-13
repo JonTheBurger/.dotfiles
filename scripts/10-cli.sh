@@ -331,4 +331,7 @@ local::cleanup() {
   rm -rf /tmp/lazygit
 }
 
+# TODO:
+#git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 main "$@"

@@ -44,11 +44,11 @@ vim.keymap.set("n", "<leader><TAB>", ":tabnew<CR>")
 vim.keymap.set("n", "<leader><C-S-TAB>", ":tabm -1<CR>")
 vim.keymap.set("n", "<leader><C-TAB>", ":tabm +1<CR>")
 
--- Split Navigation
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>")
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>")
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>")
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>")
+-- Split Navigation (See tmux.lua)
+-- vim.keymap.set("n", "<C-h>", "<C-w><C-h>")
+-- vim.keymap.set("n", "<C-j>", "<C-w><C-j>")
+-- vim.keymap.set("n", "<C-k>", "<C-w><C-k>")
+-- vim.keymap.set("n", "<C-l>", "<C-w><C-l>")
 
 -- Resize Splits with Arrows
 vim.keymap.set("n", "<C-Left>",  ":vertical resize -2<CR>")

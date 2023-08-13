@@ -7,7 +7,7 @@ ZSH="$HOME/.config/zsh/.oh-my-zsh"
 ZSH_CACHE_DIR="$HOME/.cache/oh-my-zsh"
 ZSH_CUSTOM="$HOME/.config/zsh"
 # See: https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="awesomepanda" # Remove '$HOME/.config/zsh/theme.zsh' to use a built-in theme
+ZSH_THEME="awesomepanda" # Remove '$HOME/.config/zsh/theme.zsh' to use a built-in theme
 # See: https://github.com/ohmyzsh/ohmyzsh/wiki/Settings
 #ENABLE_CORRECTION="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -73,6 +73,7 @@ export LANG=en_US.UTF-8
 export VISUAL='nvim'
 # https://github.com/zsh-users/zsh-autosuggestions#configuration
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
+[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
 # man pages
 less_termcap[md]="${fg_bold[cyan]}"
 
