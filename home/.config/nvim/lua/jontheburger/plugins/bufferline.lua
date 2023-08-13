@@ -18,7 +18,7 @@ return {
     options = {
       -- numbers = "both",
       numbers = function(opts)
-        return string.format("%s|%s", opts.id, opts.raise(opts.ordinal))
+        return string.format("%s%s", opts.id, opts.raise(opts.ordinal))
       end,
       diagnostics = "nvim_lsp",
       separator_style = "slope",

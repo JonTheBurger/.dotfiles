@@ -90,6 +90,9 @@ return {
     end
   },
 
+  -- https://github.com/folke/neodev.nvim
+  { "folke/neodev.nvim", opts = {} },
+
   -- https://github.com/neovim/nvim-lspconfig
   {
     "neovim/nvim-lspconfig",
@@ -122,7 +125,7 @@ return {
         vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
         vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
         -- Custom
-        vim.keymap.set("n", "gd", vim.diagnostic.open_float, opts)
+        vim.keymap.set("n", "gD", vim.diagnostic.open_float, opts)
         vim.keymap.set("n", "?", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "gr", telescope.lsp_references, {buffer = true})
         vim.keymap.set("n", "<leader>fr", telescope.lsp_references, {buffer = true})
@@ -140,6 +143,17 @@ return {
       lspconfig.pyright.setup({capabilities = capabilities})
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       lspconfig.rust_analyzer.setup({capabilities = capabilities})
+
+      local lua = require("lspconfig").lua_ls
+      lua.setup({
+        settings = {
+          Lua = {
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+            },
+          },
+        },
+      })
 
       lsp.setup()
     end

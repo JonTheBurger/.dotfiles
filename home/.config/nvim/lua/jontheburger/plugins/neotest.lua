@@ -24,8 +24,7 @@ return {
     adapters = {
       ["neotest-gtest"] = {
         is_test_file = function(file_path)
-          return file_path:lower():match([[**test.cpp]]) or
-            file_path:lower():starts_with([[test]])
+          return file_path:lower():match("**test.cpp$")
         end,
       },
       ["neotest-python"] = {

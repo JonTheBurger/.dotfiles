@@ -75,7 +75,7 @@ return {
           return a_time > b_time
         end)
         for i, session in ipairs(sessions) do
-          if i > 5 then
+          if i > 9 then
             break
           end
           local sc = tostring(i)

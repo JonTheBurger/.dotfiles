@@ -68,7 +68,7 @@ return {
       desc="Find Buffers",
     },
     {
-      "<leader>fm",
+      "<leader>f'",
       function()
         require("telescope.builtin").marks()
       end,
