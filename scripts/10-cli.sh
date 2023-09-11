@@ -150,7 +150,7 @@ local::install_apt() {
   PKGS_APT+=(git)
   PKGS_APT+=(git-lfs)
   PKGS_APT+=(htop)
-  PKGS_APT+=(libfuze2) # For AppImage
+  PKGS_APT+=(libfuse2) # For AppImage
   PKGS_APT+=(neovim)   # Almost certainly too out of date
   PKGS_APT+=(nodejs)   # For some nvim Mason packages
   PKGS_APT+=(pipx)

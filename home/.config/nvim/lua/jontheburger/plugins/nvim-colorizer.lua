@@ -3,6 +3,7 @@ return {
   "NvChad/nvim-colorizer.lua",
   ft = {
     "css",
+    "dosini",
     "lua",
   },
   config = function()
