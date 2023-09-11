@@ -109,6 +109,7 @@ function fsmon() {
     echo "$p$f modified"
   done
 }
+function fz() { cd $(zshz | sort -rh | awk '{print $NF}' | nl | fzf | awk '{print $NF}') }
 function mk() {
   if [ -f "bamboo.mk" ]; then
     make -f bamboo.mk "$@"

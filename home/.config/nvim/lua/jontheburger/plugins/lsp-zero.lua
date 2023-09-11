@@ -144,6 +144,14 @@ return {
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       lspconfig.rust_analyzer.setup({capabilities = capabilities})
 
+      lspconfig.ansiblels.setup({capabilities = capabilities})
+      vim.filetype.add({
+        pattern = {
+          [ ".*ansible.*/.*.yml" ]  = "yaml.ansible",
+          [ ".*ansible.*/.*.yaml" ] = "yaml.ansible",
+        },
+      })
+
       local lua = require("lspconfig").lua_ls
       lua.setup({
         settings = {

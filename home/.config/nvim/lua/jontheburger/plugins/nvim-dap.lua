@@ -28,6 +28,8 @@ return {
     { "<leader>dx", function() require("dap").terminate() end, desc = "Terminate", },
     { "<leader>du", function() require("dap").step_out() end, desc = "Step Out", },
     -- Custom
+    { "<leader>dk", function() require("dap").up() end, desc = "Go Up 1 Stack Frame", },
+    { "<leader>dj", function() require("dap").down() end, desc = "Go Down 1 Stack Frame", },
     { "<F1>", function() require("dap.ui.widgets").hover() end, desc = "Hover Variables", },
     { "<F5>", function() require("dap").continue() end, desc = "Continue", },
     { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint", },

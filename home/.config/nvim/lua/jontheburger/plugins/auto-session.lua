@@ -18,20 +18,33 @@ return {
     require("auto-session").setup({
       log_level = "error",
       auto_session_suppress_dirs = {
-        "~/",
-        "~/Projects",
-        "~/Downloads",
         "/",
+        "/tmp/*",
+        "~/",
+        "~/Desktop/*",
+        "~/Downloads/*",
+        "~/Projects",
       },
-      auto_session_allowed_dirs = {
-        "~/Projects/*",
-      },
-      auto_sesison_use_git_branch = true,
+      auto_save_enabled = true,
+      auto_restore_enabled = true,
+      -- auto_sesison_use_git_branch = true,
       post_restore_cmds = { change_nvim_tree_dir, }, --"NvimTreeOpen" },
-      post_cwd_changed_hook = function() -- example refreshing the lualine status line _after_ the cwd changes
-        require("lualine").refresh() -- refresh lualine so the new session name is displayed in the status bar
+      post_cwd_changed_hook = function()             -- example refreshing the lualine status line _after_ the cwd changes
+        require("lualine").refresh()                 -- refresh lualine so the new session name is displayed in the status bar
       end,
-      pre_save_cmds = { "NvimTreeClose", neotest_close },
+      pre_save_cmds = {
+        "NvimTreeClose",
+        neotest_close,
+        -- Close all "DAP" buffers
+        function()
+          local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+          for _, buffer in ipairs(buffers) do
+            if (buffer.name:match("DAP [^/\\]+$")) then
+              vim.api.nvim_buf_delete(buffer.bufnr, { force = true })
+            end
+          end
+        end
+      },
       session_lens = {
         load_on_setup = true,
         theme_conf = { border = true },
