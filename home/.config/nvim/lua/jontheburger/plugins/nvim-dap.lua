@@ -67,7 +67,7 @@ return {
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
     dap.adapters.lldb = {
       type = "executable",
-      command = "/home/vagrant/.local/bin/lldb-vscode",
+      command = "lldb-vscode",
       name = "lldb",
     }
     local lldb = {
@@ -76,6 +76,12 @@ return {
       request = "launch", -- could also attach to a currently running process
       program = function()
         local exe = vim.fn.getcwd() .. "/build/bin"
+
+        -- Attempt to get the current Rust target
+        if vim.fn.filereadable("Cargo.toml") then
+          local basepath = string.match(vim.fn.getcwd(), "[/\\]([^/\\]*)$")
+          exe = vim.fn.getcwd() .. "/target/debug/" .. basepath
+        end
 
         -- Attempt to get the current CMake Tools launch target
         local has_cmake, cmake = pcall(require, "cmake-tools")
@@ -105,6 +111,9 @@ return {
       lldb,
     }
     dap.configurations.c = dap.configurations.cpp
+
+    -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
+    dap.configurations.rust = dap.configurations.cpp
 
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
     local dap = require("dap")

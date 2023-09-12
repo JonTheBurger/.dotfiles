@@ -130,6 +130,7 @@ return {
         vim.keymap.set("n", "gr", telescope.lsp_references, {buffer = true})
         vim.keymap.set("n", "<leader>fr", telescope.lsp_references, {buffer = true})
         vim.keymap.set({"n", "i"}, "<C-S-SPACE>", vim.lsp.buf.signature_help, opts)
+        vim.keymap.set("i", "<S-F1>", vim.lsp.buf.signature_help, opts)
         vim.keymap.set("n", "gf", vim.lsp.buf.code_action, opts)
       end)
 
