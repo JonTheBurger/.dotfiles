@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ======================================================================================
-## @file 30-i3.sh
-## Installs i3 tiling window manager.
+## @file 30-awesome.sh
+## Installs awesome window manager.
 # UN-COMMENT FOR LSP SUPPORT
 # . "detail/util.sh"
 # ======================================================================================
@@ -15,7 +15,7 @@ main() {
   # Print welcome text
   util::notice "Welcome!"
   util::info "
-This script installs the ${CYAN}i3 tiling window manager${NOFMT}, as well as some
+This script installs the ${CYAN}awesome window manager${NOFMT}, as well as some
 typical associated programs for customization. Before I do anything, I'll tell you
 ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission before continuing${NOFMT}.
 "
@@ -29,8 +29,7 @@ ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission before contin
   fi
 
   # Install Packages
-  local::install_i3
-  local::install_ly
+  local::install_awesome
 }
 
 local::usage() {
@@ -65,58 +64,15 @@ local::parse_params() {
 }
 
 # --------------------------------------------------------------------------------------
-## @fn local::install_i3()
-## @brief Install i3.
+## @fn local::install_awesome()
+## @brief Install awesome.
 # --------------------------------------------------------------------------------------
-local::install_i3() {
+local::install_awesome() {
   declare -a PKGS_APT
-  # Brightness (usermod -aG video $(whoami))
-  PKGS_APT+=(brightnessctl)
-  # Wallpaper
-  PKGS_APT+=(feh)
-  # Window Manager
-  PKGS_APT+=(i3)
-  # Media Playback
-  PKGS_APT+=(playerctl)
-  # Status Bar
-  PKGS_APT+=(polybar)
-  # Night-light mode
-  PKGS_APT+=(redshift)
-  # Application Launcher
-  PKGS_APT+=(rofi)
+  PKGS_APT+=(awesome)
+  PKGS_APT+=(compton)
+  PKGS_APT+=(luarocks)
   util::apt_install "${PKGS_APT[@]}"
-}
-
-local::install_ly() {
-  util::notice "... LY Display Manager ..."
-  util::info "${CYAN}ly${NOFMT} is an extremely lightweight display manager.
-This is the program that handles logging in and selecting a window manager.
-"
-
-  if util::prompt "Shall I install it"; then
-    if [ ! -f "/usr/lib/systemd/system/ly.service" ]; then
-      declare -a PKGS_APT
-      PKGS_APT+=(build-essential)
-      PKGS_APT+=(libpam0g-dev)
-      PKGS_APT+=(libxcb-xkb-dev)
-      util::apt_install "${PKGS_APT[@]}"
-
-      git clone --recurse-submodules https://github.com/fairyglade/ly /tmp/ly
-      cd /tmp/ly
-      sudo make install installsystemd
-      sudo systemctl enable ly.service
-    else
-      util::notice "... Already Installed ..."
-    fi
-    util::notice "-- LY Display Manager: Installed --"
-  else
-    util::notice "-- Skipping --"
-  fi
-  util::println
-}
-
-local::cleanup() {
-  rm -rf /tmp/ly
 }
 
 main "$@"
