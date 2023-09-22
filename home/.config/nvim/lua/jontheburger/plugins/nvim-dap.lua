@@ -64,6 +64,16 @@ return {
     vim.fn.sign_define("DapLogPoint", {text="✎", texthl="DiagnosticSignInfo", linehl="", numhl=""})
     vim.fn.sign_define("DapStopped", {text="→", texthl="DiagnosticSignWarn", linehl="DiagnosticSignError", numhl="DiagnosticSignError"})
 
+    -- Keep DAP out of BufferLine
+    vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+      pattern = {
+        "*DAP *",
+      },
+      callback = function()
+        vim.cmd("setl nobuflisted")
+      end,
+    })
+
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
     dap.adapters.lldb = {
       type = "executable",

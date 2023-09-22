@@ -15,8 +15,8 @@ keysym x = x X Delete
 keysym 0 = 0 parenright Home degree
 keysym 4 = 4 dollar End onequarter
 
-! Symbols
-keysym equal = equal plus notequal plusminus
+! ! Symbols
+! keysym equal = equal plus notequal plusminus
 keysym 1 = 1 exclam udiaeresis Udiaeresis
 keysym 2 = 2 at onehalf
 keysym 3 = 3 numbersign onethird threequarters

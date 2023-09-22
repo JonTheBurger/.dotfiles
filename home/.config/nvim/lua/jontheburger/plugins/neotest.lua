@@ -53,6 +53,17 @@ return {
       },
     }, neotest_ns)
 
+    -- Keep NeoTest out of BufferLine
+    vim.api.nvim_create_autocmd({"BufWinEnter"}, {
+      pattern = {
+        "Neotest *",
+      },
+      callback = function()
+        vim.cmd("setl nobuflisted")
+      end,
+    })
+
+
     if opts.adapters then
       local adapters = {}
       for name, config in pairs(opts.adapters or {}) do

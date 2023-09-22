@@ -144,6 +144,7 @@ return {
       lspconfig.pyright.setup({capabilities = capabilities})
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       lspconfig.rust_analyzer.setup({capabilities = capabilities})
+      lspconfig.gopls.setup({capabilities = capabilities})
 
       lspconfig.ansiblels.setup({capabilities = capabilities})
       vim.filetype.add({

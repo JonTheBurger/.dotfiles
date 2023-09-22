@@ -83,7 +83,6 @@ less_termcap[md]="${fg_bold[cyan]}"
 alias :q='exit'
 alias bat='batcat'
 alias buildtree='tree -I "CMakeFiles|Testing|external"'
-alias cls='for _ in {1..300}; do echo; done; clear'
 alias copy='rsync -ahpruzvP'
 alias getmode='stat -c %a'
 alias goto='cd -P'
@@ -97,6 +96,17 @@ alias sodu='sudo --preserve-env=PATH env'
 alias splitpath='sed "s#:#/\n#g"'
 alias lzip='unzip -l'
 alias ltar='tar tf'
+function cls() {
+  clear
+  if [[ $TMUX ]]; then
+    tmux clear-history
+  else
+    for _ in {1..300}; do
+      echo
+    done
+  fi
+  clear
+}
 function dkr-rmgrep() {
   docker rmi $(docker images --format '{{.Repository}}:{{.Tag}}' | grep $@)
 }
@@ -110,6 +120,9 @@ function fsmon() {
   done
 }
 function fz() { cd $(zshz | sort -rh | awk '{print $NF}' | nl | fzf | awk '{print $NF}') }
+function tailog() {
+  tail -f "$@" | bat --paging=never -l log2
+}
 function mk() {
   if [ -f "bamboo.mk" ]; then
     make -f bamboo.mk "$@"
