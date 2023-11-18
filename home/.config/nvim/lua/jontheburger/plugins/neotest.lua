@@ -54,14 +54,22 @@ return {
     }, neotest_ns)
 
     -- Keep NeoTest out of BufferLine
-    vim.api.nvim_create_autocmd({"BufWinEnter"}, {
-      pattern = {
-        "Neotest *",
-      },
+    vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+      pattern = { "Neotest *", },
       callback = function()
         vim.cmd("setl nobuflisted")
       end,
     })
+    -- Same with the unnamed test result buffer
+    vim.api.nvim_create_autocmd({ "BufEnter", }, {
+        pattern = { "*", },
+        callback = function(args)
+          if args.file == "" then
+            vim.api.nvim_buf_set_option(args.buf, "buflisted", false)
+          end
+        end,
+      }
+    )
 
 
     if opts.adapters then
@@ -91,6 +99,7 @@ return {
     end
 
     require("neotest").setup(opts)
+
   end,
   keys = {
     { "<leader>tt", function() require("neotest").run.run() end, desc = "Run Nearest" },

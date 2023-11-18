@@ -6,6 +6,9 @@ local format = function()
   elseif vim.bo.filetype == "sh" then
     -- bash-language-server does not support formatting
     vim.cmd([[!shfmt -i 2 -s -w %]])
+  elseif vim.bo.filetype == "yaml" then
+    -- yaml-language-server does not support formatting
+    vim.cmd([[!yamlfix %]])
   else
     vim.lsp.buf.format()
   end
@@ -145,6 +148,7 @@ return {
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       lspconfig.rust_analyzer.setup({capabilities = capabilities})
       lspconfig.gopls.setup({capabilities = capabilities})
+      lspconfig.yamlls.setup({capabilities = capabilities})
 
       lspconfig.ansiblels.setup({capabilities = capabilities})
       vim.filetype.add({

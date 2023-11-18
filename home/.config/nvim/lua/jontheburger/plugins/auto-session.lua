@@ -33,7 +33,7 @@ return {
         require("lualine").refresh()                 -- refresh lualine so the new session name is displayed in the status bar
       end,
       pre_save_cmds = {
-        "NvimTreeClose",
+        function() if vim.fn.exists(':IndentLinesToggle') > 0 then vim.cmd("NvimTreeClose") end end,
         neotest_close,
         -- Close all "DAP" buffers
         function()

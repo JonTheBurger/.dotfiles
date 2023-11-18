@@ -27,6 +27,14 @@ vim.api.nvim_create_autocmd({"BufWinEnter"}, {
     vim.cmd([[:%! ar -t ]] .. vim.fn.expand('%:p'))
   end,
 })
+-- Open help window in a vertical split to the right.
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    group = vim.api.nvim_create_augroup("help_window_right", {}),
+    pattern = { "*.txt" },
+    callback = function()
+        if vim.o.filetype == 'help' then vim.cmd.wincmd("L") end
+    end
+})
 -- if vim.env.TERM == 'xterm-kitty' then
   -- vim.cmd([[autocmd UIEnter * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[>1u") | endif]])
   -- vim.cmd([[autocmd UILeave * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[<1u") | endif]])

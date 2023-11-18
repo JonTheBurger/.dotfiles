@@ -33,6 +33,7 @@ return {
       "cmake",
       "cpp",
       "json",
+      "lua",
       "markdown",
       "python",
       "rust",

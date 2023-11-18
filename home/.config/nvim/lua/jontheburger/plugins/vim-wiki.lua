@@ -9,6 +9,7 @@ return {
   },
   init = function()
     vim.g.vimwiki_autochdir = 1
+    vim.g.vimwiki_auto_chdir = 1
     vim.g.vimwiki_folding = "expr"
     vim.g.vimwiki_global_ext = 0
     vim.g.vimwiki_hl_headers = 1
@@ -33,4 +34,3 @@ return {
 -- vim.keymap.set("n", "<leader>0ww", function() vim.cmd(":edit " .. wiki .. "index.md") end)
 -- vim.keymap.set("n", "<leader>0wi", function() vim.cmd(":edit " .. diary .. "diary.md") end)
 -- vim.keymap.set("n", "<leader>0wd", function() vim.cmd(":edit " .. diary .. os.date("%Y-%m-%d") .. ".md") end)
---  :cd %:p:h

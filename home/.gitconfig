@@ -27,6 +27,7 @@
   heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
+  nuke = !git reset --hard && git clean -xdff && git restore . --recurse-submodules && git submodule foreach "git nuke"
   prune-branches = !git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
 [blame]
   coloring = highlightRecent

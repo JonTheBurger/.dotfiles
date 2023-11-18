@@ -184,5 +184,18 @@ return {
     for k, _ in pairs(opts.setup) do
       opts.setup[k](plugin, opts)
     end
+
+    -- Keep DAP out of BufferLine
+    vim.api.nvim_create_autocmd({"WinNew", "WinLeave"},
+      {
+        pattern = {
+          "*DAP*",
+          "*dap*",
+        },
+        callback = function(args)
+          vim.api.nvim_buf_set_option(args.buf, "buflisted", false)
+        end,
+      }
+    )
   end,
 }
