@@ -141,16 +141,17 @@ return {
       local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+      lspconfig.ansiblels.setup({capabilities = capabilities})
       lspconfig.bashls.setup({capabilities = capabilities})
+      lspconfig.gopls.setup({capabilities = capabilities})
+      lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.neocmake.setup({capabilities = capabilities})
+      lspconfig.omnisharp.setup({capabilities = capabilities})
       lspconfig.pyright.setup({capabilities = capabilities})
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       lspconfig.rust_analyzer.setup({capabilities = capabilities})
-      lspconfig.gopls.setup({capabilities = capabilities})
       lspconfig.yamlls.setup({capabilities = capabilities})
 
-      lspconfig.ansiblels.setup({capabilities = capabilities})
       vim.filetype.add({
         pattern = {
           [ ".*ansible.*/.*.yml" ]  = "yaml.ansible",

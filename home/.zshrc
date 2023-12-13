@@ -24,7 +24,6 @@ plugins=(
   colored-man-pages
   command-not-found
   dirhistory
-  ubuntu
   z
   zsh-completions
 )

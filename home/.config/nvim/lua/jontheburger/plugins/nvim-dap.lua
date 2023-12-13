@@ -179,6 +179,26 @@ return {
       }
     }
 
+    -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#dotnet
+    dap.adapters.coreclr = {
+      type = "executable",
+      command = "netcoredbg",
+      args = { "--interpreter=vscode" }
+    }
+    dap.configurations.cs = {
+      {
+        type = "coreclr",
+        name = "launch - netcoredbg",
+        request = "launch",
+        program = function()
+          local debugdir = vim.fn.getcwd() .. '/bin/Debug/'
+          local basepath = string.match(vim.fn.getcwd(), "[/\\]([^/\\]*)$")
+          local dll = vim.fn.globpath(debugdir, 'net*/' .. basepath .. '.dll')
+          return vim.fn.input('Path to dll', dll, 'file')
+        end,
+      },
+    }
+
     require("dap.ext.vscode").load_launchjs()
     -- set up debugger
     for k, _ in pairs(opts.setup) do

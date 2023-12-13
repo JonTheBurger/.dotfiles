@@ -88,6 +88,7 @@ local::install_apt_essentails() {
   PKGS_APT+=(clang-tidy)
   PKGS_APT+=(clangd)
   PKGS_APT+=(cmake)
+  PKGS_APT+=(cmake-doc)
   PKGS_APT+=(cppcheck)
   PKGS_APT+=(doxygen)
   PKGS_APT+=(g++)
