@@ -13,7 +13,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # ======================================================================================
 # Can be overridden from command line
 ## @var NVIM_VERSION Version of nvim to install.
-NVIM_VERSION="${NVIM_VERSION-0.9.1}"
+NVIM_VERSION="${NVIM_VERSION-0.9.5}"
 ## @var NVIM_URL Download source of nvim.
 NVIM_URL="${NVIM_URL-https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim.appimage}"
 ## @var FD_VERSION Version of fd to install.

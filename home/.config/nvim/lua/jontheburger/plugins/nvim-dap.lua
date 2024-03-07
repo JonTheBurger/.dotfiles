@@ -123,7 +123,7 @@ return {
     dap.configurations.c = dap.configurations.cpp
 
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
-    dap.configurations.rust = dap.configurations.cpp
+    -- dap.configurations.rust = dap.configurations.cpp
 
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
     local dap = require("dap")
@@ -197,6 +197,24 @@ return {
           return vim.fn.input('Path to dll', dll, 'file')
         end,
       },
+    }
+
+    -- CMake https://github.com/mfussenegger/nvim-dap/pull/992
+    local dap = require("dap")
+    dap.adapters.cmake = {
+      type = "pipe",
+      pipe = "${pipe}",
+      executable = {
+        command = "cmake",
+        args = {"--debugger", "--debugger-pipe", "${pipe}"}
+      }
+    }
+    dap.configurations.cmake = {
+      {
+        name = "Build",
+        type = "cmake",
+        request = "launch",
+      }
     }
 
     require("dap.ext.vscode").load_launchjs()

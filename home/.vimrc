@@ -15,6 +15,7 @@ highlight SpecialKey ctermfg=darkgray
 " Searching
 set hlsearch
 set ignorecase
+set incsearch
 set smartcase
 
 " Document Spacing

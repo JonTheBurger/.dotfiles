@@ -44,3 +44,6 @@ vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.undodir = vim.fn.expand(vim.fn.stdpath("state") .. "/undo")
 vim.opt.undofile = true
+
+-- Gui
+vim.opt.guifont = "FiraCode Nerd Font Mono:h12"

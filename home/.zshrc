@@ -24,7 +24,6 @@ plugins=(
   colored-man-pages
   command-not-found
   dirhistory
-  z
   zsh-completions
 )
 
@@ -63,10 +62,12 @@ for suffix in "$PATH_SUFFIX[@]"; do
   [[ ! ":$PATH:" =~ ":$suffix:" ]] && [ -d "$suffix" ] && export PATH="$PATH:$suffix"
 done
 
+eval "$(zoxide init zsh)"
+
 # ======================================================================================
 ## Environment
 # ======================================================================================
-export CMAKE_GENERATOR="CodeBlocks - Ninja"
+export CMAKE_GENERATOR="Ninja"
 export EDITOR='nvim'
 export LANG=en_US.UTF-8
 export VISUAL='nvim'
@@ -75,6 +76,8 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
 [ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
 # man pages
 less_termcap[md]="${fg_bold[cyan]}"
+# Fix comments being black foreground on black background
+ZSH_HIGHLIGHT_STYLES[comment]="fg=245"
 
 # ======================================================================================
 ## Functions & Aliases
@@ -82,13 +85,16 @@ less_termcap[md]="${fg_bold[cyan]}"
 alias :q='exit'
 alias bat='batcat'
 alias buildtree='tree -I "CMakeFiles|Testing|external"'
+alias c='z'
+alias cat='bat -p'
 alias copy='rsync -ahpruzvP'
 alias getmode='stat -c %a'
 alias goodbye='sudo apt update && sudo apt upgrade -y && sudo apt autoremove --purge -y && sudo shutdown now'
 alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
-alias l='ls -AhFl'
+alias l='eza -al --icons --git --color-scale -o'
+alias ll='eza -al --color-scale -o --no-filesize --no-time --no-permissions'
 alias look4='find . -iname'
 alias mkpatch='git diff > ~/Desktop/$(basename $(pwd)).patch'
 alias path='echo $PATH | sed "s#:#/\n#g"'
@@ -134,6 +140,13 @@ function mk() {
 }
 function new() {
   copier copy ${HOME}/.new/$@ .
+}
+function uncrust() {
+  uncrustify -c ~/.config/uncrustify.cfg -l C --mtime --replace --no-backup $@
+}
+function venv() {
+  python3 -m venv .venv
+  source .venv/bin/activate
 }
 function xmlfmt() {
   mv "$1" "$1.bkp"

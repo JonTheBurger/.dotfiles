@@ -11,6 +11,8 @@
 # Variables
 set $mod Mod4
 
+# Exit i3
+bindsym $mod+Shift+x exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 # Restart i3 (preserves layout/session)
 bindsym $mod+Shift+r restart
 # Reload Config
@@ -55,6 +57,8 @@ bindsym $mod+minus split v
 # Fullscreen
 bindsym $mod+f fullscreen toggle
 
+bindsym $mod+n layout toggle all
+
 ################################################################################
 # Theme
 ################################################################################
@@ -80,8 +84,9 @@ client.focused #4c7899 #285577 #ffffff #2e9ef4   #ff0000
 # Programs
 ################################################################################
 # Launcher
-bindsym $mod+space exec --no-startup-id rofi -show run
-bindsym $mod+Shift+space exec --no-startup-id rofi -show run
+bindsym $mod+space exec --no-startup-id bash -c "coproc (rofi -show run >/dev/null 2>&1)" &
+bindsym $mod+Shift+space exec --no-startup-id bash -c "coproc (echo '' | rofi -show run >/dev/null 2>&1)" &
+# bindsym $mod+Shift+space exec --no-startup-id rofi -show run
 # Terminal
 bindsym $mod+Return exec --no-startup-id i3-sensible-terminal
 # bindsym $mod+Escape kill
@@ -192,3 +197,9 @@ mode "resize" {
   bindsym Escape mode "default"
   bindsym $mod+r mode "default"
 }
+
+################################################################################
+# Floating Windows
+################################################################################
+for_window [class="materia" instance="materia"] floating enable
+# && i3-msg "[id=$(xdotool getactivewindow)] floating enable"

@@ -73,6 +73,16 @@ return {
           ["<C-Space>"] = cmp.mapping.complete(),
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-u>"] = function()
+            for _=1,8 do
+              cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
+            end
+          end,
+          ["<C-d>"] = function()
+            for _=1,8 do
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            end
+          end,
         },
         formatting = {
           format = function(entry, vim_item)
@@ -99,6 +109,9 @@ return {
   -- https://github.com/neovim/nvim-lspconfig
   {
     "neovim/nvim-lspconfig",
+    opts = {
+      inlay_hints = { enable = true },
+    },
     cmd = "LspInfo",
     event = {"BufReadPre", "BufNewFile"},
     dependencies = {
@@ -116,20 +129,24 @@ return {
       local telescope = require("telescope.builtin")
       lsp.on_attach(function(client, bufnr)
         local opts = { buffer = bufnr }
-        vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opts)
-        vim.keymap.set("n", "<F4>", vim.lsp.buf.code_action, opts)
-        vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
-        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
-        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-        vim.keymap.set("n", "gl", vim.diagnostic.open_float, opts)
-        vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
-        vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+        local function opt(desc)
+          return { desc = "LSP: " .. desc, buffer = bufnr }
+        end
+        vim.keymap.set("n", "<F2>", vim.lsp.buf.rename, opt("Rename"))
+        vim.keymap.set("n", "<F4>", vim.lsp.buf.code_action, opt("Code Action"))
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, opt("Show Docs"))
+        vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opt("Prev Diagnostic"))
+        vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opt("Next Diagnostic"))
+        vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opt("Goto Declaration"))
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opt("Goto Definition"))
+        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opt("Goto Implementation"))
+        vim.keymap.set("n", "gl", vim.diagnostic.open_float, opt("Line Diagnostic"))
+        vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opt("Goto Type Definition"))
+        vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opt("Signature Help"))
         -- Custom
+        vim.keymap.set("n", "?", vim.diagnostic.open_float, opt("Line Diagnostic"))
         vim.keymap.set("n", "gD", vim.diagnostic.open_float, opts)
-        vim.keymap.set("n", "?", vim.lsp.buf.hover, opts)
+        -- vim.keymap.set("n", "?", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "gr", telescope.lsp_references, {buffer = true})
         vim.keymap.set("n", "<leader>fr", telescope.lsp_references, {buffer = true})
         vim.keymap.set({"n", "i"}, "<C-S-SPACE>", vim.lsp.buf.signature_help, opts)
@@ -143,7 +160,7 @@ return {
 
       lspconfig.ansiblels.setup({capabilities = capabilities})
       lspconfig.bashls.setup({capabilities = capabilities})
-      lspconfig.gopls.setup({capabilities = capabilities})
+      lspconfig.lemminx.setup({capabilities = capabilities})
       lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.neocmake.setup({capabilities = capabilities})
       lspconfig.omnisharp.setup({capabilities = capabilities})
@@ -151,6 +168,15 @@ return {
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       lspconfig.rust_analyzer.setup({capabilities = capabilities})
       lspconfig.yamlls.setup({capabilities = capabilities})
+
+      -- Treat *.axaml files as XML
+      vim.cmd([[autocmd BufNewFile,BufRead *.axaml setfiletype xml]])
+      vim.filetype.add({
+        pattern = {
+          [ "*.axaml" ] = "xml"
+        }
+      })
+
 
       vim.filetype.add({
         pattern = {

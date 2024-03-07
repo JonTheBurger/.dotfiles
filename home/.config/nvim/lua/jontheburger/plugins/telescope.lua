@@ -12,7 +12,7 @@ return {
         desc="Find All",
       },
       {
-        "<C-p>",
+        "<C-M-p>",
         function()
           require("telescope.builtin").find_files({
             find_command={ "fd", "--hidden", "-t", "f", fname }
@@ -30,9 +30,9 @@ return {
         desc="Find All Files",
       },
       {
-        "<leader>fv",
+        "<C-p>",
         function()
-          require("telescope.builtin").git_files()
+          require("telescope.builtin").git_files({recurse_submodules=false})
         end,
         desc="Find Git Files",
       },
@@ -200,7 +200,7 @@ return {
         exports = {
           cmake_tools = create_picker("CMake - Launch Targets", function()
             local result = cmake.get_config():launch_targets()
-            targets = {}
+            local targets = {}
             for _, v in ipairs(result.targets) do
               table.insert(targets, v)
             end

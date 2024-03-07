@@ -24,7 +24,8 @@
   amend = commit --amend --no-edit
   ca = !git add -A && git commit --amend --no-edit
   shove = !git add -A && git commit --amend --no-edit && git push --force
-  heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
+  #heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
+  heave = pull origin --rebase
   force-apply = apply --reject --whitespace=fix
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
   nuke = !git reset --hard && git clean -xdff && git restore . --recurse-submodules && git submodule foreach "git nuke"

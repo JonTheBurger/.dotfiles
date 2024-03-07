@@ -14,6 +14,8 @@ vim.keymap.set("n", "<leader>s",             -- Substitute word
 vim.keymap.set("v", "<leader>lf",            -- Insert newline
   [[:s/\%V/\r/]]
 )
+vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]])  -- Trim Whitespace
+vim.keymap.set("n", "<leader>wl", [[:s/\s\+/\r/g<CR>]])  -- Split words on lines
 vim.keymap.set("n", "<leader>n", "<CMD>nohl<CR>")   -- No Highlight Search
 vim.keymap.set("n", "<leader>q", "<CMD>bp|bd#<CR>") -- Delete Buffer, Keep Split
 
@@ -65,4 +67,3 @@ vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 -- Custom Functions
 local fn = require("jontheburger.functions")
 vim.keymap.set("n", "<leader>R", fn.reload.config, { silent = false })
-vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]])  -- Trim Whitespace
