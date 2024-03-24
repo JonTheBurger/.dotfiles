@@ -4,20 +4,25 @@ vim.keymap.set("n", "<C-c>", "<ESC>")        -- Ctrl+C == Esc
 vim.keymap.set("x", "<leader>p", "\"_dP")    -- Paste & Maintain Register
 vim.keymap.set("", "q:", "<NOP>")            -- Useless
 vim.keymap.set("t", "<ESC>", [[<C-\><C-n>]]) -- Seriously, quit terminal mode
-vim.keymap.set("i", "jk", "<ESC>")           -- Fast Insert -> Normal
-vim.keymap.set("n", "<leader>X",             -- chmod +x
-  "<CMD>!chmod +x %<CR>", { silent = true }
+vim.keymap.set("i", "jk", "<ESC>", { desc = "Normal Mode" })
+vim.keymap.set("n", "<leader>X",
+  "<CMD>!chmod +x %<CR>",
+  { desc = "chmod +x", silent = true }
 )
-vim.keymap.set("n", "<leader>s",             -- Substitute word
-  [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]]
+vim.keymap.set("n", "<leader>s",
+  [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+  { desc = "Substitute word" }
 )
-vim.keymap.set("v", "<leader>lf",            -- Insert newline
-  [[:s/\%V/\r/]]
+vim.keymap.set("v", "<leader>lf",
+  [[:s/\%V/\r/]],
+  { desc = "Insert newline" }
 )
-vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]])  -- Trim Whitespace
-vim.keymap.set("n", "<leader>wl", [[:s/\s\+/\r/g<CR>]])  -- Split words on lines
-vim.keymap.set("n", "<leader>n", "<CMD>nohl<CR>")   -- No Highlight Search
-vim.keymap.set("n", "<leader>q", "<CMD>bp|bd#<CR>") -- Delete Buffer, Keep Split
+vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Trim Whitespace" })
+vim.keymap.set("n", "<leader>wl", [[:s/\s\+/\r/g<CR>]], { desc = "Split words on lines" })
+vim.keymap.set("n", "<leader>n", "<CMD>nohl<CR>", { desc = "No Highlight Search" })
+vim.keymap.set("n", "<leader>q", "<CMD>bp|bd#<CR>", { desc = "Delete Buffer, Keep Split" })
+vim.keymap.set("n", "ci_", "dt_dT_", { desc = "inner _underscores_" })
+vim.keymap.set("n", "ci,", "dt,dT,", { desc = "inner ,commas," })
 
 -- Move highlighted text up/down w/ shift JK
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

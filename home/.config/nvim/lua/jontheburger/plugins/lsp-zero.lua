@@ -83,6 +83,11 @@ return {
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             end
           end,
+          ["<C-l>"] = function()
+            for _=1,8 do
+              cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+            end
+          end,
         },
         formatting = {
           format = function(entry, vim_item)
@@ -104,7 +109,17 @@ return {
   },
 
   -- https://github.com/folke/neodev.nvim
-  { "folke/neodev.nvim", opts = {} },
+  {
+    "folke/neodev.nvim",
+    opts = {
+      library = {
+        plugins = {
+          { "nvim-dap-ui" },
+          types = true,
+        },
+      },
+    },
+  },
 
   -- https://github.com/neovim/nvim-lspconfig
   {
@@ -138,7 +153,7 @@ return {
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opt("Prev Diagnostic"))
         vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opt("Next Diagnostic"))
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opt("Goto Declaration"))
-        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opt("Goto Definition"))
+        -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opt("Goto Definition"))
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opt("Goto Implementation"))
         vim.keymap.set("n", "gl", vim.diagnostic.open_float, opt("Line Diagnostic"))
         vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opt("Goto Type Definition"))

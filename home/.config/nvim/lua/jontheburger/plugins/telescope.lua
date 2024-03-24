@@ -15,7 +15,7 @@ return {
         "<C-M-p>",
         function()
           require("telescope.builtin").find_files({
-            find_command={ "fd", "--hidden", "-t", "f", fname }
+            find_command={ "fd", "-t", "file", "-Luuu", fname }
           })
         end,
         desc="Find Files",
@@ -24,7 +24,7 @@ return {
         "<leader>ff",
         function()
           require("telescope.builtin").find_files({
-            find_command={ "fd", "-Luuu", fname }
+            find_command={ "fd", "-t", "file", "-Luuu", fname }
           })
         end,
         desc="Find All Files",
@@ -132,6 +132,13 @@ return {
         desc="Find Global Symbols",
       },
       {
+        "gd",
+        function()
+          require("telescope.builtin").lsp_definitions({ jump_type = "never" })
+        end,
+        desc="Find Definition",
+      },
+      {
         "<leader>ld",
         function()
           require("telescope.builtin").diagnostics({bufnr=0})
@@ -217,10 +224,21 @@ return {
       vim.o.timeout = true
       vim.o.timeoutlen = 300
     end,
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
+
+    config = function()
+      local actions = require('telescope.actions')
+      require('telescope').setup{
+        defaults = {
+          mappings = {
+            i = {
+              ["<C-j>"]   = actions.move_selection_next,
+              ["<C-k>"]   = actions.move_selection_previous,
+              ["<C-F2>"]   = actions.smart_send_to_qflist + actions.open_qflist,
+              ["<ESC>"]   = actions.close,
+            },
+          },
+        }
+      }
+    end,
   }
 }

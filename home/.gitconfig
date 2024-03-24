@@ -24,12 +24,12 @@
   amend = commit --amend --no-edit
   ca = !git add -A && git commit --amend --no-edit
   shove = !git add -A && git commit --amend --no-edit && git push --force
-  #heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
-  heave = pull origin --rebase
+  heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
   nuke = !git reset --hard && git clean -xdff && git restore . --recurse-submodules && git submodule foreach "git nuke"
   prune-branches = !git branch --merged >/tmp/merged-branches && vi /tmp/merged-branches && xargs git branch -d </tmp/merged-branches
+  cm = "!f() { branch=$(git rev-parse --abbrev-ref HEAD); ticket=$(echo $branch | grep -oE '[A-Z]+-[0-9]+'); if [ -n \"$ticket\" ]; then git commit -m \"$ticket $*\"; else git commit -m \"$*\"; fi; }; f"
 [blame]
   coloring = highlightRecent
   date = short
@@ -53,3 +53,5 @@
   email = jmp180@pitt.edu
 [include] ; includeIf is buggy
   path = .gitconfig-work
+[diff]
+  algorithm = histogram

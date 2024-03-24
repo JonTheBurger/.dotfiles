@@ -82,3 +82,6 @@ cppcoreguidelines
 Sanitizers
 templated
 ASAN
+emplaced
+nullopt
+static_assert

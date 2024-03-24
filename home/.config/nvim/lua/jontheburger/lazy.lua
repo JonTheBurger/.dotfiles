@@ -37,9 +37,9 @@ require("lazy").setup("jontheburger.plugins", {
   },
   dev = {
     path = "~/Projects/nvim",
-    ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
-    patterns = { "neotest-gtest" },
     fallback = true, -- Fallback to git when local plugin doesn't exist
+    ---@type string[] plugins that match these patterns will use your local versions instead of being fetched from GitHub
+    -- patterns = { "neotest-gtest" },
   },
   -- colorscheme = { "space-vim-dark" },
 })

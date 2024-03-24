@@ -35,6 +35,13 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
         if vim.o.filetype == 'help' then vim.cmd.wincmd("L") end
     end
 })
+vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "Highlight when yanking (copying) text",
+    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    callback = function()
+        vim.highlight.on_yank()
+    end,
+})
 -- if vim.env.TERM == 'xterm-kitty' then
   -- vim.cmd([[autocmd UIEnter * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[>1u") | endif]])
   -- vim.cmd([[autocmd UILeave * if v:event.chan ==# 0 | call chansend(v:stderr, "\x1b[<1u") | endif]])

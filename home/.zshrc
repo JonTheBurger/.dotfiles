@@ -102,6 +102,9 @@ alias sodu='sudo --preserve-env=PATH env'
 alias splitpath='sed "s#:#/\n#g"'
 alias lzip='unzip -l'
 alias ltar='tar tf'
+function clone() {
+  git clone git@bitbucket.org:msasafety/$@.git
+}
 function cls() {
   clear
   if [[ $TMUX ]]; then

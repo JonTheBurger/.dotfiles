@@ -31,6 +31,7 @@ return {
     { "<leader>dk", function() require("dap").up() end, desc = "Go Up 1 Stack Frame", },
     { "<leader>dj", function() require("dap").down() end, desc = "Go Down 1 Stack Frame", },
     { "<F1>", function() require("dap.ui.widgets").hover() end, desc = "Hover Variables", },
+    { "<S-F4>", function() require("dapui").eval() end, mode = {"n", "v"}, desc = "Evaluate", },
     { "<F5>", function() require("dap").continue() end, desc = "Continue", },
     { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint", },
     { "<F10>", function() require("dap").step_over() end, desc = "Step Over", },
@@ -47,7 +48,46 @@ return {
     require("nvim-dap-virtual-text").setup({ commented = true, })
     local dap = require("dap")
     local dapui = require("dapui")
-    dapui.setup({})
+    dapui.setup({
+      layouts = {
+        {
+          elements = {
+            {
+              id = "breakpoints",
+              size = 0.10
+            },
+            {
+              id = "stacks",
+              size = 0.30
+            },
+            {
+              id = "scopes",
+              size = 0.30
+            },
+            {
+              id = "watches",
+              size = 0.30
+            }
+          },
+          position = "left",
+          size = 40,
+        },
+        {
+          elements = {
+            {
+              id = "console",
+              size = 0.2,
+            },
+            {
+              id = "repl",
+              size = 0.8,
+            },
+          },
+          position = "bottom",
+          size = 10,
+        }
+      },
+    })
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dapui.open()
     end
@@ -117,12 +157,59 @@ return {
       args = {},
       runInTerminal = false,
     }
-    dap.configurations.cpp = {
-      lldb,
+
+    -- https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)
+    dap.adapters.cppdbg = {
+      id = "cppdbg",
+      type = "executable",
+      command = "/home/vagrant/.local/share/nvim/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",
+      -- command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugAD7"),
     }
+    local cppdbg = {
+      {
+        name = "Launch file",
+        type = "cppdbg",
+        request = "launch",
+        program = function()
+          return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        setupCommands = {
+          {
+             text = '-enable-pretty-printing',
+             description =  'enable pretty printing',
+             ignoreFailures = false
+          },
+        },
+        -- stopAtEntry = true,
+      },
+      -- {
+      --   name = 'Attach to gdbserver :1234',
+      --   type = 'cppdbg',
+      --   request = 'launch',
+      --   MIMode = 'gdb',
+      --   miDebuggerServerAddress = 'localhost:1234',
+      --   miDebuggerPath = '/usr/bin/gdb',
+      --   cwd = '${workspaceFolder}',
+      --   setupCommands = {
+      --     {
+      --        text = '-enable-pretty-printing',
+      --        description =  'enable pretty printing',
+      --        ignoreFailures = false
+      --     },
+      --   },
+      --   program = function()
+      --     return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+      --   end,
+      -- },
+    }
+
+    dap.configurations.cpp = cppdbg
+    -- dap.configurations.cpp = {
+    --   cppdbg, lldb
+    -- }
     dap.configurations.c = dap.configurations.cpp
 
-    -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
     -- dap.configurations.rust = dap.configurations.cpp
 
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
