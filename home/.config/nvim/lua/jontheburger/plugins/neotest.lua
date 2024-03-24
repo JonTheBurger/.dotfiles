@@ -23,6 +23,7 @@ return {
     -- The adapter will then be automatically loaded with the config.
     adapters = {
       ["neotest-gtest"] = {
+        debug_adapter = "lldb",
         is_test_file = function(file_path)
           return file_path:lower():match("**test.cpp$")
         end,

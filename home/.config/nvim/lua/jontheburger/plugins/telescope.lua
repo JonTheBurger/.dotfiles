@@ -224,21 +224,24 @@ return {
       vim.o.timeout = true
       vim.o.timeoutlen = 300
     end,
-
     config = function()
-      local actions = require('telescope.actions')
-      require('telescope').setup{
-        defaults = {
-          mappings = {
-            i = {
-              ["<C-j>"]   = actions.move_selection_next,
-              ["<C-k>"]   = actions.move_selection_previous,
-              ["<C-F2>"]   = actions.smart_send_to_qflist + actions.open_qflist,
-              ["<ESC>"]   = actions.close,
-            },
-          },
-        }
-      }
+      require("which-key").setup({})
     end,
+
+    -- config = function()
+    --   local actions = require('telescope.actions')
+    --   require('telescope').setup{
+    --     defaults = {
+    --       mappings = {
+    --         i = {
+    --           ["<C-j>"]   = actions.move_selection_next,
+    --           ["<C-k>"]   = actions.move_selection_previous,
+    --           ["<C-F2>"]   = actions.smart_send_to_qflist + actions.open_qflist,
+    --           ["<ESC>"]   = actions.close,
+    --         },
+    --       },
+    --     }
+    --   }
+    -- end,
   }
 }

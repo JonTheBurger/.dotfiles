@@ -130,7 +130,7 @@ function fsmon() {
 }
 function fz() { cd $(zshz | sort -rh | awk '{print $NF}' | nl | fzf | awk '{print $NF}') }
 function tailog() {
-  tail -f "$@" | bat --paging=never -l log2
+  tail -f "$@" | bat --paging=never -p -l log2
 }
 function mk() {
   if [ -f "bamboo.mk" ]; then

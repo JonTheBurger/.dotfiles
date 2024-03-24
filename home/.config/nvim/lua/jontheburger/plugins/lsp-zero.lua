@@ -46,11 +46,11 @@ return {
   -- https://github.com/VonHeikemen/lsp-zero.nvim
   {
     "VonHeikemen/lsp-zero.nvim",
-    branch = "v2.x",
+    branch = "v3.x",
     lazy = true,
-    config = function()
-      require("lsp-zero.settings").preset({})
-    end
+    -- config = function()
+    --   require("lsp-zero.settings").preset({})
+    -- end
   },
 
   -- https://github.com/hrsh7th/nvim-cmp
@@ -175,6 +175,13 @@ return {
 
       lspconfig.ansiblels.setup({capabilities = capabilities})
       lspconfig.bashls.setup({capabilities = capabilities})
+      lspconfig.clangd.setup({
+        capabilities = capabilities,
+        on_attach = function()
+          require("clangd_extensions.inlay_hints").setup_autocmd()
+          require("clangd_extensions.inlay_hints").set_inlay_hints()
+        end,
+      })
       lspconfig.lemminx.setup({capabilities = capabilities})
       lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
       lspconfig.neocmake.setup({capabilities = capabilities})

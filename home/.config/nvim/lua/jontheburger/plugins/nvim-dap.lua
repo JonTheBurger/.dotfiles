@@ -2,6 +2,7 @@ return {
   "mfussenegger/nvim-dap",
   dependencies = {
     { "rcarriga/nvim-dap-ui" },
+    { "nvim-neotest/nvim-nio" },
     { "theHamsta/nvim-dap-virtual-text" },
     { "nvim-telescope/telescope-dap.nvim" },
     { "jbyuki/one-small-step-for-vimkind" },
@@ -150,7 +151,6 @@ return {
       end,
       cwd = "${workspaceFolder}",
       env = {
-        "GTEST_COLOR=0",
         "NOCOLOR=1",
       },
       stopOnEntry = false,
@@ -162,8 +162,8 @@ return {
     dap.adapters.cppdbg = {
       id = "cppdbg",
       type = "executable",
-      command = "/home/vagrant/.local/share/nvim/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",
-      -- command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugAD7"),
+      -- command = "/home/vagrant/.local/share/nvim/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",
+      command = vim.fn.expand("$HOME/.local/share/nvim/mason/bin/OpenDebugAD7"),
     }
     local cppdbg = {
       {
@@ -202,6 +202,7 @@ return {
       --     return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
       --   end,
       -- },
+      lldb
     }
 
     dap.configurations.cpp = cppdbg
