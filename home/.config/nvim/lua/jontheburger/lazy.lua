@@ -16,22 +16,6 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup("jontheburger.plugins", {
-  ui = {
-    -- icons = {
-    --   cmd = "⌘",
-    --   config = "🛠",
-    --   event = "📅",
-    --   ft = "📂",
-    --   init = "⚙",
-    --   keys = "🗝",
-    --   plugin = "🔌",
-    --   runtime = "💻",
-    --   source = "📄",
-    --   start = "🚀",
-    --   task = "📌",
-    --   lazy = "💤 ",
-    -- },
-  },
   change_detection = {
     enabled = false,
   },

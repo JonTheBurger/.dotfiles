@@ -53,12 +53,124 @@ return {
     -- end
   },
 
+  -- https://github.com/L3MON4D3/LuaSnip
+  {
+    "L3MON4D3/LuaSnip",
+    event = "InsertEnter",
+    opts = {},
+    config = function(_, opts)
+      local ls = require("luasnip")
+      ls.setup(opts)
+
+      vim.keymap.set({"i", "s"}, "<A-E>", function()
+         if ls.choice_active() then
+            ls.change_choice(1)
+         end
+      end, {silent = true})
+
+      vim.keymap.set({"i", "s"}, "<A-S-E>", function()
+         if ls.choice_active() then
+            ls.change_choice(-1)
+         end
+      end, {silent = true})
+
+      vim.keymap.set({"i", "s"}, "<C-E>", function()
+         if ls.jumpable(1) then
+            ls.jump(1)
+         end
+      end, {silent = true})
+
+      vim.keymap.set({"i", "s"}, "<C-S-E>", function()
+         if ls.jumpable(-1) then
+            ls.jump(-1)
+         end
+      end, {silent = true})
+
+      vim.keymap.set({"i", "s"}, "<C-S-J>", function()
+        if ls.expand_or_jumpable() then
+          ls.expand_or_jump()
+        end
+      end, {silent = true})
+
+      local s = ls.snippet
+      local sn = ls.snippet_node
+      local t = ls.text_node
+      local i = ls.insert_node
+      local f = ls.function_node
+      local c = ls.choice_node
+      local d = ls.dynamic_node
+      local r = ls.restore_node
+      local l = require("luasnip.extras").lambda
+      local rep = require("luasnip.extras").rep
+      local p = require("luasnip.extras").partial
+      local m = require("luasnip.extras").match
+      local n = require("luasnip.extras").nonempty
+      local dl = require("luasnip.extras").dynamic_lambda
+      local fmt = require("luasnip.extras.fmt").fmt
+      local fmta = require("luasnip.extras.fmt").fmta
+      local types = require("luasnip.util.types")
+      local conds = require("luasnip.extras.expand_conditions")
+
+      ls.add_snippets(
+        "all", {
+          s("trig", {
+            i(1), t"text", i(2), t"text again", i(3)
+          }),
+          s(
+            "jon",
+            fmt(
+              [[
+              Hello {}, Goodbye {}
+              ]],
+              {
+                i(1), i(2)
+              }
+            )
+          )
+        }
+      )
+
+      -- local Job = require'plenary.job'
+      -- Job:new({
+      --   command = 'git',
+      --   args = { 'config', '--global', 'user.name' },
+      --   on_exit = function(j, return_val)
+      --     print(return_val)
+      --     print(j:result())
+      --   end,
+      -- }):sync() -- or start()
+
+      require("luasnip.loaders.from_vscode").load({paths = { vim.loop.cwd() .. "/.vscode"}})
+
+      -- vim.keymap.set({"i", "s", "n"}, "<C-N>", function() ls.jump( 1) end, {silent = true})
+      -- vim.keymap.set({"i", "s", "n"}, "<C-S-N>", function() ls.expand() end, {silent = true})
+      -- vim.keymap.set({"i", "s"}, "<C-S-N>", function() ls.jump(-1) end, {silent = true})
+
+      -- vim.keymap.set({ "i", "s" }, "<C-N>", function()
+      --   if ls.choice_active() then
+      --     ls.change_choice(1)
+      --   end
+      -- end)
+
+--       vim.api.nvim_set_keymap("i", "<C-E>", "<Plug>luasnip-next-choice", {})
+--       vim.api.nvim_set_keymap("s", "<C-E>", "<Plug>luasnip-next-choice", {})
+--       vim.keymap.set({ "i", "s" }, "<Tab>", function()
+--         if ls.choice_active() then
+--           return "<Plug>luasnip-next-choice"
+--         else
+--           return "<Tab>"
+--         end
+--       end, {
+--     expr = true,
+-- })
+    end,
+  },
+
   -- https://github.com/hrsh7th/nvim-cmp
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
-      -- https://github.com/L3MON4D3/LuaSnip
       { "L3MON4D3/LuaSnip" },
     },
     -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#manage_nvim_cmp
@@ -66,6 +178,7 @@ return {
       require("lsp-zero.cmp").extend()
       local cmp = require("cmp")
       local cmp_action = require("lsp-zero.cmp").action()
+
       cmp.setup({
         mapping = {
           ["<CR>"] = cmp.mapping.confirm({select = true}),
@@ -88,6 +201,10 @@ return {
               cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             end
           end,
+        },
+        sources = {
+          { name = "luasnip" },
+          { name = "nvim_lsp" },
         },
         formatting = {
           format = function(entry, vim_item)
@@ -131,6 +248,7 @@ return {
     event = {"BufReadPre", "BufNewFile"},
     dependencies = {
       { "hrsh7th/cmp-nvim-lsp" },
+      { "saadparwaiz1/cmp_luasnip" },
       { "williamboman/mason-lspconfig.nvim" },
       { "williamboman/mason.nvim" },
       { "nvim-telescope/telescope.nvim" },
@@ -188,8 +306,11 @@ return {
       lspconfig.omnisharp.setup({capabilities = capabilities})
       lspconfig.pyright.setup({capabilities = capabilities})
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
-      lspconfig.rust_analyzer.setup({capabilities = capabilities})
+      -- lspconfig.rust_analyzer.setup({capabilities = capabilities})
       lspconfig.yamlls.setup({capabilities = capabilities})
+  -- require('mason-lspconfig').setup_handlers {
+  --   ['rust_analyzer'] = function() end,
+  -- }
 
       -- Treat *.axaml files as XML
       vim.cmd([[autocmd BufNewFile,BufRead *.axaml setfiletype xml]])

@@ -12,8 +12,6 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # CONSTANTS
 # ======================================================================================
 # Can be overridden from command line
-## @var ANY_TERM_DROPDOWN_URL .
-ANY_TERM_DROPDOWN_URL="${ANY_TERM_DROPDOWN_URL-https://raw.githubusercontent.com/gotbletu/shownotes/master/any_term_dropdown.sh}"
 ## @var NERD_FONT_VERSION Version of nerd fonts to install.
 NERD_FONT_VERSION="${NERD_FONT_VERSION-3.0.2}"
 ## @var NERD_FONT_URL Nerd font zipfile to download (https://www.nerdfonts.com/font-downloads).
@@ -43,7 +41,6 @@ tell you ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission befo
   local::install_apt
   local::install_editors
   local::install_fonts
-  local::install_quake_term
 }
 
 local::usage() {
@@ -144,34 +141,6 @@ ${CYAN}${NERD_FONT_URL}${NOFMT}
     unzip "/tmp/nerdfont.zip" '*.otf' -d "${HOME}/.local/share/fonts"
 
     util::notice "-- Nerd Fonts: Installed --"
-  else
-    util::notice "-- Skipping --"
-  fi
-  util::println
-}
-
-# --------------------------------------------------------------------------------------
-## @fn local::install_quake_term()
-## @brief Install terminal dropdown from git.
-# --------------------------------------------------------------------------------------
-local::install_quake_term() {
-  # Print Preamble
-  util::notice "... Any Terminal Dropdown ..."
-  util::info "${CYAN}any_term_dropdown.sh${NOFMT}, enabling any terminal to be used in 'quake mode'. I'll be downloading it from:
-${CYAN}${ANY_TERM_DROPDOWN_URL}${NOFMT}
-"
-
-  if util::prompt "Shall I install it"; then
-    # Ask before removing an existing any_term_dropdown
-    if [ -f "${HOME}/.local/bin/any_term_dropdown.sh" ]; then
-      rm -i "${HOME}/.local/bin/any_term_dropdown.sh"
-    fi
-    # Only continue if any_term_dropdown is not installed / was removed
-    if [ ! -f "${HOME}/.local/bin/any_term_dropdown.sh" ]; then
-      curl -Lo "${HOME}/.local/bin/any_term_dropdown.sh" "${ANY_TERM_DROPDOWN_URL}"
-      chmod +x "${HOME}/.local/bin/any_term_dropdown.sh"
-    fi
-    util::notice "-- Any Term Dropdown: Installed --"
   else
     util::notice "-- Skipping --"
   fi

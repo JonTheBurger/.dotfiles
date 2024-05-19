@@ -69,6 +69,13 @@ return {
         desc="Find Buffers",
       },
       {
+        "<leader>fj",
+        function()
+          require("telescope.builtin").jumplist()
+        end,
+        desc="Find Jumps",
+      },
+      {
         "<leader>f'",
         function()
           require("telescope.builtin").marks()

@@ -13,25 +13,31 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # ======================================================================================
 # Can be overridden from command line
 ## @var NVIM_VERSION Version of nvim to install.
-NVIM_VERSION="${NVIM_VERSION-0.9.5}"
+NVIM_VERSION="${NVIM_VERSION-0.10.0}"
 ## @var NVIM_URL Download source of nvim.
 NVIM_URL="${NVIM_URL-https://github.com/neovim/neovim/releases/download/v${NVIM_VERSION}/nvim.appimage}"
 ## @var FD_VERSION Version of fd to install.
-FD_VERSION="${FD_VERSION-8.7.0}"
+FD_VERSION="${FD_VERSION-10.1.0}"
 ## @var FD_URL Download source of fd.
 FD_URL="${FD_URL-https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-$(uname -m)-unknown-linux-gnu.tar.gz}"
 ## @var FZF_VERSION Version of fzf to install.
-FZF_VERSION="${FZF_VERSION-0.42.0}"
+FZF_VERSION="${FZF_VERSION-0.52.1}"
 ## @var FZF_URL Download source of fzf.
 FZF_URL="${FZF_URL-https://github.com/junegunn/fzf/releases/download/${FZF_VERSION}/fzf-${FZF_VERSION}-linux_$(dpkg --print-architecture).tar.gz}"
 ## @var FZF_GIT_URL Download source of fzf.git.
 FZF_GIT_URL="${FZF_GIT_URL-https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh}"
 ## @var LAZYGIT_VERSION Download source of lazygit.
 LAZYGIT_VERSION="${LAZYGIT_VERSION-0.40.2}"
-## @var LAZYGIT_URL Version of lazygit to install.
+## @var LAZYGIT_URL Download source of lazygit.
 LAZYGIT_URL="${LAZYGIT_URL-https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_$(uname -m).tar.gz}"
-## @var TPM_URL TMux Plugin Manager Git URL.
-TPM_URL="${TPM_URL-https://github.com/tmux-plugins/tpm}"
+## @var OH_MY_ZSH_REF Git sha of OH_MY_ZSH to use for manually installed plugins.
+OH_MY_ZSH_REF="${OH_MY_ZSH_REF-a779d6563ffb2f0093b4b74c8d5ff0982fa3e930}"
+## @var OH_MY_ZSH_GIT Git repository source.
+OH_MY_ZSH_GIT="${OH_MY_ZSH_GIT-https://github.com/ohmyzsh/ohmyzsh.git}"
+## @var ZOXIDE_VERSION Version of zoxide to install.
+ZOXIDE_VERSION="${ZOXIDE_VERSION-0.9.4}"
+## @var LAZYGIT_URL Download source of zoxide.
+ZOXIDE_URL="${ZOXIDE_URL-https://github.com/ajeetdsouza/zoxide/releases/download/v${ZOXIDE_VERSION}/zoxide-${ZOXIDE_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz}"
 
 main() {
   local::parse_params "$@"
@@ -60,7 +66,8 @@ tell you ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission befo
   local::install_fd
   local::install_fzf
   local::install_lazygit
-  local::install_tmux_plugin_manager
+  local::install_tmux_plugins
+  local::install_zoxide
 }
 
 local::usage() {
@@ -157,6 +164,7 @@ local::install_apt() {
   PKGS_APT+=(python3)
   PKGS_APT+=(python3-venv)
   PKGS_APT+=(ripgrep)
+  PKGS_APT+=(ruby)  # For tmux-jump
   PKGS_APT+=(software-properties-common)
   PKGS_APT+=(stow)
   PKGS_APT+=(tig)
@@ -323,24 +331,80 @@ ${CYAN}${LAZYGIT_URL}${NOFMT}
 }
 
 # --------------------------------------------------------------------------------------
-## @fn local::install_tmux_plugin_manager()
+## @fn local::install_tmux_plugins()
 ## @brief Install tpm from git.
 # --------------------------------------------------------------------------------------
-local::install_tmux_plugin_manager() {
+local::install_tmux_plugins() {
   # Print Preamble
-  util::notice "... TMux Plugin Manager ..."
-  util::info "${CYAN}tpm${NOFMT}, a plugin manager for tmux. I'll be downloading it from:
-${CYAN}${TPM_URL}${NOFMT}
+  util::notice "... TMux Plugins ..."
+  util::info "TMux supports plugins, but rather than use a plugin manager we install from source.
+I intend to install ${CYAN}tmux-jump${NOFMT}, which makes <prefix>f behave like easymotion,
+and catppuccin, a popular theme. Please check the script for all URLs and SHAs.
+"
+
+  if util::prompt "Shall I install them"; then
+    util::notice "... Installing ..."
+    mkdir -p "${HOME}/.tmux/plugins"
+
+    if [ ! -d "${HOME}/.tmux/plugins/tmux-jump" ]; then
+      git clone https://github.com/schasse/tmux-jump "${HOME}/.tmux/plugins/tmux-jump"
+    fi
+    git -C "${HOME}/.tmux/plugins/tmux-jump" checkout "2ff4940f043cd4ad80fa25c6efa33063fb3b386b"
+
+    if [ ! -d "${HOME}/.tmux/plugins/catppuccin" ]; then
+      git clone https://github.com/catppuccin/tmux.git "${HOME}/.tmux/plugins/catppuccin"
+    fi
+    git -C "${HOME}/.tmux/plugins/catppuccin" checkout "4ca26b774bc2e945fce4ccb909245dffeea7a9bf"
+
+    util::notice "-- TMUX Plugins: Installed --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
+}
+
+local::install_oh_my_zsh() {
+  # Print Preamble
+  util::notice "... Oh My Zsh ..."
+  util::info "${CYAN}ohmyzsh${NOFMT} is a plugin manager for zsh. I prefer to install this myself
+and manually source plugins rather than autoinstall/update within zsh. I'll be installing from
+${CYAN}${OH_MY_ZSH_GIT}${NOFMT} at ${CYAN}${OH_MY_ZSH_REF}${NOFMT}.
 "
 
   if util::prompt "Shall I install it"; then
-    if [ ! -d "${HOME}/.tmux/plugins/tpm" ]; then
-      util::notice "... Installing ..."
-      git clone "${TPM_URL}" "${HOME}/.tmux/plugins/tpm"
-    else
-      util::notice "... Already Installed ..."
+    util::notice "... Installing ..."
+    if [ ! -d "${HOME}/.local/src/ohmyzsh" ]; then
+      git clone "${OH_MY_ZSH_GIT}" "${HOME}/.local/src/ohmyzsh"
     fi
-    util::notice "-- TMUX Plugin Manager: Installed --"
+    git -C "${HOME}/.local/src/ohmyzsh" checkout "${OH_MY_ZSH_REF}"
+    util::notice "-- Oh My Zsh: Installed --"
+  else
+    util::notice "-- Skipping --"
+  fi
+  util::println
+}
+
+# --------------------------------------------------------------------------------------
+## @fn local::install_zoxide()
+## @brief Install zoxide from git.
+# --------------------------------------------------------------------------------------
+local::install_zoxide() {
+  # Print Preamble
+  util::notice "... Zoxide ..."
+  util::info "${CYAN}zoxide${NOFMT} is a smarter cd alternative. I'll be downloading it from:
+${CYAN}${ZOXIDE_URL}${NOFMT}
+"
+
+  if util::prompt "Shall I install it"; then
+    util::notice "... Installing ..."
+    # download
+    curl -Lo "/tmp/zoxide.tar.gz" "${ZOXIDE_URL}"
+    mkdir -p "/tmp/zoxide"
+    tar -xf "/tmp/zoxide.tar.gz" -C "/tmp/zoxide"
+    # exe
+    mv -i "/tmp/zoxide/zoxide" "${HOME}/.local/bin/zoxide"
+    chmod +x "${HOME}/.local/bin/zoxide"
+    util::notice "-- Zoxide: Installed --"
   else
     util::notice "-- Skipping --"
   fi
@@ -354,8 +418,10 @@ ${CYAN}${TPM_URL}${NOFMT}
 local::cleanup() {
   rm -f /tmp/fd.tar.gz
   rm -f /tmp/lazygit.tar.gz
+  rm -f /tmp/zoxide.tar.gz
   rm -rf /tmp/fd
   rm -rf /tmp/lazygit
+  rm -rf /tmp/zoxide
 }
 
 main "$@"

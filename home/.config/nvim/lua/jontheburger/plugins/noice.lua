@@ -1,4 +1,4 @@
-
+-- https://github.com/folke/noice.nvim
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
@@ -38,6 +38,15 @@ return {
         long_message_to_split = true, -- long messages will be sent to a split
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = false, -- add a border to hover docs and signature help
+      },
+
+      routes = {
+        { filter = { event = "msg_show", kind = "", find = "written" }, view = "mini" },
+        { filter = { event = "msg_show", kind = "", find = "fewer lines" }, view = "mini" },
+        { filter = { event = "msg_show", find = "^E486: Pattern not found" }, view = "mini" },
+        { filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
+        { filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
+        { filter = { find = "No signature help" }, skip = true },
       },
 
       commands = {

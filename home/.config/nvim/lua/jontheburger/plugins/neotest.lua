@@ -11,7 +11,6 @@ return {
   "nvim-neotest/neotest",
   dependencies = {
     "alfaix/neotest-gtest",
-    "antoinemadec/FixCursorHold.nvim",
     "nvim-lua/plenary.nvim",
     "nvim-neotest/neotest-python",
     "nvim-treesitter/nvim-treesitter",

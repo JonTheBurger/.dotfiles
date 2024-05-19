@@ -1,6 +1,6 @@
 -- Colorscheme
 -- vim.cmd("colorscheme molokai")
-vim.cmd("colorscheme space-vim-dark")
+-- vim.cmd("colorscheme space-vim-dark")
 -- require("jontheburger.colors.crystal").setup()
 
 -- Diagnostics

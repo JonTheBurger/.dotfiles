@@ -211,7 +211,7 @@ return {
     -- }
     dap.configurations.c = dap.configurations.cpp
 
-    -- dap.configurations.rust = dap.configurations.cpp
+    -- dap.configurations.rust = lldb
 
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation#python
     local dap = require("dap")

@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# TODO: Remove package manager
 # ======================================================================================
 ## Zsh
 # ======================================================================================
@@ -6,8 +7,6 @@
 ZSH="$HOME/.config/zsh/.oh-my-zsh"
 ZSH_CACHE_DIR="$HOME/.cache/oh-my-zsh"
 ZSH_CUSTOM="$HOME/.config/zsh"
-# See: https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="awesomepanda" # Remove '$HOME/.config/zsh/theme.zsh' to use a built-in theme
 # See: https://github.com/ohmyzsh/ohmyzsh/wiki/Settings
 #ENABLE_CORRECTION="true"
 DISABLE_UNTRACKED_FILES_DIRTY="true"
@@ -24,7 +23,7 @@ plugins=(
   colored-man-pages
   command-not-found
   dirhistory
-  zsh-completions
+  # zsh-completions
 )
 
 # Auto-Setup
@@ -83,6 +82,7 @@ ZSH_HIGHLIGHT_STYLES[comment]="fg=245"
 ## Functions & Aliases
 # ======================================================================================
 alias :q='exit'
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias bat='batcat'
 alias buildtree='tree -I "CMakeFiles|Testing|external"'
 alias c='z'
@@ -93,6 +93,7 @@ alias goodbye='sudo apt update && sudo apt upgrade -y && sudo apt autoremove --p
 alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
+alias k='fc -e -'
 alias l='eza -al --icons --git --color-scale -o'
 alias ll='eza -al --color-scale -o --no-filesize --no-time --no-permissions'
 alias look4='find . -iname'
@@ -128,7 +129,6 @@ function fsmon() {
     echo "$p$f modified"
   done
 }
-function fz() { cd $(zshz | sort -rh | awk '{print $NF}' | nl | fzf | awk '{print $NF}') }
 function tailog() {
   tail -f "$@" | bat --paging=never -p -l log2
 }
@@ -155,3 +155,6 @@ function xmlfmt() {
   mv "$1" "$1.bkp"
   xmllint --format "$1.bkp" > "$1"
 }
+# rerun, but not terrible
+# shallow git clone
+# git prune

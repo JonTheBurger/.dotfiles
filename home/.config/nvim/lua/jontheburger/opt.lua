@@ -31,12 +31,13 @@ vim.g.loaded_netrwPlugin = 1
 vim.opt.colorcolumn = "80,88,120"
 vim.opt.shiftwidth = 2
 vim.opt.signcolumn = "yes"
+vim.opt.expandtab = true
+vim.opt.fixeol = true
+vim.opt.indentexpr = ""
+vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3
 vim.opt.textwidth = 0
-vim.opt.expandtab = true
-vim.opt.fixeol = true
-vim.opt.list = true
 vim.opt.listchars = { space = '·', tab = "»»" }
 
 -- Undo File

@@ -247,6 +247,13 @@ return {
               color_warn = { fg = colors.yellow },
               color_info = { fg = colors.cyan },
             },
+            on_click = function(n, mouse)
+              if (n == 1) then
+                if (mouse == "l") then
+                  vim.cmd("Trouble")
+                end
+              end
+            end,
           },
         },
       },
