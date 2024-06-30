@@ -19,7 +19,9 @@
 .LINK
     https://github.com/JonTheBurger/.dotfiles
 .NOTES
+    Winget package search: https://winget.run/
 #>
+# TODO: #Require...s -RunAsAdministrator
 [CmdletBinding()]
 param
 (
@@ -27,8 +29,12 @@ param
     [switch] $Force,
     [nullable[bool]] $DoRemoveBloat,
     [string] $OptDir = "C:\opt",
+    [string] $PythonVersion = "3.12",
+    [string] $DotNetSdkVersion = "8",
     [string] $GodotVersion = "4.2.2",
-    [string] $GodotUrl = "https://github.com/godotengine/godot/releases/download/${GodotVersion}-stable/Godot_v${GodotVersion}-stable_mono_win64.zip"
+    [string] $GodotUrl = "https://github.com/godotengine/godot/releases/download/${GodotVersion}-stable/Godot_v${GodotVersion}-stable_mono_win64.zip",
+    [string] $BattleNetUrl = "https://us.battle.net/download/getInstaller?os=win&installer=Battle.net-Setup.exe&id=undefined",
+    [string] $OpenTabletDriverUrl = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/latest/download/OpenTabletDriver.win-x64.zip"
 )
 
 $ProgressPreference = "SilentlyContinue"
@@ -37,23 +43,7 @@ if ($Help.IsPresent) {
     Get-Help ".\10-Run-Admin-Setup.ps1"
     return
 }
-
-function Set-Registry {
-    param (
-        [string]$Key,
-        [object]$Value,
-        [string]$Type = "DWord" # or maybe ExpandString
-    )
-    $Path = Split-Path -Path $Key -Parent
-    $Name = Split-Path -Path $Key -Leaf
-
-    # Check if the registry key exists, and create it if it doesn't
-    if (-not (Test-Path $Path)) {
-        New-Item -Path "$Path" -Force | Out-Null
-    }
-
-    Set-ItemProperty -Path "$Path" -Name "$Name" -Value $Value -Type $Type -Force
-}
+Import-Module $PSScriptRoot\Util\Dotfile-Functions.ps1
 
 function Remove-Bloatware {
     $applications = @(
@@ -79,7 +69,7 @@ function Remove-Bloatware {
         "*LinkedInforWindows*"
         "*MarchofEmpires*"
         "*Microsoft.3DBuilder*"
-        "*Microsoft.549981C3F5F10*"   #Cortana app
+        "*Microsoft.549981C3F5F10*"   # Cortana app
         "*Microsoft.Asphalt8Airborne*"
         "*Microsoft.BingFinance*"
         "*Microsoft.BingFoodAndDrink*"
@@ -173,18 +163,18 @@ function Disable-Telemetry {
     # Disable Cortana
     Set-Registry "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search\AllowCortana" 0
     # Disable Suggested Applications
-    Set-Registry "HKLM:\Software\Policies\Microsoft\Windows\CloudContent\DisableWindowsConsumerFeatures" 1
-    Set-Registry "HKLM:\Software\Policies\Microsoft\Windows\CloudContent\DisableCloudOptimizedContent" 1
-    Set-Registry "HKLM:\Software\Policies\Microsoft\Windows\CloudContent\DisableConsumerAccountStateContent" 1
+    Set-Registry "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent\DisableWindowsConsumerFeatures" 1
+    Set-Registry "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent\DisableCloudOptimizedContent" 1
+    Set-Registry "HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent\DisableConsumerAccountStateContent" 1
     # Disable WiFi Hotspot Sharing
     #Set-Registry "HKLM:\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots"  1
     # Disable Pre-Lock Screen that drops the first character
     Set-Registry "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Personalization\NoLockScreen" 1
     # Disable Telemetry (requires a reboot to take effect)
-    Set-Registry "HKLM:\Software\Policies\Microsoft\Windows\DataCollection\AllowTelemetry" 0
+    Set-Registry "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection\AllowTelemetry" 0
     Get-Service DiagTrack, Dmwappushservice | Stop-Service | Set-Service -StartupType Disabled
     # Disable P2P Update downloads outside of local network
-    Set-Registry "HKLM:\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config\DODownloadMode" 1
+    Set-Registry "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Config\DODownloadMode" 1
 }
 
 function Enable-Wsl {
@@ -195,23 +185,42 @@ function Enable-Wsl {
 function Install-DevApps {
     winget install -e --id AutoHotkey.AutoHotkey
     winget install -e --id Google.Chrome
-    winget install -e --id JFrog.Conan
     winget install -e --id JetBrains.Toolbox
-    winget install -e --id Kitware.CMake
-    winget install -e --id MSYS2.MSYS2
     winget install -e --id Microsoft.PowerToys
     winget install -e --id Microsoft.VisualStudioCode
     winget install -e --id Microsoft.WindowsTerminal
-    winget install -e --id Ninja-build.Ninja
     winget install -e --id OpenJS.NodeJS.LTS
-    winget install -e --id Python.Python.3.12
-    # TODO: qt
+
+    # Python
+    winget install -e --id Python.Python.${PythonVersion}
+    msiexec /passive /i https://github.com/pypa/hatch/releases/latest/download/hatch-x64.msi
+    # TODO: pipx
+    $pyver = ${PythonVersion}.Replace(".", "")
+    & "C:\Program Files\Python${pyver}\python.exe" -m venv .venv
+
+    # C#
+    winget install -e --id Microsoft.DotNet.SDK.${DotNetSdkVersion}
+
+    # C++
+    # TODO: VS Community https://aka.ms/vs/17/release/vs_community.exe, https://learn.microsoft.com/en-us/visualstudio/install/use-command-line-parameters-to-install-visual-studio?view=vs-2022
+    # TODO: qt (aqtinstall?) https://www.qt.io/offline-installers
+    # https://doc.qt.io/qt-6/get-and-install-qt-cli.html
+    # https://download.qt.io/official_releases/qtcreator/13.0/13.0.2/qt-creator-opensource-windows-x86_64-13.0.2.exe?__hstc=45788219.64f02eb7ed6ba237641c1ba3ab97ff53.1689838104787.1689838104787.1689838104787.1&__hssc=45788219.1.1689838104787&__hsfp=783877104
+    winget install -e --id JFrog.Conan
+    winget install -e --id Kitware.CMake
+    winget install -e --id MSYS2.MSYS2
+    winget install -e --id Ninja-build.Ninja
+
+    # Rust
     winget install -e --id Rustlang.Rustup
 }
 
 function Install-CliApps {
     # Enable Developer Mode
-    Set-Registry "HKLM:\Software\Microsoft\Windows\CurrentVersion\AppModelUnlock\AllowDevelopmentWithoutDevLicense" 1
+    Set-Registry "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock\AllowDevelopmentWithoutDevLicense" 1
+    # Enable Long Paths
+    Set-Registry "HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem\LongPathsEnabled" 1
+
     winget install -e --id Neovim.Neovim
     winget install -e --id 7zip.7zip
     winget install -e --id Git.Git --override "/VerySilent /NoRestart /o:PathOption=CmdTools /Components=""icons,assoc,assoc_sh,gitlfs"""
@@ -274,12 +283,17 @@ function Install-FunApps {
     winget install -e --id Valve.Steam
     winget install -e --id VideoLAN.VLC
     winget install -e --id flux.flux
-    # TODO: battlenet
+    # Battle.net
+    Invoke-WebRequest "${BattleNetUrl}" -OutFile "${env:Temp}\Battle.net-Setup.exe" -UseBasicParsing
+    & "${env:Temp}\Battle.net-Setup.exe"
     # TODO: u.gg
 }
 
 function Install-CreativeApps {
-    # Aseprite is cool too! (but must be built from source)
+    # Aseprite/Pixel-Over/Photopea
+    # winget install -e --id JannisX11.Blockbench
+    # winget install -e --id KDE.Krita
+    winget install -e --id Audacity.Audacity
     winget install -e --id BlenderFoundation.Blender
     winget install -e --id KDE.Kdenlive
     winget install -e --id LMMS.LMMS
@@ -287,7 +301,6 @@ function Install-CreativeApps {
     winget install -e --id OBSProject.OBSStudio
     winget install -e --id Tiled.Tiled
     winget install -e --id dotPDNLLC.paintdotnet
-    # TODO: VS Community
 
     # Godot: "C:\opt\godot\latest\Godot_stable_mono_win64.exe"
     if (-not (Test-Path "${OptDir}\godot\*${GodotVersion}*")) {
@@ -320,7 +333,10 @@ function Install-CreativeApps {
         Remove-Item "${env:Temp}\godot.zip"
     }
 
-    # TODO: opentabletdriver (https://opentabletdriver.net/Framework)
-    # TODO: tenacity
-    # TODO: #Require...s -RunAsAdministrator
+    # OpenTabletDriver (https://opentabletdriver.net/Framework)
+    if (-not (Test-Path "${OptDir}\OpenTabletDriver")) {
+        winget install -e --id Microsoft.DotNet.Runtime.6
+        Invoke-WebRequest "${OpenTabletDriverUrl}" -OutFile "${env:Temp}\OpenTabletDriver.zip"
+        Expand-Archive -Path "${env:Temp}\OpenTabletDriver.zip" -DestinationPath "${OptDir}\OpenTabletDriver"
+    }
 }

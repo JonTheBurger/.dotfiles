@@ -33,23 +33,7 @@ if ($Help.IsPresent) {
     Get-Help ".\20-Run-User-Setup.ps1"
     return
 }
-
-function Set-Registry {
-    param (
-        [string]$Key,
-        [object]$Value,
-        [string]$Type = "DWord" # or maybe ExpandString
-    )
-    $Path = Split-Path -Path $Key -Parent
-    $Name = Split-Path -Path $Key -Leaf
-
-    # Check if the registry key exists, and create it if it doesn't
-    if (-not (Test-Path $Path)) {
-        New-Item -Path "$Path" -Force | Out-Null
-    }
-
-    Set-ItemProperty -Path "$Path" -Name "$Name" -Value $Value -Type $Type -Force
-}
+Import-Module $PSScriptRoot\Util\Dotfile-Functions.ps1
 
 function Set-UserExplorer {
     # Query Parameters
@@ -174,6 +158,8 @@ Set-UserPrivacy
 # TODO: Softlinks
 # TODO: Windows Terminal Config
 # TODO: powershell $profile symlink?
+
+# TODO: ASCII escape codes
 
 #TODO: Custom Shell Entries
 # Computer\HKEY_CLASSES_ROOT\*\shell\Open with nvim\command
