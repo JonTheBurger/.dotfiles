@@ -1,3 +1,5 @@
+#Requires -RunAsAdministrator
+#Requires -Version 5
 <#
 .SYNOPSIS
     Provides convenience functions for setting up a Windows machine with opinionated
@@ -21,7 +23,6 @@
 .NOTES
     Winget package search: https://winget.run/
 #>
-# TODO: #Require...s -RunAsAdministrator
 [CmdletBinding()]
 param
 (
@@ -194,9 +195,6 @@ function Install-DevApps {
     # Python
     winget install -e --id Python.Python.${PythonVersion}
     msiexec /passive /i https://github.com/pypa/hatch/releases/latest/download/hatch-x64.msi
-    # TODO: pipx
-    $pyver = ${PythonVersion}.Replace(".", "")
-    & "C:\Program Files\Python${pyver}\python.exe" -m venv .venv
 
     # C#
     winget install -e --id Microsoft.DotNet.SDK.${DotNetSdkVersion}

@@ -51,11 +51,11 @@ function Set-Registry {
     $Name = Split-Path -Path "$Key" -Leaf
 
     # Check if the registry key exists, and create it if it doesn't
-    if (-not (Test-Path $Path)) {
+    if (-not (Test-Path -LiteralPath $Path)) {
         New-Item -Path "$Path" -Force | Out-Null
     }
 
-    Set-ItemProperty -Path "$Path" -Name "$Name" -Value "$Value" -Type "$Type" -Force
+    New-ItemProperty -LiteralPath "$Path" -Name "$Name" -Value "$Value" -PropertyType "$Type" -Force
 }
 
 <#
@@ -289,3 +289,77 @@ function Get-Path {
         $path
     }
 }
+
+<#
+.SYNOPSIS
+    Adds a new entry to the (legacy) right-click context menu.
+.PARAMETER Name
+    Display name of the new context menu entry. May contain spaces.
+.PARAMETER Command
+    Command to run when entry is selected. Use "%1" with quotes to pass the
+    selected file/directory as an argument to the program.
+.PARAMETER Context
+    Selects the context menu that will contain the new entry. Must be one of
+    "File" (default), "Folder", or "Desktop".
+.PARAMETER Extension
+    When using the "File" Context, determines which kinds of files will display
+    the new context menu. For example, use .pdf to add a context menu to pdf
+    files only. By default, this is set to "*", matching all file types.
+.PARAMETER Icon
+    Uses the icon of the given .exe or .ico for the context menu entry.
+.NOTES
+    This function requires administrator permissions
+.EXAMPLE
+    Add-ShellContextMenu -Name "Open with nvim" -Command 'C:\opt\neovim\bin\nvim.exe "%1"' -Icon "C:\opt\neovim\bin\nvim-qt.exe"
+#>
+function Add-ShellContextMenu {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory=$true)]
+        [string]$Name,
+
+        [Parameter(Mandatory=$true)]
+        [string]$Command,
+
+        [Parameter()]
+        [ValidateSet("File", "Folder", "Desktop")]
+        [string]$Context = "File",
+
+        [Parameter()]
+        [string]$Extension = '*',
+
+        [Parameter()]
+        [string]$Icon
+    )
+    begin {
+        if ($Context -eq "File")
+        {
+            $key = "Registry::HKEY_CLASSES_ROOT\${Extension}\shell"
+            # $key = "Registry::HKEY_CLASSES_ROOT\${Extension}\shellex\ContextMenuHandlers"
+        }
+        elseif ($Context -eq "Folder")
+        {
+            $key = "Registry::HKEY_CLASSES_ROOT\Folder\shell"
+            # $key = "Registry::HKEY_CLASSES_ROOT\Folder\shellex\ContextMenuHandlers"
+        }
+        else
+        {
+            $key = "Registry::HKEY_CLASSES_ROOT\Directory\Background\shell"
+            # $key = "Registry::HKEY_CLASSES_ROOT\Directory\Background\shellex\ContextMenuHandlers"
+        }
+    }
+    process {
+        Set-Registry -Key "${key}\${Name}\command\(Default)" -Value "${Command}" -Type String
+        if ($Icon) {
+            Set-Registry -Key "${key}\${Name}\Icon" -Value "${Icon}" -Type String
+        }
+    }
+}
+
+# TODO: pipx
+    # Update-Path # Refresh path
+    # python -m pip install pipx
+    # # TODO: pipx
+    # $pyver = ${PythonVersion}.Replace(".", "")
+    # & "C:\Program Files\Python${pyver}\python.exe" -m venv .venv
+    # # Get-Package | Where-Object {$_.Name -match '.*Python 3.12.\d+\s+[^A-Z]'}

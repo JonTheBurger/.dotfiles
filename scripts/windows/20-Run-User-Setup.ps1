@@ -1,3 +1,4 @@
+#Requires -Version 5
 <#
 .SYNOPSIS
     Provides convenience functions for setting up a Windows machine with opinionated
@@ -35,7 +36,7 @@ if ($Help.IsPresent) {
 }
 Import-Module $PSScriptRoot\Util\Dotfile-Functions.ps1
 
-function Set-UserExplorer {
+function Set-UserShell {
     # Query Parameters
     if ($Force) {
         $DoConfigExplorer = $true
@@ -49,6 +50,14 @@ function Set-UserExplorer {
         $DoConfigExplorer = $Host.UI.PromptForChoice($null, $message, $choices, 1) -eq 0
     }
 
+    # Enable ANSI Color Codes in Terminal
+    Set-Registry "HKCU:\Console\VirtualTerminalLevel" 1
+    # Set Visual Effects to Custom
+    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\VisualFXSetting" 3
+    # Disable Minimize, Maximize, and Workspace Switch Animation
+    Set-Registry "HKCU:\Control Panel\Desktop\WindowMetrics\Min" 0
+    # Disable several Win+ keys so we can reuse them:
+    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisabledHotkeys" "1234567890FJK" -Type String
     # Dark Mode
     Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\AppsUseLightTheme" 0
     Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\AppsUseLightTheme" 0
@@ -145,12 +154,7 @@ function Set-UserPrivacy {
     Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement\ScoobeSystemSettingEnabled" 0 # Finish Setting up my Device
 }
 
-function Set-UserShell {
-    # Disable Win+F so we can reuse it:
-    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisabledHotkeys" "F" -Type String
-}
-
-Set-UserExplorer
+Set-UserShell
 Set-UserPrivacy
 
 # TODO: PATH
@@ -158,8 +162,6 @@ Set-UserPrivacy
 # TODO: Softlinks
 # TODO: Windows Terminal Config
 # TODO: powershell $profile symlink?
-
-# TODO: ASCII escape codes
 
 #TODO: Custom Shell Entries
 # Computer\HKEY_CLASSES_ROOT\*\shell\Open with nvim\command
