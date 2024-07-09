@@ -83,7 +83,6 @@ local::install_snap() {
   ## @var PKGS_SNAP Snap packages to install in --classic mode.
   declare -a PKGS_SNAP
   PKGS_SNAP+=(bash-language-server)
-  PKGS_SNAP+=(yarn) # for markdown language server
   util::snap_install "${PKGS_SNAP[@]}"
 }
 

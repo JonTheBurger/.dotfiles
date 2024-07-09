@@ -1,35 +1,36 @@
+# source /opt/provisioners/style/config/.gdbinit
+focus cmd
+set history filename ~/.cache/gdb/history
+set history save
+# Do not step into includes matching
 skip -gfi */*san_handlers*
 skip -gfi */*googletest*
 skip -gfi /usr/include/*
-skip -rfu ^.*::(begin|end|cbegin|cend|rbegin|rend|crbegin|crend).*
-skip -rfu ^.*::(capacity|c_str|data|empty|length|max_size|size).*
+# Do not step into functions matching
+skip -rfu ^.*::(capacity|c_str|data|empty|length|max_size|size|begin|end|cbegin|cend|rbegin|rend|crbegin|crend).*
 skip -rfu ^boost::.*
 skip -rfu ^std::.*
 skip -rfu ^testing::.*
 
-set mem inaccessible-by-default off
-set history filename ~/.gdb_history
-set history save
-focus cmd
+# FreeRTOS Desktop support
+handle SIGUSR1 nostop noignore noprint
+handle SIGALRM nostop noignore noprint
+set startup-with-shell off
 
-define saveb
+# Embedded
+set mem inaccessible-by-default off
+
+# Functions
+define bsave
   save breakpoints ~/.cache/gdb/bkp.gdb
 end
-define loadb
+
+define bload
   source ~/.cache/gdb/bkp.gdb
 end
 
-# Printers
-source ~/Projects/jon/metl/tools/debugger/printers.py
-
-# GUI
-set $is_tui=1
-# python import os
-# python if os.path.exists(os.path.expanduser("~/.local/src/.gdbinit-gef.py")): gdb.execute("source ~/.local/src/.gdbinit-gef.py"); gdb.execute("tui disable"); gdb.execute("set $is_tui=0")
-# python if os.path.exists(os.path.expanduser("~/.local/src/GEP/gdbinit-gep.py")): gdb.execute("source ~/.local/src/GEP/gdbinit-gep.py"); gdb.execute("tui disable"); gdb.execute("set $is_tui=0")
-
+# Hooks
 define hook-stop
- if ($is_tui == 1)
-   refresh
- end
+  # Obsessive refresh fixes TUI issues
+  refresh
 end

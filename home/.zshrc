@@ -1,48 +1,30 @@
 #!/usr/bin/env zsh
-# TODO: Remove package manager
+# source /opt/provisioners/style/config/.zshrc
 # ======================================================================================
-## Zsh
+## Zsh: https://zsh.sourceforge.io/Doc/Release/Options.html
 # ======================================================================================
-# See: https://zsh.sourceforge.io/Doc/Release/Options.html
-ZSH="$HOME/.config/zsh/.oh-my-zsh"
-ZSH_CACHE_DIR="$HOME/.cache/oh-my-zsh"
-ZSH_CUSTOM="$HOME/.config/zsh"
-# See: https://github.com/ohmyzsh/ohmyzsh/wiki/Settings
-#ENABLE_CORRECTION="true"
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-HYPHEN_INSENSITIVE="true"
-zstyle ':omz:update' mode disable
-
-# Custom Plugins
-[ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ] && git clone https://github.com/zsh-users/zsh-completions $ZSH_CUSTOM/plugins/zsh-completions
-fpath+="$ZSH_CUSTOM/plugins/zsh-completions/src"
-
-# See: https://github.com/ohmyzsh/ohmyzsh/wiki/Plugins
-# std @ $ZSH/plugins/, custom @ $ZSH_CUSTOM/plugins/
-plugins=(
-  colored-man-pages
-  command-not-found
-  dirhistory
-  # zsh-completions
-)
-
-# Auto-Setup
-[ ! -d "$ZSH" ] && git clone https://github.com/ohmyzsh/ohmyzsh.git "${ZSH}"
-source "$ZSH/oh-my-zsh.sh"
+setopt auto_pushd
+setopt hist_ignore_all_dups
+setopt interactive_comments
+setopt pushd_ignore_dups
+setopt pushd_minus
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=$HISTSIZE
 
 # ======================================================================================
 ## PATH & Scripts
 # ======================================================================================
 # Sourced in-order
 local SCRIPTS=(
-  $HOME/.local/bin/fzf-git.sh
-  $HOME/.config/zsh/theme.zsh
   /usr/share/doc/fzf/examples/key-bindings.zsh
   /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  /usr/local/share/zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 )
 # Later paths = higher precedence
 local PATH_PREFIX=(
+  /opt/SEGGER/JLink
   $HOME/bin
   $HOME/.local/bin
   $HOME/.cargo/bin
@@ -61,50 +43,113 @@ for suffix in "$PATH_SUFFIX[@]"; do
   [[ ! ":$PATH:" =~ ":$suffix:" ]] && [ -d "$suffix" ] && export PATH="$PATH:$suffix"
 done
 
-eval "$(zoxide init zsh)"
+# ======================================================================================
+## Command Hooks
+# ======================================================================================
+[ -d "/usr/local/share/zsh/zsh-completions" ] && fpath+="/usr/local/share/zsh/zsh-completions"
+[ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+[ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
+[ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
+[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
+[ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
+[ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
+[ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
+
+zmodload zsh/complist
+command_not_found_handler() {
+  if [[ -x /usr/lib/command-not-found ]]; then
+    /usr/lib/command-not-found -- "$1"
+    return $?
+  elif [[ -x /usr/share/command-not-found/command-not-found ]]; then
+    /usr/share/command-not-found/command-not-found -- "$1"
+    return $?
+  else
+    printf "zsh: command not found: %s\n" "$1" >&2
+    return 127
+  fi
+}
+
+# ======================================================================================
+## Theme
+# ======================================================================================
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)  # https://github.com/zsh-users/zsh-autosuggestions#configuration
+ZSH_HIGHLIGHT_STYLES[comment]=fg=245                          # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=yellow
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=yellow
+ZSH_HIGHLIGHT_STYLES[path]=fg=blue,bold
+# Colorize completions using default `ls` colors.
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu select
+# Case insensitive match
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
+# Keybinds, check with 'showkey -a', see https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Modifying-Text
+bindkey '^[e'  _expand_alias      # Alt+E
+bindkey '^[b'  backward-word      # Alt+B
+bindkey '^[f'  forward-word       # Alt+F
+bindkey '^A'   beginning-of-line  # Ctrl+A
+bindkey '^E'   end-of-line        # Ctrl+E
+bindkey '^[[1;5D' backward-word   # Ctrl+Left
+bindkey '^[[1;5C' forward-word    # Ctrl+Right
+bindkey '^[[3;5~' kill-word       # Ctrl+Delete
+bindkey '^[[3;3~' kill-word       # Alt+Delete
+bindkey '^H'   backward-kill-word # Ctrl+Backspace & Ctrl+H
+bindkey '^[^?' backward-kill-word # Alt+Backspace
+bindkey '^[^H' backward-kill-line # Ctrl+Alt+Backspace
+bindkey '^[[A' history-substring-search-up    # Up
+bindkey '^[[B' history-substring-search-down  # Down
+bindkey -M menuselect '^[[Z' reverse-menu-complete  # Shift+Tab
 
 # ======================================================================================
 ## Environment
 # ======================================================================================
-export CMAKE_GENERATOR="Ninja"
-export EDITOR='nvim'
-export LANG=en_US.UTF-8
-export VISUAL='nvim'
-# https://github.com/zsh-users/zsh-autosuggestions#configuration
-export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)
-[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
-# man pages
-less_termcap[md]="${fg_bold[cyan]}"
-# Fix comments being black foreground on black background
-ZSH_HIGHLIGHT_STYLES[comment]="fg=245"
+export CMAKE_GENERATOR='Ninja'
+export EDITOR='vim'
 
 # ======================================================================================
 ## Functions & Aliases
 # ======================================================================================
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+alias 1='cd -1'
+alias 2='cd -2'
+alias 3='cd -3'
+alias 4='cd -4'
+alias 5='cd -5'
+alias 6='cd -6'
+alias 7='cd -7'
+alias 8='cd -8'
+alias 9='cd -9'
 alias :q='exit'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias bat='batcat'
-alias buildtree='tree -I "CMakeFiles|Testing|external"'
 alias c='z'
-alias cat='bat -p'
+alias d='dirs -v'
+alias cat='bat -pP'
 alias copy='rsync -ahpruzvP'
 alias getmode='stat -c %a'
-alias goodbye='sudo apt update && sudo apt upgrade -y && sudo apt autoremove --purge -y && sudo shutdown now'
+alias goodbye='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt update && apt upgrade -y && apt autoremove --purge -y && shutdown now"'
 alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
 alias k='fc -e -'
 alias l='eza -al --icons --git --color-scale -o'
-alias ll='eza -al --color-scale -o --no-filesize --no-time --no-permissions'
-alias look4='find . -iname'
-alias mkpatch='git diff > ~/Desktop/$(basename $(pwd)).patch'
+alias ls='ls --color=auto -CF'
+alias ll='eza -al --icons --git --color-scale -o'
+alias ls='ls --color=auto'
+alias lstar='tar tf'
+alias lszip='unzip -l'
 alias path='echo $PATH | sed "s#:#/\n#g"'
+alias ssh-set-permissions="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"
 alias sodu='sudo --preserve-env=PATH env'
-alias splitpath='sed "s#:#/\n#g"'
-alias lzip='unzip -l'
-alias ltar='tar tf'
-function clone() {
-  git clone git@bitbucket.org:msasafety/$@.git
+alias upd8='apt-get update && apt-get upgrade -y && apt-get autoremove --purge'
+
+# ======================================================================================
+## Functions & Aliases
+# ======================================================================================
+function :e() {
+  nvim --cmd "cd $(dirname "$1")" "$1"
 }
 function cls() {
   clear
@@ -144,6 +189,24 @@ function mk() {
 function new() {
   copier copy ${HOME}/.new/$@ .
 }
+function onchange() {
+  if [[ $# -lt 2 ]]; then
+    echo "Error: rerun requires at least 2 arguments."
+    echo "Usage: rerun <file_to_watch> <command> [args...]"
+    return 1
+  fi
+
+  inotifywait -r -m -e modify . >/dev/null 2>&1 |
+  while read -r p e f; do
+    if [[ -z "$f" ]]; then
+      continue
+    fi
+
+    if [[ "$(realpath $1)" == "$(realpath $f)" ]]; then
+      "${@:2}"
+    fi
+  done
+}
 function uncrust() {
   uncrustify -c ~/.config/uncrustify.cfg -l C --mtime --replace --no-backup $@
 }
@@ -155,6 +218,3 @@ function xmlfmt() {
   mv "$1" "$1.bkp"
   xmllint --format "$1.bkp" > "$1"
 }
-# rerun, but not terrible
-# shallow git clone
-# git prune

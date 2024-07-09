@@ -34,12 +34,9 @@ return {
       },
     },
     status = { virtual_text = true },
-    output = { open_on_run = true },
-    quickfix = {
-      open = function()
-        vim.cmd("copen")
-      end,
-    },
+    output = { enabled = true, open_on_run = false, },
+    output_panel = { enabled = true, },
+    quickfix = { enabled = true, open = false, },
   },
   config = function(_, opts)
     local neotest_ns = vim.api.nvim_create_namespace("neotest")

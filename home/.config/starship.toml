@@ -1,0 +1,40 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+add_newline = false  # no newline between shell
+command_timeout = 500
+format = "$python$directory:$git_branch$git_status$character"
+
+[line_break]
+disabled = true  # 1 line prompt
+
+[character]
+success_symbol = '[\$](bold green)'
+error_symbol = '[\$](bold red)'
+
+[directory]
+format = '[$path]($style)'
+style = 'bold blue'
+truncation_length = 1  # Only show last directory
+
+[git_branch]
+format = '[\(](bold cyan)[$branch]($style)'
+style = 'bold red'
+
+[git_status]
+format = '[$all_status]($style)[\)](bold cyan) '
+style = 'bold yellow'
+ignore_submodules = false  # Ignore changes to submodules
+ahead = '⇡'                # The format of ahead
+behind = '⇣'               # The format of behind
+deleted = '-'              # The format of deleted
+conflicted = '='           # This branch has merge conflicts
+diverged = '⇕'             # The format of diverged
+modified = '*'             # The format of modified
+renamed = '»'              # The format of renamed
+staged = '+'               # The format of staged
+stashed = '$'              # The format of stashed
+typechanged = "~"          # The format of typechange
+untracked = '?'            # The format of untracked
+up_to_date = ''            # The format of up_to_date
+
+[python]
+format = '(\($virtualenv\)) '

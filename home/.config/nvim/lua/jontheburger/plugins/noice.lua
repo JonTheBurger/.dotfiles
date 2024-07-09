@@ -1,4 +1,5 @@
 -- https://github.com/folke/noice.nvim
+-- return {}
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
@@ -11,7 +12,7 @@ return {
     -- OPTIONAL:
     --   `nvim-notify` is only needed, if you want to use the notification view.
     --   If not available, we use `mini` as the fallback
-    "rcarriga/nvim-notify",
+    -- "rcarriga/nvim-notify",
   },
   config = function()
     require("noice").setup({
@@ -25,7 +26,7 @@ return {
       },
       cmdline = {
         format = {
-          make = { pattern = "make", icon = "make", lang = "make" }
+          -- make = { pattern = "make", icon = "make", lang = "make" }
         }
       },
       messages = {
@@ -46,6 +47,7 @@ return {
         { filter = { event = "msg_show", find = "^E486: Pattern not found" }, view = "mini" },
         { filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
         { filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
+        { filter = { find = ".*inlayHint is not supported.*" }, skip = true },
         { filter = { find = "No signature help" }, skip = true },
       },
 

@@ -36,7 +36,7 @@ OH_MY_ZSH_REF="${OH_MY_ZSH_REF-a779d6563ffb2f0093b4b74c8d5ff0982fa3e930}"
 OH_MY_ZSH_GIT="${OH_MY_ZSH_GIT-https://github.com/ohmyzsh/ohmyzsh.git}"
 ## @var ZOXIDE_VERSION Version of zoxide to install.
 ZOXIDE_VERSION="${ZOXIDE_VERSION-0.9.4}"
-## @var LAZYGIT_URL Download source of zoxide.
+## @var ZOXIDE_URL Download source of zoxide.
 ZOXIDE_URL="${ZOXIDE_URL-https://github.com/ajeetdsouza/zoxide/releases/download/v${ZOXIDE_VERSION}/zoxide-${ZOXIDE_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz}"
 
 main() {
@@ -159,7 +159,6 @@ local::install_apt() {
   PKGS_APT+=(htop)
   PKGS_APT+=(libfuse2) # For AppImage
   PKGS_APT+=(neovim)   # Almost certainly too out of date
-  PKGS_APT+=(nodejs)   # For some nvim Mason packages
   PKGS_APT+=(pipx)
   PKGS_APT+=(python3)
   PKGS_APT+=(python3-venv)

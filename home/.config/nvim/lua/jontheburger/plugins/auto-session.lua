@@ -20,7 +20,7 @@ local function neotest_close()
   local has_neotest, neotest = pcall(require, "neotest")
   if has_neotest then
     neotest.summary.close()
-    neotest.output_panel.close()
+    -- neotest.output_panel.close()
   end
 end
 

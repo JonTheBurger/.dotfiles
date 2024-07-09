@@ -144,5 +144,9 @@ Notably the following programs are configured (among others):
 - neocmake
 - if grep -q xmodmap "~/.profile"; then echo "xmodmap ~/.Xmodmap" >> "~/.profile" fi
 - vim commentary bash #
+- sudo snap install node --channel=22/stable --classic
+- npm config set prefix '~/.local'
+- npm install --global yarn
+- konsave
 
 </details>

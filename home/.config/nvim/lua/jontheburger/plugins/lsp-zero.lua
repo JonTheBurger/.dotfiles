@@ -308,6 +308,7 @@ return {
       lspconfig.ruff_lsp.setup({capabilities = capabilities})
       -- lspconfig.rust_analyzer.setup({capabilities = capabilities})
       lspconfig.yamlls.setup({capabilities = capabilities})
+      require('mason').setup()
   -- require('mason-lspconfig').setup_handlers {
   --   ['rust_analyzer'] = function() end,
   -- }
