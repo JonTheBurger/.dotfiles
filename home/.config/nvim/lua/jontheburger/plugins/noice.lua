@@ -1,5 +1,6 @@
 -- https://github.com/folke/noice.nvim
--- return {}
+return {}
+--[[
 return {
   "folke/noice.nvim",
   event = "VeryLazy",
@@ -60,3 +61,4 @@ return {
     })
   end,
 }
+]]--

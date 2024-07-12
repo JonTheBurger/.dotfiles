@@ -140,6 +140,8 @@ Notably the following programs are configured (among others):
 <details>
 <summary markdown="span">TODO</summary>
 
+- qq keyboard layout
+- zshrc dependency installer
 - updatedb exclude /mnt & /media
 - neocmake
 - if grep -q xmodmap "~/.profile"; then echo "xmodmap ~/.Xmodmap" >> "~/.profile" fi
@@ -148,5 +150,8 @@ Notably the following programs are configured (among others):
 - npm config set prefix '~/.local'
 - npm install --global yarn
 - konsave
+- vlink
+- https://unix.stackexchange.com/questions/747748/map-c-s-a-hjkl-to-arrow-keys-with-xkb-map
+- marksman, other LSP (autoinstall?) (vimwiki remove)
 
 </details>

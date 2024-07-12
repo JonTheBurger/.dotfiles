@@ -8,9 +8,11 @@ setopt hist_ignore_all_dups
 setopt interactive_comments
 setopt pushd_ignore_dups
 setopt pushd_minus
+setopt share_history
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=$HISTSIZE
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 # ======================================================================================
 ## PATH & Scripts
@@ -97,11 +99,17 @@ bindkey '^[^?' backward-kill-word # Alt+Backspace
 bindkey '^[^H' backward-kill-line # Ctrl+Alt+Backspace
 bindkey '^[[A' history-substring-search-up    # Up
 bindkey '^[[B' history-substring-search-down  # Down
+bindkey "$terminfo[kcuu1]" history-substring-search-up    # Up
+bindkey "$terminfo[kcud1]" history-substring-search-down  # Down
 bindkey -M menuselect '^[[Z' reverse-menu-complete  # Shift+Tab
 
 # ======================================================================================
 ## Environment
 # ======================================================================================
+if [[ "$(uname -a)" == *WSL* ]]; then
+  export DONT_PROMPT_WSL_INSTALL=1
+  export XCURSOR_SIZE=24
+fi
 export CMAKE_GENERATOR='Ninja'
 export EDITOR='vim'
 
@@ -124,17 +132,19 @@ alias 9='cd -9'
 alias :q='exit'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias bat='batcat'
+alias bigvim='vim -c "syntax off"'
 alias c='z'
 alias d='dirs -v'
 alias cat='bat -pP'
 alias copy='rsync -ahpruzvP'
 alias getmode='stat -c %a'
-alias goodbye='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt update && apt upgrade -y && apt autoremove --purge -y && shutdown now"'
+alias goodbye='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge -y && shutdown now"'
 alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
+alias history='history 0'
 alias k='fc -e -'
-alias l='eza -al --icons --git --color-scale -o'
+alias l='eza -l --icons --git --color-scale -o'
 alias ls='ls --color=auto -CF'
 alias ll='eza -al --icons --git --color-scale -o'
 alias ls='ls --color=auto'
@@ -143,7 +153,7 @@ alias lszip='unzip -l'
 alias path='echo $PATH | sed "s#:#/\n#g"'
 alias ssh-set-permissions="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"
 alias sodu='sudo --preserve-env=PATH env'
-alias upd8='apt-get update && apt-get upgrade -y && apt-get autoremove --purge'
+alias upd8='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"'
 
 # ======================================================================================
 ## Functions & Aliases

@@ -302,6 +302,7 @@ return {
       })
       lspconfig.lemminx.setup({capabilities = capabilities})
       lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
+      lspconfig.marksman.setup({capabilities = capabilities})
       lspconfig.neocmake.setup({capabilities = capabilities})
       lspconfig.omnisharp.setup({capabilities = capabilities})
       lspconfig.pyright.setup({capabilities = capabilities})
