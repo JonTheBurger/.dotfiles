@@ -9,10 +9,11 @@
   bD = branch -D
   bd = branch -d
   c = commit
-  ci = commit --verbose
   ca = commit --amend
   can = commit --amend --no-edit
+  ci = commit --verbose
   cl = clone
+  cm = commit -m
   co = checkout
   cob = checkout -b
   cp = cherry-pick
@@ -56,7 +57,7 @@
   local-only-branches = !python ~/.local/bin/local-only-branches.py
   # git shallow-clone <repo> <ref>
   shallow-clone = "!f() { dir=$(echo \"${1}\" | sed 's#.*/\\(.*\\).git#\\1#'); mkdir ${dir}; git -C ${dir} init; git -C ${dir} remote add origin ${1}; git -C ${dir} fetch --depth 1 origin ${2}; git -C ${dir} checkout FETCH_HEAD; }; f ${1} ${2}"
-  shove = !git add -A && git commit --amend --no-edit && git push --force
+  shove = !git add -A && git commit --amend --no-edit && git push --force-with-lease
   # git squash <ref>
   squash = !git reset --soft $@ && git commit --verbose
   subinit = submodule update --init --recursive
@@ -87,8 +88,8 @@
   email = jmp180@pitt.edu
 [include]
   path = /opt/provisioners/style/config/.gitconfig
-[includeIf "gitdir:/msa/"]
-  path = /msa/.gitconfig
+[includeIf "gitdir:~/Projects/"]
+  path = ~/Projects/.gitconfig
 [diff]
   algorithm = histogram
 [log]
