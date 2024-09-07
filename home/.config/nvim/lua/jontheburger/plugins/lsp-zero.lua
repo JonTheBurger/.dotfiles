@@ -271,7 +271,7 @@ return {
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opt("Prev Diagnostic"))
         vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opt("Next Diagnostic"))
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opt("Goto Declaration"))
-        -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opt("Goto Definition"))
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, opt("Goto Definition"))
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opt("Goto Implementation"))
         vim.keymap.set("n", "gl", vim.diagnostic.open_float, opt("Line Diagnostic"))
         vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opt("Goto Type Definition"))
@@ -293,11 +293,13 @@ return {
 
       lspconfig.ansiblels.setup({capabilities = capabilities})
       lspconfig.bashls.setup({capabilities = capabilities})
+      require'lspconfig'.bufls.setup{}
       lspconfig.clangd.setup({
+        filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
         capabilities = capabilities,
         on_attach = function()
-          require("clangd_extensions.inlay_hints").setup_autocmd()
-          require("clangd_extensions.inlay_hints").set_inlay_hints()
+          -- require("clangd_extensions.inlay_hints").setup_autocmd()
+          -- require("clangd_extensions.inlay_hints").set_inlay_hints()
         end,
       })
       lspconfig.lemminx.setup({capabilities = capabilities})

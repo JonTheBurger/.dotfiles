@@ -15,7 +15,7 @@ return {
     {
       "ad",
       function() require("align").align_to_char({ preview = true, length = 2, }) end,
-      mode = { "x" },
+      mode = { "v" },
       noremap = true,
       silent = true,
       desc = "Align to 2 characters with previews"

@@ -33,16 +33,16 @@ return {
         end,
         desc = "Find Grep",
       }, -- Requires ripgrep
-      {
-        "gd",
-        function()
-          require("telescope.builtin").lsp_definitions({
-            jump_type = "vsplit",
-            reuse_win = true,
-          })
-        end,
-        desc = "Find Definition",
-      },
+      -- {
+      --   "gd",
+      --   function()
+      --     require("telescope.builtin").lsp_definitions({
+      --       jump_type = "vsplit",
+      --       reuse_win = true,
+      --     })
+      --   end,
+      --   desc = "Find Definition",
+      -- },
       {
         "<leader>fa",
         function()
@@ -256,12 +256,18 @@ return {
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    init = function()
-      vim.o.timeout = true
-      vim.o.timeoutlen = 300
-    end,
-    config = function()
-      require("which-key").setup({})
+    opts = {
+      preset = "modern",
+      spec = {
+        -- { "<leader>a", desc="align", mode = "nvxsot" },
+      },
+      triggers = {
+        { "<auto>", mode = "nxsot" },
+      },
+    },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
     end,
   }
 }

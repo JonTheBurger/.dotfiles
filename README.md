@@ -151,6 +151,8 @@ Notably the following programs are configured (among others):
 - npm install --global yarn
 - konsave
 - vlink
+- curl https://sh.rustup.rs -sSf | sh -s -- -y
+    - rustup component add rust-analyzer
 - https://unix.stackexchange.com/questions/747748/map-c-s-a-hjkl-to-arrow-keys-with-xkb-map
 - marksman, other LSP (autoinstall?) (vimwiki remove)
 

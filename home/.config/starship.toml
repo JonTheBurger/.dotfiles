@@ -1,6 +1,6 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 add_newline = false  # no newline between shell
-command_timeout = 500
+command_timeout = 300
 format = "$python$directory:$git_branch$git_status$character"
 
 [line_break]

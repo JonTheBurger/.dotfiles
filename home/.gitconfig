@@ -1,5 +1,12 @@
 [core]
   editor = vim
+  pager = delta
+[delta]
+  navigate = true
+[diff]
+  colorMove = default
+[interactive]
+  diffFilter = delta --color-only
 [alias]
   ## Aliases
   a = add
@@ -55,6 +62,8 @@
   heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
   local-only-branches = !python ~/.local/bin/local-only-branches.py
+  # pull branch
+  pb = "!f() { git fetch origin $1:$1; }; f"
   # git shallow-clone <repo> <ref>
   shallow-clone = "!f() { dir=$(echo \"${1}\" | sed 's#.*/\\(.*\\).git#\\1#'); mkdir ${dir}; git -C ${dir} init; git -C ${dir} remote add origin ${1}; git -C ${dir} fetch --depth 1 origin ${2}; git -C ${dir} checkout FETCH_HEAD; }; f ${1} ${2}"
   shove = !git add -A && git commit --amend --no-edit && git push --force-with-lease
@@ -86,6 +95,9 @@
 [user]
   name = Jon Povirk
   email = jmp180@pitt.edu
+  signingkey = 1FF640D9B960DD2F
+  # gpg --list-keys --keyid-format=long
+  # export GPG_TTY=$(tty)
 [include]
   path = /opt/provisioners/style/config/.gitconfig
 [includeIf "gitdir:~/Projects/"]
@@ -98,3 +110,5 @@
 [pager]
   aliases = false
   branch = false
+[color]
+	ui = auto

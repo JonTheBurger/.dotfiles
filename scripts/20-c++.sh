@@ -110,8 +110,9 @@ local::install_apt_clang() {
   PKGS_APT+=(clang)
   PKGS_APT+=(lld)
   PKGS_APT+=(lldb)
-  PKGS_APT+=(llvm)
   PKGS_APT+=(libc++-dev)
+  PKGS_APT+=(libclang-rt-dev)
+  PKGS_APT+=(llvm)
   util::apt_install "${PKGS_APT[@]}"
 
   # Set up version-only packages, make non-versioned symlinks if applicable

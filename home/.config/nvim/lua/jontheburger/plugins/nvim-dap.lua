@@ -118,7 +118,7 @@ return {
     -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
     dap.adapters.lldb = {
       type = "executable",
-      command = "lldb-vscode",
+      command = "lldb-dap",
       name = "lldb",
     }
     local lldb = {

@@ -18,7 +18,15 @@ vim.keymap.set("v", "<leader>lf",
   { desc = "Insert newline" }
 )
 vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Trim Whitespace" })
-vim.keymap.set("n", "<leader>wl", [[:s/\s\+/\r/g<CR>]], { desc = "Split words on lines" })
+vim.keymap.set("n", "<leader>wl", function()
+    local pattern = vim.fn.getreg("/")
+    vim.cmd([[:s/\s\+/\r/g]])
+    vim.fn.setreg("/", pattern)
+  end,
+  { desc = "Split words on lines" }
+)
+vim.keymap.set("", "<leader>/", "//-1<Left><Left><Left>", { desc = "Line before search" })
+vim.keymap.set("", "<leader>?", "//+1<Left><Left><Left>", { desc = "Line after search" })
 vim.keymap.set("n", "<leader>n", "<CMD>nohl<CR>", { desc = "No Highlight Search" })
 vim.keymap.set("n", "<leader>q", "<CMD>bp|bd#<CR>", { desc = "Delete Buffer, Keep Split" })
 vim.keymap.set("n", "ci_", "dt_dT_", { desc = "inner _underscores_" })
@@ -35,6 +43,10 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- Cursor to Middle for Search Next/Previous
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
+
+-- Swap ' and `
+vim.keymap.set({ "n", "o", }, "'", "`", { noremap = true })
+vim.keymap.set({ "n", "o", }, "`", "'", { noremap = true })
 
 -- Stay in Indent Mode
 vim.keymap.set("v", "<", "<gv")

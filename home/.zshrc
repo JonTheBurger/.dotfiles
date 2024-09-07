@@ -1,8 +1,13 @@
 #!/usr/bin/env zsh
+# zsh -l --sourcetrace
+# zmodload zsh/zprof
+# * `~/.zshenv` skip_global_compinit=1
 # source /opt/provisioners/style/config/.zshrc
 # ======================================================================================
 ## Zsh: https://zsh.sourceforge.io/Doc/Release/Options.html
 # ======================================================================================
+autoload edit-command-line
+zle -N edit-command-line
 setopt auto_pushd
 setopt hist_ignore_all_dups
 setopt interactive_comments
@@ -13,6 +18,7 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=$HISTSIZE
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
+# ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)  # https://github.com/zsh-users/zsh-autosuggestions#configuration
 
 # ======================================================================================
 ## PATH & Scripts
@@ -48,7 +54,6 @@ done
 # ======================================================================================
 ## Command Hooks
 # ======================================================================================
-[ -d "/usr/local/share/zsh/zsh-completions" ] && fpath+="/usr/local/share/zsh/zsh-completions"
 [ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 [ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
@@ -56,6 +61,13 @@ done
 [ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
 [ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
+[ -d "/usr/local/share/zsh/zsh-completions" ] && fpath=(/usr/local/share/zsh/zsh-completions/src $fpath)
+autoload -Uz compinit
+if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
+  compinit
+else
+  compinit -Cu
+fi
 
 zmodload zsh/complist
 command_not_found_handler() {
@@ -74,7 +86,7 @@ command_not_found_handler() {
 # ======================================================================================
 ## Theme
 # ======================================================================================
-ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)  # https://github.com/zsh-users/zsh-autosuggestions#configuration
+# ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)  # https://github.com/zsh-users/zsh-autosuggestions#configuration
 ZSH_HIGHLIGHT_STYLES[comment]=fg=245                          # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=yellow
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=yellow
@@ -102,6 +114,7 @@ bindkey '^[[B' history-substring-search-down  # Down
 bindkey "$terminfo[kcuu1]" history-substring-search-up    # Up
 bindkey "$terminfo[kcud1]" history-substring-search-down  # Down
 bindkey -M menuselect '^[[Z' reverse-menu-complete  # Shift+Tab
+bindkey '^X^e' edit-command-line  # Ctrl+X, Ctrl+E
 
 # ======================================================================================
 ## Environment
@@ -112,6 +125,7 @@ if [[ "$(uname -a)" == *WSL* ]]; then
 fi
 export CMAKE_GENERATOR='Ninja'
 export EDITOR='vim'
+export STARSHIP_LOG='error'
 
 # ======================================================================================
 ## Functions & Aliases
@@ -120,6 +134,7 @@ alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
+alias \$=''
 alias 1='cd -1'
 alias 2='cd -2'
 alias 3='cd -3'
@@ -201,19 +216,18 @@ function new() {
 }
 function onchange() {
   if [[ $# -lt 2 ]]; then
-    echo "Error: rerun requires at least 2 arguments."
-    echo "Usage: rerun <file_to_watch> <command> [args...]"
+    echo "Error: onchange requires at least 2 arguments."
+    echo "Usage: onchange <file_to_watch> <command> [args...]"
     return 1
   fi
 
-  inotifywait -r -m -e modify . >/dev/null 2>&1 |
-  while read -r p e f; do
-    if [[ -z "$f" ]]; then
-      continue
-    fi
+  local file_to_watch=$(realpath "$1")
+  shift
 
-    if [[ "$(realpath $1)" == "$(realpath $f)" ]]; then
-      "${@:2}"
+  inotifywait -r -m -e modify --format '%w%f' . |
+  while read -r modified_file; do
+    if [[ "$file_to_watch" == "$(realpath "$modified_file")" ]]; then
+      "$@"
     fi
   done
 }
@@ -228,3 +242,4 @@ function xmlfmt() {
   mv "$1" "$1.bkp"
   xmllint --format "$1.bkp" > "$1"
 }
+# zprof
