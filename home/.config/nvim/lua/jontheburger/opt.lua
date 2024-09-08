@@ -24,13 +24,13 @@ vim.opt.smartcase = true
 vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamed,unnamedplus"
 
-if vim.fn.has("wsl") == 1 then
+if vim.fn.has("wsl") == 2 then
   -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
   local win32yank = "win32yank"
   local clip_exe = "/mnt/c/Windows/System32/clip.exe"
   local powershell = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 
-  if vim.fn.executable(win32yank) then
+  if vim.fn.executable(win32yank) ~= 0 then
     vim.g.clipboard = {
       name = "win32yank-wsl",
       copy = {

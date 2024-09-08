@@ -62,6 +62,7 @@ return {
   config = function()
     require("auto-session").setup({
       log_level = "error",
+      use_git_branch = true,
       auto_session_suppress_dirs = {
         "/",
         "/tmp/*",

@@ -30,10 +30,6 @@ FZF_GIT_URL="${FZF_GIT_URL-https://raw.githubusercontent.com/junegunn/fzf-git.sh
 LAZYGIT_VERSION="${LAZYGIT_VERSION-0.40.2}"
 ## @var LAZYGIT_URL Download source of lazygit.
 LAZYGIT_URL="${LAZYGIT_URL-https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_$(uname -m).tar.gz}"
-## @var OH_MY_ZSH_REF Git sha of OH_MY_ZSH to use for manually installed plugins.
-OH_MY_ZSH_REF="${OH_MY_ZSH_REF-a779d6563ffb2f0093b4b74c8d5ff0982fa3e930}"
-## @var OH_MY_ZSH_GIT Git repository source.
-OH_MY_ZSH_GIT="${OH_MY_ZSH_GIT-https://github.com/ohmyzsh/ohmyzsh.git}"
 ## @var ZOXIDE_VERSION Version of zoxide to install.
 ZOXIDE_VERSION="${ZOXIDE_VERSION-0.9.4}"
 ## @var ZOXIDE_URL Download source of zoxide.
@@ -67,6 +63,7 @@ tell you ${CYAN}what I'm about to do${NOFMT}, and ${CYAN}ask for permission befo
   local::install_fzf
   local::install_lazygit
   local::install_tmux_plugins
+  local::install_zsh_plugins
   local::install_zoxide
 }
 
@@ -152,6 +149,7 @@ local::install_apt() {
   PKGS_APT+=(batcat) # "batcat" was renamed "bat"
   PKGS_APT+=(ca-certificates)
   PKGS_APT+=(curl)
+  PKGS_APT+=(delta)
   PKGS_APT+=(dos2unix)
   PKGS_APT+=(fzf) # Almost certainly too out of date
   PKGS_APT+=(git)
@@ -355,6 +353,11 @@ and catppuccin, a popular theme. Please check the script for all URLs and SHAs.
     fi
     git -C "${HOME}/.tmux/plugins/catppuccin" checkout "4ca26b774bc2e945fce4ccb909245dffeea7a9bf"
 
+    if [ ! -d "${HOME}/.tmux/plugins/catppuccin" ]; then
+      git clone https://github.com/catppuccin/tmux.git "${HOME}/.tmux/plugins/catppuccin"
+    fi
+    git -C "${HOME}/.tmux/plugins/catppuccin" checkout "4ca26b774bc2e945fce4ccb909245dffeea7a9bf"
+
     util::notice "-- TMUX Plugins: Installed --"
   else
     util::notice "-- Skipping --"
@@ -362,21 +365,50 @@ and catppuccin, a popular theme. Please check the script for all URLs and SHAs.
   util::println
 }
 
-local::install_oh_my_zsh() {
+# --------------------------------------------------------------------------------------
+## @fn local::install_zsh_plugins()
+## @brief Install zsh plugins manually for the current user.
+# --------------------------------------------------------------------------------------
+local::install_zsh_plugins() {
   # Print Preamble
-  util::notice "... Oh My Zsh ..."
-  util::info "${CYAN}ohmyzsh${NOFMT} is a plugin manager for zsh. I prefer to install this myself
-and manually source plugins rather than autoinstall/update within zsh. I'll be installing from
-${CYAN}${OH_MY_ZSH_GIT}${NOFMT} at ${CYAN}${OH_MY_ZSH_REF}${NOFMT}.
-"
+  util::notice "... ZSH Plugins ..."
+  util::info "Rather than using a package manager, I prefer to install zsh plugins by hand.
+  Specifically: ${CYAN}zsh-completions, zsh-history-substring-search, zsh-autopair${NOFMT}.
+  Each will be downloaded from github."
 
-  if util::prompt "Shall I install it"; then
+  if util::prompt "Shall I install them"; then
     util::notice "... Installing ..."
-    if [ ! -d "${HOME}/.local/src/ohmyzsh" ]; then
-      git clone "${OH_MY_ZSH_GIT}" "${HOME}/.local/src/ohmyzsh"
+
+    # Turn off ubuntu's call to compinit, since we do it ourselves
+    touch "${HOME}/.zshenv"
+    if ! grep -q skip_global_compinit "${HOME}/.zshenv"; then
+      echo "skip_global_compinit=1" >> "${HOME}/.zshenv"
     fi
-    git -C "${HOME}/.local/src/ohmyzsh" checkout "${OH_MY_ZSH_REF}"
-    util::notice "-- Oh My Zsh: Installed --"
+
+    local ZSH_PLUGIN_DIR="${HOME}/.local/share/zsh"
+    mkdir -p "${ZSH_PLUGIN_DIR}"
+    # Only clone & accept known hashes, else remove the plugin
+
+    if [[ ! -d "${ZSH_PLUGIN_DIR}/zsh-completions" ]]; then
+      git clone "https://github.com/zsh-users/zsh-completions.git" "${ZSH_PLUGIN_DIR}/zsh-completions"
+      # v0.35.0
+      git -C "${ZSH_PLUGIN_DIR}/zsh-completions" checkout 67921bc12502c1e7b0f156533fbac2cb51f6943d \
+        || rm -rf "${ZSH_PLUGIN_DIR}/zsh-completions"
+    fi
+
+    if [[ ! -d "${ZSH_PLUGIN_DIR}/zsh-history-substring-search" ]]; then
+      git clone "https://github.com/zsh-users/zsh-history-substring-search.git" "${ZSH_PLUGIN_DIR}/zsh-history-substring-search"
+      # v1.1.0
+      git -C "${ZSH_PLUGIN_DIR}/zsh-history-substring-search" checkout 400e58a87f72ecec14f783fbd29bc6be4ff1641c \
+        || rm -rf "${ZSH_PLUGIN_DIR}/zsh-history-substring-search"
+    fi
+
+    if [[ ! -d "${ZSH_PLUGIN_DIR}/zsh-autopair" ]]; then
+      git clone "https://github.com/hlissner/zsh-autopair.git" "${ZSH_PLUGIN_DIR}/zsh-autopair"
+      # v1.0
+      git -C "${ZSH_PLUGIN_DIR}/zsh-autopair" checkout 34a8bca0c18fcf3ab1561caef9790abffc1d3d49 \
+        || rm -rf "${ZSH_PLUGIN_DIR}/zsh-autopair"
+    fi
   else
     util::notice "-- Skipping --"
   fi

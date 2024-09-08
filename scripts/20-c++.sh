@@ -120,7 +120,7 @@ local::install_apt_clang() {
     CLANG_VERSION=$(/usr/bin/clang --version | grep -o '[0-9]\+' | head -1)
     PKGS_APT=("libfuzzer-${CLANG_VERSION}-dev")
     util::apt_install "${PKGS_APT[@]}"
-    sudo ln -s "/usr/bin/lldb-vscode-${CLANG_VERSION}" /usr/local/bin/lldb-vscode
+    sudo ln -s "/usr/bin/lldb-dap-${CLANG_VERSION}" /usr/local/bin/lldb-dap
   fi
 }
 

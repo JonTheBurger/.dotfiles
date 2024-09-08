@@ -292,7 +292,14 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       lspconfig.ansiblels.setup({capabilities = capabilities})
-      lspconfig.bashls.setup({capabilities = capabilities})
+      lspconfig.bashls.setup({
+        capabilities = capabilities,
+        settings = {
+          bashIde = {
+            includeAllWorkspaceSymbols = true,
+          },
+        },
+      })
       require'lspconfig'.bufls.setup{}
       lspconfig.clangd.setup({
         filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },

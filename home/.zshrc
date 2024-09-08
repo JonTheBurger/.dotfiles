@@ -1,8 +1,10 @@
 #!/usr/bin/env zsh
-# zsh -l --sourcetrace
-# zmodload zsh/zprof
-# * `~/.zshenv` skip_global_compinit=1
 # source /opt/provisioners/style/config/.zshrc
+# ======================================================================================
+## Profiling: zsh -l --sourcetrace
+# ======================================================================================
+# zmodload zsh/zprof
+
 # ======================================================================================
 ## Zsh: https://zsh.sourceforge.io/Doc/Release/Options.html
 # ======================================================================================
@@ -18,17 +20,16 @@ HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=$HISTSIZE
 WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
-# ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)  # https://github.com/zsh-users/zsh-autosuggestions#configuration
 
 # ======================================================================================
-## PATH & Scripts
+## PATH & Scripts: "should" be in .zshenv, but 1 file is easier. skip_global_compinit=1
 # ======================================================================================
 # Sourced in-order
 local SCRIPTS=(
   /usr/share/doc/fzf/examples/key-bindings.zsh
   /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  /usr/local/share/zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+  $HOME/.local/share/zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 )
 # Later paths = higher precedence
 local PATH_PREFIX=(
@@ -54,6 +55,7 @@ done
 # ======================================================================================
 ## Command Hooks
 # ======================================================================================
+[ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
 [ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 [ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
@@ -61,7 +63,8 @@ done
 [ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
 [ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
-[ -d "/usr/local/share/zsh/zsh-completions" ] && fpath=(/usr/local/share/zsh/zsh-completions/src $fpath)
+[ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
+[ -d "${HOME}/.local/share/zsh/zsh-autopair" ] && source "${HOME}/.local/share/zsh/zsh-autopair/autopair.zsh" && autopair-init
 autoload -Uz compinit
 if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
   compinit
@@ -86,7 +89,6 @@ command_not_found_handler() {
 # ======================================================================================
 ## Theme
 # ======================================================================================
-# ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)  # https://github.com/zsh-users/zsh-autosuggestions#configuration
 ZSH_HIGHLIGHT_STYLES[comment]=fg=245                          # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
 ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=yellow
 ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=yellow
@@ -166,9 +168,9 @@ alias ls='ls --color=auto'
 alias lstar='tar tf'
 alias lszip='unzip -l'
 alias path='echo $PATH | sed "s#:#/\n#g"'
-alias ssh-set-permissions="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"
 alias sodu='sudo --preserve-env=PATH env'
 alias upd8='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"'
+alias trust-ssh-keys="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"
 
 # ======================================================================================
 ## Functions & Aliases
@@ -242,4 +244,8 @@ function xmlfmt() {
   mv "$1" "$1.bkp"
   xmllint --format "$1.bkp" > "$1"
 }
+
+# ======================================================================================
+## Stop Profiling:
+# ======================================================================================
 # zprof
