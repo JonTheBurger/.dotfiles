@@ -190,6 +190,7 @@ function Install-DevApps {
     winget install -e --id Microsoft.PowerToys
     winget install -e --id Microsoft.VisualStudioCode
     winget install -e --id Microsoft.WindowsTerminal
+    winget install -e --id Microsoft.PowerShell
     winget install -e --id OpenJS.NodeJS.LTS
 
     # Python
@@ -227,6 +228,7 @@ function Install-CliApps {
     winget install -e --id junegunn.fzf
     winget install -e --id ajeetdsouza.zoxide # Invoke-Expression (& { (zoxide init powershell | Out-String) })
     winget install -e --id sharkdp.fd
+    winget install -e --id dandavison.delta
     winget install -e --id JesseDuffield.lazygit
 
     if (-not (Test-Path "${OptDir}\Everything")) {
@@ -251,8 +253,8 @@ function Install-CliApps {
             $FontName = $_.Name
             Write-Host "Installing Font: ${FontName}..."
             if (-not(Test-Path -Path "C:\Windows\fonts\${FontName}" )) {
-                Get-ChildItem $_ | ForEach-Object { $Fonts.CopyHere($_.FullName) }
-                Copy-Item $_ C:\Windows\Fonts
+                $Fonts.CopyHere($_.FullName)
+                Copy-Item $_.FullName C:\Windows\Fonts
             }
         }
     }
