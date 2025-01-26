@@ -65,6 +65,7 @@ done
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
 [ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
 [ -d "${HOME}/.local/share/zsh/zsh-autopair" ] && source "${HOME}/.local/share/zsh/zsh-autopair/autopair.zsh" && autopair-init
+# [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 autoload -Uz compinit
 if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
   compinit
@@ -121,12 +122,16 @@ bindkey '^X^e' edit-command-line  # Ctrl+X, Ctrl+E
 # ======================================================================================
 ## Environment
 # ======================================================================================
+[ -d "${HOME}/.local/src/vcpkg" ] && export VCPKG_ROOT=/home/vagrant/.local/src/vcpkg
 if [[ "$(uname -a)" == *WSL* ]]; then
   export DONT_PROMPT_WSL_INSTALL=1
   export XCURSOR_SIZE=24
+  export WIN_USERNAME=$(/mnt/c/Windows/System32/cmd.exe "/c" "echo %USERNAME%" 2>/dev/null | tr -d '\r')
+  export USERPROFILE=/mnt/c/Users/${WIN_USERNAME}
 fi
 export CMAKE_GENERATOR='Ninja'
 export EDITOR='vim'
+export GPG_TTY=$(tty)
 export STARSHIP_LOG='error'
 
 # ======================================================================================
@@ -162,6 +167,7 @@ alias grep4='rg -S -uu'
 alias history='history 0'
 alias k='fc -e -'
 alias l='eza -l --icons --git --color-scale -o'
+alias lg='lazygit'
 alias ls='ls --color=auto -CF'
 alias ll='eza -al --icons --git --color-scale -o'
 alias ls='ls --color=auto'
@@ -223,26 +229,45 @@ function onchange() {
     return 1
   fi
 
+  if [ "${1}" = "--verbose" ]; then
+    local verbose=1
+    shift
+  fi
+  [ -n "$verbose" ] && echo "-- [Hello]"
+
   local file_to_watch=$(realpath "$1")
   shift
+  [ -n "$verbose" ] && echo "-- [Watching '${file_to_watch}']"
 
-  inotifywait -r -m -e modify --format '%w%f' . |
-  while read -r modified_file; do
-    if [[ "$file_to_watch" == "$(realpath "$modified_file")" ]]; then
-      "$@"
+  # inotifywait -q -m -e create,close_write,moved_to . |
+  inotifywait -q -m -e modify . |
+  while read -r directory events filename; do
+    fullpath=$(realpath "$filename")
+    if [ "${fullpath}" = "${file_to_watch}" ]; then
+      [ -n "$verbose" ] && echo "-- [Event: '${events}' @ '${file_to_watch}']"
+      $@
     fi
   done
+  [ -n "$verbose" ] && echo "-- [Goodbye]"
 }
 function uncrust() {
   uncrustify -c ~/.config/uncrustify.cfg -l C --mtime --replace --no-backup $@
 }
 function venv() {
-  python3 -m venv .venv
+  uv venv .venv
   source .venv/bin/activate
 }
 function xmlfmt() {
   mv "$1" "$1.bkp"
   xmllint --format "$1.bkp" > "$1"
+}
+function y() {
+  local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+  yazi "$@" --cwd-file="$tmp"
+  if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+    builtin cd -- "$cwd"
+  fi
+  rm -f -- "$tmp"
 }
 
 # ======================================================================================

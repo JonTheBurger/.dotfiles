@@ -152,16 +152,16 @@ return {
         desc = "Find Outgoing Calls",
       },
       {
-        "<leader>fy",
+        "<leader>fm",
         function()
           require("telescope.builtin").lsp_document_symbols()
         end,
-        desc = "Find Symbols",
+        desc = "Find Document Symbols",
       },
       {
-        "<leader>fm",
+        "<leader>fy",
         function()
-          require("telescope.builtin").lsp_workspace_symbols()
+          require("telescope.builtin").lsp_dynamic_workspace_symbols()
         end,
         desc = "Find Global Symbols",
       },
@@ -189,6 +189,8 @@ return {
       },
     },
     config = function()
+      local actions = require "telescope.actions"
+      local config = require "telescope.config"
       require("telescope").setup({
         defaults = {
           vimgrep_arguments = {
@@ -200,14 +202,11 @@ return {
             "--smart-case",
             "--hidden",
           },
-          --       mappings = {
-          --         i = {
-          --           ["<C-j>"]   = actions.move_selection_next,
-          --           ["<C-k>"]   = actions.move_selection_previous,
-          --           ["<C-F2>"]   = actions.smart_send_to_qflist + actions.open_qflist,
-          --           ["<ESC>"]   = actions.close,
-          --         },
-          --       },
+          mappings = {
+            i = {
+              ["<C-f>"] = actions.send_to_qflist + actions.open_qflist,
+            },
+          },
           file_ignore_patterns = {
             ".git/",
           },
@@ -220,7 +219,6 @@ return {
       local make_entry = require("telescope.make_entry")
       local conf = require("telescope.config").values
       local cmake = require("cmake-tools")
-
       local function create_picker(title, fn)
         return function(opts)
           opts = opts or {}

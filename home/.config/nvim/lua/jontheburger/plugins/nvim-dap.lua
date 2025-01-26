@@ -35,9 +35,9 @@ return {
     { "<S-F4>", function() require("dapui").eval() end, mode = {"n", "v"}, desc = "Evaluate", },
     { "<F5>", function() require("dap").continue() end, desc = "Continue", },
     { "<F9>", function() require("dap").toggle_breakpoint() end, desc = "Toggle Breakpoint", },
-    { "<F10>", function() require("dap").step_over() end, desc = "Step Over", },
-    { "<F11>", function() require("dap").step_into() end, desc = "Step In", },
-    { "<S-F11>", function() require("dap").step_out() end, desc = "Step Out", },
+    { "<F10>", function() require("dap").step_over() vim.api.nvim_feedkeys("zz", "n", false) end, desc = "Step Over", },
+    { "<F11>", function() require("dap").step_into() vim.cmd(":norm zz") end, desc = "Step In", },
+    { "<S-F11>", function() require("dap").step_out() vim.cmd(":norm zz") end, desc = "Step Out", },
     { "<M-d>", function() require("dap.ui.widgets").hover() end, desc = "Hover Variables", },
   },
   opts = {
@@ -294,7 +294,7 @@ return {
       pipe = "${pipe}",
       executable = {
         command = "cmake",
-        args = {"--debugger", "--debugger-pipe", "${pipe}"}
+        args = {"--debugger", "--debugger-pipe", "${pipe}", "-B", "build/dap"}
       }
     }
     dap.configurations.cmake = {

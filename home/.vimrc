@@ -5,8 +5,10 @@ set number
 set nowrap
 
 " Whitespace
+scriptencoding utf-8
+set encoding=utf-8
 set list
-set lcs+=space:·
+set listchars+=space:·
 set listchars+=eol:\ 
 
 " Theme

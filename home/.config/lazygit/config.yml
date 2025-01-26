@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+git:
+  paging:
+    colorArg: always
+    pager: delta --dark --paging=never
+  commitPrefix:
+    pattern: "^\\w+\\/(\\w+-\\w+).*"
+    replace: "[$1]"
+keybinding:
+  universal:
+    quit: <esc>
+    return: q
+gui:
+  nerdFontsVersion: "3"
+  filterMode: fuzzy

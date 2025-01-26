@@ -1,5 +1,6 @@
 -- <space> as <leader>
 vim.g.mapleader = " "
+vim.g.maplocalleader = ","
 vim.g.modelines = 2
 vim.opt.compatible = false
 vim.opt.cursorline = true
@@ -24,7 +25,7 @@ vim.opt.smartcase = true
 vim.opt.mouse = "a"
 vim.opt.clipboard = "unnamed,unnamedplus"
 
-if vim.fn.has("wsl") == 2 then
+if vim.fn.has("wsl") == 1 then
   -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
   local win32yank = "win32yank"
   local clip_exe = "/mnt/c/Windows/System32/clip.exe"

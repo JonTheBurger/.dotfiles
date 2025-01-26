@@ -34,7 +34,7 @@
   s = status -s
   st = status
   sm = submodule
-  sma = submodule add
+  sma = "!f() { cd -- \"${GIT_PREFIX:-.}\"; git submodule add ${@}; }; f"
   smu = submodule update
   smi = submodule update --init --recursive
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
@@ -46,13 +46,13 @@
   ## Stash
   stashes = stash list
   stash-diff = "!f() { git stash show -p $1; }; f"
-  stash-diff-at = "!f() { git stash show -p stash^{/$1}; }; f"
   stash-to = "!f() { git stash push -m $1; }; f"
   unstash-from= "!f() { git stash apply stash^{/$1}; }; f"
 
   ## Custom Functions
   A = !git add -A && git commit --amend --no-edit
   aliases = config --get-regexp alias
+  addend = !git add -A && commit --amend --no-edit
   amend = commit --amend --no-edit
   authors = shortlog -s -n
   # Reset & clean everything in the main repo and in submodules
@@ -62,13 +62,15 @@
   heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
   local-only-branches = !python ~/.local/bin/local-only-branches.py
+  lg = "!f() { lazygit log; }; f"
+  lazy = "!f() { lazygit; }; f"
   # pull branch
   pb = "!f() { git fetch origin $1:$1; }; f"
   # git shallow-clone <repo> <ref>
-  shallow-clone = "!f() { dir=$(echo \"${1}\" | sed 's#.*/\\(.*\\).git#\\1#'); mkdir ${dir}; git -C ${dir} init; git -C ${dir} remote add origin ${1}; git -C ${dir} fetch --depth 1 origin ${2}; git -C ${dir} checkout FETCH_HEAD; }; f ${1} ${2}"
+  shallow-clone = "!f() { cd -- \"${GIT_PREFIX:-.}\"; dir=$(echo \"${1}\" | sed 's#.*/\\(.*\\).git#\\1#'); mkdir ${dir}; git -C ${dir} init; git -C ${dir} remote add origin ${1}; git -C ${dir} fetch --depth 1 origin ${2}; git -C ${dir} checkout FETCH_HEAD; }; f ${1} ${2}"
   shove = !git add -A && git commit --amend --no-edit && git push --force-with-lease
   # git squash <ref>
-  squash = !git reset --soft $@ && git commit --verbose
+  squash = "!f() { git reset --soft ${1} && git commit --verbose; }; f"
   subinit = submodule update --init --recursive
   # Get Jira ticket associated with branch
   ticket = "!f() { branch=$(git rev-parse --abbrev-ref HEAD); echo $branch | grep -oE '[A-Z]+-[0-9]+'; }; f"
@@ -95,9 +97,6 @@
 [user]
   name = Jon Povirk
   email = jmp180@pitt.edu
-  signingkey = 1FF640D9B960DD2F
-  # gpg --list-keys --keyid-format=long
-  # export GPG_TTY=$(tty)
 [include]
   path = /opt/provisioners/style/config/.gitconfig
 [includeIf "gitdir:~/Projects/"]
@@ -111,4 +110,4 @@
   aliases = false
   branch = false
 [color]
-	ui = auto
+  ui = auto

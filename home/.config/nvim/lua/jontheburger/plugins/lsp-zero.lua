@@ -1,14 +1,17 @@
 -- Format hacks
 local format = function()
-  if vim.bo.filetype == "python" then
-    -- pyright does not support formatting
-    vim.cmd([[!black %]])
-  elseif vim.bo.filetype == "sh" then
+  if vim.bo.filetype == "sh" then
     -- bash-language-server does not support formatting
     vim.cmd([[!shfmt -i 2 -s -w %]])
+  elseif vim.bo.filetype == "cmake" then
+    vim.cmd([[!gersemi --in-place %]])
   elseif vim.bo.filetype == "yaml" then
     -- yaml-language-server does not support formatting
     vim.cmd([[!yamlfix %]])
+  elseif vim.bo.filetype == "python" then
+    -- pyright does not support formatting
+    vim.cmd([[!ruff check --fix %]])
+    vim.cmd([[!ruff format %]])
   else
     vim.lsp.buf.format()
   end
@@ -270,6 +273,8 @@ return {
         vim.keymap.set("n", "K", vim.lsp.buf.hover, opt("Show Docs"))
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opt("Prev Diagnostic"))
         vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opt("Next Diagnostic"))
+        vim.keymap.set("n", "[w", vim.diagnostic.goto_prev, opt("Prev Diagnostic"))
+        vim.keymap.set("n", "]w", vim.diagnostic.goto_next, opt("Next Diagnostic"))
         vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opt("Goto Declaration"))
         vim.keymap.set("n", "gd", vim.lsp.buf.definition, opt("Goto Definition"))
         vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opt("Goto Implementation"))
@@ -285,6 +290,10 @@ return {
         vim.keymap.set({"n", "i"}, "<C-S-SPACE>", vim.lsp.buf.signature_help, opts)
         vim.keymap.set("i", "<S-F1>", vim.lsp.buf.signature_help, opts)
         vim.keymap.set("n", "gf", vim.lsp.buf.code_action, opts)
+        vim.keymap.set("n", "<leader>ld", function()
+            vim.diagnostic.setqflist()
+            vim.cmd("copen") -- Open the quickfix window
+        end, { desc = "Show all diagnostics in quickfix" })
       end)
 
       -- Language Server Config: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
@@ -300,7 +309,7 @@ return {
           },
         },
       })
-      require'lspconfig'.bufls.setup{}
+      require'lspconfig'.buf_ls.setup{}
       lspconfig.clangd.setup({
         filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
         capabilities = capabilities,
@@ -314,10 +323,30 @@ return {
       lspconfig.marksman.setup({capabilities = capabilities})
       lspconfig.neocmake.setup({capabilities = capabilities})
       lspconfig.omnisharp.setup({capabilities = capabilities})
+
       lspconfig.pyright.setup({capabilities = capabilities})
-      lspconfig.ruff_lsp.setup({capabilities = capabilities})
+      lspconfig.ruff.setup({capabilities = capabilities})
+
+      lspconfig.vale_ls.setup({
+        filetypes = { "md", "rst", "cmake" },
+        capabilities = capabilities,
+      })
+
+      lspconfig.gopls.setup({capabilities = capabilities})
       -- lspconfig.rust_analyzer.setup({capabilities = capabilities})
-      lspconfig.yamlls.setup({capabilities = capabilities})
+      lspconfig.yamlls.setup({
+        capabilities = capabilities,
+        settings = {
+          yaml = {
+            schemaStore = {
+              enable = true,
+            },
+            schemas = {
+              ["https://json.schemastore.org/mkdocs-1.6.json"] = "mkdocs.yml",
+            },
+          },
+        },
+      })
       require('mason').setup()
   -- require('mason-lspconfig').setup_handlers {
   --   ['rust_analyzer'] = function() end,

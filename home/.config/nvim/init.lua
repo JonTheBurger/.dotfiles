@@ -12,4 +12,3 @@ function buffer_quit_all_except_visible(opts)
   end
 end
 vim.api.nvim_create_user_command("QAEV", buffer_quit_all_except_visible, {})
--- :%bd|e#

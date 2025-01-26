@@ -5,6 +5,8 @@ vim.keymap.set("x", "<leader>p", "\"_dP")    -- Paste & Maintain Register
 vim.keymap.set("", "q:", "<NOP>")            -- Useless
 vim.keymap.set("t", "<ESC>", [[<C-\><C-n>]]) -- Seriously, quit terminal mode
 vim.keymap.set("i", "jk", "<ESC>", { desc = "Normal Mode" })
+vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
+vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
 vim.keymap.set("n", "<leader>X",
   "<CMD>!chmod +x %<CR>",
   { desc = "chmod +x", silent = true }
@@ -29,8 +31,12 @@ vim.keymap.set("", "<leader>/", "//-1<Left><Left><Left>", { desc = "Line before 
 vim.keymap.set("", "<leader>?", "//+1<Left><Left><Left>", { desc = "Line after search" })
 vim.keymap.set("n", "<leader>n", "<CMD>nohl<CR>", { desc = "No Highlight Search" })
 vim.keymap.set("n", "<leader>q", "<CMD>bp|bd#<CR>", { desc = "Delete Buffer, Keep Split" })
-vim.keymap.set("n", "ci_", "dt_dT_", { desc = "inner _underscores_" })
-vim.keymap.set("n", "ci,", "dt,dT,", { desc = "inner ,commas," })
+vim.keymap.set("n", "ci_", "dt_dT_i", { desc = "inner _underscores_" })
+vim.keymap.set("n", "ci,", "dt,dT,i", { desc = "inner ,commas," })
+
+-- Yanks
+vim.keymap.set("n", "yaa", "gg0yG<C-o>", { desc = "Yank all" })
+vim.keymap.set("n", "yd", "yyp", { desc = "Duplicate line" })
 
 -- Move highlighted text up/down w/ shift JK
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -84,3 +90,9 @@ vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 -- Custom Functions
 local fn = require("jontheburger.functions")
 vim.keymap.set("n", "<leader>R", fn.reload.config, { silent = false })
+vim.keymap.set("n", "<leader>tdi", function ()
+  vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false)
+end, { desc = "Insert TODO" })
+vim.keymap.set("n", "<leader>tda", function ()
+  vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false)
+end, { desc = "Append TODO" })

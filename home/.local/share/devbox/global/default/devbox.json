@@ -14,8 +14,11 @@
     "shfmt@3.9.0",
     "yazi@0.3.1",
     "zoxide@0.9.4",
-    "lazygit@0.43.1",
-    "lazydocker@0.23.3"
+    "lazygit@0.45.0",
+    "lazydocker@0.23.3",
+    "jira-cli-go@latest",
+    "mdcat@latest",
+    "vale@latest"
   ],
   "shell": {
     "init_hook": [
