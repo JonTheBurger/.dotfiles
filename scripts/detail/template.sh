@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 SCRIPT_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+# shellcheck source=scripts/detail/util.sh
 . "${SCRIPT_DIR}/detail/util.sh"
 
 main() {
@@ -38,7 +39,7 @@ local::parse_params() {
     -q | --quiet) QUIET=1 ;;
     --no-color) NO_COLOR=1 ;;
     -f | --flag) flag=1 ;; # example flag
-    -p | --param) # example named parameter
+    -p | --param)          # example named parameter
       param="${2-}"
       shift
       ;;
@@ -51,7 +52,7 @@ local::parse_params() {
   args=("$@")
 
   # check required params and arguments
-  [[ -z "${param-}" ]] && util::die "Missing required parameter: param"
+  [[ -z ${param-} ]] && util::die "Missing required parameter: param"
   [[ ${#args[@]} -eq 0 ]] && util::die "Missing script arguments"
 
   return 0

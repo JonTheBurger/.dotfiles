@@ -15,4 +15,5 @@ polybar-msg cmd quit
 echo "---" | tee -a "$LOG"
 
 # Launch bar
-polybar --config="$CFG" "$BAR" 2>&1 | tee -a "$LOG" & disown
+polybar --config="$CFG" "$BAR" 2>&1 | tee -a "$LOG" &
+disown

@@ -2,10 +2,9 @@
 # ======================================================================================
 ## @file 40-desktop.sh
 ## Installs Linux Desktop applications.
-# UN-COMMENT FOR LSP SUPPORT
-#. "detail/util.sh"
 # ======================================================================================
 SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+# shellcheck source=scripts/detail/util.sh
 . "${SCRIPT_DIR}/detail/util.sh"
 
 # ======================================================================================

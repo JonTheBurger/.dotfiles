@@ -20,7 +20,7 @@ git clone https://github.com/JonTheBurger/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./scripts/10-cli.sh
 # Farm Soft Links
-./stow.sh
+make stow
 ```
 
 --------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ those directories would appear in our `.dotfiles` repo.
 **Contents:**
 
 This directory contains the files that will be soft-linked under `$HOME`. Simply
-`cd ~/.dotfiles && ./stow.sh` to distribute the links. This may be rerun any
+`cd ~/.dotfiles && make stow` to distribute the links. This may be rerun any
 number of times.
 
 Notably the following programs are configured (among others):

@@ -55,7 +55,7 @@ function Set-UserShell {
     # Set Visual Effects to Custom
     Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\VisualFXSetting" 3
     # Disable Minimize, Maximize, and Workspace Switch Animation
-    Set-Registry "HKCU:\Control Panel\Desktop\WindowMetrics\Min" 0
+    Set-Registry "HKCU:\Control Panel\Desktop\WindowMetrics\MinAnimate" 0
     # Disable several Win+ keys so we can reuse them:
     Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisabledHotkeys" "1234567890FJK" -Type String
     # Dark Mode
