@@ -64,35 +64,35 @@ so consider reading the script before executing.
   fi
 
   # Download Layan KDE
-  if [ ! -d ~/.local/src/Layan ]; then
-    mkdir -p ~/.local/src
-    git clone --depth 1 https://github.com/vinceliuice/Layan-kde.git ~/.local/src/Layan
+  if [ ! -d "${HOME}/.local/src/Layan" ]; then
+    mkdir -p "${HOME}/.local/src"
+    git clone --depth 1 https://github.com/vinceliuice/Layan-kde.git "${HOME}/.local/src/Layan"
   fi
 
   # Kvantum Theme
-  if [ ! -d "~/.config/Kvantum/Layan" ]; then
-    mkdir -p ~/.config/Kvantum/Layan
-    ln -s ~/.local/src/Layan/Kvantum/Layan/Layan.kvconfig ~/.config/Kvantum/Layan
-    ln -s ~/.local/src/Layan/Kvantum/Layan/Layan.svg ~/.config/Kvantum/Layan
+  if [ ! -d "${HOME}/.config/Kvantum/Layan" ]; then
+    mkdir -p "${HOME}/.config/Kvantum/Layan"
+    ln -s "${HOME}/.local/src/Layan/Kvantum/Layan/Layan.kvconfig" "${HOME}/.config/Kvantum/Layan"
+    ln -s "${HOME}/.local/src/Layan/Kvantum/Layan/Layan.svg" "${HOME}/.config/Kvantum/Layan"
   fi
-  kwriteconfig5 --file ~/.config/Kvantum/kvantum.kvconfig --group General --key theme Layan
-  kwriteconfig5 --file ~/.config/Kvantum/Layan/Layan.kvconfig --group Hacks --key transparent_dolphin_view --type bool true
+  kwriteconfig5 --file "${HOME}/.config/Kvantum/kvantum.kvconfig" --group General --key theme Layan
+  kwriteconfig5 --file "${HOME}/.config/Kvantum/Layan/Layan.kvconfig" --group Hacks --key transparent_dolphin_view --type bool true
 
   # Widget Style
   kwriteconfig5 --file kdeglobals --group KDE --key widgetStyle 'kvantum-dark'
 
   # Color Scheme
-  if [ ! -d "~/.local/share/color-schemes/Layan.colors" ]; then
-    mkdir -p ~/.local/share/color-schemes
-    ln -s ~/.local/src/Layan/color-schemes/Layan.colors ~/.local/share/color-schemes/Layan.colors
+  if [ ! -d "${HOME}/.local/share/color-schemes/Layan.colors" ]; then
+    mkdir -p "${HOME}/.local/share/color-schemes"
+    ln -s "${HOME}/.local/src/Layan/color-schemes/Layan.colors" "${HOME}/.local/share/color-schemes/Layan.colors"
   fi
   kwriteconfig5 --file kdeglobals --group General --key ColorScheme Layan
 
   # Window Decorations
-  if [ ! -d "~/.local/share/aurorae/themes/Sweet" ]; then
+  if [ ! -d "${HOME}/.local/share/aurorae/themes/Sweet" ]; then
     git clone --depth 1 --branch nova https://github.com/EliverLara/Sweet.git /tmp/Sweet
-    mkdir -p ~/.local/share/aurorae/themes
-    cp -r /tmp/Sweet/kde/aurorae/Sweet-Dark-transparent ~/.local/share/aurorae/themes/Sweet-Dark-transparent
+    mkdir -p "${HOME}/.local/share/aurorae/themes"
+    cp -r /tmp/Sweet/kde/aurorae/Sweet-Dark-transparent "${HOME}/.local/share/aurorae/themes/Sweet-Dark-transparent"
     kwriteconfig5 --file kwinrc --group org.kde.kdecoration2 --key theme '__aurorae__svg__Sweet-Dark-transparent'
   fi
   # Add "Keep Above" button on left side of window decoration
@@ -140,9 +140,9 @@ so consider reading the script before executing.
   kwriteconfig5 --file kscreenlockerrc --group Daemon --key Autolock --type bool false
 
   # 4 virtual desktops
-  kwriteconfig5 --file kwinrc --group Desktops --key Id_2 $(uuidgen)
-  kwriteconfig5 --file kwinrc --group Desktops --key Id_3 $(uuidgen)
-  kwriteconfig5 --file kwinrc --group Desktops --key Id_4 $(uuidgen)
+  kwriteconfig5 --file kwinrc --group Desktops --key Id_2 "$(uuidgen)"
+  kwriteconfig5 --file kwinrc --group Desktops --key Id_3 "$(uuidgen)"
+  kwriteconfig5 --file kwinrc --group Desktops --key Id_4 "$(uuidgen)"
   kwriteconfig5 --file kwinrc --group Desktops --key Name_1 NW
   kwriteconfig5 --file kwinrc --group Desktops --key Name_2 NE
   kwriteconfig5 --file kwinrc --group Desktops --key Name_3 SW
@@ -227,32 +227,32 @@ so consider reading the script before executing.
 
   # Install plasmoids
   # System Load Viewer - https://store.kde.org/s/KDE%20Store/p/1474921
-  if [ ! -d ~/.local/share/plasma/plasmoids/org.kde.plasma.systemloadviewer ]; then
+  if [ ! -d "${HOME}/.local/share/plasma/plasmoids/org.kde.plasma.systemloadviewer" ]; then
     /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1474921
   fi
   # Event Calendar - https://store.kde.org/s/KDE%20Store/p/998901
-  if [ ! -d ~/.local/share/plasma/plasmoids/org.kde.plasma.eventcalendar ]; then
+  if [ ! -d "${HOME}/.local/share/plasma/plasmoids/org.kde.plasma.eventcalendar" ]; then
     /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/998901
   fi
   # Window Title Applet - https://store.kde.org/s/KDE%20Store/p/1274218
-  if [ ! -d ~/.local/share/plasma/plasmoids/org.kde.windowtitle ]; then
+  if [ ! -d "${HOME}/.local/share/plasma/plasmoids/org.kde.windowtitle" ]; then
     /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1274218
   fi
   # Simple Menu - https://store.kde.org/s/KDE%20Store/p/1169537
-  if [ ! -d ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu ]; then
+  if [ ! -d "${HOME}/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu" ]; then
     /usr/lib/x86_64-linux-gnu/libexec/kf5/kpackagehandlers/knshandler kns://plasmoids.knsrc/api.kde-look.org/1169537
   fi
   # Center SimpleMenu Above Dock
-  sed -ie 's/x = (appletTopLeft.x < horizMidPoint) ? screen.x + offset : (screen.x + screen.width) - width - offset;/x = screen.x + (screen.width \/ 2) - (width \/ 2);/g' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
-  sed -ie 's/y = screen.height - height - offset - panelSvg.margins.top;/y = screen.y + screen.height - height - appletTopLeft.y - offset;/g' ~/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml
+  sed -ie 's/x = (appletTopLeft.x < horizMidPoint) ? screen.x + offset : (screen.x + screen.width) - width - offset;/x = screen.x + (screen.width \/ 2) - (width \/ 2);/g' "${HOME}/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml"
+  sed -ie 's/y = screen.height - height - offset - panelSvg.margins.top;/y = screen.y + screen.height - height - appletTopLeft.y - offset;/g' "${HOME}/.local/share/plasma/plasmoids/org.kde.plasma.simplemenu/contents/ui/MenuRepresentation.qml"
 
   # Setup latte-dock
   kwriteconfig5 --file lattedockrc --group UniversalSettings --key currentLayout JonTheBurger
   kwriteconfig5 --file lattedockrc --group UniversalSettings --key lastNonAssignedLayout JonTheBurger
-  if [ -f ~/.config/latte/Default.layout.latte ]; then
-    mv ~/.config/latte/Default.layout.latte ~/.config/latte/Default.layout.latte.bkp
+  if [ -f "${HOME}/.config/latte/Default.layout.latte" ]; then
+    mv "${HOME}/.config/latte/Default.layout.latte" "${HOME}/.config/latte/Default.layout.latte.bkp"
   fi
-  ln -s ~/.config/latte/JonTheBurger.layout.latte ~/.config/latte/Default.layout.latte
+  ln -s "${HOME}/.config/latte/JonTheBurger.layout.latte" "${HOME}/.config/latte/Default.layout.latte"
   latte-dock --layout JonTheBurger &
 
   # Desktop Wallpaper
@@ -260,7 +260,7 @@ so consider reading the script before executing.
   qdbus org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "var allDesktops = desktops(); print(allDesktops); for (i=0;i<allDesktops.length;i++) { d = allDesktops[i]; d.wallpaperPlugin = 'org.kde.image'; d.currentConfigGroup = Array('Wallpaper', 'org.kde.image', 'General'); d.writeConfig('Image', 'file://${HOME}/.local/share/wallpapers/${WALLPAPER_NAME}'); }"
 
   # Remove default panel
-  cat <<EOF >~/.config/plasma-org.kde.plasma.desktop-appletsrc
+  cat <<EOF >"${HOME}/.config/plasma-org.kde.plasma.desktop-appletsrc"
 [ActionPlugins][0]
 MidButton;NoModifier=org.kde.paste
 RightButton;NoModifier=org.kde.contextmenu
@@ -293,36 +293,36 @@ EOF
   kwriteconfig5 --file katerc --group General --key "Startup Session" last
   kwriteconfig5 --file katerc --group "KTextEditor Renderer" --key Schema "Breeze Dark"
   kwriteconfig5 --file katerc --group UiSettings --key ColorScheme Layan
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key externaltoolsplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katebacktracebrowserplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katebuildplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katecloseexceptplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katectagsplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katefilebrowserplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katefiletreeplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key kategdbplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katekonsoleplugin --type bool true
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key kateopenheaderplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key kateprojectplugin --type bool true
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katereplicodeplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesearchplugin --type bool true
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesnippetsplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesqlplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katesymbolviewerplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katexmlcheckplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key katexmltoolsplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key ktexteditorpreviewplugin --type bool true
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key lspclientplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key tabswitcherplugin --type bool false
-  kwriteconfig5 --file ~/.local/share/kate/anonymous.katesession --group "Kate Plugins" --key textfilterplugin --type bool true
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key externaltoolsplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katebacktracebrowserplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katebuildplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katecloseexceptplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katectagsplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katefilebrowserplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katefiletreeplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key kategdbplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katekonsoleplugin --type bool true
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key kateopenheaderplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key kateprojectplugin --type bool true
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katereplicodeplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katesearchplugin --type bool true
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katesnippetsplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katesqlplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katesymbolviewerplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katexmlcheckplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key katexmltoolsplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key ktexteditorpreviewplugin --type bool true
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key lspclientplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key tabswitcherplugin --type bool false
+  kwriteconfig5 --file "${HOME}/.local/share/kate/anonymous.katesession" --group "Kate Plugins" --key textfilterplugin --type bool true
 
   # Dolphin
   kwriteconfig5 --file dolphinrc --group VersionControl --key enabledPlugins Git
 
   # GTK
-  mkdir -p ~/.themes/Layan-dark
-  ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 ~/.themes/Layan-dark/gtk-2.0
-  ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ ~/.themes/Layan-dark/gtk-3.0
+  mkdir -p "${HOME}/.themes/Layan-dark"
+  ln -sf /snap/layan-themes/current/share/gtk2/Layan-dark/gtk-2.0 "${HOME}/.themes/Layan-dark/gtk-2.0"
+  ln -sf /snap/layan-themes/current/share/themes/Layan-dark/gtk-3.0/ "${HOME}/.themes/Layan-dark/gtk-3.0"
 
   # Reload changes
   qdbus org.kde.KWin /KWin reconfigure

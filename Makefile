@@ -30,7 +30,7 @@ stow:  # Distributes softlinks in home to dotfiles
 	stow home --no-folding --ignore='.*AppData.*' ${STOWFLAGS}  # Farm soft-links; create directories.
 
 format:  ## Formats shell scripts
-	shfmt -i 2 -s -w .
+	shfmt -s -w .
 
 lint:  ## Lints shell scripts
 	find . -name '*.sh' -type f -exec shellcheck -x --color {} \;

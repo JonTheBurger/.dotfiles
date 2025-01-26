@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-SCRIPT_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # shellcheck source=scripts/detail/util.sh
 . "${SCRIPT_DIR}/detail/util.sh"
 

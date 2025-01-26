@@ -6,7 +6,8 @@ CFG="$HOME/.config/polybar/config.ini"
 LOG="/tmp/$USER-polybar-$BAR.log"
 
 # Platform Detection
-export BACKLIGHT="$(ls -1 /sys/class/backlight)"
+BACKLIGHT="$(ls -1 /sys/class/backlight)"
+export BACKLIGHT
 
 # Terminate running bars; ensure ipc is enabled for each bar (killall -q polybar)
 polybar-msg cmd quit

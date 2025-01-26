@@ -120,15 +120,15 @@ util::apt_install() {
 # --------------------------------------------------------------------------------------
 util::snap_install() {
   util::notice "I'm going to install snap packages:"
-  for pkg in $@; do
+  for pkg in "$@"; do
     util::info "- $pkg"
   done
 
   if util::prompt "Is this acceptable"; then
     util::notice "... Installing ..."
-    for pkg in $@; do
+    for pkg in "$@"; do
       util::info "- $pkg"
-      sudo snap install --classic ${pkg}
+      sudo snap install --classic "${pkg}"
     done
     util::notice "-- Installation Complete! --"
   else
@@ -144,15 +144,15 @@ util::snap_install() {
 # --------------------------------------------------------------------------------------
 util::pipx_install() {
   util::notice "I'm going to install executables from pip into separated venvs:"
-  for pkg in $@; do
+  for pkg in "$@"; do
     util::info "- $pkg"
   done
 
   if util::prompt "Is this acceptable"; then
     util::notice "... Installing ..."
-    for pkg in $@; do
+    for pkg in "$@"; do
       util::info "- $pkg"
-      pipx install ${pkg}
+      pipx install "${pkg}"
     done
     util::notice "-- Installation Complete! --"
   else

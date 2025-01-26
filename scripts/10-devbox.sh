@@ -3,7 +3,7 @@
 ## @file 10-devbox.sh
 ## Uses devbox+nix to install command line tools.
 # ======================================================================================
-SCRIPT_DIR=$(dirname $(readlink -f ${BASH_SOURCE[0]}))
+SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # shellcheck source=scripts/detail/util.sh
 . "${SCRIPT_DIR}/detail/util.sh"
 
