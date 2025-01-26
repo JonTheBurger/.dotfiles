@@ -19,7 +19,8 @@
     "jira-cli-go@latest",
     "mdcat@latest",
     "vale@latest",
-    "uv@latest"
+    "uv@latest",
+    "copier@latest"
   ],
   "shell": {
     "init_hook": [

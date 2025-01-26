@@ -33,6 +33,7 @@ return {
       "cmake",
       "comment",
       "cpp",
+      "doxygen",
       "json",
       "lua",
       "markdown",
@@ -55,7 +56,7 @@ return {
         scope_incremental = false,
         node_decremental = "<bs>",
       },
-      additional_vim_regex_highlighting = true,
+      -- additional_vim_regex_highlighting = true,
     },
     textobjects = {
       swap = {
