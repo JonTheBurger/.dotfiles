@@ -18,7 +18,8 @@
     "lazydocker@0.23.3",
     "jira-cli-go@latest",
     "mdcat@latest",
-    "vale@latest"
+    "vale@latest",
+    "uv@latest"
   ],
   "shell": {
     "init_hook": [

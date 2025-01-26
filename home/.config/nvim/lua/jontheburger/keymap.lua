@@ -20,6 +20,7 @@ vim.keymap.set("v", "<leader>lf",
   { desc = "Insert newline" }
 )
 vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Trim Whitespace" })
+vim.keymap.set("n", "<leader>wr", [[:%s/\r//<CR>]], { desc = "Remove CR" })
 vim.keymap.set("n", "<leader>wl", function()
     local pattern = vim.fn.getreg("/")
     vim.cmd([[:s/\s\+/\r/g]])

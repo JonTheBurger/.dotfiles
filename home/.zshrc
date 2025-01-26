@@ -122,7 +122,7 @@ bindkey '^X^e' edit-command-line  # Ctrl+X, Ctrl+E
 # ======================================================================================
 ## Environment
 # ======================================================================================
-[ -d "${HOME}/.local/src/vcpkg" ] && export VCPKG_ROOT=/home/vagrant/.local/src/vcpkg
+[ -x "$(command -v vcpkg)" ] && export VCPKG_ROOT="$(dirname $(realpath $(which vcpkg)))"
 if [[ "$(uname -a)" == *WSL* ]]; then
   export DONT_PROMPT_WSL_INSTALL=1
   export XCURSOR_SIZE=24
