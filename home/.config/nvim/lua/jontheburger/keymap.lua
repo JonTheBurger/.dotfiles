@@ -89,8 +89,6 @@ vim.keymap.set("n", "<S-Up>",    "<C-w><S-k>")
 vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 
 -- Custom Functions
-local fn = require("jontheburger.functions")
-vim.keymap.set("n", "<leader>R", fn.reload.config, { silent = false })
 vim.keymap.set("n", "<leader>tdi", function ()
   vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false)
 end, { desc = "Insert TODO" })
