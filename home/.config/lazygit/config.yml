@@ -1,11 +1,14 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 git:
+  branchColorPatterns:
+    'feature/[A-Z0-9]+-[0-9]+': "#11aaff"
+    'bugfix/[A-Z0-9]+-[0-9]+': "#ff5733"
   paging:
     colorArg: always
     pager: delta --dark --paging=never
   commitPrefix:
     pattern: "^\\w+\\/(\\w+-\\w+).*"
-    replace: "[$1]"
+    replace: "$1 "
 keybinding:
   universal:
     quit: <esc>

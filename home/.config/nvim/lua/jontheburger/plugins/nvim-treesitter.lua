@@ -38,6 +38,7 @@ return {
       "lua",
       "markdown",
       "python",
+      "rst",
       "rust",
       "yaml",
     },
