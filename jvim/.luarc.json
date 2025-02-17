@@ -1,0 +1,19 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime.version": "LuaJIT",
+  "runtime.path": [
+    "lua/?.lua",
+    "lua/?/init.lua",
+  ],
+  "diagnostics.globals": ["vim"],
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "$VIMRUNTIME",
+    "$XDG_CONFIG_HOME/$NVIM_APPNAME",
+    "$XDG_DATA_HOME/$NVIM_APPNAME/lazy",
+    "$XDG_DATA_HOME/$NVIM_APPNAME/lazy/lazy.nvim",
+    "$XDG_CONFIG_HOME/nvim",
+    "$XDG_DATA_HOME/nvim/lazy",
+    "$XDG_DATA_HOME/nvim/lazy/lazy.nvim"
+  ]
+}

@@ -1,0 +1,89 @@
+################################################################################
+# Config
+################################################################################
+theme = citruszest
+background-blur = 20
+background-opacity = 0.9
+clipboard-paste-protection = true
+clipboard-trim-trailing-spaces = true
+cursor-invert-fg-bg = true
+cursor-style = block
+shell-integration-features = no-cursor
+unfocused-split-opacity = 1
+# window-decoration = server
+
+################################################################################
+# Keys
+################################################################################
+keybind = ctrl+q>r=reload_config
+keybind = ctrl+q>enter=toggle_fullscreen
+keybind = ctrl+q>c=clear_screen
+keybind = ctrl+q>x=close_surface
+keybind = ctrl+q>s=write_screen_file:paste
+keybind = ctrl+q>d=scroll_page_down
+keybind = ctrl+q>u=scroll_page_up
+keybind = ctrl+alt+up=scroll_page_up
+keybind = ctrl+alt+down=scroll_page_down
+
+################################################################################
+# Tabs
+################################################################################
+# Tabs:new
+keybind = ctrl+q>c=new_tab
+# Tabs:navigation
+keybind = alt+j=previous_tab
+keybind = alt+k=next_tab
+# Tabs:goto
+keybind = ctrl+q>1=goto_tab:1
+keybind = ctrl+q>2=goto_tab:2
+keybind = ctrl+q>3=goto_tab:3
+keybind = ctrl+q>4=goto_tab:4
+keybind = ctrl+q>5=goto_tab:5
+keybind = ctrl+q>6=goto_tab:6
+keybind = ctrl+q>7=goto_tab:7
+keybind = ctrl+q>8=goto_tab:8
+keybind = ctrl+q>9=goto_tab:9
+keybind = ctrl+q>0=last_tab
+
+################################################################################
+# Splits
+################################################################################
+# Splits:new (/-)
+keybind = ctrl+q>/=new_split:right
+keybind = ctrl+q>-=new_split:down
+# Splits:navigate (hjkl)
+# keybind = unconsumed:ctrl+h=goto_split:left
+# keybind = unconsumed:ctrl+j=goto_split:down
+# keybind = unconsumed:ctrl+k=goto_split:up
+# keybind = unconsumed:ctrl+l=goto_split:right
+# Splits:navigate (C-q+hjkl)
+keybind = ctrl+q>h=goto_split:left
+keybind = ctrl+q>j=goto_split:down
+keybind = ctrl+q>k=goto_split:up
+keybind = ctrl+q>l=goto_split:right
+keybind = ctrl+q>p=goto_split:previous
+keybind = ctrl+q>n=goto_split:next
+# Splits:resize (C-S-<left/down/up/right>)
+keybind = ctrl+shift+left=resize_split:left,10
+keybind = ctrl+shift+down=resize_split:down,10
+keybind = ctrl+shift+up=resize_split:up,10
+keybind = ctrl+shift+right=resize_split:right,10
+# Splits:resize (<v^>)
+keybind = ctrl+q>shift+comma=resize_split:left,128
+keybind = ctrl+q>v=resize_split:down,128
+keybind = ctrl+q>shift+6=resize_split:up,128
+keybind = ctrl+q>shift+period=resize_split:right,128
+
+################################################################################
+# Zoom
+################################################################################
+keybind = ctrl+equal=increase_font_size:1
+keybind = ctrl+-=decrease_font_size:1
+keybind = ctrl+q>z=toggle_split_zoom
+
+################################################################################
+# Symbols
+################################################################################
+# \cool
+keybind = ctrl+q>\>c>o>o>l=text:😎
+

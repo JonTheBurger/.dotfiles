@@ -18,7 +18,7 @@ local function on_attach(bufnr)
   vim.keymap.del("n", "e", { buffer = bufnr })
 end
 
-return {
+return {{
   "nvim-tree/nvim-tree.lua",
   version = "*",
   dependencies = {
@@ -74,4 +74,5 @@ return {
       end,
     })
   end,
+},{ 'echasnovski/mini.nvim', version = '*' },
 }

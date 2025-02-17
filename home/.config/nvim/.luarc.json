@@ -1,0 +1,32 @@
+{
+    "workspace.library": [
+        "/home/vagrant/.config/nvim",
+        "/home/vagrant/.local/share/nvim/site",
+        "/home/vagrant/.local/share/nvim/lazy/lazy.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/lsp-zero.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/one-small-step-for-vimkind",
+        "/home/vagrant/.local/share/nvim/lazy/telescope-dap.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/nvim-dap-virtual-text",
+        "/home/vagrant/.local/share/nvim/lazy/nvim-nio",
+        "/home/vagrant/.local/share/nvim/lazy/nvim-dap-ui",
+        "/home/vagrant/.local/share/nvim/lazy/nvim-dap",
+        "/home/vagrant/.local/share/nvim/lazy/cmake-tools.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/telescope-fzf-native.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/plenary.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/telescope.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/mason.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/mason-lspconfig.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/cmp_luasnip",
+        "/home/vagrant/.local/share/nvim/lazy/cmp-nvim-lsp",
+        "/home/vagrant/.local/share/nvim/lazy/nvim-lspconfig",
+        "/home/vagrant/.local/share/nvim/lazy/neodev.nvim",
+        "/home/vagrant/.local/share/nvim/lazy/nvim-various-textobjs",
+        "/home/vagrant/.local/share/nvim/lazy/onedark.nvim",
+        "/nix/store/5akabmajpnd5dqy5yxgb7fz62p7kkwg8-neovim-unwrapped-0.10.1/share/nvim/runtime",
+        "/nix/store/5akabmajpnd5dqy5yxgb7fz62p7kkwg8-neovim-unwrapped-0.10.1/lib/nvim",
+        "/home/vagrant/.local/state/nvim/lazy/readme",
+        "/home/vagrant/.local/share/nvim/lazy/cmp_luasnip/after",
+        "/home/vagrant/.local/share/nvim/lazy/cmp-nvim-lsp/after",
+        "${3rd}/luv/library"
+    ]
+}

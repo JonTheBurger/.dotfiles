@@ -1,0 +1,7 @@
+require("config.opt")
+require("config.lsp")
+require("config.keymap")
+require("config.lazy")
+require("config.autocmd")
+require("config.syms")
+_G.U = require("config.util")

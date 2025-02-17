@@ -1,5 +1,4 @@
 -- https://github.com/MagicDuck/grug-far.nvim
--- ALTERNATIVE: https://github.com/nvim-pack/nvim-spectre
 return {
   "MagicDuck/grug-far.nvim",
   keys = {

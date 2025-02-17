@@ -1,3 +1,18 @@
+vim.schedule(function()
+  vim.opt.clipboard = "unnamedplus"
+end)
+vim.opt.wildmode = {"longest:full", "full"}
+vim.opt.breakindent = true
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
+vim.opt.listchars = { space = '·', tab = "»»", nbsp = "␣", }
+vim.opt.inccommand = "split"
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
+
+-- vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+--------------------------------------------------------------------------------
+
 -- <space> as <leader>
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -12,7 +27,7 @@ vim.opt.spelllang = "en_us"
 vim.opt.syntax = "on"
 vim.opt.termguicolors = true
 vim.opt.timeout = false
-vim.opt.updatetime = 750
+-- vim.opt.updatetime = 750
 vim.opt.wrap = false
 
 -- Searching
@@ -23,7 +38,7 @@ vim.opt.smartcase = true
 
 -- Host System Integration
 vim.opt.mouse = "a"
-vim.opt.clipboard = "unnamed,unnamedplus"
+-- vim.opt.clipboard = "unnamed,unnamedplus"
 
 if vim.fn.has("wsl") == 1 then
   -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
@@ -75,7 +90,7 @@ vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3
 vim.opt.textwidth = 0
-vim.opt.listchars = { space = '·', tab = "»»" }
+-- vim.opt.listchars = { space = '·', tab = "»»" }
 
 -- Undo File
 vim.opt.backup = false
@@ -85,3 +100,4 @@ vim.opt.undofile = true
 
 -- Gui
 vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
+
