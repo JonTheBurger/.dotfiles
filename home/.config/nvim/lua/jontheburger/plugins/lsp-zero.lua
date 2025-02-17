@@ -328,7 +328,7 @@ return {
       lspconfig.ruff.setup({capabilities = capabilities})
 
       lspconfig.vale_ls.setup({
-        filetypes = { "md", "rst", "cmake" },
+        filetypes = { "markdown", "rst", },
         capabilities = capabilities,
       })
 

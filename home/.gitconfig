@@ -1,3 +1,5 @@
+[include]
+  path = /opt/provisioners/style/config/.gitconfig
 [core]
   editor = vim
   pager = delta
@@ -50,7 +52,7 @@
   unstash-from= "!f() { git stash apply stash^{/$1}; }; f"
 
   ## Custom Functions
-  A = !git add -A && git commit --amend --no-edit
+  A = "!f() { git add -A && git commit --amend --no-edit; }; f"
   aliases = config --get-regexp alias
   addend = !git add -A && commit --amend --no-edit
   amend = commit --amend --no-edit
@@ -76,6 +78,7 @@
   ticket = "!f() { branch=$(git rev-parse --abbrev-ref HEAD); echo $branch | grep -oE '[A-Z]+-[0-9]+'; }; f"
   # Remove last commit, maintain working tree
   uncommit = reset --soft HEAD^
+	staash = stash --all
 [blame]
   coloring = highlightRecent
   date = short
@@ -97,8 +100,6 @@
 [user]
   name = Jon Povirk
   email = jmp180@pitt.edu
-[include]
-  path = /opt/provisioners/style/config/.gitconfig
 [includeIf "gitdir:~/Projects/"]
   path = ~/Projects/.gitconfig
 [diff]

@@ -1,8 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
 git:
-  branchColorPatterns:
-    'feature/[A-Z0-9]+-[0-9]+': "#11aaff"
-    'bugfix/[A-Z0-9]+-[0-9]+': "#ff5733"
   paging:
     colorArg: always
     pager: delta --dark --paging=never
@@ -16,3 +13,16 @@ keybinding:
 gui:
   nerdFontsVersion: "3"
   filterMode: fuzzy
+  branchColorPatterns:
+    'master': "#11cfff" # cyan
+    'main': "#11cfff" # cyan
+    'develop': "#11aaff" # blue
+    'feature/.*': "#0dd63c" # green
+    'bugfix.*': "#ff3333" # red
+    'release/.*': "#ff33f1" # pink
+    'integration/.*': "#ff9633" # orange
+    '.*tags.*': "#ffe733" # yellow
+  authorColors:
+    'Jon Povirk': '#11aaff' # blue
+    'Jonathan Povirk': '#11aaff' # blue
+    'Riccardi Dalexis': '#aa33ff' # purple

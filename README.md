@@ -140,6 +140,8 @@ Notably the following programs are configured (among others):
 <details>
 <summary markdown="span">TODO</summary>
 
+- lspconfig and blink should be enough
+
 - qq keyboard layout
 - zshrc dependency installer
 - updatedb exclude /mnt & /media

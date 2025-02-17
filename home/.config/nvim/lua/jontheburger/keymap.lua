@@ -19,6 +19,7 @@ vim.keymap.set("v", "<leader>lf",
   [[:s/\%V/\r/]],
   { desc = "Insert newline" }
 )
+vim.keymap.set("n", "<leader>wp", "vipgq", { desc = "Wrap paragraph" })
 vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Trim Whitespace" })
 vim.keymap.set("n", "<leader>wr", [[:%s/\r//<CR>]], { desc = "Remove CR" })
 vim.keymap.set("n", "<leader>wl", function()
@@ -89,9 +90,9 @@ vim.keymap.set("n", "<S-Up>",    "<C-w><S-k>")
 vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 
 -- Custom Functions
-vim.keymap.set("n", "<leader>tdi", function ()
+vim.keymap.set("n", "<leader>Tdi", function ()
   vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false)
 end, { desc = "Insert TODO" })
-vim.keymap.set("n", "<leader>tda", function ()
+vim.keymap.set("n", "<leader>Tda", function ()
   vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false)
 end, { desc = "Append TODO" })
