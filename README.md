@@ -140,14 +140,10 @@ Notably the following programs are configured (among others):
 <details>
 <summary markdown="span">TODO</summary>
 
-- lspconfig and blink should be enough
-
 - qq keyboard layout
 - zshrc dependency installer
 - updatedb exclude /mnt & /media
-- neocmake
 - if grep -q xmodmap "~/.profile"; then echo "xmodmap ~/.Xmodmap" >> "~/.profile" fi
-- vim commentary bash #
 - sudo snap install node --channel=22/stable --classic
 - npm config set prefix '~/.local'
 - npm install --global yarn
@@ -155,7 +151,5 @@ Notably the following programs are configured (among others):
 - vlink
 - curl https://sh.rustup.rs -sSf | sh -s -- -y
     - rustup component add rust-analyzer
-- https://unix.stackexchange.com/questions/747748/map-c-s-a-hjkl-to-arrow-keys-with-xkb-map
-- marksman, other LSP (autoinstall?) (vimwiki remove)
 
 </details>

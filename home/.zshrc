@@ -56,6 +56,7 @@ done
 ## Command Hooks
 # ======================================================================================
 [ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
+unset XDG_DATA_DIRS
 [ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 [ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"

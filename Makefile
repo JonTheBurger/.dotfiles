@@ -25,7 +25,7 @@ help:  ## Shows this message
 	@printf '${RED}Variables:\n${RST}'
 	@cat ${MAKEFILE_LIST} | awk -F'(:|##|])\\s*' '/##\s*[A-Z_]+:.*$$/ {printf "  ${BLU}%-18s ${RED}%s]${RST} %s\n", $$2, $$3, $$4}'
 
-stow:  # Distributes softlinks in home to dotfiles
+stow:  ## Distributes softlinks in home to dotfiles
 	@rm -f "${HOME}/.gtkrc-2.0" # Some gtk jerk keeps removing my softlink
 	stow home --no-folding --ignore='.*AppData.*' ${STOWFLAGS}
 

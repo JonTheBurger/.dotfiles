@@ -6,7 +6,6 @@
     "eza@0.19.0",
     "fd@10.2.0",
     "fzf@0.54.3",
-    "neovim@0.10.1",
     "pyright@1.1.377",
     "ripgrep@14.1.0",
     "ruff-lsp@0.0.55",
@@ -20,7 +19,14 @@
     "mdcat@latest",
     "vale@latest",
     "uv@latest",
-    "copier@latest"
+    "copier@latest",
+    "dt-shell-color-scripts@latest",
+    "neocmakelsp@latest",
+    "marksman@latest",
+    "vale-ls@latest",
+    "yaml-language-server@latest",
+    "stylua@latest",
+    "lua-language-server@latest"
   ],
   "shell": {
     "init_hook": [

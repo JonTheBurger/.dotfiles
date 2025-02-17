@@ -64,6 +64,7 @@
   heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
   local-only-branches = !python ~/.local/bin/local-only-branches.py
+  l = "!f() { lazygit --screen-mode full log; }; f"
   lg = "!f() { lazygit log; }; f"
   lazy = "!f() { lazygit; }; f"
   # pull branch
