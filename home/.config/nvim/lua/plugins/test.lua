@@ -10,22 +10,23 @@ return {
   ---@diagnostic disable missing-fields
   config = function(_, opts)
     require("neotest").setup({
-    adapters = {
-      require("neotest-gtest").setup({
-        debug_adapter = "lldb",
-        is_test_file = function(file_path)
-          return file_path:lower():match("**test.cpp$")
-        end,
-      }),
-      -- https://github.com/nvim-neotest/neotest-python
-      require("neotest-python")({
-        args = { "-s", "--log-level", "DEBUG" },
-        dap = { justMyCode = true, },
-        pytest_discover_instances = false,
-      }),
-    },
-  })
+      adapters = {
+        require("neotest-gtest").setup({
+          debug_adapter = "lldb",
+          is_test_file = function(file_path)
+            return file_path:lower():match("**test.cpp$")
+          end,
+        }),
+        -- https://github.com/nvim-neotest/neotest-python
+        require("neotest-python")({
+          args = { "-s", "--log-level", "DEBUG" },
+          dap = { justMyCode = true },
+          pytest_discover_instances = false,
+        }),
+      },
+    })
   end,
+  -- stylua: ignore start
   keys = {
     { "<leader>tt", function() require("neotest").run.run() end,                     desc = "Run Nearest" },
     { "<leader>td", function() require("neotest").run.run({ strategy = "dap" }) end, desc = "Debug Nearest Test" },
@@ -50,4 +51,5 @@ return {
       desc = "Show Output"
     },
   },
+  -- stylua: ignore end
 }

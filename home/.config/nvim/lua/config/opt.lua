@@ -23,11 +23,13 @@ vim.opt.inccommand = "split"
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.showmode = false
-vim.opt.wildmode = {"longest:full", "full"}
+vim.opt.wildmode = { "longest:full", "full" }
 
 -- Host System Integration
 vim.opt.mouse = "a"
-vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
+vim.schedule(function()
+  vim.opt.clipboard = "unnamedplus"
+end)
 
 -- Disable netrw
 vim.g.loaded_netrw = 1
@@ -45,7 +47,7 @@ vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3
 vim.opt.textwidth = 0
-vim.opt.listchars = { space = '·', tab = "»»", nbsp = "␣", }
+vim.opt.listchars = { space = "·", tab = "»»", nbsp = "␣" }
 
 -- Undo File
 vim.opt.backup = false

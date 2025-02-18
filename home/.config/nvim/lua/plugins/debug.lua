@@ -21,42 +21,44 @@ return {
       { "nvim-neotest/nvim-nio" },
       { "theHamsta/nvim-dap-virtual-text" },
     },
+    -- stylua: ignore start
     keys = {
       -- Custom
-      { "<leader>dk",  function() require("dap").up() end,                           desc = "Go Up 1 Stack Frame", },
-      { "<leader>dj",  function() require("dap").down() end,                         desc = "Go Down 1 Stack Frame", },
-      { "<M-d>",       function() require("dap.ui.widgets").hover() end,             desc = "Hover Variables", },
-      { "<F1>",        function() require("dap.ui.widgets").hover() end,             desc = "Hover Variables", },
-      { "<S-F4>",      function() require("dapui").eval() end,                       desc = "Evaluate",               mode = { "n", "v" }, },
-      { "<F5>",        function() require("dap").continue() end,                     desc = "Continue", },
-      { "<leader>Dbg", function() require("config.fn").debug_cmake_executable() end, desc = "Debug CMake Target", },
-      { "<F9>",        function() require("dap").toggle_breakpoint() end,            desc = "Toggle Breakpoint", },
-      { "<F10>",       function() require("dap").step_over() end,                    desc = "Step Over", },
-      { "<F11>",       function() require("dap").step_into() end,                    desc = "Step In", },
-      { "<S-F11>",     function() require("dap").step_out() end,                     desc = "Step Out", },
+      { "<leader>dk",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
+      { "<leader>dj",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
+      { "<M-d>",       function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
+      { "<F1>",        function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
+      { "<S-F4>",      function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
+      { "<F5>",        function() require("dap").continue() end,                                    desc = "Continue", },
+      { "<leader>Dbg", function() require("config.fn").debug_cmake_executable() end,                desc = "Debug CMake Target", },
+      { "<F9>",        function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
+      { "<F10>",       function() require("dap").step_over() end,                                   desc = "Step Over", },
+      { "<F11>",       function() require("dap").step_into() end,                                   desc = "Step In", },
+      { "<S-F11>",     function() require("dap").step_out() end,                                    desc = "Step Out", },
       -- Standard
-      { "<leader>dR", function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
-      { "<leader>dU", function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
-      { "<leader>db", function() require("dap").step_back() end,                                   desc = "Step Back", },
-      { "<leader>dc", function() require("dap").continue() end,                                    desc = "Continue", },
-      { "<leader>dd", function() require("dap").disconnect() end,                                  desc = "Disconnect", },
-      { "<leader>de", function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
-      { "<leader>dg", function() require("dap").session() end,                                     desc = "Get Session", },
-      { "<leader>dh", function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
-      { "<leader>dS", function() require("dap.ui.widgets").scopes() end,                           desc = "Scopes", },
-      { "<leader>di", function() require("dap").step_into() end,                                   desc = "Step Into", },
-      { "<leader>do", function() require("dap").step_over() end,                                   desc = "Step Over", },
-      { "<leader>dp", function() require("dap").pause.toggle() end,                                desc = "Pause", },
-      { "<leader>dq", function() require("dap").close() end,                                       desc = "Quit", },
-      { "<leader>dr", function() require("dap").repl.toggle() end,                                 desc = "Toggle REPL", },
-      { "<leader>ds", function() require("dap").continue() end,                                    desc = "Start", },
-      { "<leader>dt", function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
-      { "<leader>dx", function() require("dap").terminate() end,                                   desc = "Terminate", },
-      { "<leader>du", function() require("dap").step_out() end,                                    desc = "Step Out", },
-      { "<leader>dE", function() require("dapui").eval(vim.fn.input "[Expression] > ") end,        desc = "Evaluate Input", },
-      { "<leader>dC", function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
-      { "<leader>dN", function() require("osv").launch({ port = 8086 }) end,                       desc = "Launch nvim Server",             noremap = true, },
+      { "<leader>dR",  function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
+      { "<leader>dU",  function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
+      { "<leader>db",  function() require("dap").step_back() end,                                   desc = "Step Back", },
+      { "<leader>dc",  function() require("dap").continue() end,                                    desc = "Continue", },
+      { "<leader>dd",  function() require("dap").disconnect() end,                                  desc = "Disconnect", },
+      { "<leader>de",  function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
+      { "<leader>dg",  function() require("dap").session() end,                                     desc = "Get Session", },
+      { "<leader>dh",  function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
+      { "<leader>dS",  function() require("dap.ui.widgets").scopes() end,                           desc = "Scopes", },
+      { "<leader>di",  function() require("dap").step_into() end,                                   desc = "Step Into", },
+      { "<leader>do",  function() require("dap").step_over() end,                                   desc = "Step Over", },
+      { "<leader>dp",  function() require("dap").pause.toggle() end,                                desc = "Pause", },
+      { "<leader>dq",  function() require("dap").close() end,                                       desc = "Quit", },
+      { "<leader>dr",  function() require("dap").repl.toggle() end,                                 desc = "Toggle REPL", },
+      { "<leader>ds",  function() require("dap").continue() end,                                    desc = "Start", },
+      { "<leader>dt",  function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
+      { "<leader>dx",  function() require("dap").terminate() end,                                   desc = "Terminate", },
+      { "<leader>du",  function() require("dap").step_out() end,                                    desc = "Step Out", },
+      { "<leader>dE",  function() require("dapui").eval(vim.fn.input "[Expression] > ") end,        desc = "Evaluate Input", },
+      { "<leader>dC",  function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
+      { "<leader>dN",  function() require("osv").launch({ port = 8086 }) end,                       desc = "Launch nvim Server",     noremap = true, },
     },
+    -- stylua: ignore end
     opts = {
       -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
       adapters = {
@@ -91,14 +93,14 @@ return {
               type = "server",
               port = assert(port, "`connect.port` is required for a python `attach` configuration"),
               host = host,
-              options = { source_filetype = "python", },
+              options = { source_filetype = "python" },
             })
           else
             callback({
               type = "executable",
               command = "python",
               args = { "-m", "debugpy.adapter" },
-              options = { source_filetype = "python", },
+              options = { source_filetype = "python" },
             })
           end
         end,
@@ -114,7 +116,7 @@ return {
           request = "launch", -- could also attach to a currently running process
           program = require("config.fn").find_cxx_executable,
           cwd = "${workspaceFolder}",
-          env = { "NOCOLOR=1", },
+          env = { "NOCOLOR=1" },
           stopOnEntry = false,
           args = {},
           runInTerminal = false,
@@ -126,14 +128,14 @@ return {
           request = "launch",
           program = require("config.fn").find_cxx_executable,
           cwd = "${workspaceFolder}",
-          env = { "NOCOLOR=1", },
+          env = { "NOCOLOR=1" },
           stopOnEntry = false,
           args = {},
           runInTerminal = false,
           setupCommands = {
             {
-              text = '-enable-pretty-printing',
-              description = 'enable pretty printing',
+              text = "-enable-pretty-printing",
+              description = "enable pretty printing",
               ignoreFailures = false,
             },
           },
@@ -156,7 +158,7 @@ return {
           type = "nlua",
           request = "attach",
           name = "Attach to running Neovim instance",
-        }
+        },
       },
     },
     config = function(_, opts)
@@ -193,7 +195,7 @@ return {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
     dependencies = {
-      { "mfussenegger/nvim-dap", },
+      { "mfussenegger/nvim-dap" },
     },
     opts = {
       layouts = {
@@ -204,17 +206,17 @@ return {
             { id = "breakpoints", size = 0.10 },
             { id = "stacks",      size = 0.30 },
             { id = "scopes",      size = 0.30 },
-            { id = "watches",     size = 0.30 }
+            { id = "watches",     size = 0.30 },
           },
         },
         {
           position = "bottom",
           size = 10,
           elements = {
-            { id = "console", size = 0.20, },
-            { id = "repl",    size = 0.80, },
+            { id = "console", size = 0.20 },
+            { id = "repl",    size = 0.80 },
           },
-        }
+        },
       },
     },
     config = function(_, opts)

@@ -55,7 +55,7 @@ return {
         replace = "Sr",        -- Replace surrounding
         update_n_lines = "Sn", -- Update `n_lines`
       },
-    }
+    },
   },
   config = function(_, opts)
     -- opts.align.steps = {

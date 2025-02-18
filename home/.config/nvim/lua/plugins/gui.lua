@@ -9,7 +9,7 @@ return {
       { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
     },
     opts = {
-      templates = { "make", "vscode", "cargo", "just", },
+      templates = { "make", "vscode", "cargo", "just" },
       task_list = {
         max_width = { 100, 0.4 },
         min_width = { 30, 0.2 },
@@ -65,7 +65,7 @@ return {
       symbol_folding = {
         autofold_depth = 5,
       },
-    }
+    },
   },
   {
     -- https://github.com/MagicDuck/grug-far.nvim
@@ -95,7 +95,7 @@ return {
       },
     },
     opts = {
-      windowCreationCommand = "vsplit"
+      windowCreationCommand = "vsplit",
     },
   },
   {
@@ -157,9 +157,9 @@ return {
         css_fn = false,       -- Enable all CSS *functions*: rgb_fn, hsl_fn
         mode = "virtualtext", -- "foreground", "background", "virtualtext"
         tailwind = false,
-        sass = { enable = false, parsers = { "css" }, },
+        sass = { enable = false, parsers = { "css" } },
         virtualtext = "■",
-        always_update = false
+        always_update = false,
       },
       buftypes = {},
     },

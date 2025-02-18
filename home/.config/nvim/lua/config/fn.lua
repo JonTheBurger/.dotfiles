@@ -37,7 +37,7 @@ end
 ---@param str string
 ---@return boolean
 M.ends_with = function(str, suffix)
-  return str:sub(- #suffix) == suffix
+  return str:sub(-#suffix) == suffix
 end
 
 ---@param str string
@@ -264,11 +264,7 @@ M.find_cxx_executable = function()
     exe = tostring(tgt)
   end
 
-  return vim.fn.input(
-    "Path to executable: ",
-    exe,
-    "file"
-  )
+  return vim.fn.input("Path to executable: ", exe, "file")
 end
 
 M.find_python = function()
@@ -294,7 +290,9 @@ M.debug_cmake_executable = function()
 
   vim.ui.select(targets.data.abs_paths, {
     prompt = "Pick a target:",
-    format_item = function(item) return M.basename(item) end,
+    format_item = function(item)
+      return M.basename(item)
+    end,
   }, function(choice)
     M.dap_executable = choice
     require("dap").continue()
@@ -384,15 +382,11 @@ M.bkpt_load = function()
         -- And the line number is valid
         if breakpoint.line <= vim.api.nvim_buf_line_count(buffer.bufnr) then
           -- Set a breakpoint
-          dap_bkpt.set(
-            {
-              condition = breakpoint.condition,
-              hit_condition = breakpoint.hit_condition,
-              log_message = breakpoint.log_message,
-            },
-            buffer.bufnr,
-            breakpoint.line
-          )
+          dap_bkpt.set({
+            condition = breakpoint.condition,
+            hit_condition = breakpoint.hit_condition,
+            log_message = breakpoint.log_message,
+          }, buffer.bufnr, breakpoint.line)
         end
       end
     end
@@ -405,7 +399,7 @@ end
 function M.select_motion_char(char, grab)
   local text = vim.api.nvim_get_current_line()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  col = col + 1  -- Cursor columns are zero-indexed, lua strings are 1
+  col = col + 1 -- Cursor columns are zero-indexed, lua strings are 1
 
   local next = M.find_char(text, char, col + 1)
   if next == nil then
@@ -455,12 +449,12 @@ function M.use_wsl_clip()
       vim.g.clipboard = {
         name = "clip-windows",
         copy = {
-          ['+'] = clip_exe,
-          ['*'] = clip_exe,
+          ["+"] = clip_exe,
+          ["*"] = clip_exe,
         },
         paste = {
-          ['+'] = powershell .. " -noprofile -command Get-Clipboard",
-          ['*'] = powershell .. " -noprofile -command Get-Clipboard",
+          ["+"] = powershell .. " -noprofile -command Get-Clipboard",
+          ["*"] = powershell .. " -noprofile -command Get-Clipboard",
         },
         cache_enabled = false,
       }

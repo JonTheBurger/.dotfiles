@@ -2,12 +2,14 @@ return {
   {
     -- https://github.com/mrjones2014/smart-splits.nvim
     "mrjones2014/smart-splits.nvim",
+    -- stylua: ignore start
     keys = {
       { "<C-h>", function() require("smart-splits").move_cursor_left() end,  desc = "Move left one pane" },
       { "<C-j>", function() require("smart-splits").move_cursor_down() end,  desc = "Move down one pane" },
       { "<C-k>", function() require("smart-splits").move_cursor_up() end,    desc = "Move up one pane" },
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Move right one pane" },
     },
+    -- stylua: ignore end
   },
   {
     -- https://github.com/chrisgrieser/nvim-various-textobjs
@@ -30,7 +32,7 @@ return {
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
-      { "nvim-treesitter/nvim-treesitter-textobjects", },
+      { "nvim-treesitter/nvim-treesitter-textobjects" },
     },
     cmd = { "TSUpdateSync" },
     keys = {
@@ -66,8 +68,8 @@ return {
       textobjects = {
         swap = {
           enable = true,
-          swap_next = { ["<leader>a"] = "@parameter.inner", },
-          swap_previous = { ["<leader>A"] = "@parameter.inner", },
+          swap_next = { ["<leader>a"] = "@parameter.inner" },
+          swap_previous = { ["<leader>A"] = "@parameter.inner" },
         },
         select = {
           enable = true,
@@ -89,9 +91,9 @@ return {
           },
           -- You can choose the select mode  ('v' (default), 'V', or '<c-v>')
           selection_modes = {
-            ['@parameter.outer'] = 'v',
-            ['@function.outer'] = 'V',
-            ['@class.outer'] = 'V',
+            ["@parameter.outer"] = "v",
+            ["@function.outer"] = "V",
+            ["@class.outer"] = "V",
           },
           include_surrounding_whitespace = false,
         },
@@ -124,7 +126,7 @@ return {
             ["[a"] = "@parameter.inner",
             ["[b"] = "@block.outer",
             ["[i"] = "@conditional.outer",
-            ["[z"] = { query = "@fold", query_group = "folds", },
+            ["[z"] = { query = "@fold", query_group = "folds" },
           },
           goto_previous_end = {
             ["[F"] = "@function.outer",

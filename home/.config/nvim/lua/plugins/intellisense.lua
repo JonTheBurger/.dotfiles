@@ -13,25 +13,25 @@ return {
       },
 
       completion = {
-        keyword = { range = 'full' },
+        keyword = { range = "full" },
         -- Show documentation when selecting a completion item
         documentation = { auto_show = true, auto_show_delay_ms = 500 },
-        menu = { auto_show = true, },
-        ghost_text = { enabled = true, },
+        menu = { auto_show = true },
+        ghost_text = { enabled = true },
       },
 
       appearance = {
         -- Useful for when your theme doesn"t support blink.cmp
         use_nvim_cmp_as_default = true,
         -- Adjusts spacing to ensure icons are aligned
-        nerd_font_variant = "mono"
+        nerd_font_variant = "mono",
       },
 
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
-        default = { "lsp", "path", "snippets", "markdown", }, --"buffer" },
+        default = { "lsp", "path", "snippets", "markdown" }, --"buffer" },
         providers = {
           snippets = {
             opts = {
@@ -44,14 +44,14 @@ return {
           markdown = {
             name = "RenderMarkdown",
             module = "render-markdown.integ.blink",
-            fallbacks = { "lsp", },
+            fallbacks = { "lsp" },
           },
         },
       },
 
-      signature = { enabled = true, },
+      signature = { enabled = true },
     },
-    opts_extend = { "sources.default" }
+    opts_extend = { "sources.default" },
   },
   {
     -- https://github.com/nvimtools/none-ls.nvim
@@ -63,7 +63,7 @@ return {
         null_ls.builtins.diagnostics.mypy,
         null_ls.builtins.diagnostics.pylint,
         null_ls.builtins.formatting.gersemi,
-        null_ls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2", "-ci" }, }),
+        null_ls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2", "-ci" } }),
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.yamlfix,
       }
@@ -75,8 +75,20 @@ return {
     "danymat/neogen",
     version = "*",
     keys = {
-      { "<leader>com", function() require("neogen").generate() end, desc = "Generate docstring comment", },
-      { "<leader>KK",  function() require("neogen").generate() end, desc = "Generate docstring comment", },
+      {
+        "<leader>com",
+        function()
+          require("neogen").generate()
+        end,
+        desc = "Generate docstring comment",
+      },
+      {
+        "<leader>KK",
+        function()
+          require("neogen").generate()
+        end,
+        desc = "Generate docstring comment",
+      },
     },
     opts = {
       snippet_engine = "nvim",
@@ -88,7 +100,7 @@ return {
             annotation_convention = "numpydoc",
           },
         },
-      }
+      },
     },
   },
   {
@@ -108,7 +120,7 @@ return {
         desc = "Clangd Type Hierarchy",
       },
     },
-    ft = { "c", "cpp", },
+    ft = { "c", "cpp" },
     init = function()
       vim.api.nvim_create_user_command("A", "ClangdSwitchSourceHeader", {})
     end,
@@ -117,8 +129,8 @@ return {
     -- https://github.com/Civitasv/cmake-tools.nvim/blob/master/docs/all_commands.md
     "Civitasv/cmake-tools.nvim",
     dependencies = {
-      { "mfussenegger/nvim-dap", },
-      { "nvim-lua/plenary.nvim", },
+      { "mfussenegger/nvim-dap" },
+      { "nvim-lua/plenary.nvim" },
     },
     ft = { "cmake", "c", "cpp" },
     opts = {
@@ -129,18 +141,18 @@ return {
       },
     },
     keys = {
-      { "<F7>",        "<cmd>CMakeBuild<CR>",              desc = "CMake Build", },
-      { "<leader>cmb", "<cmd>CMakeBuild<CR>",              desc = "CMake Build", },
-      { "<leader>cmt", "<cmd>CMakeSelectBuildTarget<CR>",  desc = "CMake Launch Target", },
-      { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target", },
-      { "<leader>cmd", "<cmd>CMakeDebug<CR>",              desc = "CMake Debug", },
-      { "<leader>cmr", "<cmd>CMakeRun<CR>",                desc = "CMake Run", },
-      { "<C-S-F5>",    "<cmd>CMakeRun<CR>",                desc = "CMake Run", },
+      { "<F7>",        "<cmd>CMakeBuild<CR>",              desc = "CMake Build" },
+      { "<leader>cmb", "<cmd>CMakeBuild<CR>",              desc = "CMake Build" },
+      { "<leader>cmt", "<cmd>CMakeSelectBuildTarget<CR>",  desc = "CMake Launch Target" },
+      { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
+      { "<leader>cmd", "<cmd>CMakeDebug<CR>",              desc = "CMake Debug" },
+      { "<leader>cmr", "<cmd>CMakeRun<CR>",                desc = "CMake Run" },
+      { "<C-S-F5>",    "<cmd>CMakeRun<CR>",                desc = "CMake Run" },
     },
   },
   {
     -- https://github.com/MTDL9/vim-log-highlighting
     "MTDL9/vim-log-highlighting",
-    ft = { "log", },
+    ft = { "log" },
   },
 }

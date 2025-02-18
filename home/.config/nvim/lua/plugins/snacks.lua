@@ -7,13 +7,9 @@ return {
   priority = 1000,
   enabled = true,
   lazy = false,
+  -- stylua: ignore start
   keys = {
-    {
-      "<C-\\>",
-      function() Snacks.terminal.toggle() end,
-      mode = { "n", "t", },
-      desc = "Toggle Terminal",
-    },
+    { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
     { "<C-F>",           function() Snacks.picker.grep() end,                   desc = "Grep" },
     { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
     { "<C-p>",           function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
@@ -79,6 +75,7 @@ return {
     { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,            desc = "LSP Symbols" },
     { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
   },
+  -- stylua: ignore end
   ---@type snacks.Config
   opts = {
     ---@class snacks.bigfile.Config
@@ -98,7 +95,7 @@ return {
         { section = "startup" },
       },
     },
-    debug = { enabled = true, },
+    debug = { enabled = true },
     explorer = {
       enabled = true,
       hidden = true,
@@ -110,6 +107,7 @@ return {
       ui_select = true,
       win = {
         list = {
+          -- stylua: ignore start
           keys = {
             ["<Esc>"] = "", -- Do not close explorer on ESC
             ["<CR>"] = { { "pick_win", "jump" }, mode = { "n", "i" } },
@@ -118,6 +116,7 @@ return {
             ["<C-k>"] = { "<C-k>", function(_) vim.cmd("wincmd k") end, desc = "Do not break C-k to move to the window on the right", },
             ["<C-l>"] = { "<C-l>", function(_) vim.cmd("wincmd l") end, desc = "Do not break C-l to move to the window on the right", },
           },
+          -- stylua: ignore end
         },
       },
       sources = {
@@ -135,15 +134,15 @@ return {
         float = true,
       },
     },
-    input = { enabled = true, },
-    lazygit = { enabled = true, },
-    quickfile = { enabled = true, },
+    input = { enabled = true },
+    lazygit = { enabled = true },
+    quickfile = { enabled = true },
     ---@diagnostic disable-next-line missing-fields
     statuscolumn = {
       enabled = true,
-      left = { "mark", "sign", },
-      rigth = { "fold", "git", },
-      folds = { open = true, },
+      left = { "mark", "sign" },
+      rigth = { "fold", "git" },
+      folds = { open = true },
     },
     terminal = {
       enabled = true,
@@ -153,7 +152,7 @@ return {
     win = { enabled = true },
     styles = {
       -- Disable ugly header on toggle terminal
-      terminal = { wo = { winbar = "", }, },
+      terminal = { wo = { winbar = "" } },
     },
   },
   init = function()
@@ -164,6 +163,8 @@ return {
       Snacks.debug.backtrace()
     end
     vim.print = _G.dd
-    vim.api.nvim_create_user_command("Colorize", function() Snacks.terminal.colorize() end, {})
+    vim.api.nvim_create_user_command("Colorize", function()
+      Snacks.terminal.colorize()
+    end, {})
   end,
 }

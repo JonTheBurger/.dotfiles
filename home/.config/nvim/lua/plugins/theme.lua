@@ -1,16 +1,16 @@
 local colors = {
-  bg       = "#202328",
-  fg       = "#bbc2cf",
-  yellow   = "#ecbe7b",
-  cyan     = "#0084ff",
+  bg = "#202328",
+  fg = "#bbc2cf",
+  yellow = "#ecbe7b",
+  cyan = "#0084ff",
   darkblue = "#081633",
-  green    = "#4ef278",
-  orange   = "#ff8800",
-  violet   = "#c489ff",
-  magenta  = "#ff539e",
-  blue     = "#51afef",
-  red      = "#ec5f67",
-  white    = "#cccccc",
+  green = "#4ef278",
+  orange = "#ff8800",
+  violet = "#c489ff",
+  magenta = "#ff539e",
+  blue = "#51afef",
+  red = "#ec5f67",
+  white = "#cccccc",
 }
 
 local conditions = {
@@ -33,41 +33,61 @@ local conditions = {
 
 local function cmake_line()
   local cmake_presets = io.open(vim.fn.getcwd() .. "/CMakePresets.json", "r")
-  if cmake_presets == nil then return {} end
+  if cmake_presets == nil then
+    return {}
+  end
   io.close(cmake_presets)
-  local present = function(text) return "[" .. (text and text or "?") .. "]" end
+  local present = function(text)
+    return "[" .. (text and text or "?") .. "]"
+  end
   local cmake = require("cmake-tools")
 
   return {
     {
-      function() return present(cmake.get_configure_preset()) end,
+      function()
+        return present(cmake.get_configure_preset())
+      end,
       icon = " ",
       cond = conditions.is_cmake_project,
       on_click = function(n, mouse)
-        if (n == 1) and (mouse == "l") then cmake.select_configure_preset() end
-      end
+        if (n == 1) and (mouse == "l") then
+          cmake.select_configure_preset()
+        end
+      end,
     },
     {
-      function() return present(cmake.get_build_target()) end,
+      function()
+        return present(cmake.get_build_target())
+      end,
       icon = " ",
       cond = cmake.is_cmake_project,
       on_click = function(n, mouse)
-        if (n == 1) and (mouse == "l") then cmake.select_build_target() end
-      end
+        if (n == 1) and (mouse == "l") then
+          cmake.select_build_target()
+        end
+      end,
     },
     {
-      function() return "" end,
+      function()
+        return ""
+      end,
       cond = cmake.is_cmake_project,
       on_click = function(n, mouse)
-        if (n == 1) and (mouse == "l") then cmake.run() end
-      end
+        if (n == 1) and (mouse == "l") then
+          cmake.run()
+        end
+      end,
     },
     {
-      function() return present(cmake.get_launch_target()) end,
+      function()
+        return present(cmake.get_launch_target())
+      end,
       cond = cmake.is_cmake_project,
       on_click = function(n, mouse)
-        if (n == 1) and (mouse == "l") then cmake.select_launch_target() end
-      end
+        if (n == 1) and (mouse == "l") then
+          cmake.select_launch_target()
+        end
+      end,
     },
   }
 end
@@ -76,12 +96,12 @@ return {
   {
     -- https://github.com/navarasu/onedark.nvim
     "navarasu/onedark.nvim",
-    priority = 1000,                -- Ensure it loads first
+    priority = 1000, -- Ensure it loads first
     opts = {
-      style = "deep",               -- Default theme style. Choose between "dark", "darker", "cool", "deep", "warm", "warmer" and "light"
-      transparent = true,           -- Show/hide background
-      term_colors = true,           -- Change terminal color as per the selected theme style
-      ending_tildes = false,        -- Show the end-of-buffer tildes. By default they are hidden
+      style = "deep", -- Default theme style. Choose between "dark", "darker", "cool", "deep", "warm", "warmer" and "light"
+      transparent = true, -- Show/hide background
+      term_colors = true, -- Change terminal color as per the selected theme style
+      ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
       cmp_itemkind_reverse = false, -- reverse item kind highlights in cmp menu
 
       -- Options are italic, bold, underline, none
@@ -92,7 +112,7 @@ return {
         keywords = "none",
         functions = "none",
         strings = "none",
-        variables = "none"
+        variables = "none",
       },
 
       lualine = {
@@ -100,7 +120,7 @@ return {
       },
 
       -- Custom Highlights --
-      colors = {},   -- Override default colors
+      colors = {}, -- Override default colors
       highlights = { -- Override highlight groups
         ["FloatBorder"] = { bg = "none" },
         ["NormalFloat"] = { bg = "none" },
@@ -114,8 +134,8 @@ return {
 
       -- Plugins Config --
       diagnostics = {
-        darker = true,     -- darker colors for diagnostic
-        undercurl = true,  -- use undercurl instead of underline for diagnostics
+        darker = true, -- darker colors for diagnostic
+        undercurl = true, -- use undercurl instead of underline for diagnostics
         background = true, -- use background color for virtual text
       },
     },
@@ -140,7 +160,7 @@ return {
             [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
             [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
           },
-        }
+        },
       })
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
       vim.fn.sign_define("DapBreakpointCondition", { text = "🯄", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
@@ -158,19 +178,21 @@ return {
     "akinsho/bufferline.nvim",
     dependencies = "nvim-tree/nvim-web-devicons",
     lazy = false,
+    -- stylua: ignore start
     keys = {
-      { "<leader>1", function() require("bufferline").go_to(1, true) end, desc = "GoTo Ordinal Buffer 1" },
-      { "<leader>2", function() require("bufferline").go_to(2, true) end, desc = "GoTo Ordinal Buffer 2" },
-      { "<leader>3", function() require("bufferline").go_to(3, true) end, desc = "GoTo Ordinal Buffer 3" },
-      { "<leader>4", function() require("bufferline").go_to(4, true) end, desc = "GoTo Ordinal Buffer 4" },
-      { "<leader>5", function() require("bufferline").go_to(5, true) end, desc = "GoTo Ordinal Buffer 5" },
-      { "<leader>6", function() require("bufferline").go_to(6, true) end, desc = "GoTo Ordinal Buffer 6" },
-      { "<leader>7", function() require("bufferline").go_to(7, true) end, desc = "GoTo Ordinal Buffer 7" },
-      { "<leader>8", function() require("bufferline").go_to(8, true) end, desc = "GoTo Ordinal Buffer 8" },
-      { "<leader>9", function() require("bufferline").go_to(9, true) end, desc = "GoTo Ordinal Buffer 9" },
-      { "<leader><", function() require("bufferline").move(-1) end,       desc = "Move buffer to the left" },
-      { "<leader>>", function() require("bufferline").move(1) end,        desc = "Move buffer to the right" },
+      { "<leader>1", function() require("bufferline").go_to(1, true) end, desc = "GoTo Ordinal Buffer 1", },
+      { "<leader>2", function() require("bufferline").go_to(2, true) end, desc = "GoTo Ordinal Buffer 2", },
+      { "<leader>3", function() require("bufferline").go_to(3, true) end, desc = "GoTo Ordinal Buffer 3", },
+      { "<leader>4", function() require("bufferline").go_to(4, true) end, desc = "GoTo Ordinal Buffer 4", },
+      { "<leader>5", function() require("bufferline").go_to(5, true) end, desc = "GoTo Ordinal Buffer 5", },
+      { "<leader>6", function() require("bufferline").go_to(6, true) end, desc = "GoTo Ordinal Buffer 6", },
+      { "<leader>7", function() require("bufferline").go_to(7, true) end, desc = "GoTo Ordinal Buffer 7", },
+      { "<leader>8", function() require("bufferline").go_to(8, true) end, desc = "GoTo Ordinal Buffer 8", },
+      { "<leader>9", function() require("bufferline").go_to(9, true) end, desc = "GoTo Ordinal Buffer 9", },
+      { "<leader><", function() require("bufferline").move(-1) end,       desc = "Move buffer to the left", },
+      { "<leader>>", function() require("bufferline").move(1) end,        desc = "Move buffer to the right", },
     },
+    -- stylua: ignore end
     opts = {
       options = {
         themable = true,
@@ -211,7 +233,7 @@ return {
       }
     end,
     opts = {
-      extensions = { "quickfix", "trouble", "overseer", },
+      extensions = { "quickfix", "trouble", "overseer" },
       options = {
         component_separators = "",
         section_separators = "",
@@ -222,18 +244,24 @@ return {
           {
             "mode",
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then Snacks.picker.help() end
+              if (n == 1) and (mouse == "l") then
+                Snacks.picker.help()
+              end
             end,
-          }
+          },
         },
         lualine_b = cmake_line(),
         lualine_c = {
           {
-            function() return "█" end,
+            function()
+              return "█"
+            end,
             color = { fg = colors.blue },
             padding = { left = 0, right = 1 }, -- We don't need space before this
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then Snacks.terminal.toggle() end
+              if (n == 1) and (mouse == "l") then
+                Snacks.terminal.toggle()
+              end
             end,
           },
           {
@@ -242,7 +270,9 @@ return {
             cond = conditions.hide_in_width,
             color = { fg = colors.green, gui = "bold" },
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then require("grug-far").open({ transient = true }) end
+              if (n == 1) and (mouse == "l") then
+                require("grug-far").open({ transient = true })
+              end
             end,
           },
           {
@@ -264,7 +294,9 @@ return {
             icon = "󰡱",
             color = { fg = colors.white },
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then require("outline").open() end
+              if (n == 1) and (mouse == "l") then
+                require("outline").open()
+              end
             end,
           },
           {
@@ -275,7 +307,9 @@ return {
             icon = "",
             color = { fg = colors.violet, gui = "bold" },
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then require("snacks.lazygit").open() end
+              if (n == 1) and (mouse == "l") then
+                require("snacks.lazygit").open()
+              end
             end,
           },
           {
@@ -288,7 +322,9 @@ return {
             },
             cond = conditions.hide_in_width,
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then require("gitsigns").blame() end
+              if (n == 1) and (mouse == "l") then
+                require("gitsigns").blame()
+              end
             end,
           },
         },
@@ -324,7 +360,9 @@ return {
             cond = conditions.buffer_not_empty,
             color = { gui = "bold" },
             on_click = function(n, mouse)
-              if (n == 1) and (mouse == "l") then vim.cmd("UndotreeToggle") end
+              if (n == 1) and (mouse == "l") then
+                vim.cmd("UndotreeToggle")
+              end
             end,
           },
         },
@@ -334,7 +372,7 @@ return {
         lualine_b = {},
         lualine_c = {},
         lualine_x = {},
-        lualine_y = { { "filesize" }, { "progress" }, { "location" }, { "filename" }, },
+        lualine_y = { { "filesize" }, { "progress" }, { "location" }, { "filename" } },
         lualine_z = {},
       },
     },

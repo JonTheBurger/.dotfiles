@@ -16,9 +16,9 @@ vim.api.nvim_create_autocmd({ "WinNew", "WinLeave", "BufWinEnter" }, {
     vim.api.nvim_set_option_value("buflisted", false, { buf = args.buf })
   end,
 })
-vim.api.nvim_create_autocmd({ "BufEnter", }, {
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
   desc = "Keep unnamed buffers out of BufferLine",
-  pattern = { "*", },
+  pattern = { "*" },
   callback = function(args)
     if args.file == "" then
       vim.api.nvim_set_option_value("buflisted", false, { buf = args.buf })
@@ -27,24 +27,24 @@ vim.api.nvim_create_autocmd({ "BufEnter", }, {
 })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
   desc = "Dump hex",
-  pattern = { "*.bin", },
+  pattern = { "*.bin" },
   callback = function()
     require("config.fn").toggle_hex()
   end,
 })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
   desc = "Dump archives",
-  pattern = { "*.a", },
+  pattern = { "*.a" },
   callback = function()
-    vim.cmd([[:%! ar -t ]] .. vim.fn.expand('%:p'))
+    vim.cmd([[:%! ar -t ]] .. vim.fn.expand("%:p"))
   end,
 })
 vim.api.nvim_create_autocmd("BufWritePre", {
   desc = "Ruff",
-  pattern = { "*.py", },
+  pattern = { "*.py" },
   callback = function()
     vim.lsp.buf.code_action({
-      context = { only = { "source.organizeImports", } }, -- "source.fixAll"
+      context = { only = { "source.organizeImports" } }, -- "source.fixAll"
       apply = true,
     })
     vim.wait(100)

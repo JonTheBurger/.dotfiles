@@ -6,7 +6,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
       { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out,                            "WarningMsg" },
+      { out, "WarningMsg" },
       { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
@@ -17,14 +17,14 @@ vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim (https://lazy.folke.io/configuration)
 require("lazy").setup({
-  change_detection = { enabled = false, },
+  change_detection = { enabled = false },
   checker = { enabled = false },
-  install = { colorscheme = { "onedark" }, },
+  install = { colorscheme = { "onedark" } },
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json",
-  spec = { { import = "plugins" }, },
+  spec = { { import = "plugins" } },
   dev = {
     path = "~/Projects/nvim",
     fallback = true, -- Fallback to git when local plugin doesn't exist
-    patterns = {},   -- Plugins that match these patterns will use your local versions
+    patterns = {}, -- Plugins that match these patterns will use your local versions
   },
 })

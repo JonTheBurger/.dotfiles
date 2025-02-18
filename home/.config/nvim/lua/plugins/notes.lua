@@ -6,10 +6,11 @@ return {
       "nvim-tree/nvim-web-devicons",
       "nvim-treesitter/nvim-treesitter",
     },
-    -- lazy = false,
+    -- stylua: ignore start
     keys = {
       { "<leader>MR", function() require("render-markdown").toggle() end, desc = "MarkdownRender Toggle" },
     },
+    -- stylua: ignore end
     ---@module "render-markdown"
     ---@type render.md.UserConfig
     opts = {
