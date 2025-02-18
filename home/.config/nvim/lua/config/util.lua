@@ -49,6 +49,38 @@ M.remove_suffix = function(str, suffix)
   return str
 end
 
+--- Finds the index of an ascii character in a string
+---@param str string to search
+---@param char string character to search for
+---@param idx? integer start index; defaults to 1
+---@return integer? index of char, or nil if not found
+function M.find_char(str, char, idx)
+  local ascii = char:byte(1)
+  idx = idx or 1
+  for i = idx, #str, 1 do
+    if str:byte(i) == ascii then
+      return i
+    end
+  end
+  return nil
+end
+
+--- Finds the index of an ascii character in a string, backwards
+---@param str string to search
+---@param char string character to search for
+---@param idx? integer start index; defaults to end of string
+---@return integer? index of char, or nil if not found
+function M.rfind_char(str, char, idx)
+  local ascii = char:byte(1)
+  idx = idx or #str
+  for i = idx, 1, -1 do
+    if str:byte(i) == ascii then
+      return i
+    end
+  end
+  return nil
+end
+
 ---@param path Path|string
 ---@return string
 M.basename = function(path)
@@ -364,6 +396,38 @@ M.bkpt_load = function()
         end
       end
     end
+  end
+end
+
+---Selects inside of or around an ascii character within  a line. Kind of works.
+---@param char string ASCII character
+---@param grab ("i"|"a") Grab Inside or Around
+function M.select_motion_char(char, grab)
+  local text = vim.api.nvim_get_current_line()
+  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+  col = col + 1  -- Cursor columns are zero-indexed, lua strings are 1
+
+  local next = M.find_char(text, char, col + 1)
+  if next == nil then
+    return
+  end
+
+  local prev = M.rfind_char(text, char, col - 1)
+  if prev == nil then
+    prev = next
+    next = M.find_char(text, char, prev + 1)
+  end
+
+  if grab == "i" then
+    next = next - 1
+  elseif grab == "a" then
+    prev = prev - 1
+  end
+
+  if next ~= nil then
+    vim.api.nvim_win_set_cursor(0, { line, prev })
+    vim.cmd("normal! v")
+    vim.api.nvim_win_set_cursor(0, { line, next - 1 })
   end
 end
 

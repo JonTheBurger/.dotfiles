@@ -4,11 +4,7 @@ vim.keymap.set("x", "<leader>p", "\"_dP")    -- Paste & Maintain Register
 vim.keymap.set("", "q:", "<NOP>")            -- Useless
 vim.keymap.set("t", "<ESC>", [[<C-\><C-n>]]) -- Seriously, quit terminal mode
 vim.keymap.set("i", "jk", "<ESC>", { desc = "Normal Mode" })
-vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
-vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
 vim.keymap.set("n", "<leader>q", "<cmd>bp|bd#<CR>", { desc = "Delete Buffer, Keep Split" })
-vim.keymap.set("n", "ci_", "dt_dT_i", { desc = "inner _underscores_" })
-vim.keymap.set("n", "ci,", "dt,dT,i", { desc = "inner ,commas," })
 
 -- Yanks
 vim.keymap.set("n", "yaa", "gg0yG<C-o>", { desc = "Yank all" })
@@ -57,6 +53,16 @@ vim.keymap.set("n", "<S-Down>", "<C-w><S-j>")
 vim.keymap.set("n", "<S-Up>", "<C-w><S-k>")
 vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 
+-- Motions
+vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
+vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
+vim.keymap.set("o", "a_", ":<C-u>lua require('config.util').select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "a_", ":<C-u>lua require('config.util').select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "i_", ":<C-u>lua require('config.util').select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "i_", ":<C-u>lua require('config.util').select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "_", ":<C-u>lua require('config.util').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "_", ":<C-u>lua require('config.util').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
+
 -- LSP
 vim.keymap.set("n", "?", vim.diagnostic.open_float, {})
 vim.keymap.set("n", "gD", vim.diagnostic.open_float, {})
@@ -88,10 +94,10 @@ vim.api.nvim_create_user_command("Fmt", format, {})
 
 -- Custom Functions
 local util = require("config.util")
-vim.api.nvim_create_user_command( "QAEV", util.buffer_quit_all_except_visible,
+vim.api.nvim_create_user_command("QAEV", util.buffer_quit_all_except_visible,
   { desc = "Quit All Except Visible", }
 )
-vim.keymap.set( "n", "<leader>x", util.toggle_hex,
+vim.keymap.set("n", "<leader>x", util.toggle_hex,
   { noremap = true, silent = true, desc = "Toggle Hex" }
 )
 vim.api.nvim_create_user_command("Vh", "vertical help<CR>", {})
@@ -106,10 +112,10 @@ vim.keymap.set("n", "<leader>wp", "vipgq", { desc = "Wrap paragraph" })
 vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Trim Whitespace" })
 vim.keymap.set("n", "<leader>wr", [[:%s/\r//<CR>]], { desc = "Remove CR" })
 vim.keymap.set("n", "<leader>wl", function()
-  local pattern = vim.fn.getreg("/")
-  vim.cmd([[:s/\s\+/\r/g]])
-  vim.fn.setreg("/", pattern)
-end,
+    local pattern = vim.fn.getreg("/")
+    vim.cmd([[:s/\s\+/\r/g]])
+    vim.fn.setreg("/", pattern)
+  end,
   { desc = "Split words on lines" }
 )
 
@@ -118,9 +124,12 @@ local wiki = vim.fn.expand("~/Documents/wiki")
 local diary = vim.fn.expand(wiki .. "/diary")
 local edit_file = require("config.util").edit_file
 vim.keymap.set("n", "<leader>wn", function() edit_file(wiki .. "/index.md") end, { desc = "Open Wiki Notes" })
-vim.keymap.set("n", "<leader>ww", function() edit_file(wiki .. "/index.md", { cd = true }) end, { desc = "Open Wiki Index" })
-vim.keymap.set("n", "<leader>wd", function() edit_file(diary .. "/" .. os.date("%Y-%m-%d") .. ".md") end, { desc = "Open Daily Notes" })
-vim.keymap.set("n", "<leader>wi", function() require("config.util").update_diary_index(diary) end, { desc = "Update Diary Index" })
+vim.keymap.set("n", "<leader>ww", function() edit_file(wiki .. "/index.md", { cd = true }) end,
+  { desc = "Open Wiki Index" })
+vim.keymap.set("n", "<leader>wd", function() edit_file(diary .. "/" .. os.date("%Y-%m-%d") .. ".md") end,
+  { desc = "Open Daily Notes" })
+vim.keymap.set("n", "<leader>wi", function() require("config.util").update_diary_index(diary) end,
+  { desc = "Update Diary Index" })
 
 -- To-do
 vim.keymap.set("n", "<leader>Tdi", function()

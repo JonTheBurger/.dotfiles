@@ -12,6 +12,17 @@ return {
   {
     -- https://github.com/chrisgrieser/nvim-various-textobjs
     "chrisgrieser/nvim-various-textobjs",
+    keys = {
+      { "i$", "<cmd>lua require('various-textobjs').lineCharacterwise('inner')<CR>", mode = { "o", "x" } },
+      { "a$", "<cmd>lua require('various-textobjs').lineCharacterwise('outer')<CR>", mode = { "o", "x" } },
+      { "gG", "<cmd>lua require('various-textobjs').entireBuffer()<CR>",             mode = { "o", "x" } },
+      { "as", '<cmd>lua require("various-textobjs").subword("outer")<CR>',           mode = { "o", "x" } },
+      { "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>",           mode = { "o", "x" } },
+      { "ik", "<cmd>lua require('various-textobjs').key('inner')<CR>",               mode = { "o", "x" } },
+      { "ak", "<cmd>lua require('various-textobjs').key('outer')<CR>",               mode = { "o", "x" } },
+      { "iv", "<cmd>lua require('various-textobjs').value('inner')<CR>",             mode = { "o", "x" } },
+      { "av", "<cmd>lua require('various-textobjs').value('outer')<CR>",             mode = { "o", "x" } },
+    },
   },
   {
     -- https://github.com/nvim-treesitter/nvim-treesitter
