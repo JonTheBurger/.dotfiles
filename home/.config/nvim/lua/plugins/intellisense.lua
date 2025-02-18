@@ -54,6 +54,23 @@ return {
     opts_extend = { "sources.default" }
   },
   {
+    -- https://github.com/nvimtools/none-ls.nvim
+    "nvimtools/none-ls.nvim",
+    config = function(_, _)
+      local null_ls = require("null-ls")
+      local sources = {
+        null_ls.builtins.diagnostics.cppcheck,
+        null_ls.builtins.diagnostics.mypy,
+        null_ls.builtins.diagnostics.pylint,
+        null_ls.builtins.formatting.gersemi,
+        null_ls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2", "-ci" }, }),
+        null_ls.builtins.formatting.stylua,
+        null_ls.builtins.formatting.yamlfix,
+      }
+      null_ls.setup({ sources = sources })
+    end,
+  },
+  {
     -- https://github.com/danymat/neogen
     "danymat/neogen",
     version = "*",

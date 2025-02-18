@@ -65,6 +65,8 @@ vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').select_motion_char('_',
 vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 
 -- LSP
+vim.api.nvim_create_user_command("Fmt", vim.lsp.buf.format, { desc = "Format" })
+vim.keymap.set("n", "<leader>FF", vim.lsp.buf.format, { desc = "Format" })
 vim.keymap.set("n", "?", vim.diagnostic.open_float, {})
 vim.keymap.set("n", "gD", vim.diagnostic.open_float, {})
 vim.keymap.set({ "n", "i" }, "<C-S-SPACE>", vim.lsp.buf.signature_help, {})
@@ -74,28 +76,11 @@ vim.keymap.set("n", "<leader>ld", function()
   vim.diagnostic.setqflist()
   vim.cmd("copen") -- Open the quickfix window
 end, { desc = "Show all diagnostics in quickfix" })
-local format = function()
-  if vim.bo.filetype == "sh" then
-    -- bash-language-server does not support formatting
-    vim.cmd([[!shfmt -i 2 -s -w %]])
-  elseif vim.bo.filetype == "cmake" then
-    vim.cmd([[!gersemi --in-place %]])
-  elseif vim.bo.filetype == "yaml" then
-    -- yaml-language-server does not support formatting
-    vim.cmd([[!yamlfix %]])
-  elseif vim.bo.filetype == "python" then
-    -- pyright does not support formatting
-    vim.cmd([[!ruff check --fix %]])
-    vim.cmd([[!ruff format %]])
-  else
-    vim.lsp.buf.format()
-  end
-end
-vim.api.nvim_create_user_command("Fmt", format, {})
+vim.api.nvim_create_user_command("Fmt", vim.lsp.buf.format, { desc = "Format" })
 
 -- Lua
-vim.keymap.set("n", "LL", ":lua ")
-vim.keymap.set("n", "LP", ":lua vim.print()")
+vim.keymap.set("n", "LL", ":lua =")
+vim.keymap.set("n", "LR", ':lua require("')
 vim.keymap.set("n", "LF", ":lua F.")
 
 -- Custom Functions
