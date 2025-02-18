@@ -37,7 +37,7 @@ end
 ---@param str string
 ---@return boolean
 M.ends_with = function(str, suffix)
-  return str:sub(-#suffix) == suffix
+  return str:sub(- #suffix) == suffix
 end
 
 ---@param str string
@@ -95,7 +95,7 @@ M.remove_ext = function(path)
 end
 
 ---Returns a string representation of the current dir that can be used as a
----file name, such as for stdpath("data") .. "/session"
+---file name, such as for stdpath("data") .. "/sessions"
 ---@param rep string? Directory to convert, cwd by default
 ---@return string
 M.dir_as_fname = function(rep)
@@ -117,8 +117,10 @@ M.session_file = function(ext)
     ext = ".json"
   end
   local Path = require("plenary.path")
-  local rep = vim.fn.stdpath("data") .. "/session/" .. M.dir_as_fname() .. ext
-  return Path:new(rep)
+  local rep = vim.fn.stdpath("data") .. "/sessions/" .. M.dir_as_fname() .. ext
+  local path = Path:new(rep)
+  path:parent():mkdir({ parents = true, exists_ok = true })
+  return Path:new(path)
 end
 
 ---@param strings string[]

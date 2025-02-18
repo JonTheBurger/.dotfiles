@@ -1,8 +1,13 @@
-vim.api.nvim_create_autocmd("TextYankPost", {
+vim.api.nvim_create_autocmd({ "TextYankPost" }, {
   desc = "Highlight when yanking (copying) text",
   callback = function()
     vim.highlight.on_yank()
   end,
+})
+vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
+  desc = "Enable TreeSitter Folds",
+  pattern = { "*" },
+  command = "normal zx", -- zR
 })
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Support Makefile Tabs",
@@ -39,7 +44,7 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
     vim.cmd([[:%! ar -t ]] .. vim.fn.expand("%:p"))
   end,
 })
-vim.api.nvim_create_autocmd("BufWritePre", {
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   desc = "Ruff",
   pattern = { "*.py" },
   callback = function()

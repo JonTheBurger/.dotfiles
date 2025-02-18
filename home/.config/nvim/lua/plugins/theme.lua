@@ -122,14 +122,15 @@ return {
       -- Custom Highlights --
       colors = {}, -- Override default colors
       highlights = { -- Override highlight groups
-        ["FloatBorder"] = { bg = "none" },
-        ["NormalFloat"] = { bg = "none" },
-        ["SpellBad"] = { sp = colors.fg },
-        ["SpellCap"] = { sp = colors.fg },
-        ["SpellLocal"] = { sp = colors.fg },
-        ["SpellRare"] = { sp = colors.fg },
-        ["StatusLine"] = { bg = "none" },
         ["BlinkCmpGhostText"] = { fg = colors.bg },
+        ["FloatBorder"] = { bg = "none" },
+        ["Folded"] = { fg = "$light_grey" },
+        ["NormalFloat"] = { bg = "none" },
+        ["SpellBad"] = { sp = "$fg" },
+        ["SpellCap"] = { sp = "$fg" },
+        ["SpellLocal"] = { sp = "$fg" },
+        ["SpellRare"] = { sp = "$fg" },
+        ["StatusLine"] = { bg = "none" },
       },
 
       -- Plugins Config --
