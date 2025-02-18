@@ -349,11 +349,18 @@ return {
             },
             on_click = function(n, mouse)
               if (n == 1) and (mouse == "l") then
-                vim.cmd("Trouble diagnostics")
+                vim.cmd("Trouble diagnostics toggle")
               end
             end,
           },
-          { "overseer" },
+          {
+            "overseer",
+            on_click = function(n, mouse)
+              if (n == 1) and (mouse == "l") then
+                vim.cmd("OverseerToggle")
+              end
+            end,
+          },
         },
         lualine_z = {
           {

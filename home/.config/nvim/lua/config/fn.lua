@@ -221,7 +221,7 @@ end
 
 ---@param diary string Directory containing diary index.md
 M.update_diary_index = function(diary)
-  diary = vim.fn.expand(diary)
+  local diary = vim.fn.expand(diary)
   local Path = require("plenary.path")
   local scan = require("plenary.scandir")
 
@@ -305,23 +305,31 @@ M.unwanted_buf_del = function()
   local x_buftype = {
     "nofile",
     "prompt",
+    "terminal",
   }
   local x_filetype = {
     "neotest-summary",
     "snacks_picker_input",
+    "trouble",
     "snacks_picker_list",
     "undotree",
   }
   local try_close = function(buffer)
     local winid = vim.fn.bufwinid(buffer.bufnr)
-    if winid ~= -1 then
+    if vim.api.nvim_win_is_valid(winid) then
       vim.api.nvim_win_close(winid, true)
     end
-    vim.api.nvim_buf_delete(buffer.bufnr, { force = true })
+    if vim.api.nvim_buf_is_valid(buffer.bufnr) then
+      vim.api.nvim_buf_delete(buffer.bufnr, { force = true })
+    end
   end
 
   local buffers = vim.fn.getbufinfo()
   for _, buffer in ipairs(buffers) do
+    if not vim.api.nvim_buf_is_valid(buffer.bufnr) then
+      goto continue
+    end
+
     local ftype = vim.api.nvim_get_option_value("filetype", { buf = buffer.bufnr })
     if M.contains(x_filetype, ftype) then
       try_close(buffer)
@@ -462,6 +470,37 @@ function M.use_wsl_clip()
       }
     end
   end
+end
+
+---@param extension string
+---@param binary string
+M.find_vscode_binary = function(extension, binary)
+  local Path = require("plenary.path")
+  local scan = require("plenary.scandir")
+  extension = string.gsub(extension or "ms-vscode.cpptools", "%-", "[-]") -- Escape "-", which has special meaning in lua
+  binary = binary or string.gsub("OpenDebugAD7", "%-", "[-]")
+
+  local paths = {
+    Path:new(vim.fn.expand("~/.vscode/extensions")),
+    Path:new(vim.fn.expand("~/.vscode-server/extensions")),
+  }
+
+  while #paths > 0 do
+    local extensions = table.remove(paths, 1)
+    if extensions:is_dir() then
+      local dirs = scan.scan_dir(tostring(extensions), { depth = 1, only_dirs = true, search_pattern = extension })
+      if #dirs > 0 then
+        local dir = dirs[#dirs] -- get last alphabetically
+        local exe = scan.scan_dir(tostring(dir), { search_pattern = binary })
+        if #exe > 0 then
+          return exe[1]
+        end
+      end
+    end
+  end
+
+  -- Give up and hope it's on $PATH
+  return binary
 end
 
 return M

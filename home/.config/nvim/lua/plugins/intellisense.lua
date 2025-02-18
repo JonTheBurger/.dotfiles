@@ -112,7 +112,6 @@ return {
   {
     -- https://github.com/p00f/clangd_extensions.nvim
     "p00f/clangd_extensions.nvim",
-    enabled = false,
     keys = {
       {
         "<leader>ct",
@@ -137,7 +136,21 @@ return {
       cmake_regenerate_on_save = false,
       cmake_executor = {
         name = "overseer",
-        opts = {},
+        opts = {
+          ---@class overseer.TaskDefinition
+          new_task_opts = {
+            name = "cmake build",
+            components = {
+              { "default" },
+              { "on_output_parse", problem_matcher = "$gcc" },
+              { "on_result_diagnostics" },
+            },
+          },
+          ---@param overseer.Task
+          on_new_task = function(task)
+            require("overseer").open({ enter = false, direction = "bottom" })
+          end,
+        },
       },
     },
     keys = {

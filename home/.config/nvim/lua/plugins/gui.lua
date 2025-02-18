@@ -3,11 +3,12 @@ return {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
     keys = {
-      { "<leader>Wx", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
+      { "<leader>Wb", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
       { "<leader>Wo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>B",  "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
       { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
     },
+    ---@type overseer.Config
     opts = {
       templates = { "make", "vscode", "cargo", "just" },
       task_list = {
@@ -26,6 +27,18 @@ return {
         },
       },
     },
+    config = function(_, opts)
+      local overseer = require("overseer")
+      overseer.setup(opts)
+      -- https://github.com/stevearc/overseer.nvim/blob/master/doc/reference.md#add_template_hookopts-hook
+      overseer.add_template_hook(
+        { name = "^make.*", },
+        function(task_defn, util)
+          util.add_component(task_defn, { "on_output_parse", problem_matcher = "$gcc" })
+          util.add_component(task_defn, { "on_result_diagnostics" })
+          util.add_component(task_defn, { "on_result_diagnostics_trouble" })
+        end)
+    end,
   },
   {
     -- https://github.com/mbbill/undotree

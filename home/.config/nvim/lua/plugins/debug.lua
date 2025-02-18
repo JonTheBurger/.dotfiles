@@ -72,7 +72,7 @@ return {
           id = "cppdbg",
           name = "cppdbg",
           type = "executable",
-          command = "OpenDebugAD7",
+          command = require("config.fn").find_vscode_binary("ms-vscode.cpptools", "OpenDebugAD7"),
         },
         cmake = {
           id = "cmake",

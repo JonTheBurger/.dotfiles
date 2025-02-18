@@ -32,6 +32,8 @@ return {
     { "<leader>td", function() require("neotest").run.run({ strategy = "dap" }) end, desc = "Debug Nearest Test" },
     { "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end,   desc = "Run File" },
     { "<leader>te", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },
+    { "<leader>Wt", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },
+    { "<leader>WT", function() require("neotest").output_panel.toggle() end,         desc = "Toggle Output Panel" },
     { "<leader>to", function() require("neotest").output_panel.toggle() end,         desc = "Toggle Output Panel" },
     { "<leader>tS", function() require("neotest").run.stop() end,                    desc = "Stop" },
     {

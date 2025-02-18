@@ -33,7 +33,7 @@
   "render-markdown.nvim": { "branch": "main", "commit": "4a28c135bc3548e398ba38178fec3f705cb26fe6" },
   "rustaceanvim": { "branch": "master", "commit": "0c79344c3bd9696d5f0e6d78b71e5c18b3842c82" },
   "smart-splits.nvim": { "branch": "master", "commit": "de1d5ed60c1407b7704495d7b3c8e262358728c9" },
-  "snacks.nvim": { "branch": "main", "commit": "de3cba5158509b82e2f0ff9fc9101effccc1a863" },
+  "snacks.nvim": { "branch": "main", "commit": "76f5ee4a1bd2566fc1460a1b11aa6a0bc36d2f5d" },
   "trouble.nvim": { "branch": "main", "commit": "85bedb7eb7fa331a2ccbecb9202d8abba64d37b3" },
   "undotree": { "branch": "master", "commit": "2556c6800b210b2096b55b66e74b4cc1d9ebbe4f" },
   "vim-log-highlighting": { "branch": "master", "commit": "1037e26f3120e6a6a2c0c33b14a84336dee2a78f" },

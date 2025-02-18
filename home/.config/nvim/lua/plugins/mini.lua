@@ -42,8 +42,6 @@ return {
         line_up = "<S-M-k>",
       },
     },
-    --- @type MiniPairs.config
-    pairs = {},
     --- @type MiniSurround.config
     surround = {
       mappings = {

@@ -122,6 +122,15 @@ return {
       sources = {
         explorer = {
           hidden = true,
+          win = {
+            list = {
+              ---@class snacks.win.Config
+              wo = {
+                number = true,
+                relativenumber = true,
+              },
+            }
+          },
         },
       },
       matcher = {

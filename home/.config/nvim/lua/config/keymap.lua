@@ -86,6 +86,7 @@ vim.keymap.set("n", "LF", ":lua F.")
 
 -- Custom Functions
 local fn = require("config.fn")
+vim.keymap.set("n", "<leader>Wx", fn.unwanted_buf_del, { desc = "Close all widget windows" })
 vim.api.nvim_create_user_command("QAEV", fn.buffer_quit_all_except_visible, { desc = "Quit All Except Visible" })
 vim.keymap.set("n", "<leader>x", fn.toggle_hex, { noremap = true, silent = true, desc = "Toggle Hex" })
 vim.api.nvim_create_user_command("Vh", "vertical help<CR>", {})
