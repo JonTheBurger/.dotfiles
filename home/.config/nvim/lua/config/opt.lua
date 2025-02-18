@@ -1,20 +1,3 @@
--- TODO: FIXME: UGLY
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
-vim.opt.wildmode = {"longest:full", "full"}
-vim.opt.breakindent = true
-vim.opt.updatetime = 250
-vim.opt.timeoutlen = 300
-vim.opt.listchars = { space = '·', tab = "»»", nbsp = "␣", }
-vim.opt.inccommand = "split"
-vim.opt.showmode = false
-vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
---------------------------------------------------------------------------------
-
 -- <space> as <leader>
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -29,53 +12,22 @@ vim.opt.spelllang = "en_us"
 vim.opt.syntax = "on"
 vim.opt.termguicolors = true
 vim.opt.timeout = false
--- vim.opt.updatetime = 750
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
 vim.opt.wrap = false
 
 -- Searching
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
+vim.opt.inccommand = "split"
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.showmode = false
+vim.opt.wildmode = {"longest:full", "full"}
 
 -- Host System Integration
 vim.opt.mouse = "a"
--- vim.opt.clipboard = "unnamed,unnamedplus"
-
-if vim.fn.has("wsl") == 1 then
-  -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
-  local win32yank = "win32yank"
-  local clip_exe = "/mnt/c/Windows/System32/clip.exe"
-  local powershell = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
-
-  -- if vim.fn.executable(win32yank) ~= 0 then
-  --   vim.g.clipboard = {
-  --     name = "win32yank-wsl",
-  --     copy = {
-  --       ["+"] = win32yank .. " -i --crlf",
-  --       ["*"] = win32yank .. " -i --crlf",
-  --     },
-  --     paste = {
-  --       ["+"] = win32yank .. " -o --lf",
-  --       ["*"] = win32yank .. " -o --lf",
-  --     },
-  --     cache_enabled = false,
-  --   }
-  -- elseif vim.fn.executable(clip_exe) and vim.fn.executable(powershell) then
-  --   vim.g.clipboard = {
-  --     name = "clip-windows",
-  --     copy = {
-  --       ['+'] = clip_exe,
-  --       ['*'] = clip_exe,
-  --     },
-  --     paste = {
-  --       ['+'] = powershell .. " -noprofile -command Get-Clipboard",
-  --       ['*'] = powershell .. " -noprofile -command Get-Clipboard",
-  --     },
-  --     cache_enabled = false,
-  --   }
-  -- end
-end
+vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
 
 -- Disable netrw
 vim.g.loaded_netrw = 1
@@ -87,12 +39,13 @@ vim.opt.shiftwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.expandtab = true
 vim.opt.fixeol = true
+vim.opt.breakindent = true
 vim.opt.indentexpr = ""
 vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3
 vim.opt.textwidth = 0
--- vim.opt.listchars = { space = '·', tab = "»»" }
+vim.opt.listchars = { space = '·', tab = "»»", nbsp = "␣", }
 
 -- Undo File
 vim.opt.backup = false
@@ -102,4 +55,3 @@ vim.opt.undofile = true
 
 -- Gui
 vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
-

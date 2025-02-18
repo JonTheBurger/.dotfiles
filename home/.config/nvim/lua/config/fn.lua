@@ -358,13 +358,13 @@ end
 
 M.bkpt_save = function()
   local bkpts = M.bkpt_get()
-  local json = require("config.util").session_file(".bkpt.json")
+  local json = require("config.fn").session_file(".bkpt.json")
   json:write(vim.fn.json_encode(bkpts), "w")
 end
 
 M.bkpt_load = function()
   local dap_bkpt = require("dap.breakpoints")
-  local json = require("config.util").session_file(".bkpt.json")
+  local json = require("config.fn").session_file(".bkpt.json")
 
   -- Load breakpoints from disk
   local data = nil
@@ -428,6 +428,43 @@ function M.select_motion_char(char, grab)
     vim.api.nvim_win_set_cursor(0, { line, prev })
     vim.cmd("normal! v")
     vim.api.nvim_win_set_cursor(0, { line, next - 1 })
+  end
+end
+
+function M.use_wsl_clip()
+  if vim.fn.has("wsl") == 1 then
+    -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
+    local win32yank = "win32yank"
+    local clip_exe = "/mnt/c/Windows/System32/clip.exe"
+    local powershell = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+
+    if vim.fn.executable(win32yank) ~= 0 then
+      vim.g.clipboard = {
+        name = "win32yank-wsl",
+        copy = {
+          ["+"] = win32yank .. " -i --crlf",
+          ["*"] = win32yank .. " -i --crlf",
+        },
+        paste = {
+          ["+"] = win32yank .. " -o --lf",
+          ["*"] = win32yank .. " -o --lf",
+        },
+        cache_enabled = false,
+      }
+    elseif vim.fn.executable(clip_exe) and vim.fn.executable(powershell) then
+      vim.g.clipboard = {
+        name = "clip-windows",
+        copy = {
+          ['+'] = clip_exe,
+          ['*'] = clip_exe,
+        },
+        paste = {
+          ['+'] = powershell .. " -noprofile -command Get-Clipboard",
+          ['*'] = powershell .. " -noprofile -command Get-Clipboard",
+        },
+        cache_enabled = false,
+      }
+    end
   end
 end
 

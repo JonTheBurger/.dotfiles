@@ -23,17 +23,17 @@ return {
     },
     keys = {
       -- Custom
-      { "<leader>dk",  function() require("dap").up() end,                             desc = "Go Up 1 Stack Frame", },
-      { "<leader>dj",  function() require("dap").down() end,                           desc = "Go Down 1 Stack Frame", },
-      { "<M-d>",       function() require("dap.ui.widgets").hover() end,               desc = "Hover Variables", },
-      { "<F1>",        function() require("dap.ui.widgets").hover() end,               desc = "Hover Variables", },
-      { "<S-F4>",      function() require("dapui").eval() end,                         desc = "Evaluate",               mode = { "n", "v" }, },
-      { "<F5>",        function() require("dap").continue() end,                       desc = "Continue", },
-      { "<leader>Dbg", function() require("config.util").debug_cmake_executable() end, desc = "Debug CMake Target", },
-      { "<F9>",        function() require("dap").toggle_breakpoint() end,              desc = "Toggle Breakpoint", },
-      { "<F10>",       function() require("dap").step_over() end,                      desc = "Step Over", },
-      { "<F11>",       function() require("dap").step_into() end,                      desc = "Step In", },
-      { "<S-F11>",     function() require("dap").step_out() end,                       desc = "Step Out", },
+      { "<leader>dk",  function() require("dap").up() end,                           desc = "Go Up 1 Stack Frame", },
+      { "<leader>dj",  function() require("dap").down() end,                         desc = "Go Down 1 Stack Frame", },
+      { "<M-d>",       function() require("dap.ui.widgets").hover() end,             desc = "Hover Variables", },
+      { "<F1>",        function() require("dap.ui.widgets").hover() end,             desc = "Hover Variables", },
+      { "<S-F4>",      function() require("dapui").eval() end,                       desc = "Evaluate",               mode = { "n", "v" }, },
+      { "<F5>",        function() require("dap").continue() end,                     desc = "Continue", },
+      { "<leader>Dbg", function() require("config.fn").debug_cmake_executable() end, desc = "Debug CMake Target", },
+      { "<F9>",        function() require("dap").toggle_breakpoint() end,            desc = "Toggle Breakpoint", },
+      { "<F10>",       function() require("dap").step_over() end,                    desc = "Step Over", },
+      { "<F11>",       function() require("dap").step_into() end,                    desc = "Step In", },
+      { "<S-F11>",     function() require("dap").step_out() end,                     desc = "Step Out", },
       -- Standard
       { "<leader>dR", function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
       { "<leader>dU", function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
@@ -112,7 +112,7 @@ return {
           name = "lldb: launch",
           type = "lldb",      -- matches the adapter
           request = "launch", -- could also attach to a currently running process
-          program = require("config.util").find_cxx_executable,
+          program = require("config.fn").find_cxx_executable,
           cwd = "${workspaceFolder}",
           env = { "NOCOLOR=1", },
           stopOnEntry = false,
@@ -124,7 +124,7 @@ return {
           name = "gdb: launch",
           type = "cppdbg",
           request = "launch",
-          program = require("config.util").find_cxx_executable,
+          program = require("config.fn").find_cxx_executable,
           cwd = "${workspaceFolder}",
           env = { "NOCOLOR=1", },
           stopOnEntry = false,
@@ -149,7 +149,7 @@ return {
           request = "launch",
           name = "python launch file",
           program = "${file}",
-          pythonPath = require("config.util").find_python,
+          pythonPath = require("config.fn").find_python,
         },
         -- https://github.com/jbyuki/one-small-step-for-vimkind?tab=readme-ov-file#configuration
         nlua = {

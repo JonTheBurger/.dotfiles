@@ -2,9 +2,10 @@
 vim.keymap.set("n", "<C-c>", "<ESC>")        -- Ctrl+C == Esc
 vim.keymap.set("x", "<leader>p", "\"_dP")    -- Paste & Maintain Register
 vim.keymap.set("", "q:", "<NOP>")            -- Useless
-vim.keymap.set("t", "<ESC>", [[<C-\><C-n>]]) -- Seriously, quit terminal mode
+vim.keymap.set("t", "<Esc>", "<C-\\><C-n>", { desc = "Exit Terminal Mode" })
 vim.keymap.set("i", "jk", "<ESC>", { desc = "Normal Mode" })
 vim.keymap.set("n", "<leader>q", "<cmd>bp|bd#<CR>", { desc = "Delete Buffer, Keep Split" })
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Yanks
 vim.keymap.set("n", "yaa", "gg0yG<C-o>", { desc = "Yank all" })
@@ -56,12 +57,12 @@ vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 -- Motions
 vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
 vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
-vim.keymap.set("o", "a_", ":<C-u>lua require('config.util').select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
-vim.keymap.set("x", "a_", ":<C-u>lua require('config.util').select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
-vim.keymap.set("o", "i_", ":<C-u>lua require('config.util').select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
-vim.keymap.set("x", "i_", ":<C-u>lua require('config.util').select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
-vim.keymap.set("o", "_", ":<C-u>lua require('config.util').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
-vim.keymap.set("x", "_", ":<C-u>lua require('config.util').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "a_", ":<C-u>lua require('config.fn').select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "a_", ":<C-u>lua require('config.fn').select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "i_", ":<C-u>lua require('config.fn').select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "i_", ":<C-u>lua require('config.fn').select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 
 -- LSP
 vim.keymap.set("n", "?", vim.diagnostic.open_float, {})
@@ -92,12 +93,17 @@ local format = function()
 end
 vim.api.nvim_create_user_command("Fmt", format, {})
 
+-- Lua
+vim.keymap.set("n", "LL", ":lua ")
+vim.keymap.set("n", "LP", ":lua vim.print()")
+vim.keymap.set("n", "LF", ":lua F.")
+
 -- Custom Functions
-local util = require("config.util")
-vim.api.nvim_create_user_command("QAEV", util.buffer_quit_all_except_visible,
+local fn = require("config.fn")
+vim.api.nvim_create_user_command("QAEV", fn.buffer_quit_all_except_visible,
   { desc = "Quit All Except Visible", }
 )
-vim.keymap.set("n", "<leader>x", util.toggle_hex,
+vim.keymap.set("n", "<leader>x", fn.toggle_hex,
   { noremap = true, silent = true, desc = "Toggle Hex" }
 )
 vim.api.nvim_create_user_command("Vh", "vertical help<CR>", {})
@@ -122,13 +128,13 @@ vim.keymap.set("n", "<leader>wl", function()
 -- Wiki
 local wiki = vim.fn.expand("~/Documents/wiki")
 local diary = vim.fn.expand(wiki .. "/diary")
-local edit_file = require("config.util").edit_file
+local edit_file = require("config.fn").edit_file
 vim.keymap.set("n", "<leader>wn", function() edit_file(wiki .. "/index.md") end, { desc = "Open Wiki Notes" })
 vim.keymap.set("n", "<leader>ww", function() edit_file(wiki .. "/index.md", { cd = true }) end,
   { desc = "Open Wiki Index" })
 vim.keymap.set("n", "<leader>wd", function() edit_file(diary .. "/" .. os.date("%Y-%m-%d") .. ".md") end,
   { desc = "Open Daily Notes" })
-vim.keymap.set("n", "<leader>wi", function() require("config.util").update_diary_index(diary) end,
+vim.keymap.set("n", "<leader>wi", function() require("config.fn").update_diary_index(diary) end,
   { desc = "Update Diary Index" })
 
 -- To-do

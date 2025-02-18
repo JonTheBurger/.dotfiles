@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
   desc = "Dump hex",
   pattern = { "*.bin", },
   callback = function()
-    require("config.util").toggle_hex()
+    require("config.fn").toggle_hex()
   end,
 })
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {

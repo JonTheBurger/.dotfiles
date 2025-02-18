@@ -1,3 +1,4 @@
+---@diagnostic disable:missing-fields
 -- This is an example for how to download a lazy package: https://github.com/folke/lazy.nvim?tab=readme-ov-file#-plugin-spec
 --- @type LazyPlugin
 return {

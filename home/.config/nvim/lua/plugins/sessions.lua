@@ -6,13 +6,13 @@ return {
     vim.api.nvim_create_autocmd("User", {
       pattern = "PersistenceSavePre",
       callback = function()
-        require("config.util").unwanted_buf_del()
+        require("config.fn").unwanted_buf_del()
       end,
     })
     vim.api.nvim_create_autocmd("User", {
       pattern = "PersistenceSavePost",
       callback = function()
-        require("config.util").bkpt_save()
+        require("config.fn").bkpt_save()
       end,
     })
     -- vim.api.nvim_create_autocmd("User", {
@@ -21,7 +21,7 @@ return {
     vim.api.nvim_create_autocmd("User", {
       pattern = "PersistenceLoadPost",
       callback = function()
-        require("config.util").bkpt_load()
+        require("config.fn").bkpt_load()
       end,
     })
   end,

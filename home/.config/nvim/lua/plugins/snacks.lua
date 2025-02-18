@@ -2,7 +2,6 @@
 local MB = 1024 * 1024
 local cfg_dir = vim.fn.stdpath("config")
 
---- @type LazyPlugin
 return {
   "folke/snacks.nvim",
   priority = 1000,

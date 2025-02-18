@@ -1,4 +1,3 @@
---- @type LazyPlugin
 return {
   "echasnovski/mini.nvim",
   enabled = true,
@@ -11,7 +10,7 @@ return {
     { "Sc",    "Sr",       mode = { "n", "v" }, remap = true, desc = "Surround change" },
   },
   opts = {
-    --- @type mini.ai.config
+    --- @type MiniAi.config
     ai = {
       mappings = {
         goto_right = "g]",
