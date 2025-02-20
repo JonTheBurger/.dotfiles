@@ -73,11 +73,7 @@ vim.keymap.set("n", "?", vim.diagnostic.open_float, {})
 vim.keymap.set("n", "gD", vim.diagnostic.open_float, {})
 vim.keymap.set({ "n", "i" }, "<C-S-SPACE>", vim.lsp.buf.signature_help, {})
 vim.keymap.set("i", "<S-F1>", vim.lsp.buf.signature_help, {})
-vim.keymap.set("n", "gf", vim.lsp.buf.code_action, {})
-vim.keymap.set("n", "<leader>ld", function()
-  vim.diagnostic.setqflist()
-  vim.cmd("copen") -- Open the quickfix window
-end, { desc = "Show all diagnostics in quickfix" })
+vim.keymap.set("n", "gF", vim.lsp.buf.code_action, {})
 
 -- Lua
 vim.keymap.set("n", "LL", ":lua =")

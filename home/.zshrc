@@ -131,7 +131,7 @@ if [[ "$(uname -a)" == *WSL* ]]; then
   export USERPROFILE=/mnt/c/Users/${WIN_USERNAME}
 fi
 export CMAKE_GENERATOR='Ninja'
-export EDITOR='vim'
+export EDITOR='nvim'
 export GPG_TTY=$(tty)
 export STARSHIP_LOG='error'
 

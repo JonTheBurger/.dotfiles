@@ -1,7 +1,7 @@
-[include]
-  path = /opt/provisioners/style/config/.gitconfig
+; [include]
+;   path = /opt/provisioners/style/config/.gitconfig
 [core]
-  editor = vim
+  editor = nvim
   pager = delta
 [delta]
   navigate = true
@@ -79,7 +79,7 @@
   ticket = "!f() { branch=$(git rev-parse --abbrev-ref HEAD); echo $branch | grep -oE '[A-Z]+-[0-9]+'; }; f"
   # Remove last commit, maintain working tree
   uncommit = reset --soft HEAD^
-	staash = stash --all
+  staash = stash --all
 [blame]
   coloring = highlightRecent
   date = short
@@ -105,9 +105,6 @@
   path = ~/Projects/.gitconfig
 [diff]
   algorithm = histogram
-[log]
-  decorate = full
-  pretty = fuller
 [pager]
   aliases = false
   branch = false

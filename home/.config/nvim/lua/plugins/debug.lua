@@ -187,8 +187,6 @@ return {
         --   opts.launchers.lldb,
         -- },
       }
-
-      -- require("dap.ext.vscode").load_launchjs()
     end,
   },
   {

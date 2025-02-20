@@ -21,7 +21,7 @@ return {
       },
 
       appearance = {
-        -- Useful for when your theme doesn"t support blink.cmp
+        -- Useful for when your theme doesn't support blink.cmp
         use_nvim_cmp_as_default = true,
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = "mono",
@@ -75,13 +75,6 @@ return {
     "danymat/neogen",
     version = "*",
     keys = {
-      {
-        "<leader>com",
-        function()
-          require("neogen").generate()
-        end,
-        desc = "Generate docstring comment",
-      },
       {
         "<leader>KK",
         function()

@@ -151,5 +151,6 @@ Notably the following programs are configured (among others):
 - vlink
 - curl https://sh.rustup.rs -sSf | sh -s -- -y
     - rustup component add rust-analyzer
+- sudo loginctl enable-linger "$(whoami)" # Fix /var/run/$(id -u)
 
 </details>

@@ -8,8 +8,7 @@ git:
     replace: "$1 "
 keybinding:
   universal:
-    quit: <esc>
-    return: q
+    return: x
 gui:
   nerdFontsVersion: "3"
   filterMode: fuzzy

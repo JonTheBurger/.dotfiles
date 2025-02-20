@@ -150,12 +150,10 @@ return {
     statuscolumn = {
       enabled = true,
       left = { "mark", "sign" },
-      rigth = { "fold", "git" },
+      right = { "fold", "git" },
       folds = { open = true },
     },
-    terminal = {
-      enabled = true,
-    },
+    terminal = { enabled = true, },
     notifier = { enabled = true },
     rename = { enabled = true },
     win = { enabled = true },
