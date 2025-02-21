@@ -209,7 +209,7 @@ function fsmon() {
   done
 }
 function tailog() {
-  tail -f "$@" | bat --paging=never -p -l log2
+  tail -f "$@" | bat --paging=never -p -l log
 }
 function mk() {
   if [ -f "bamboo.mk" ]; then
@@ -255,7 +255,9 @@ function uncrust() {
   uncrustify -c ~/.config/uncrustify.cfg -l C --mtime --replace --no-backup $@
 }
 function venv() {
-  uv venv .venv
+  if [ ! -d .venv ]; then
+    uv venv .venv
+  fi
   source .venv/bin/activate
 }
 function xmlfmt() {

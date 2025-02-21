@@ -67,7 +67,16 @@ vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').select_motion_char('_',
 -- LSP
 vim.api.nvim_create_user_command("Fmt", function()
   vim.lsp.buf.format()
+  vim.lsp.buf.code_action({
+    apply = true,
+    context = {
+      triggerKind = 1, -- 1: Invoked, 2: Automatic
+      diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }),
+      only = { "source.organizeImports" },
+    },
+  })
 end, { desc = "Format" })
+
 vim.keymap.set("n", "<leader>FF", vim.lsp.buf.format, { desc = "Format" })
 vim.keymap.set("n", "?", vim.diagnostic.open_float, {})
 vim.keymap.set("n", "gD", vim.diagnostic.open_float, {})

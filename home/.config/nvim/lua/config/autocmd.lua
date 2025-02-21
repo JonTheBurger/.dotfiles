@@ -7,7 +7,12 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
 vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
   desc = "Enable TreeSitter Folds",
   pattern = { "*" },
-  command = "normal zx", -- zR
+  callback = function()
+    -- For some reason, this breaks snacks_input a little bit
+    if vim.bo.filetype ~= "snacks_input" then
+      vim.cmd("normal zx")  -- zR
+    end
+  end,
 })
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Support Makefile Tabs",
