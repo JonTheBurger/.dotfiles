@@ -9,6 +9,35 @@ local M = {}
 ---@class Breakpoints
 ---@field [string] Breakpoint[] A table mapping file paths to arrays of breakpoints.
 
+---Returns the input
+---@param i any
+---@return any
+M.identity = function(i)
+  return i
+end
+
+---Reverses a list, in-place.
+---@param list List The list to reverse.
+---@return List The list passed in.
+M.reverse = function(list)
+  local len = #list
+  for i = 1, math.floor(len / 2) do
+    list[i], list[len - i + 1] = list[len - i + 1], list[i]
+  end
+  return list
+end
+
+---Returns a copy of a list, reversed.
+---@param list List The list to reverse.
+---@return List A newly reversed list.
+M.reversed = function(list)
+  local reversed = {}
+  for i = #list, 1, -1 do
+    table.insert(reversed, list[i])
+  end
+  return reversed
+end
+
 ---@return boolean
 M.contains = function(list, value)
   for _, element in ipairs(list) do
@@ -26,6 +55,7 @@ M.starts_with = function(str, prefix)
 end
 
 ---@param str string
+---@param prefix string
 ---@return string
 M.remove_prefix = function(str, prefix)
   if M.starts_with(str, prefix) then
@@ -37,7 +67,7 @@ end
 ---@param str string
 ---@return boolean
 M.ends_with = function(str, suffix)
-  return str:sub(- #suffix) == suffix
+  return str:sub(-#suffix) == suffix
 end
 
 ---@param str string
@@ -206,41 +236,24 @@ end
 ---@param filename string Name of file
 ---@param opts table? Options
 ---@class edit_file_opts
----@field cd boolean Also change to the directory
+---@field chdir boolean? Also change to the directory
+---@field initial_contents string? Initial contents of file, if it did not exist
 M.edit_file = function(filename, opts)
   local Path = require("plenary.path")
   local path = Path:new(vim.fn.expand(filename))
   path:parent():mkdir({ parents = true, exists_ok = true }) -- path:touch() doesn't work
 
-  if opts ~= nil and opts.cd then
+  if not path:exists() then
+    if opts ~= nil and opts.initial_contents ~= nil then
+      path:write(opts.initial_contents, "w")
+    end
+  end
+
+  if opts ~= nil and opts.chdir then
     vim.api.nvim_set_current_dir(tostring(path:parent()))
   end
 
   vim.cmd("edit " .. tostring(path))
-end
-
----@param diary string Directory containing diary index.md
-M.update_diary_index = function(diary)
-  local diary = vim.fn.expand(diary)
-  local Path = require("plenary.path")
-  local scan = require("plenary.scandir")
-
-  local path = Path:new(diary)
-  if not path:exists() or not path:is_dir() then
-    return
-  end
-
-  local files = scan.scan_dir(tostring(path), { depth = 1, search_pattern = ".*%d+-%d+-%d+.md" })
-  path = path / "index.md"
-  path:write("", "w")
-
-  for _, value in ipairs(files) do
-    local name = M.basename(Path:new(value))
-    value = M.remove_suffix(name, ".md")
-    path:write("- [" .. value .. "](./" .. name .. ")\n", "a")
-  end
-
-  vim.notify("Updated " .. path .. "!")
 end
 
 M.find_rust_executable = function()

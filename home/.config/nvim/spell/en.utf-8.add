@@ -5,3 +5,8 @@ str
 param
 functionality
 including
+param
+table
+filename
+chdir
+boolean
