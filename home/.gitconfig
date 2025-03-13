@@ -1,14 +1,57 @@
 [include]
   path = /opt/provisioners/style/config/.gitconfig
+[user]
+  name = Jon Povirk
+  email = jmp180@pitt.edu
+[includeIf "gitdir:Projects/"]
+  path = ~/Projects/.gitconfig
+[blame]
+  coloring = highlightRecent
+  date = short
+[branch]
+  sort = -committerdate
+[color "blame"]
+  highlightRecent = 237, 20 month ago, 238, 19 month ago, 239, 18 month ago, 240, 17 month ago, 241, 16 month ago, 242, 15 month ago, 243, 14 month ago, 244, 13 month ago, 245, 12 month ago, 246, 11 month ago, 247, 10 month ago, 248, 9 month ago, 249, 8 month ago, 250, 7 month ago, 251, 6 month ago, 252, 5 month ago, 253, 4 month ago, 254, 3 month ago, 231, 2 month ago, 230, 1 month ago, 229, 3 weeks ago, 228, 2 weeks ago, 227, 1 week ago, 226
+  ui = auto
+[commit]
+  verbose = true
 [core]
   editor = nvim
+  hooksPath = ~/.config/git/hooks
   pager = delta
 [delta]
   navigate = true
 [diff]
-  colorMove = default
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+[format]
+  pretty = format:%C(yellow)%h%Creset %Cblue%as%Creset %an %Cgreen%s%Creset
+[help]
+  autocorrect = prompt
 [interactive]
   diffFilter = delta --color-only
+[pager]
+  aliases = false
+  branch = false
+[rebase]
+  updateRefs = true
+[rerere]
+  autoupdate = true
+  enabled = true
+[tag]
+  sort = version:refname
+[tig]
+  main-view = id date author commit-title
+  main-view-author = abbreviated
+  main-view-commit-title = graph=yes,refs=yes
+  main-view-date = custom
+  main-view-date-format = "%Y-%m-%d"
 [alias]
   ## Aliases
   a = add
@@ -63,6 +106,7 @@
   # Reset branch to state it is on remote
   heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
+  fix-author = "!f() { git commit --amend --author=\"$(git config user.name) <$(git config user.email)>\"; }; f"
   local-only-branches = !python ~/.local/bin/local-only-branches.py
   l = "!f() { lazygit --screen-mode full log; }; f"
   lg = "!f() { lazygit log; }; f"
@@ -80,33 +124,3 @@
   # Remove last commit, maintain working tree
   uncommit = reset --soft HEAD^
   staash = stash --all
-[blame]
-  coloring = highlightRecent
-  date = short
-[format]
-  pretty = format:%C(yellow)%h%Creset %Cblue%as%Creset %an %Cgreen%s%Creset
-[color "blame"]
-  highlightRecent = 237, 20 month ago, 238, 19 month ago, 239, 18 month ago, 240, 17 month ago, 241, 16 month ago, 242, 15 month ago, 243, 14 month ago, 244, 13 month ago, 245, 12 month ago, 246, 11 month ago, 247, 10 month ago, 248, 9 month ago, 249, 8 month ago, 250, 7 month ago, 251, 6 month ago, 252, 5 month ago, 253, 4 month ago, 254, 3 month ago, 231, 2 month ago, 230, 1 month ago, 229, 3 weeks ago, 228, 2 weeks ago, 227, 1 week ago, 226
-[filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
-[tig]
-  main-view = id date author commit-title
-  main-view-author = abbreviated
-  main-view-commit-title = graph=yes,refs=yes
-  main-view-date = custom
-  main-view-date-format = "%Y-%m-%d"
-[user]
-  name = Jon Povirk
-  email = jmp180@pitt.edu
-[includeIf "gitdir:~/Projects/"]
-  path = ~/Projects/.gitconfig
-[diff]
-  algorithm = histogram
-[pager]
-  aliases = false
-  branch = false
-[color]
-  ui = auto

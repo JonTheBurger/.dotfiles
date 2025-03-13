@@ -100,6 +100,10 @@ return {
       enabled = true,
       hidden = true,
       replace_netrw = true,
+      exclude = {
+        ".git/*",
+        ".venv/*",
+      }
     },
     ---@class snacks.picker.Config
     picker = {

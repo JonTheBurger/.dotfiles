@@ -56,6 +56,7 @@ return {
   {
     -- https://github.com/nvimtools/none-ls.nvim
     "nvimtools/none-ls.nvim",
+    enabled = false,
     config = function(_, _)
       local null_ls = require("null-ls")
       local sources = {
@@ -97,8 +98,9 @@ return {
     },
   },
   {
-    -- https://github.com/rmagatti/goto-preview
+    -- https://github.com/mrcjkb/rustaceanvim
     "mrcjkb/rustaceanvim",
+    version = "^5",
     ft = { "rust" },
     lazy = false,
   },
@@ -136,7 +138,7 @@ return {
             components = {
               { "default" },
               { "on_output_parse", problem_matcher = "$gcc" },
-              { "on_result_diagnostics" },
+              -- { "on_result_diagnostics" },
             },
           },
           ---@param overseer.Task

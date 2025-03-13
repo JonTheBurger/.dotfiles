@@ -34,3 +34,18 @@ format:  ## Formats shell scripts
 
 lint:  ## Lints shell scripts
 	find . -name '*.sh' -type f -exec shellcheck -x --color {} \;
+
+jvim:
+	mkdir -p "${HOME}/.local/bin/"
+	echo "#!/bin/bash" > "${HOME}/.local/bin/jvim"
+	echo "export NVIM_APPNAME=jvim" >> "${HOME}/.local/bin/jvim"
+	echo 'nvim "$@"' >> "${HOME}/.local/bin/jvim"
+	chmod +x "${HOME}/.local/bin/jvim"
+	ln -s "${PWD}/home/.config/nvim/" "${HOME}/.config/jvim"
+
+jvim.clean:
+	rm -f "${HOME}/.local/bin/jvim"
+	rm -rf "${HOME}/.cache/jvim"
+	rm -rf "${HOME}/.config/jvim"
+	rm -rf "${HOME}/.local/share/jvim"
+	rm -rf "${HOME}/.local/state/jvim"

@@ -12,9 +12,9 @@ local TEMPLATE = [[
 
 ]]
 
-vim.keymap.set("n", "<leader>wn", function()
+vim.keymap.set("n", "<leader>wW", function()
   edit_file(WIKI .. "/index.md")
-end, { desc = "Open Wiki Notes" })
+end, { desc = "Open Wiki Index, keep pwd" })
 
 vim.keymap.set("n", "<leader>ww", function()
   edit_file(WIKI .. "/index.md", { chdir = true })

@@ -6,7 +6,7 @@ return {
   keys = {
     { "<C-_>", "gcc<ESC>", mode = { "n", "v" }, remap = true, desc = "Toggle Comment" },
     { "<C-/>", "gcc<ESC>", mode = { "n", "v" }, remap = true, desc = "Toggle Comment" },
-    { "Ss",    "Saw",      mode = { "n", "v" }, remap = true, desc = "Surround inner word with" },
+    { "Ss",    "SiW",      mode = { "n", "v" }, remap = true, desc = "Surround inner word with" },
     { "Sc",    "Sr",       mode = { "n", "v" }, remap = true, desc = "Surround change" },
   },
   opts = {

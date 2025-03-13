@@ -1,15 +1,15 @@
+-- vim.api.nvim_get_hl(0, {name="WinSeparator"})
 local colors = {
-  bg = "#202328",
+  bg = "#455574",
   fg = "#bbc2cf",
-  yellow = "#ecbe7b",
-  cyan = "#0084ff",
-  darkblue = "#081633",
-  green = "#4ef278",
+  red = "#ec5f67",
   orange = "#ff8800",
+  yellow = "#ecbe7b",
+  green = "#4ef278",
+  blue = "#51afef",
+  cyan = "#0084ff",
   violet = "#c489ff",
   magenta = "#ff539e",
-  blue = "#51afef",
-  red = "#ec5f67",
   white = "#cccccc",
 }
 

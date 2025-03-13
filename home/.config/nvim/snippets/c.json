@@ -1,0 +1,10 @@
+{
+  "typedef struct": {
+    "prefix": "typedef",
+    "body": [
+      "typedef struct ${1} {",
+      "  ${2}",
+      "} ${1}_t;"
+    ]
+  }
+}

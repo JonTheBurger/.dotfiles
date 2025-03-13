@@ -26,7 +26,8 @@
     "vale-ls@latest",
     "yaml-language-server@latest",
     "stylua@latest",
-    "lua-language-server@latest"
+    "lua-language-server@latest",
+    "vscode-langservers-extracted@latest"
   ],
   "shell": {
     "init_hook": [
