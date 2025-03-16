@@ -491,7 +491,7 @@ M.find_vscode_binary = function(extension, binary)
   local Path = require("plenary.path")
   local scan = require("plenary.scandir")
   extension = string.gsub(extension or "ms-vscode.cpptools", "%-", "[-]") -- Escape "-", which has special meaning in lua
-  binary = binary or string.gsub("OpenDebugAD7", "%-", "[-]")
+  binary = string.gsub(binary or "OpenDebugAD7", "%-", "[-]")
 
   local paths = {
     Path:new(vim.fn.expand("~/.vscode/extensions")),

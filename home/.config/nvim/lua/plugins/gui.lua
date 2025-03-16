@@ -155,6 +155,8 @@ return {
       "css",
       "dosini",
       "lua",
+      "qss",
+      "slint",
     },
     opts = {
       filetypes = { "*" },

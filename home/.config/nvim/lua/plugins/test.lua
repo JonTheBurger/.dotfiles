@@ -23,6 +23,7 @@ return {
           dap = { justMyCode = true },
           pytest_discover_instances = false,
         }),
+        require("rustaceanvim.neotest"),
       },
     })
   end,

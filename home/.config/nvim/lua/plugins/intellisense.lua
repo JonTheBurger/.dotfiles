@@ -98,11 +98,44 @@ return {
     },
   },
   {
+    -- https://github.com/chrisgrieser/nvim-lsp-endhints
+    "chrisgrieser/nvim-lsp-endhints",
+    event = "LspAttach",
+    opts = {},
+  },
+  {
     -- https://github.com/mrcjkb/rustaceanvim
     "mrcjkb/rustaceanvim",
     version = "^5",
     ft = { "rust" },
     lazy = false,
+    init = function()
+      local fn = require("config.fn")
+      local codelldb = fn.find_vscode_binary("vscode-lldb", "codelldb")
+      local liblldb = fn.find_vscode_binary("vscode-lldb", "liblldb")
+      local cfg = require('rustaceanvim.config')
+
+      vim.g.rustaceanvim = {
+        -- Plugin configuration
+        tools = {
+        },
+        -- LSP configuration
+        server = {
+          on_attach = function(client, bufnr)
+            -- you can also put keymaps in here
+          end,
+          default_settings = {
+            -- rust-analyzer language server configuration
+            ['rust-analyzer'] = {
+            },
+          },
+        },
+        -- DAP configuration
+        dap = {
+          adapter = cfg.get_codelldb_adapter(codelldb, liblldb),
+        },
+      }
+    end,
   },
   {
     -- https://github.com/p00f/clangd_extensions.nvim
