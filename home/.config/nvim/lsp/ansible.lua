@@ -1,10 +1,4 @@
-vim.filetype.add({
-  pattern = {
-    [ ".*ansible.*/.*.yml" ]  = "yaml.ansible",
-    [ ".*ansible.*/.*.yaml" ] = "yaml.ansible",
-  },
-})
 return {
-  cmd = { "ansible-language-server", },
+  cmd = { "ansible-language-server", "--stdio" },
   filetypes = { "yaml.ansible", },
 }

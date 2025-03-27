@@ -67,6 +67,8 @@ return {
     require("mini.move").setup(opts.move)
     require("mini.pairs").setup(opts.pairs)
     require("mini.surround").setup(opts.surround)
-    require("mini.indentscope").setup(opts.indentscope)
+    if not vim.g.vscode then
+      require("mini.indentscope").setup(opts.indentscope)
+    end
   end,
 }

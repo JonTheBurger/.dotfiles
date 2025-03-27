@@ -16,6 +16,7 @@ return {
   {
     -- https://github.com/mfussenegger/nvim-dap
     "mfussenegger/nvim-dap",
+    enabled = not vim.g.vscode,
     dependencies = {
       { "jbyuki/one-small-step-for-vimkind" },
       { "nvim-neotest/nvim-nio" },
@@ -192,6 +193,7 @@ return {
   {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
+    enabled = not vim.g.vscode,
     dependencies = {
       { "mfussenegger/nvim-dap" },
     },
@@ -236,6 +238,7 @@ return {
   {
     -- https://github.com/theHamsta/nvim-dap-virtual-text
     "theHamsta/nvim-dap-virtual-text",
+    enabled = not vim.g.vscode,
     opts = {},
   },
 }

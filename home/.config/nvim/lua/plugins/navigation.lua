@@ -66,7 +66,7 @@ return {
         enable = true,
         disable = {},
       },
-      indent = { enable = true },
+      indent = { enable = false },
       incremental_selection = { enable = true },
       textobjects = {
         swap = {

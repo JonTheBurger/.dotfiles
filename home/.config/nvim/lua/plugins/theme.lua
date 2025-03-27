@@ -177,6 +177,7 @@ return {
   {
     -- https://github.com/akinsho/bufferline.nvim
     "akinsho/bufferline.nvim",
+    enabled = not vim.g.vscode,
     dependencies = "nvim-tree/nvim-web-devicons",
     lazy = false,
     -- stylua: ignore start
@@ -217,6 +218,7 @@ return {
   {
     -- https://github.com/nvim-lualine/lualine.nvim
     "nvim-lualine/lualine.nvim",
+    enabled = not vim.g.vscode,
     dependencies = {
       { "Civitasv/cmake-tools.nvim" },
       { "MagicDuck/grug-far.nvim" },

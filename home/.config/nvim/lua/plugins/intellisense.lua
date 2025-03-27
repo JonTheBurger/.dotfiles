@@ -2,7 +2,7 @@ return {
   {
     -- https://github.com/Saghen/blink.cmp
     "saghen/blink.cmp",
-    enabled = true,
+    enabled = not vim.g.vscode,
     version = "*",
 
     ---@module "blink.cmp"

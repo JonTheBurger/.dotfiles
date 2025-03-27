@@ -39,9 +39,10 @@ jvim:
 	mkdir -p "${HOME}/.local/bin/"
 	echo "#!/bin/bash" > "${HOME}/.local/bin/jvim"
 	echo "export NVIM_APPNAME=jvim" >> "${HOME}/.local/bin/jvim"
-	echo 'nvim "$@"' >> "${HOME}/.local/bin/jvim"
+	echo 'nvim "$$@"' >> "${HOME}/.local/bin/jvim"
 	chmod +x "${HOME}/.local/bin/jvim"
-	ln -s "${PWD}/home/.config/nvim/" "${HOME}/.config/jvim"
+	rm -f "${HOME}/.config/jvim"
+	ln -s "${PWD}/home/.config/nvim" "${HOME}/.config/jvim"
 
 jvim.clean:
 	rm -f "${HOME}/.local/bin/jvim"

@@ -27,7 +27,9 @@
     "yaml-language-server@latest",
     "stylua@latest",
     "lua-language-server@latest",
-    "vscode-langservers-extracted@latest"
+    "vscode-langservers-extracted@latest",
+    "yamlfmt@latest",
+    "ansible-language-server@latest"
   ],
   "shell": {
     "init_hook": [

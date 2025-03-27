@@ -448,6 +448,11 @@ function M.select_motion_char(char, grab)
   end
 end
 
+function M.is_wsl()
+  local osrelease = vim.fn.readfile("/proc/sys/kernel/osrelease")[1] or ""
+  return osrelease:lower():match("microsoft") ~= nil
+end
+
 function M.use_wsl_clip()
   if vim.fn.has("wsl") == 1 then
     -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
