@@ -228,6 +228,7 @@ function Install-CliApps {
     winget install -e --id ajeetdsouza.zoxide # Invoke-Expression (& { (zoxide init powershell | Out-String) })
     winget install -e --id sharkdp.fd
     winget install -e --id JesseDuffield.lazygit
+    winget install -e --id uutils.coreutils
 
     if (-not (Test-Path "${OptDir}\Everything")) {
         $EverythingCliUrl = "https://www.voidtools.com/ES-1.1.0.27.x64.zip"

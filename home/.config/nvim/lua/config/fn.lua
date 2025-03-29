@@ -1,4 +1,6 @@
 local M = {}
+---@string Path to the most recently selected debug executable
+M.dap_executable = nil
 
 ---@class Breakpoint
 ---@field line integer Line number
@@ -109,6 +111,18 @@ function M.rfind_char(str, char, idx)
     end
   end
   return nil
+end
+
+
+--- Splits strings on \r or \n.
+---@param str string to split
+---@return string[]
+function M.split_lines(str)
+  local lines = {}
+  for line in str:gmatch("[^\r\n]+") do
+    table.insert(lines, line)
+  end
+  return lines
 end
 
 ---@param path Path|string
@@ -282,6 +296,33 @@ M.find_cxx_executable = function()
   return vim.fn.input("Path to executable: ", exe, "file")
 end
 
+--- Finds executable files in the current directory down using fd.
+---@param opts table? Options
+---@class find_executable_opts
+---@field timeout integer? Milliseconds to search, 10'000 (10 seconds) by default
+---@field max_depth integer? Number of directories to search. 20 by default.
+---@return string[] Executables list
+M.find_executables = function(opts)
+  opts = opts or {}
+  local result = vim.system(
+    {
+      "fd",
+      "--type", "x",
+      "--follow",
+      "--max-depth", tostring(opts.max_depth or 20),
+      "--no-ignore",
+      "--exclude", "CMakeFiles",
+    },
+    { text = true }
+  ):wait(opts.timeout or 10000)
+  if result.code == nil then
+    vim.notify("Finding executables timed out!", vim.log.levels.ERROR)
+    return {}
+  else
+    return M.split_lines(result.stdout)
+  end
+end
+
 M.find_python = function()
   local cwd = vim.fn.getcwd()
   if os.getenv("VIRTUAL_ENV") then
@@ -293,24 +334,35 @@ M.find_python = function()
   end
 end
 
-M.dap_executable = nil
+--- Searches for executables either by searching CMake targets or using fd
 M.debug_cmake_executable = function()
   local cmake = require("cmake-tools")
   local targets = cmake.get_launch_targets()
 
+  local prompt = ""
+  local choices = {}
+  local format_item = M.identity
+
   if targets == nil or targets.data == nil then
-    vim.notify("You must configure cmake first!", vim.log.levels.ERROR)
-    return
+    -- CMake Project not Configured
+    vim.notify("CMake was not configured; searching filesystem...", vim.log.levels.WARN)
+    prompt = "Pick an executable:"
+    choices = M.find_executables()
+    format_item = M.identity
+  else
+    -- CMake Project Detected!
+    prompt = "Pick a target:"
+    choices = targets.data.abs_paths
+    format_item = function(item) return M.basename(item) end
   end
 
-  vim.ui.select(targets.data.abs_paths, {
-    prompt = "Pick a target:",
-    format_item = function(item)
-      return M.basename(item)
-    end,
-  }, function(choice)
-    M.dap_executable = choice
-    require("dap").continue()
+  return coroutine.create(function(coro)
+    vim.ui.select(choices, {
+      prompt = prompt,
+      format_item = format_item,
+    }, function(choice)
+      coroutine.resume(coro, choice)
+    end)
   end)
 end
 

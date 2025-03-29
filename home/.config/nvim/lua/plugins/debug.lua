@@ -31,7 +31,6 @@ return {
       { "<F1>",        function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
       { "<S-F4>",      function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
       { "<F5>",        function() require("dap").continue() end,                                    desc = "Continue", },
-      { "<leader>Dbg", function() require("config.fn").debug_cmake_executable() end,                desc = "Debug CMake Target", },
       { "<F9>",        function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
       { "<F10>",       function() require("dap").step_over() end,                                   desc = "Step Over", },
       { "<F11>",       function() require("dap").step_into() end,                                   desc = "Step In", },
@@ -115,7 +114,7 @@ return {
           name = "lldb: launch",
           type = "lldb",      -- matches the adapter
           request = "launch", -- could also attach to a currently running process
-          program = require("config.fn").find_cxx_executable,
+          program = require("config.fn").debug_cmake_executable,
           cwd = "${workspaceFolder}",
           env = { "NOCOLOR=1" },
           stopOnEntry = false,
@@ -127,7 +126,7 @@ return {
           name = "gdb: launch",
           type = "cppdbg",
           request = "launch",
-          program = require("config.fn").find_cxx_executable,
+          program = require("config.fn").debug_cmake_executable,
           cwd = "${workspaceFolder}",
           env = { "NOCOLOR=1" },
           stopOnEntry = false,
