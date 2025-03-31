@@ -72,7 +72,7 @@ return {
           id = "cppdbg",
           name = "cppdbg",
           type = "executable",
-          command = require("config.fn").find_vscode_binary("ms-vscode.cpptools", "OpenDebugAD7"),
+          command = require("config.fn").fs.find_vscode_binary("ms-vscode.cpptools", "OpenDebugAD7"),
         },
         cmake = {
           id = "cmake",
@@ -114,7 +114,7 @@ return {
           name = "lldb: launch",
           type = "lldb",      -- matches the adapter
           request = "launch", -- could also attach to a currently running process
-          program = require("config.fn").debug_cmake_executable,
+          program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
           env = { "NOCOLOR=1" },
           stopOnEntry = false,
@@ -126,7 +126,7 @@ return {
           name = "gdb: launch",
           type = "cppdbg",
           request = "launch",
-          program = require("config.fn").debug_cmake_executable,
+          program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
           env = { "NOCOLOR=1" },
           stopOnEntry = false,
@@ -151,7 +151,7 @@ return {
           request = "launch",
           name = "python launch file",
           program = "${file}",
-          pythonPath = require("config.fn").find_python,
+          pythonPath = require("config.fn").os.find_python,
         },
         -- https://github.com/jbyuki/one-small-step-for-vimkind?tab=readme-ov-file#configuration
         nlua = {

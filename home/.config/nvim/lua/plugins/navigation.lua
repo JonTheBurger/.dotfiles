@@ -66,7 +66,7 @@ return {
         enable = true,
         disable = {},
       },
-      indent = { enable = false },
+      indent = { enable = true },
       incremental_selection = { enable = true },
       textobjects = {
         swap = {
@@ -160,8 +160,8 @@ return {
       -- Setup Folding
       vim.opt.foldmethod = "expr"
       vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-      vim.opt.indentexpr = ""
       vim.opt.foldlevel = 20
+      vim.opt.indentexpr = "nvim_treesitter#indent()"
     end,
   },
 }

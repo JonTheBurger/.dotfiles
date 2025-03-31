@@ -111,8 +111,8 @@ return {
     lazy = false,
     init = function()
       local fn = require("config.fn")
-      local codelldb = fn.find_vscode_binary("vscode-lldb", "codelldb")
-      local liblldb = fn.find_vscode_binary("vscode-lldb", "liblldb")
+      local codelldb = fn.fs.find_vscode_binary("vscode-lldb", "codelldb")
+      local liblldb = fn.fs.find_vscode_binary("vscode-lldb", "liblldb")
       local cfg = require('rustaceanvim.config')
 
       vim.g.rustaceanvim = {

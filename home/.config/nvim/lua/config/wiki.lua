@@ -1,5 +1,5 @@
 -- Wiki
-local edit_file = require("config.fn").edit_file
+local edit_file = require("config.fn").buf.edit_file
 local WIKI = vim.fn.expand("~/Documents/wiki")
 local DIARY = vim.fn.expand(WIKI .. "/diary")
 local MONTH_NAME = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }
@@ -39,17 +39,17 @@ vim.keymap.set("n", "<leader>wi", function()
 
   local years = scan.scan_dir(tostring(DIARY), { depth = 1, only_dirs = true })
   for _, year in ipairs(fn.identity(years)) do
-    path:write("# " .. fn.basename(year) .. "\n\n", "a")
+    path:write("# " .. fn.path.basename(year) .. "\n\n", "a")
 
     local months = scan.scan_dir(tostring(year), { depth = 1, only_dirs = true })
     for _, month_dir in ipairs(fn.identity(months)) do
-      local month_idx = fn.basename(month_dir)
+      local month_idx = fn.path.basename(month_dir)
       path:write("## " .. month_idx .. " - " .. MONTH_NAME[tonumber(month_idx)] .. "\n\n", "a")
 
       local weeks = scan.scan_dir(tostring(month_dir), { depth = 1 })
       for _, week_file in ipairs(fn.identity(weeks)) do
-        local relative = fn.remove_prefix(week_file, DIARY)
-        local week = fn.remove_suffix(fn.basename(week_file), ".md")
+        local relative = fn.str.remove_prefix(week_file, DIARY)
+        local week = fn.remove_suffix(fn.path.basename(week_file), ".md")
         path:write("- [" .. week .. "](." .. relative .. ")\n", "a")
       end
 
