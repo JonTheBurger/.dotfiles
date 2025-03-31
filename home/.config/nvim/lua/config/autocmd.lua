@@ -14,6 +14,12 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
     end
   end,
 })
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+  desc = "Lint Files",
+  callback = function()
+    require("lint").try_lint()
+  end,
+})
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Support Makefile Tabs",
   pattern = { "make" },

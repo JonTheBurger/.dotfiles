@@ -311,7 +311,9 @@ return {
             color = { fg = colors.violet, gui = "bold" },
             on_click = function(n, mouse)
               if (n == 1) and (mouse == "l") then
-                require("snacks.lazygit").open()
+                vim.cmd("DiffviewOpen")
+              elseif (n == 1) and (mouse == "r") then
+                vim.cmd("DiffviewClose")
               end
             end,
           },

@@ -57,16 +57,17 @@ vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 -- Motions
 vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
 vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
-vim.keymap.set("o", "a_", ":<C-u>lua require('config.fn').fs.select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
-vim.keymap.set("x", "a_", ":<C-u>lua require('config.fn').fs.select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
-vim.keymap.set("o", "i_", ":<C-u>lua require('config.fn').fs.select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
-vim.keymap.set("x", "i_", ":<C-u>lua require('config.fn').fs.select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
-vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').fs.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
-vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').fs.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "i_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "i_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'i')<CR>", { noremap = true, silent = true })
+vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
+vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 
 -- LSP
 vim.api.nvim_create_user_command("Fmt", function()
-  vim.lsp.buf.format()
+  require("conform").format({ async = true })
+  -- vim.lsp.buf.format()
   vim.lsp.buf.code_action({
     apply = true,
     context = {
@@ -78,7 +79,6 @@ vim.api.nvim_create_user_command("Fmt", function()
 end, { desc = "Format" })
 vim.keymap.set("n", "gF", vim.lsp.buf.code_action, { desc = "Code Action/Fix" })
 vim.keymap.set("n", "<F2>", function() vim.lsp.buf.rename() end, { desc = "Rename" })
-vim.keymap.set("n", "<leader>FF", vim.lsp.buf.format, { desc = "Format" })
 vim.keymap.set("n", "?", vim.diagnostic.open_float, { desc = "Float Diagnostic" })
 vim.keymap.set({ "n", "i" }, "<C-S-SPACE>", vim.lsp.buf.signature_help, {})
 vim.keymap.set("i", "<S-F1>", vim.lsp.buf.signature_help, {})

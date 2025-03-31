@@ -524,6 +524,8 @@ M.buf = {
 
       ::continue::
     end
+
+    vim.cmd("DiffviewClose")
   end,
 
   ---Open a file for editing, creating it if it doesn't exist.

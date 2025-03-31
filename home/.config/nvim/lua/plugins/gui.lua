@@ -112,6 +112,24 @@ return {
     },
   },
   {
+    -- https://github.com/sindrets/diffview.nvim
+    "sindrets/diffview.nvim",
+    keys = {
+      { "<leader>gd", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
+      { "<leader>gD", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
+      { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "Git FileHistory" },
+    },
+    cmd = {
+      "DiffviewClose",
+      "DiffviewFileHistory",
+      "DiffviewFocusFiles",
+      "DiffviewLog",
+      "DiffviewOpen",
+      "DiffviewRefresh",
+      "DiffviewToggleFiles",
+    },
+  },
+  {
     -- https://github.com/lewis6991/gitsigns.nvim
     "lewis6991/gitsigns.nvim",
     keys = {
