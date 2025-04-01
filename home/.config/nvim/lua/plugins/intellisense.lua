@@ -13,6 +13,12 @@ return {
       },
 
       completion = {
+        -- accept = {
+        --   auto_brackets = {
+        --     enabled = true,
+        --     default_brackets = { "(", ")", "{", "}", "[", "]" },
+        --   },
+        -- },
         keyword = { range = "full" },
         -- Show documentation when selecting a completion item
         documentation = { auto_show = true, auto_show_delay_ms = 500 },
@@ -52,6 +58,14 @@ return {
       signature = { enabled = true },
     },
     opts_extend = { "sources.default" },
+  },
+  {
+    -- https://github.com/windwp/nvim-autopairs
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {
+      map_cr = true,
+    },
   },
   {
     --https://github.com/mfussenegger/nvim-lint

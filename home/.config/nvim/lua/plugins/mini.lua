@@ -65,7 +65,6 @@ return {
     require("mini.comment").setup(opts.comment)
     require("mini.cursorword").setup(opts.comment)
     require("mini.move").setup(opts.move)
-    require("mini.pairs").setup(opts.pairs)
     require("mini.surround").setup(opts.surround)
     if not vim.g.vscode then
       require("mini.indentscope").setup(opts.indentscope)

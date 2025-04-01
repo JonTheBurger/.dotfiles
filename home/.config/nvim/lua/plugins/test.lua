@@ -10,9 +10,12 @@ return {
   ---@diagnostic disable missing-fields
   config = function(_, opts)
     require("neotest").setup({
+      summary = {
+        animated = false,
+      },
       adapters = {
         require("neotest-gtest").setup({
-          debug_adapter = "lldb",
+          debug_adapter = "cppdbg",
           is_test_file = function(file_path)
             return file_path:lower():match("**test.cpp$")
           end,
@@ -26,6 +29,7 @@ return {
         require("rustaceanvim.neotest"),
       },
     })
+    require("neotest-gtest.executables.global_registry")["for_dir"] = require("config.fn").util.find_cxx_tests
   end,
   -- stylua: ignore start
   keys = {
