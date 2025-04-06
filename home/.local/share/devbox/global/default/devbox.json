@@ -29,7 +29,8 @@
     "lua-language-server@latest",
     "vscode-langservers-extracted@latest",
     "yamlfmt@latest",
-    "ansible-language-server@latest"
+    "ansible-language-server@latest",
+    "nodePackages.prettier@latest"
   ],
   "shell": {
     "init_hook": [

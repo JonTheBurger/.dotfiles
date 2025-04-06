@@ -11,6 +11,7 @@ local colors = {
   violet = "#c489ff",
   magenta = "#ff539e",
   white = "#cccccc",
+  dark_grey = "#20303b",
 }
 
 local conditions = {
@@ -123,6 +124,7 @@ return {
       colors = {}, -- Override default colors
       highlights = { -- Override highlight groups
         ["BlinkCmpGhostText"] = { fg = colors.bg },
+        ["DiffviewDiffDelete"] = { fg = colors.dark_grey },
         ["FloatBorder"] = { bg = "none" },
         ["Folded"] = { fg = "$light_grey" },
         ["NormalFloat"] = { bg = "none" },
@@ -230,10 +232,10 @@ return {
     },
     event = "VeryLazy",
     init = function()
-      vim.opt.fillchars = {
+      vim.opt.fillchars:append({
         stl = "─",
         stlnc = "─",
-      }
+      })
     end,
     opts = {
       extensions = { "quickfix", "trouble", "overseer" },

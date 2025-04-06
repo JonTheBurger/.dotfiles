@@ -130,6 +130,9 @@ if [[ "$(uname -a)" == *WSL* ]]; then
   export WIN_USERNAME=$(/mnt/c/Windows/System32/cmd.exe "/c" "echo %USERNAME%" 2>/dev/null | tr -d '\r')
   export USERPROFILE=/mnt/c/Users/${WIN_USERNAME}
 fi
+export CMAKE_BUILD_TYPE='Debug'
+export CMAKE_COLOR_DIAGNOSTICS='ON'
+export CMAKE_EXPORT_COMPILE_COMMANDS='ON'
 export CMAKE_GENERATOR='Ninja'
 export EDITOR='nvim'
 export GPG_TTY=$(tty)

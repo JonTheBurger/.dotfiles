@@ -38,9 +38,10 @@ vim.keymap.set("n", "<", ":bprevious<CR>")
 -- Tab Through Tabs
 vim.keymap.set({ "n", "i" }, "<C-TAB>", ":tabnext<CR>")
 vim.keymap.set({ "n", "i" }, "<C-S-TAB>", ":tabprevious<CR>")
--- vim.keymap.set("n", "<leader><M-TAB>", ":tabnew<CR>")
--- vim.keymap.set("n", "<leader><TAB>", ":tabm +1<CR>")
--- vim.keymap.set("n", "<leader><S-TAB>", ":tabm -1<CR>")
+vim.keymap.set("n", "<leader><M-TAB>", ":tabnew<CR>")
+vim.keymap.set("n", "<leader><TAB>", "gt", { desc = "Next Tab", noremap = true, })
+vim.keymap.set("n", "<leader><S-TAB>", "gT", { desc = "Next Previous", noremap = true, })
+vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { desc = "TabClose", noremap = true, })
 
 -- Resize Splits with Arrows
 vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>")
@@ -55,6 +56,8 @@ vim.keymap.set("n", "<S-Up>", "<C-w><S-k>")
 vim.keymap.set("n", "<S-Right>", "<C-w><S-l>")
 
 -- Motions
+vim.keymap.set("n", "]h", "]c", { desc = "Next Hunk", noremap = true, })
+vim.keymap.set("n", "[h", "[c", { desc = "Previous Hunk", noremap = true, })
 vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
 vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
 vim.keymap.set("o", "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { noremap = true, silent = true })
@@ -82,6 +85,7 @@ vim.keymap.set("n", "<F2>", function() vim.lsp.buf.rename() end, { desc = "Renam
 vim.keymap.set("n", "?", vim.diagnostic.open_float, { desc = "Float Diagnostic" })
 vim.keymap.set({ "n", "i" }, "<C-S-SPACE>", vim.lsp.buf.signature_help, {})
 vim.keymap.set("i", "<S-F1>", vim.lsp.buf.signature_help, {})
+vim.keymap.set({"n", "i"}, "<F7>", require("config.fn").util.build, { desc = "Build" })
 
 -- Lua
 vim.keymap.set("n", "LL", ":lua =")

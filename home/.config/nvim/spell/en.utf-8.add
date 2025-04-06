@@ -10,3 +10,9 @@ table
 filename
 chdir
 boolean
+enqueues
+GPIO
+RTOS
+dequeue
+dequeues
+enqueued

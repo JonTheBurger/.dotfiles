@@ -26,9 +26,9 @@ return {
 
       -- Add or skip adding a new cursor by matching word/selection
       vim.keymap.set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
-      vim.keymap.set({"n", "x"}, "<leader>s", function() mc.matchSkipCursor(1) end)
+      vim.keymap.set({"n", "x"}, "<leader>m", function() mc.matchSkipCursor(1) end)
       vim.keymap.set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-      vim.keymap.set({"n", "x"}, "<leader>S", function() mc.matchSkipCursor(-1) end)
+      vim.keymap.set({"n", "x"}, "<leader>M", function() mc.matchSkipCursor(-1) end)
 
       -- Add and remove cursors with control + left click.
       vim.keymap.set("n", "<c-leftmouse>", mc.handleMouse)

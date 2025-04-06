@@ -648,6 +648,21 @@ M.util = {
     end
   end,
 
+  --- Invoke the build command
+  build = function()
+    local Path = require("plenary.path")
+    local cmake_tools = require("cmake-tools")
+    local overseer = require("overseer")
+
+    if Path:new("Cargo.toml"):exists() then
+      overseer.run_template({name = "cargo build"})
+    elseif Path:new("CMakeList.txt"):exists() and cmake_tools.is_cmake_project() then
+      vim.cmd("CMakeBuild")
+    elseif Path:new("Makefile"):exists() then
+      overseer.run_template({name = "make lint"})
+    end
+  end,
+
   --- Searches for executables either by searching CMake targets or using fd
   select_cxx_executable = function()
     local cmake = require("cmake-tools")

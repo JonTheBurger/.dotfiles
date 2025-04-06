@@ -77,8 +77,21 @@ return {
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
-        python = { "mypy", "pylint", },
+        c = { "cppcheck" },
+        cmake = { "cmakelint" },
+        cpp = { "cppcheck", "clazy" },
+        python = { "mypy", "pylint" },
+        yaml = { "yamllint" },
       }
+
+      -- Remove a linter if it doesn't exist
+      for _, linters in pairs(lint.linters_by_ft) do
+        for i = #linters, 1, -1 do
+          if vim.fn.executable(linters[i]) == 0 then
+            table.remove(linters, i)
+          end
+        end
+      end
 
       vim.api.nvim_create_user_command("Lint", function()
         lint.try_lint()
@@ -129,25 +142,7 @@ return {
       },
     },
     init = function()
-      vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
-    end,
-  },
-  {
-    -- https://github.com/nvimtools/none-ls.nvim
-    "nvimtools/none-ls.nvim",
-    enabled = false,
-    config = function(_, _)
-      local null_ls = require("null-ls")
-      local sources = {
-        null_ls.builtins.diagnostics.cppcheck,
-        null_ls.builtins.diagnostics.mypy,
-        null_ls.builtins.diagnostics.pylint,
-        null_ls.builtins.formatting.gersemi,
-        null_ls.builtins.formatting.shfmt.with({ extra_args = { "-i", "2", "-ci" } }),
-        null_ls.builtins.formatting.stylua,
-        null_ls.builtins.formatting.yamlfix,
-      }
-      null_ls.setup({ sources = sources })
+      -- vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
     end,
   },
   {
@@ -185,19 +180,18 @@ return {
   {
     -- https://github.com/mrcjkb/rustaceanvim
     "mrcjkb/rustaceanvim",
-    version = "^5",
+    version = "^6",
     ft = { "rust" },
     lazy = false,
     init = function()
       local fn = require("config.fn")
       local codelldb = fn.fs.find_vscode_binary("vscode-lldb", "codelldb")
       local liblldb = fn.fs.find_vscode_binary("vscode-lldb", "liblldb")
-      local cfg = require('rustaceanvim.config')
+      local cfg = require("rustaceanvim.config")
 
       vim.g.rustaceanvim = {
         -- Plugin configuration
-        tools = {
-        },
+        tools = {},
         -- LSP configuration
         server = {
           on_attach = function(client, bufnr)
@@ -205,8 +199,7 @@ return {
           end,
           default_settings = {
             -- rust-analyzer language server configuration
-            ['rust-analyzer'] = {
-            },
+            ["rust-analyzer"] = {},
           },
         },
         -- DAP configuration
@@ -261,13 +254,12 @@ return {
       },
     },
     keys = {
-      { "<F7>",        "<cmd>CMakeBuild<CR>",              desc = "CMake Build" },
-      { "<leader>cmb", "<cmd>CMakeBuild<CR>",              desc = "CMake Build" },
-      { "<leader>cmt", "<cmd>CMakeSelectBuildTarget<CR>",  desc = "CMake Launch Target" },
+      { "<leader>cmb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
+      { "<leader>cmt", "<cmd>CMakeSelectBuildTarget<CR>", desc = "CMake Launch Target" },
       { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>cmd", "<cmd>CMakeDebug<CR>",              desc = "CMake Debug" },
-      { "<leader>cmr", "<cmd>CMakeRun<CR>",                desc = "CMake Run" },
-      { "<C-S-F5>",    "<cmd>CMakeRun<CR>",                desc = "CMake Run" },
+      { "<leader>cmd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
+      { "<leader>cmr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
+      { "<C-S-F5>", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
     },
   },
   {

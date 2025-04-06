@@ -48,6 +48,7 @@ vim.opt.smarttab = true
 vim.opt.tabstop = 3
 vim.opt.textwidth = 0
 vim.opt.listchars = { space = "·", tab = "»»", nbsp = "␣" }
+vim.opt.fillchars:append({ diff = "╱" })
 
 -- Undo File
 vim.opt.backup = false
