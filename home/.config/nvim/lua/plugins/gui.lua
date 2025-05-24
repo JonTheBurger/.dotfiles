@@ -10,7 +10,8 @@ return {
     },
     ---@type overseer.Config
     opts = {
-      templates = { "make", "vscode", "cargo", "just" },
+      -- templates = { "make", "vscode", "cargo", "just", "user.run_script", },
+      templates = { "builtin", "user.run_script", },
       task_list = {
         max_width = { 100, 0.4 },
         min_width = { 30, 0.2 },
@@ -38,6 +39,21 @@ return {
           util.add_component(task_defn, { "on_result_diagnostics" })
           util.add_component(task_defn, { "on_result_diagnostics_trouble" })
         end)
+
+      -- https://github.com/stevearc/overseer.nvim/blob/master/doc/tutorials.md#run-a-file-on-save
+      vim.api.nvim_create_user_command("WatchRun", function()
+        local overseer = require("overseer")
+        overseer.run_template({ name = "run script" }, function(task)
+          if task then
+            task:add_component({ "restart_on_save", paths = {vim.fn.expand("%:p")} })
+            local main_win = vim.api.nvim_get_current_win()
+            overseer.run_action(task, "open vsplit")
+            vim.api.nvim_set_current_win(main_win)
+          else
+            vim.notify("WatchRun not supported for filetype " .. vim.bo.filetype, vim.log.levels.ERROR)
+          end
+        end)
+      end, {})
     end,
   },
   {

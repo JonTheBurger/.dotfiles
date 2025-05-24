@@ -164,6 +164,8 @@ return {
             [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
           },
         },
+        virtual_lines = false,
+        virtual_text = true,
       })
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
       vim.fn.sign_define("DapBreakpointCondition", { text = "🯄", texthl = "DiagnosticSignError", linehl = "", numhl = "" })

@@ -26,6 +26,15 @@ return {
         ghost_text = { enabled = true },
       },
 
+      cmdline = {
+        enabled = true,
+        keymap = { preset = "inherit" },
+        completion = {
+          menu = { auto_show = true },
+          -- ghost_text = { enabled = true },
+        },
+      },
+
       appearance = {
         -- Useful for when your theme doesn't support blink.cmp
         use_nvim_cmp_as_default = true,
@@ -129,7 +138,7 @@ return {
         lua = { "stylua" },
         python = { "ruff_format", "ruff_organize_imports" },
         sh = { "shfmt" },
-        yaml = { "yamlfix" },
+        yaml = { "yamlfmt" },
         zsh = { "shfmt" },
       },
       default_format_opts = {
@@ -208,6 +217,21 @@ return {
         },
       }
     end,
+  },
+  {
+    "cordx56/rustowl",
+    enabled = false,
+    build = "cd rustowl && cargo install --path . --locked",
+    lazy = false, -- This plugin is already lazy
+    opts = {
+      client = {
+        on_attach = function(_, buffer)
+          vim.keymap.set("n", "<leader>o", function()
+            require("rustowl").toggle(buffer)
+          end, { buffer = buffer, desc = "Toggle RustOwl" })
+        end
+      },
+    },
   },
   {
     -- https://github.com/p00f/clangd_extensions.nvim

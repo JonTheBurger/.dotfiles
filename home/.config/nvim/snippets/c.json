@@ -1,4 +1,13 @@
 {
+  "include guard": {
+    "prefix": "#ifn",
+    "body": [
+      "#ifndef ${1}",
+      "#define ${1}",
+      "${2}",
+      "#endif /* ${1} */"
+    ]
+  },
   "typedef struct": {
     "prefix": "typedef",
     "body": [

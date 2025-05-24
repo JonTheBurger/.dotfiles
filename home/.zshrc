@@ -125,9 +125,13 @@ bindkey '^X^e' edit-command-line  # Ctrl+X, Ctrl+E
 # ======================================================================================
 [ -x "$(command -v vcpkg)" ] && export VCPKG_ROOT="$(dirname $(realpath $(which vcpkg)))"
 if [[ "$(uname -a)" == *WSL* ]]; then
+  if [[ ! -f "${HOME}/.local/share/.wsl_env" ]]; then
+    echo "WIN_USERNAME=$(/mnt/c/Windows/System32/cmd.exe "/c" "echo %USERNAME%" 2>/dev/null | tr -d '\r')" > "${HOME}/.local/share/.wsl_env"
+  fi
+
+  export $(grep -v '^#' "${HOME}/.local/share/.wsl_env" | xargs -d '\n')
   export DONT_PROMPT_WSL_INSTALL=1
   export XCURSOR_SIZE=24
-  export WIN_USERNAME=$(/mnt/c/Windows/System32/cmd.exe "/c" "echo %USERNAME%" 2>/dev/null | tr -d '\r')
   export USERPROFILE=/mnt/c/Users/${WIN_USERNAME}
 fi
 export CMAKE_BUILD_TYPE='Debug'
@@ -156,6 +160,7 @@ alias 7='cd -7'
 alias 8='cd -8'
 alias 9='cd -9'
 alias :q='exit'
+alias :qa='tmux kill-window'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias bat='batcat'
 alias bigvim='vim -c "syntax off"'
@@ -177,6 +182,7 @@ alias ll='eza -al --icons --git --color-scale -o'
 alias ls='ls --color=auto'
 alias lstar='tar tf'
 alias lszip='unzip -l'
+alias mtime='stat -c %Y'
 alias path='echo $PATH | sed "s#:#/\n#g"'
 alias sodu='sudo --preserve-env=PATH env'
 alias upd8='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"'

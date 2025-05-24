@@ -4,6 +4,18 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
     vim.highlight.on_yank()
   end,
 })
+vim.api.nvim_create_autocmd("TextYankPost", {
+  desc = "Yank Ring",
+  callback = function()
+    local event = vim.v.event
+    if event.operator == "y" then
+      -- Shift numbered registers up (1 becomes 2, etc.)
+      for i = 9, 1, -1 do
+        vim.fn.setreg(tostring(i), vim.fn.getreg(tostring(i - 1)))
+      end
+    end
+  end,
+})
 vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
   desc = "Enable TreeSitter Folds",
   pattern = { "*" },

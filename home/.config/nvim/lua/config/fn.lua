@@ -312,6 +312,8 @@ M.fs = {
           local dir = dirs[#dirs] -- get last alphabetically
           local exe = scan.scan_dir(tostring(dir), { search_pattern = binary })
           if #exe > 0 then
+            -- Try and mark as executable
+            vim.fn.system("chmod +x " .. exe[1])
             return exe[1]
           end
         end
@@ -656,10 +658,12 @@ M.util = {
 
     if Path:new("Cargo.toml"):exists() then
       overseer.run_template({name = "cargo build"})
-    elseif Path:new("CMakeList.txt"):exists() and cmake_tools.is_cmake_project() then
+    elseif Path:new("CMakeLists.txt"):exists() and cmake_tools.is_cmake_project() then
       vim.cmd("CMakeBuild")
     elseif Path:new("Makefile"):exists() then
       overseer.run_template({name = "make lint"})
+    else
+      vim.notify("No build task found", vim.log.levels.WARN)
     end
   end,
 

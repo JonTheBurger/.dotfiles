@@ -11,6 +11,10 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "yaa", "gg0yG<C-o>", { desc = "Yank all" })
 vim.keymap.set("n", "yd", "yyp", { desc = "Duplicate line" })
 
+-- Inclusive reverse delete find/till (also delete char under cursor)
+vim.keymap.set("o", "F", "vF", { noremap = true })
+vim.keymap.set("o", "T", "vT", { noremap = true })
+
 -- Move highlighted text up/down w/ shift JK
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -26,6 +30,15 @@ vim.keymap.set("n", "N", "Nzzzv")
 -- Swap ' and `
 vim.keymap.set({ "n", "o" }, "'", "`", { noremap = true })
 vim.keymap.set({ "n", "o" }, "`", "'", { noremap = true })
+
+-- Save <N>j/k to jumplist
+vim.keymap.set("n", "k", function()
+  return vim.v.count > 0 and "m'" .. vim.v.count .. "k" or "gk"
+end, { expr = true })
+
+vim.keymap.set("n", "j", function()
+  return vim.v.count > 0 and "m'" .. vim.v.count .. "j" or "gj"
+end, { expr = true })
 
 -- Stay in Indent Mode
 vim.keymap.set("v", "<", "<gv")

@@ -31,6 +31,7 @@ return {
       { "<F1>",        function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
       { "<S-F4>",      function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
       { "<F5>",        function() require("dap").continue() end,                                    desc = "Continue", },
+      { "<F8>",        function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
       { "<F9>",        function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
       { "<F10>",       function() require("dap").step_over() end,                                   desc = "Step Over", },
       { "<F11>",       function() require("dap").step_into() end,                                   desc = "Step In", },

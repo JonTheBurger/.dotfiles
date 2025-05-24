@@ -28,7 +28,7 @@ return {
       vim.keymap.set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
       vim.keymap.set({"n", "x"}, "<leader>m", function() mc.matchSkipCursor(1) end)
       vim.keymap.set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-      vim.keymap.set({"n", "x"}, "<leader>M", function() mc.matchSkipCursor(-1) end)
+      vim.keymap.set({"n", "x"}, "<leader>MM", function() mc.matchSkipCursor(-1) end)
 
       -- Add and remove cursors with control + left click.
       vim.keymap.set("n", "<c-leftmouse>", mc.handleMouse)
@@ -124,7 +124,10 @@ return {
         enable = true,
         disable = {},
       },
-      indent = { enable = true },
+      indent = {
+        enable = true,
+        disable = { "rst" },
+      },
       incremental_selection = { enable = true },
       textobjects = {
         swap = {
@@ -220,6 +223,8 @@ return {
       vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
       vim.opt.foldlevel = 20
       vim.opt.indentexpr = "nvim_treesitter#indent()"
+
+      vim.g._ts_force_sync_parsing = true
     end,
   },
 }

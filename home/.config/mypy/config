@@ -1,0 +1,5 @@
+[mypy]
+cache_dir = .cache/mypy
+strict = true
+follow_imports = normal
+ignore_missing_imports = true
