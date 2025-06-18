@@ -2,6 +2,9 @@ return {
   {
     -- https://github.com/mrjones2014/smart-splits.nvim
     "mrjones2014/smart-splits.nvim",
+    dependencies = {
+      "hiasr/vim-zellij-navigator.nvim",
+    },
     -- stylua: ignore start
     keys = {
       { "<C-h>", function() require("smart-splits").move_cursor_left() end,  desc = "Move left one pane" },

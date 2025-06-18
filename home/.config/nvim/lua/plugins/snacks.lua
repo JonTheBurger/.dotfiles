@@ -110,7 +110,6 @@ return {
       picker = {
         enabled = true,
         ui_select = true,
-        -- TODO(POVIRK)
         -- https://github.com/folke/snacks.nvim/discussions/1798
         -- https://github.com/folke/snacks.nvim/discussions/1854
         actions = {
@@ -199,6 +198,7 @@ return {
       input = { enabled = true },
       lazygit = { enabled = true },
       quickfile = { enabled = true },
+      scroll = { enabled = true },
       ---@diagnostic disable-next-line missing-fields
       statuscolumn = {
         enabled = true,
@@ -223,9 +223,8 @@ return {
         Snacks.debug.backtrace()
       end
       vim.print = _G.dd
-      vim.api.nvim_create_user_command("Colorize", function()
-        Snacks.terminal.colorize()
-      end, {})
+
+      vim.g.snacks_animate = false
     end,
   },
 }

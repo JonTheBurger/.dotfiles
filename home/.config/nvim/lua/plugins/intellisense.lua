@@ -121,7 +121,16 @@ return {
       {
         "<leader>FF",
         function()
-          require("conform").format({ async = true })
+          if vim.bo.filetype == "bigfile" then
+            local ext = vim.fn.expand("%:e")
+            if ext == "json" then
+              require("conform").format({ formatters = { "jq" } })
+            else
+              vim.notify("No bigfile formatter found for " .. ext)
+            end
+          else
+            require("conform").format({ async = true })
+          end
         end,
         mode = "",
         desc = "Format buffer",
@@ -135,7 +144,9 @@ return {
         ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
         cmake = { "gersemi" },
+        json = { "jq" },
         lua = { "stylua" },
+        markdown = { "prettier" },
         python = { "ruff_format", "ruff_organize_imports" },
         sh = { "shfmt" },
         yaml = { "yamlfmt" },
@@ -147,6 +158,9 @@ return {
       formatters = {
         shfmt = {
           prepend_args = { "-i", "2" },
+        },
+        prettier = {
+          prepend_args = { "--prose-wrap", "always", "--print-width", "80" },
         },
       },
     },

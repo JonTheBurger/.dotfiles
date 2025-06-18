@@ -1,3 +1,19 @@
+-- Commands
+vim.api.nvim_create_user_command("Colorize", function()
+  Snacks.terminal.colorize()
+end, {})
+vim.api.nvim_create_user_command("AnimateOn", function()
+  vim.g.snacks_animate = true
+  require("smear_cursor").enabled = true
+  vim.notify("Animations On")
+end, {})
+vim.api.nvim_create_user_command("AnimateOff", function()
+  vim.g.snacks_animate = false
+  require("smear_cursor").enabled = false
+  vim.notify("Animations Off")
+end, {})
+
+-- AutoCommands
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {
   desc = "Highlight when yanking (copying) text",
   callback = function()

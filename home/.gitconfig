@@ -77,6 +77,7 @@
   pf = push --force-with-lease
   pushf = push --force-with-lease
   s = status -s
+  sha = rev-parse HEAD
   st = status
   sm = submodule
   sma = "!f() { cd -- \"${GIT_PREFIX:-.}\"; git submodule add ${@}; }; f"

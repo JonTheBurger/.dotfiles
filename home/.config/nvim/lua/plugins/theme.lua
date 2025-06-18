@@ -95,6 +95,12 @@ end
 
 return {
   {
+    "sphamba/smear-cursor.nvim",
+    opts = {
+      enabled = false,
+    },
+  },
+  {
     -- https://github.com/navarasu/onedark.nvim
     "navarasu/onedark.nvim",
     priority = 1000, -- Ensure it loads first

@@ -1,0 +1,14 @@
+// https://zellij.dev/documentation/creating-a-layout.html
+layout {
+  pane size=1 borderless=true {
+      plugin location="tab-bar"
+  }
+  pane {
+    pane
+    pane cwd="build" {
+    }
+  }
+  pane size=1 borderless=true {
+      plugin location="status-bar"
+  }
+}

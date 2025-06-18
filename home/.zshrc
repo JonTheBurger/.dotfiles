@@ -60,7 +60,8 @@ unset XDG_DATA_DIRS
 [ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 [ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
-[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude ".git"'
+[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude .git'
+[ -x "$(command -v fd)" ] && export FZF_CTRL_T_COMMAND='fd . -t file --hidden --exclude .git'
 [ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
 [ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
@@ -87,6 +88,17 @@ command_not_found_handler() {
     return 127
   fi
 }
+
+python_venv() {
+  local MYVENV=./.venv
+  # when you cd into a folder that contains $MYVENV
+  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
+  # when you cd into a folder that doesn't
+  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
+}
+autoload -U add-zsh-hook
+add-zsh-hook chpwd python_venv
+python_venv
 
 # ======================================================================================
 ## Theme
@@ -165,11 +177,13 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 alias bat='batcat'
 alias bigvim='vim -c "syntax off"'
 alias c='z'
-alias d='dirs -v'
 alias cat='bat -pP'
 alias copy='rsync -ahpruzvP'
+alias d='dirs -v'
+alias e="$EDITOR"
+alias f='y'
 alias getmode='stat -c %a'
-alias goodbye='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge -y && shutdown now"'
+alias goodbye='sudo zsh -c "upd8 && shutdown now"'
 alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
@@ -188,6 +202,8 @@ alias sodu='sudo --preserve-env=PATH env'
 alias upd8='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"'
 alias trust-ssh-keys="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"
 alias x=trash
+alias zj=zellij
+alias zja=zellij attach --create
 
 # ======================================================================================
 ## Functions & Aliases
@@ -287,3 +303,7 @@ function y() {
 ## Stop Profiling:
 # ======================================================================================
 # zprof
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
