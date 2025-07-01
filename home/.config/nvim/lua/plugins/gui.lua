@@ -152,6 +152,8 @@ return {
       { "<leader>gb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
       { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Toggle" },
       { "<leader>Wb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame" },
+      { "]g",         "<cmd>Gitsigns nav_hunk next<CR>",             desc = "Next Git Change" },
+      { "[g",         "<cmd>Gitsigns nav_hunk prev<CR>",             desc = "Previous Git Change" },
     },
     cmd = {
       "Gitsigns",
@@ -172,7 +174,7 @@ return {
       },
     },
     opts = {
-      prefix = "<leader>",
+      sort = { "alphanum", "local", "order", "group", "mod" },
     },
   },
   {
@@ -213,4 +215,9 @@ return {
       buftypes = {},
     },
   },
+  {
+    -- https://github.com/jontheburger/nvim-elf-file
+    "jontheburger/nvim-elf-file",
+    opts = {},
+  }
 }

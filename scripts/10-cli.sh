@@ -357,6 +357,11 @@ and catppuccin, a popular theme. Please check the script for all URLs and SHAs.
     fi
     git -C "${HOME}/.tmux/plugins/catppuccin" checkout "4ca26b774bc2e945fce4ccb909245dffeea7a9bf"
 
+    if [ ! -d "${HOME}/.tmux/plugins/tmux-floax" ]; then
+      git clone https://github.com/omerxx/tmux-floax.git "${HOME}/.tmux/plugins/tmux-floax"
+    fi
+    git -C "${HOME}/.tmux/plugins/tmux-floax" checkout "61c7f466b9a4ceed56f99d403250164170d586cd"
+
     util::notice "-- TMUX Plugins: Installed --"
   else
     util::notice "-- Skipping --"

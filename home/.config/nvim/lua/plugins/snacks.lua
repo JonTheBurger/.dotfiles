@@ -81,7 +81,7 @@ return {
     opts = {
       ---@class snacks.bigfile.Config
       bigfile = {
-        enable = true,
+        enabled = true,
         notify = true,
         size = 1.5 * MB,
         line_length = 1000,

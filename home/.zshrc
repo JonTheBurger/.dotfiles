@@ -249,6 +249,11 @@ function mk() {
 function new() {
   copier copy ${HOME}/.new/$@ .
 }
+function nvmenv() {
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+}
 function onchange() {
   if [[ $# -lt 2 ]]; then
     echo "Error: onchange requires at least 2 arguments."
@@ -303,7 +308,3 @@ function y() {
 ## Stop Profiling:
 # ======================================================================================
 # zprof
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

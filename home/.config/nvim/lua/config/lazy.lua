@@ -25,6 +25,6 @@ require("lazy").setup({
   dev = {
     path = "~/Projects/nvim",
     fallback = true, -- Fallback to git when local plugin doesn't exist
-    patterns = {}, -- Plugins that match these patterns will use your local versions
+    patterns = { "nvim-elf-file" }, -- Plugins that match these patterns will use your local versions
   },
 })

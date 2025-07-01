@@ -8,6 +8,10 @@ return {
       cmd = { "go", "run", file }
     elseif vim.bo.filetype == "cmake" then
       cmd = { "cmake", "-P", file}
+    elseif vim.bo.filetype == "python" then
+      cmd = { "python", file}
+    elseif vim.bo.filetype == "lua" then
+      cmd = { "lua", file}
     end
     return {
       cmd = cmd,
@@ -19,6 +23,6 @@ return {
     }
   end,
   condition = {
-    filetype = { "sh", "python", "go", "cmake" },
+    filetype = { "sh", "python", "go", "cmake", "lua" },
   },
 }

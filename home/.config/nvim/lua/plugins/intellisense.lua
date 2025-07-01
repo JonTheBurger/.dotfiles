@@ -144,6 +144,7 @@ return {
         ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
         cmake = { "gersemi" },
+        html = { "prettier" },
         json = { "jq" },
         lua = { "stylua" },
         markdown = { "prettier" },

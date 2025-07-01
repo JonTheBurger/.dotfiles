@@ -1,0 +1,50 @@
+{
+  "function": {
+    "prefix": "fun",
+    "body": [
+      "function(${1})",
+      "  set(options)",
+      "  set(oneValueArgs)",
+      "  set(multiValueArgs)",
+      "  cmake_parse_arguments(",
+      "    PARSE_ARGV",
+      "    0",
+      "    arg",
+      "    \"\\${options}\"",
+      "    \"\\${oneValueArgs}\"",
+      "    \"\\${multiValueArgs}\"",
+      "  )",
+      "  ${2}",
+      "endfunction()"
+    ]
+  },
+  "function comment": {
+    "prefix": "#[=",
+    "body": [
+      "#[=======================================================================[.rst:",
+      ".. command:: ${1}",
+      "",
+      "  Lorem ipsum.",
+      "",
+      "  **Signatures**::",
+      "",
+      "    ${1}(",
+      "      ${2}",
+      "    )",
+      "",
+      "  **The options are:**",
+      "",
+      "  ``ARG``",
+      "  Lorem ipsum.",
+      "",
+      "  **Example usage:**",
+      "",
+      ".. code-block:: cmake",
+      "",
+      "   ${1}()",
+      "",
+      "#]=======================================================================]"
+    ]
+  }
+}
+
