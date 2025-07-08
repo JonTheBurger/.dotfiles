@@ -46,7 +46,7 @@ return {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
-        default = { "lsp", "path", "snippets", "markdown" }, --"buffer" },
+        default = { "lsp", "path", "snippets", }, --"buffer" },
         providers = {
           snippets = {
             opts = {
@@ -55,11 +55,6 @@ return {
                 vim.fn.stdpath("config") .. "/snippets",
               },
             },
-          },
-          markdown = {
-            name = "RenderMarkdown",
-            module = "render-markdown.integ.blink",
-            fallbacks = { "lsp" },
           },
         },
       },
@@ -140,7 +135,7 @@ return {
     ---@type conform.setupOpts
     opts = {
       formatters_by_ft = {
-        ["*"] = { "codespell" },
+        ["*"] = { "codespell", "injected" },
         ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
         cmake = { "gersemi" },

@@ -53,6 +53,7 @@ return {
         replace = "Sr",        -- Replace surrounding
         update_n_lines = "Sn", -- Update `n_lines`
       },
+      respect_selection_type= true,
     },
   },
   config = function(_, opts)

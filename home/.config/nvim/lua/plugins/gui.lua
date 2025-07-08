@@ -41,7 +41,7 @@ return {
         end)
 
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/tutorials.md#run-a-file-on-save
-      vim.api.nvim_create_user_command("WatchRun", function()
+      vim.api.nvim_create_user_command("Rerun", function()
         local overseer = require("overseer")
         overseer.run_template({ name = "run script" }, function(task)
           if task then
@@ -50,7 +50,7 @@ return {
             overseer.run_action(task, "open vsplit")
             vim.api.nvim_set_current_win(main_win)
           else
-            vim.notify("WatchRun not supported for filetype " .. vim.bo.filetype, vim.log.levels.ERROR)
+            vim.notify("Rerun not supported for filetype " .. vim.bo.filetype, vim.log.levels.ERROR)
           end
         end)
       end, {})
@@ -134,6 +134,10 @@ return {
       { "<leader>gd", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
       { "<leader>gD", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
       { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "Git FileHistory" },
+      { "<leader>gxo", function() require("diffview.actions").conflict_choose("ours") end, desc = "Git Conflict accept ours" },
+      { "<leader>gxt", function() require("diffview.actions").conflict_choose("theirs") end, desc = "Git Conflict accept theirs" },
+      { "<leader>gxb", function() require("diffview.actions").conflict_choose("base") end, desc = "Git Conflict accept base" },
+      { "<leader>gxa", function() require("diffview.actions").conflict_choose("all") end, desc = "Git Conflict accept all" },
     },
     cmd = {
       "DiffviewClose",
@@ -150,7 +154,7 @@ return {
     "lewis6991/gitsigns.nvim",
     keys = {
       { "<leader>gb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
-      { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Toggle" },
+      { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Line Toggle" },
       { "<leader>Wb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame" },
       { "]g",         "<cmd>Gitsigns nav_hunk next<CR>",             desc = "Next Git Change" },
       { "[g",         "<cmd>Gitsigns nav_hunk prev<CR>",             desc = "Previous Git Change" },

@@ -21,6 +21,7 @@
   pager = delta
 [delta]
   navigate = true
+  line-numbers = true
 [diff]
   algorithm = histogram
   colorMoved = plain
@@ -30,6 +31,11 @@
   prune = true
   pruneTags = true
   all = true
+[filter]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 [format]
   pretty = format:%C(yellow)%h%Creset %Cblue%as%Creset %an %Cgreen%s%Creset
 [help]
