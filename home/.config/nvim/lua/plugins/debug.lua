@@ -81,7 +81,7 @@ return {
           type = "pipe",
           executable = {
             command = "cmake",
-            args = { "--debugger", "--debugger-pipe", "${pipe}", "-B", "build/dap" },
+            args = require("config.fn").gbl.cmake_args,
           },
           pipe = "${pipe}",
         },
@@ -146,6 +146,7 @@ return {
           name = "cmake: debug",
           type = "cmake",
           request = "launch",
+          args = require("config.fn").util.select_cmake_args,
         },
         python_file = {
           type = "python",

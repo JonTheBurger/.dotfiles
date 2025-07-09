@@ -1,5 +1,17 @@
 return {
   {
+    -- https://github.com/kylechui/nvim-surround
+    "kylechui/nvim-surround",
+    event = "VeryLazy",
+    opts = {},
+    init = function()
+      -- stylua: ignore start
+      vim.keymap.set("n", "gs", "<Plug>(nvim-surround-normal)aw", { noremap = true, desc = "Surround around word" })
+      vim.keymap.set("n", "gS", "<Plug>(nvim-surround-normal)aW", { noremap = true, desc = "Surround around WORD" })
+      -- stylua: ignore end
+    end,
+  },
+  {
     -- https://github.com/mrjones2014/smart-splits.nvim
     "mrjones2014/smart-splits.nvim",
     dependencies = {

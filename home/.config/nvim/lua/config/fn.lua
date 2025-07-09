@@ -24,6 +24,13 @@ M.gbl = {
   ---@type string? Path to the most recently selected debug executable
   dap_executable = nil,
 
+  ---@type string[] Arguments to pass to cmake debug adapter. The cmake debugger doesn't
+  ---respect "launch" "args" DAP setting, so we instead modify the original adapter
+  ---command as a workaround.
+  cmake_args = { "--debugger", "--debugger-pipe", "${pipe}", },
+
+  ---@type string Default <custom> arguments used for cmake; remembered across runs
+  default_cmake_args = "-B build",
 }
 
 ----------------------------------------------------------------------------------------
@@ -708,6 +715,53 @@ M.util = {
           M.gbl.dap_executable = choice
           coroutine.resume(coro, choice)
         end)
+    end)
+  end,
+
+  select_cmake_args = function()
+    local file = io.open("CMakePresets.json", "r")
+    if not file then return nil end
+    local presets_json = file:read("a")
+    file:close()
+
+    local configure_presets = {}
+    local presets = vim.fn.json_decode(presets_json)
+    if presets.configurePresets then
+      for _, preset in ipairs(presets.configurePresets) do
+        configure_presets[#configure_presets + 1] = preset.name
+      end
+    end
+    configure_presets[#configure_presets + 1] = "<custom>"
+
+    return coroutine.create(function(coro)
+      vim.ui.select(configure_presets, {
+        format_item = M.util.identity,
+        prompt = "Select a configure preset:",
+      }, function(choice)
+        -- Reset table to original 3 values
+        -- We do NOT reassign the table because we need the reference to stay the same
+        for i = 4, #M.gbl.cmake_args do
+          M.gbl.cmake_args[i] = nil
+        end
+
+        if choice ~= "<custom>" then
+          M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "--preset=" .. choice
+          coroutine.resume(coro, {})
+        else -- == "<custom>"
+          vim.ui.input({
+            prompt = "Enter CMake Args: ",
+            default = M.gbl.default_cmake_args,
+          }, function(args)
+            if args then
+              M.gbl.default_cmake_args = args
+              for word in string.gmatch(args, "%S+") do
+                M.gbl.cmake_args[#M.gbl.cmake_args + 1] = word
+              end
+            end
+            coroutine.resume(coro, {})
+          end)
+        end
+      end)
     end)
   end,
 

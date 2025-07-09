@@ -12,6 +12,7 @@ local colors = {
   magenta = "#ff539e",
   white = "#cccccc",
   dark_grey = "#20303b",
+  brown = "#885a2c",
 }
 
 local conditions = {
@@ -139,6 +140,7 @@ return {
         ["SpellLocal"] = { sp = "$fg" },
         ["SpellRare"] = { sp = "$fg" },
         ["StatusLine"] = { bg = "none" },
+        ["NvimSurroundHighlight"] = { bg = colors.brown }
       },
 
       -- Plugins Config --

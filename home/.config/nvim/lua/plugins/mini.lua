@@ -6,8 +6,6 @@ return {
   keys = {
     { "<C-_>", "gcc<ESC>", mode = { "n", "v" }, remap = true, desc = "Toggle Comment" },
     { "<C-/>", "gcc<ESC>", mode = { "n", "v" }, remap = true, desc = "Toggle Comment" },
-    { "Ss",    "SiW",      mode = { "n", "v" }, remap = true, desc = "Surround inner word with" },
-    { "Sc",    "Sr",       mode = { "n", "v" }, remap = true, desc = "Surround change" },
   },
   opts = {
     --- @type MiniAi.config
@@ -42,19 +40,6 @@ return {
         line_up = "<S-M-k>",
       },
     },
-    --- @type MiniSurround.config
-    surround = {
-      mappings = {
-        add = "S",             -- Add surrounding in Normal and Visual modes
-        delete = "Sd",         -- Delete surrounding
-        find = "Sf",           -- Find surrounding (to the right)
-        find_left = "SF",      -- Find surrounding (to the left)
-        highlight = "Sh",      -- Highlight surrounding
-        replace = "Sr",        -- Replace surrounding
-        update_n_lines = "Sn", -- Update `n_lines`
-      },
-      respect_selection_type= true,
-    },
   },
   config = function(_, opts)
     -- opts.align.steps = {
@@ -66,7 +51,6 @@ return {
     require("mini.comment").setup(opts.comment)
     require("mini.cursorword").setup(opts.comment)
     require("mini.move").setup(opts.move)
-    require("mini.surround").setup(opts.surround)
     if not vim.g.vscode then
       require("mini.indentscope").setup(opts.indentscope)
     end

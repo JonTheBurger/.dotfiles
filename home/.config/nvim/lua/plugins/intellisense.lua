@@ -135,14 +135,14 @@ return {
     ---@type conform.setupOpts
     opts = {
       formatters_by_ft = {
-        ["*"] = { "codespell", "injected" },
+        ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
         cmake = { "gersemi" },
         html = { "prettier" },
         json = { "jq" },
         lua = { "stylua" },
-        markdown = { "prettier" },
+        markdown = { "prettier", "injected" },
         python = { "ruff_format", "ruff_organize_imports" },
         sh = { "shfmt" },
         yaml = { "yamlfmt" },

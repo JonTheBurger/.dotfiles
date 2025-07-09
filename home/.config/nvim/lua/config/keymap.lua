@@ -101,9 +101,9 @@ vim.keymap.set("i", "<S-F1>", vim.lsp.buf.signature_help, {})
 vim.keymap.set({"n", "i"}, "<F7>", require("config.fn").util.build, { desc = "Build" })
 
 -- Lua
-vim.keymap.set("n", "LL", ":lua =")
-vim.keymap.set("n", "LR", ':lua require("')
-vim.keymap.set("n", "LF", ":lua F.")
+vim.keymap.set("n", "<leader>LL", ":lua =", { desc = ":lua =" })
+vim.keymap.set("n", "<leader>LR", ':lua require("', { desc=':lua require("' })
+vim.keymap.set("n", "<leader>LF", ":lua F.", { desc = ":lua F." })
 
 -- Custom Functions
 local fn = require("config.fn")
