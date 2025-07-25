@@ -135,12 +135,12 @@ return {
         ["FloatBorder"] = { bg = "none" },
         ["Folded"] = { fg = "$light_grey" },
         ["NormalFloat"] = { bg = "none" },
+        ["NvimSurroundHighlight"] = { bg = colors.brown },
         ["SpellBad"] = { sp = "$fg" },
         ["SpellCap"] = { sp = "$fg" },
         ["SpellLocal"] = { sp = "$fg" },
         ["SpellRare"] = { sp = "$fg" },
         ["StatusLine"] = { bg = "none" },
-        ["NvimSurroundHighlight"] = { bg = colors.brown }
       },
 
       -- Plugins Config --

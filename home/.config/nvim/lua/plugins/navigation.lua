@@ -3,7 +3,11 @@ return {
     -- https://github.com/kylechui/nvim-surround
     "kylechui/nvim-surround",
     event = "VeryLazy",
-    opts = {},
+    opts = {
+      aliases = {
+        ["d"] = '"', -- double quotes
+      },
+    },
     init = function()
       -- stylua: ignore start
       vim.keymap.set("n", "gs", "<Plug>(nvim-surround-normal)aw", { noremap = true, desc = "Surround around word" })

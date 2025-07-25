@@ -90,6 +90,7 @@
   smu = submodule update
   smi = submodule update --init --recursive
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
+  unstage = restore --staged
   w = whatchanged
 
   # Misspelling
@@ -107,6 +108,7 @@
   addend = !git add -A && commit --amend --no-edit
   amend = commit --amend --no-edit
   authors = shortlog -s -n
+  bkp = "!f() { git branch -D bkp && git checkout -b bkp && git switch -; }; f"
   # Reset & clean everything in the main repo and in submodules
   distclean = !git reset --hard && git clean -xdff && git restore . --recurse-submodules && git submodule foreach "git distclean"
   gc-branches = !git local-only-branches | xargs git branch -D

@@ -17,3 +17,5 @@ dequeue
 dequeues
 enqueued
 gzip/!
+lua
+Neovim

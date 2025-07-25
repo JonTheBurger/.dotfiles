@@ -1,0 +1,20 @@
+{
+  "pylint disable": {
+    "prefix": "pylint",
+    "body": [
+      "# pylint: disable=${1}"
+    ]
+  },
+  "pylint disable-next": {
+    "prefix": "py",
+    "body": [
+      "# pylint: disable-next=${1}"
+    ]
+  },
+  "pylint enable": {
+    "prefix": "# py",
+    "body": [
+      "# pylint: enable=${1}"
+    ]
+  }
+}

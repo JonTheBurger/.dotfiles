@@ -1,6 +1,8 @@
 -- Commands
 vim.api.nvim_create_user_command("Colorize", function()
   Snacks.terminal.colorize()
+  vim.wo.number = true
+  vim.wo.relativenumber = true
 end, {})
 vim.api.nvim_create_user_command("AnimateOn", function()
   vim.g.snacks_animate = true

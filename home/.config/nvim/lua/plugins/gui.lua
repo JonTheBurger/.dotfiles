@@ -47,7 +47,7 @@ return {
           if task then
             task:add_component({ "restart_on_save", paths = {vim.fn.expand("%:p")} })
             local main_win = vim.api.nvim_get_current_win()
-            overseer.run_action(task, "open vsplit")
+            overseer.run_action(task, "open hsplit")
             vim.api.nvim_set_current_win(main_win)
           else
             vim.notify("Rerun not supported for filetype " .. vim.bo.filetype, vim.log.levels.ERROR)
@@ -62,7 +62,7 @@ return {
     event = "BufEnter",
     keys = {
       { "<leader>U",  "<cmd>UndotreeToggle<CR>", desc = "Toggle Undo Tree" },
-      { "<leader>Wu", "<cmd>Outline<CR>",        desc = "Undo Tree" },
+      { "<leader>Wu", "<cmd>UndotreeToggle<CR>",        desc = "Undo Tree" },
     },
     init = function()
       vim.g.undotree_WindowLayout = 4
@@ -134,10 +134,10 @@ return {
       { "<leader>gd", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
       { "<leader>gD", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
       { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "Git FileHistory" },
-      { "<leader>gxo", function() require("diffview.actions").conflict_choose("ours") end, desc = "Git Conflict accept ours" },
-      { "<leader>gxt", function() require("diffview.actions").conflict_choose("theirs") end, desc = "Git Conflict accept theirs" },
-      { "<leader>gxb", function() require("diffview.actions").conflict_choose("base") end, desc = "Git Conflict accept base" },
-      { "<leader>gxa", function() require("diffview.actions").conflict_choose("all") end, desc = "Git Conflict accept all" },
+      { "<leader>gxo", function() require("diffview.actions").conflict_choose("ours")() end, desc = "Git Conflict accept ours" },
+      { "<leader>gxt", function() require("diffview.actions").conflict_choose("theirs")() end, desc = "Git Conflict accept theirs" },
+      { "<leader>gxb", function() require("diffview.actions").conflict_choose("base")() end, desc = "Git Conflict accept base" },
+      { "<leader>gxa", function() require("diffview.actions").conflict_choose("all")() end, desc = "Git Conflict accept all" },
     },
     cmd = {
       "DiffviewClose",

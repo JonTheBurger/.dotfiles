@@ -422,52 +422,6 @@ M.buf = {
     end
   end,
 
-  ---Show the current file contents as hex / toggle hex back to buffer.
-  toggle_hex = function()
-    -- Save modified, readonly, and modifiable states
-    local modified = vim.bo.modified
-    local old_readonly = vim.bo.readonly
-    local old_modifiable = vim.bo.modifiable
-
-    -- Temporarily make buffer modifiable
-    vim.bo.readonly = false
-    vim.bo.modifiable = true
-
-    if not vim.b.edit_hex then
-      -- Save old options
-      vim.b.old_ft = vim.bo.filetype
-      vim.b.old_bin = vim.bo.binary
-
-      -- Set new options
-      vim.bo.binary = true
-      vim.cmd("silent edit") -- Reload the file
-      vim.bo.filetype = "xxd"
-
-      -- Set status
-      vim.b.edit_hex = true
-
-      -- Switch to hex editor
-      vim.cmd("%!xxd")
-    else
-      -- Restore old options
-      vim.bo.filetype = vim.b.old_ft
-      if not vim.b.old_bin then
-        vim.bo.binary = false
-      end
-
-      -- Set status
-      vim.b.edit_hex = false
-
-      -- Return to normal editing
-      vim.cmd("%!xxd -r")
-    end
-
-    -- Restore modified, readonly, and modifiable states
-    vim.bo.modified = modified
-    vim.bo.readonly = old_readonly
-    vim.bo.modifiable = old_modifiable
-  end,
-
   ---Close all "widget" buffers
   close_widgets = function()
     local x_buftype = {

@@ -74,6 +74,7 @@ return {
   {
     --https://github.com/mfussenegger/nvim-lint
     "mfussenegger/nvim-lint",
+    enabled = true,
     event = {
       "BufNewFile",
       "BufReadPre",
@@ -127,7 +128,7 @@ return {
             require("conform").format({ async = true })
           end
         end,
-        mode = "",
+        mode = "n",
         desc = "Format buffer",
       },
     },

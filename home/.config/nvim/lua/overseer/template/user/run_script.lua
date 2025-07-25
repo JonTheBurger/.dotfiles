@@ -1,4 +1,4 @@
--- /home/stevearc/.config/nvim/lua/overseer/template/user/run_script.lua
+-- https://github.com/stevearc/overseer.nvim/blob/master/doc/tutorials.md#run-a-file-on-save
 return {
   name = "run script",
   builder = function()
@@ -12,6 +12,10 @@ return {
       cmd = { "python", file}
     elseif vim.bo.filetype == "lua" then
       cmd = { "lua", file}
+    elseif vim.bo.filetype == "c" then
+      cmd = "cc " .. file .. " && ./a.out"
+    elseif vim.bo.filetype == "cpp" then
+      cmd = "c++ " .. file .. " && ./a.out"
     end
     return {
       cmd = cmd,
@@ -23,6 +27,6 @@ return {
     }
   end,
   condition = {
-    filetype = { "sh", "python", "go", "cmake", "lua" },
+    filetype = { "sh", "python", "go", "cmake", "lua", "c", "cpp" },
   },
 }

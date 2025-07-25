@@ -4,7 +4,8 @@
     "snippets": [
       { "language": "c", "path": "./c.json" },
       { "language": "cpp", "path": "./cpp.json" },
-      { "language": "cmake", "path": "./cmake.json" }
+      { "language": "cmake", "path": "./cmake.json" },
+      { "language": "python", "path": "./python.json" }
     ]
   }
 }

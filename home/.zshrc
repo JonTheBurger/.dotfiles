@@ -74,6 +74,7 @@ if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
 else
   compinit -Cu
 fi
+[ -x "$(command -v jj)" ] && eval "$(jj util completion zsh)"
 
 zmodload zsh/complist
 command_not_found_handler() {
@@ -250,6 +251,7 @@ function new() {
   copier copy ${HOME}/.new/$@ .
 }
 function nvmenv() {
+  # https://github.com/nvm-sh/nvm/issues/2724
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

@@ -11,11 +11,14 @@ vim.filetype.add({
   },
 })
 
-vim.lsp.handlers["window/showMessage"] = function(_, result, ctx)
-  if result.type == vim.lsp.protocol.MessageType.Info then
-    return  -- ignore info messages
-  end
-  vim.notify(result.message, vim.log.levels[result.type] or vim.log.levels.INFO)
+local hover = vim.lsp.buf.hover
+vim.lsp.buf.hover = function()
+  return hover({
+    wrap = false,
+    max_width = 100,
+    max_height = 40,
+    border = "rounded",
+  })
 end
 
 vim.lsp.enable("ansible")

@@ -1,5 +1,42 @@
 # JVim
 
+This document explains the basics of getting started with `jvim`. If you are new
+to `vim`, consider reading the `Vim` section below for the basics.
+
+> [!NOTE]
+> `jvim` does not use `mason` for LSP installation. This repo prefers to use
+> `nix` via `devbox.json` (or your system package manager) to install LSPs.
+
+## Features
+
+This section describes the functionality in jvim not present in vanilla neovim.
+
+### Keymaps
+
+`jvim` tends to group commands behind common keymap prefixes. While not an
+exhaustive list, the groupings here should help users discover key mappings.
+
+- `<leader>cm`: CMake
+- `<leader>d`: Debugger
+- `<leader>f`: Find
+- `<leader>g`: Git
+- `<leader>s`: Search (additional Find)
+- `<leader>t`: Tests
+- `<leader>M`: Markdown
+
+## Vim
+
+This section describes the basics of vim.
+
+### Modes
+
+### Basic Keys
+- `h/j/k/l`: Move cursor left/down/up/right
+- `<C-d>`/`<C-u>` (`Ctrl+d`/`Ctrl+u`): Page down/up
+
+### Advanced
+
+- `]`: Go to next occurrence of `<something>` in the file (`[` for previous)
 
 ## Lua
 
@@ -11,8 +48,9 @@ Lua uses `1`-based indexing.
 
 ### Classes
 
-TL;DR, `:` is (essentially) the member function operator. Use the following
-blueprint for classes:
+TL;DR, `:` is essentially the member function operator. It passes the left side
+of `:` as the first argument to the function on the right side. Use the
+following blueprint for classes:
 
 ```lua
 Account = {}
@@ -83,6 +121,26 @@ Patterns can also be anchored to the start or end of a string using `^` or `$`
 respectively.
 
 `%` can be used to escape the magic characters: `( ) . % + - * ? [ ^ $`.
+
+--------------------------------------------------------------------------------
+
+## Neovim API
+
+This section lists some of common, useful Neovim Lua API functions.
+
+--------------------------------------------------------------------------------
+
+## TODO:
+
+- Investigate AI Plugins
+    - https://github.com/fang2hou/blink-copilot
+    - https://github.com/Robitx/gp.nvim
+    - https://github.com/jackMort/ChatGPT.nvim
+    - https://github.com/olimorris/codecompanion.nvim
+    - https://github.com/CopilotC-Nvim/CopilotChat.nvim
+    - https://github.com/milanglacier/minuet-ai.nvim?tab=readme-ov-file#blink-cmp-setup
+    - https://github.com/yetone/avante.nvim
+    - https://github.com/supermaven-inc/supermaven-nvim
 
 --------------------------------------------------------------------------------
 
