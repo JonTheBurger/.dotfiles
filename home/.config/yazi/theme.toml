@@ -1,6 +1,6 @@
 # https://github.com/BennyOe/onedark.yazi/blob/main/flavor.toml
 # : Manager {{{
-[manager]
+[mgr]
 cwd = { fg = "#61AFEF" }  # Blue
 
 # Hovered

@@ -83,34 +83,36 @@ util::prompt() {
 ## @param try_install List of packages to try and install.
 # --------------------------------------------------------------------------------------
 util::apt_install() {
-  # Prepend '-e ' to each element
-  local -a try_install=("$@")
-  try_install=("${try_install[@]/#/-e }")
+  if [ -x "/usr/bin/apt-get" ]; then
+    # Prepend '-e ' to each element
+    local -a try_install=("$@")
+    try_install=("${try_install[@]/#/-e }")
 
-  # Match each against the apt package list
-  local installable
-  # shellcheck disable=SC2068
-  installable=$(
-    apt-cache --generate pkgnames |
-      grep --line-regexp --fixed-strings ${try_install[@]} |
-      sort
-  )
+    # Match each against the apt package list
+    local installable
+    # shellcheck disable=SC2068
+    installable=$(
+      apt-cache --generate pkgnames |
+        grep --line-regexp --fixed-strings ${try_install[@]} |
+        sort
+    )
 
-  # Install
-  util::notice "I'm going to install apt packages:"
-  for pkg in ${installable}; do
-    util::info "- $pkg"
-  done
+    # Install
+    util::notice "I'm going to install apt packages:"
+    for pkg in ${installable}; do
+      util::info "- $pkg"
+    done
 
-  if util::prompt "Is this acceptable"; then
-    util::notice "... Installing ..."
-    # shellcheck disable=SC2086
-    sudo apt-get install -y ${installable}
-    util::notice "-- Installation Complete! --"
-  else
-    util::notice "-- Skipping --"
+    if util::prompt "Is this acceptable"; then
+      util::notice "... Installing ..."
+      # shellcheck disable=SC2086
+      sudo apt-get install -y ${installable}
+      util::notice "-- Installation Complete! --"
+    else
+      util::notice "-- Skipping --"
+    fi
+    util::println
   fi
-  util::println
 }
 
 # --------------------------------------------------------------------------------------
@@ -135,6 +137,28 @@ util::snap_install() {
     util::notice "-- Skipping --"
   fi
   util::println
+}
+
+# --------------------------------------------------------------------------------------
+## @fn util::dnf_install()
+## @brief Installs rpm packages.
+## @param try_install List of packages to try and install.
+# --------------------------------------------------------------------------------------
+util::dnf_install() {
+  if [ -x "/usr/bin/dnf" ]; then
+    sudo dnf install "$@"
+  fi
+}
+
+# --------------------------------------------------------------------------------------
+## @fn util::flatpak_install()
+## @brief Installs flatpak packages from flathub.
+## @param try_install List of packages to try and install.
+# --------------------------------------------------------------------------------------
+util::flatpak_install() {
+  if [ -x "/usr/bin/flatpak" ]; then
+    flatpak install flathub "$@"
+  fi
 }
 
 # --------------------------------------------------------------------------------------
@@ -239,7 +263,11 @@ util::error() {
 ## @param msg Message to display.
 # --------------------------------------------------------------------------------------
 util::critical() {
-  util::println "${ORANGE}${1-}${NOFMT}"
+  if [[ -n "${NOFMT+x}" ]]; then
+    util::println "${ORANGE}${1-}${NOFMT}"
+  else
+    util::println "${1-}"
+  fi
 }
 
 # --------------------------------------------------------------------------------------

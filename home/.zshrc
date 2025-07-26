@@ -57,8 +57,8 @@ done
 # ======================================================================================
 [ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
 unset XDG_DATA_DIRS
-[ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-[ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
+[ -x "$(command -v bat)" ] && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+[ -x "$(command -v bat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
 [ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude .git'
 [ -x "$(command -v fd)" ] && export FZF_CTRL_T_COMMAND='fd . -t file --hidden --exclude .git'
@@ -116,11 +116,14 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:
 # Keybinds, check with 'showkey -a', see https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Modifying-Text
 bindkey '^[e'  _expand_alias      # Alt+E
 bindkey '^[b'  backward-word      # Alt+B
+bindkey '\e[1~' beginning-of-line # Home
+bindkey '\e[4~' end-of-line       # End
 bindkey '^[f'  forward-word       # Alt+F
 bindkey '^A'   beginning-of-line  # Ctrl+A
 bindkey '^E'   end-of-line        # Ctrl+E
 bindkey '^[[1;5D' backward-word   # Ctrl+Left
 bindkey '^[[1;5C' forward-word    # Ctrl+Right
+bindkey "^[[3~" delete-char       # Delete
 bindkey '^[[3;5~' kill-word       # Ctrl+Delete
 bindkey '^[[3;3~' kill-word       # Alt+Delete
 bindkey '^H'   backward-kill-word # Ctrl+Backspace & Ctrl+H
@@ -175,7 +178,6 @@ alias 9='cd -9'
 alias :q='exit'
 alias :qa='tmux kill-window'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-alias bat='batcat'
 alias bigvim='vim -c "syntax off"'
 alias c='z'
 alias cat='bat -pP'

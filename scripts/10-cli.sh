@@ -29,10 +29,6 @@ FZF_GIT_URL="${FZF_GIT_URL-https://raw.githubusercontent.com/junegunn/fzf-git.sh
 LAZYGIT_VERSION="${LAZYGIT_VERSION-0.40.2}"
 ## @var LAZYGIT_URL Download source of lazygit.
 LAZYGIT_URL="${LAZYGIT_URL-https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_$(uname -m).tar.gz}"
-## @var ZOXIDE_VERSION Version of zoxide to install.
-ZOXIDE_VERSION="${ZOXIDE_VERSION-0.9.4}"
-## @var ZOXIDE_URL Download source of zoxide.
-ZOXIDE_URL="${ZOXIDE_URL-https://github.com/ajeetdsouza/zoxide/releases/download/v${ZOXIDE_VERSION}/zoxide-${ZOXIDE_VERSION}-$(uname -m)-unknown-linux-musl.tar.gz}"
 
 main() {
   local::parse_params "$@"
@@ -381,38 +377,7 @@ local::install_zsh_plugins() {
   Each will be downloaded from github."
 
   if util::prompt "Shall I install them"; then
-    util::notice "... Installing ..."
-
-    # Turn off ubuntu's call to compinit, since we do it ourselves
-    touch "${HOME}/.zshenv"
-    if ! grep -q skip_global_compinit "${HOME}/.zshenv"; then
-      echo "skip_global_compinit=1" >>"${HOME}/.zshenv"
-    fi
-
-    local ZSH_PLUGIN_DIR="${HOME}/.local/share/zsh"
-    mkdir -p "${ZSH_PLUGIN_DIR}"
-    # Only clone & accept known hashes, else remove the plugin
-
-    if [[ ! -d "${ZSH_PLUGIN_DIR}/zsh-completions" ]]; then
-      git clone "https://github.com/zsh-users/zsh-completions.git" "${ZSH_PLUGIN_DIR}/zsh-completions"
-      # v0.35.0
-      git -C "${ZSH_PLUGIN_DIR}/zsh-completions" checkout 67921bc12502c1e7b0f156533fbac2cb51f6943d ||
-        rm -rf "${ZSH_PLUGIN_DIR}/zsh-completions"
-    fi
-
-    if [[ ! -d "${ZSH_PLUGIN_DIR}/zsh-history-substring-search" ]]; then
-      git clone "https://github.com/zsh-users/zsh-history-substring-search.git" "${ZSH_PLUGIN_DIR}/zsh-history-substring-search"
-      # v1.1.0
-      git -C "${ZSH_PLUGIN_DIR}/zsh-history-substring-search" checkout 400e58a87f72ecec14f783fbd29bc6be4ff1641c ||
-        rm -rf "${ZSH_PLUGIN_DIR}/zsh-history-substring-search"
-    fi
-
-    if [[ ! -d "${ZSH_PLUGIN_DIR}/zsh-autopair" ]]; then
-      git clone "https://github.com/hlissner/zsh-autopair.git" "${ZSH_PLUGIN_DIR}/zsh-autopair"
-      # v1.0
-      git -C "${ZSH_PLUGIN_DIR}/zsh-autopair" checkout 34a8bca0c18fcf3ab1561caef9790abffc1d3d49 ||
-        rm -rf "${ZSH_PLUGIN_DIR}/zsh-autopair"
-    fi
+    bash "${SCRIPT_DIR}/pkg/zsh.sh"
   else
     util::notice "-- Skipping --"
   fi
@@ -431,15 +396,7 @@ ${CYAN}${ZOXIDE_URL}${NOFMT}
 "
 
   if util::prompt "Shall I install it"; then
-    util::notice "... Installing ..."
-    # download
-    curl -Lo "/tmp/zoxide.tar.gz" "${ZOXIDE_URL}"
-    mkdir -p "/tmp/zoxide"
-    tar -xf "/tmp/zoxide.tar.gz" -C "/tmp/zoxide"
-    # exe
-    mv -i "/tmp/zoxide/zoxide" "${HOME}/.local/bin/zoxide"
-    chmod +x "${HOME}/.local/bin/zoxide"
-    util::notice "-- Zoxide: Installed --"
+    bash "${SCRIPT_DIR}/pkg/zoxide.sh"
   else
     util::notice "-- Skipping --"
   fi
@@ -453,10 +410,8 @@ ${CYAN}${ZOXIDE_URL}${NOFMT}
 local::cleanup() {
   rm -f /tmp/fd.tar.gz
   rm -f /tmp/lazygit.tar.gz
-  rm -f /tmp/zoxide.tar.gz
   rm -rf /tmp/fd
   rm -rf /tmp/lazygit
-  rm -rf /tmp/zoxide
 }
 
 main "$@"

@@ -1,6 +1,6 @@
 [Appearance]
 ColorScheme=JonTheBurger
-Font=Hack,15,-1,7,50,0,0,0,0,0
+Font=Hack,12,-1,7,400,0,0,0,0,0,0,0,0,0,0,1
 
 [General]
 Command=/usr/bin/tmux
