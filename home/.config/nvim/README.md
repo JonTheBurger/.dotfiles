@@ -130,18 +130,4 @@ This section lists some of common, useful Neovim Lua API functions.
 
 --------------------------------------------------------------------------------
 
-## TODO:
-
-- Investigate AI Plugins
-    - https://github.com/fang2hou/blink-copilot
-    - https://github.com/Robitx/gp.nvim
-    - https://github.com/jackMort/ChatGPT.nvim
-    - https://github.com/olimorris/codecompanion.nvim
-    - https://github.com/CopilotC-Nvim/CopilotChat.nvim
-    - https://github.com/milanglacier/minuet-ai.nvim?tab=readme-ov-file#blink-cmp-setup
-    - https://github.com/yetone/avante.nvim
-    - https://github.com/supermaven-inc/supermaven-nvim
-
---------------------------------------------------------------------------------
-
 [pattern]: https://www.lua.org/pil/20.2.html

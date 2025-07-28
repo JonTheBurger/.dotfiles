@@ -133,6 +133,14 @@ Notably the following programs are configured (among others):
 - `Konsole`: KDE's default terminal emulator. (Gathering cobwebs)
 - `Yakuake`: Quake-style drop-down terminal emulator for KDE. (Gathering cobwebs)
 
+# Windows
+
+```ps1
+Set-ExecutionPolicy Unrestricted -Scope Process
+.\scripts\windows\10-Run-Admin-Setup.ps1
+# Set-ExecutionPolicy Unrestricted -Scope CurrentUser
+```
+
 --------------------------------------------------------------------------------
 
 [Filesystem Hierarchy Standard]: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html

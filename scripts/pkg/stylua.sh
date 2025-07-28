@@ -10,25 +10,23 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.11.3"
+    version="2.1.0"
   fi
-  local URL="${URL-https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux-$(uname -m).tar.gz}"
+  local URL="${URL-https://github.com/JohnnyMorganz/StyLua/releases/download/v${version}/stylua-linux-$(uname -m).zip}"
 
   # download
-  curl -Lo "/tmp/nvim.tar.gz" "${URL}"
-  mkdir -p "/tmp/nvim"
-  tar -xf "/tmp/nvim.tar.gz" --strip-components=1 -C "/tmp/nvim"
+  curl -Lo "/tmp/stylua.zip" "${URL}"
+  mkdir -p "/tmp/stylua"
+  unzip "/tmp/stylua.zip" -d "/tmp/stylua"
 
   # exe
-  mkdir -p "${HOME}/.local/opt"
-  mv -i "/tmp/nvim" "${HOME}/.local/opt/nvim"
   mkdir -p "${HOME}/.local/bin"
-  ln -s "${HOME}/.local/opt/nvim/bin/nvim" "${HOME}/.local/bin/nvim"
-  chmod +x "${HOME}/.local/opt/nvim/bin/nvim"
+  mv -i /tmp/stylua/stylua "${HOME}/.local/bin/"
+  chmod +x "${HOME}/.local/bin/stylua"
 
   # cleanup
-  rm -f /tmp/nvim.tar.gz
-  rm -rf /tmp/nvim
+  rm -f /tmp/stylua.zip
+  rm -rf /tmp/stylua
 }
 
 # --------------------------------------------------------------------------------------
@@ -36,8 +34,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/nvim"
-  rm -rf "${HOME}/.local/opt/nvim/bin/nvim"
+  rm -rf "${HOME}/.local/bin/stylua"
 }
 
 main "$@"

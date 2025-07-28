@@ -10,25 +10,23 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.11.3"
+    version="0.17.2"
   fi
-  local URL="${URL-https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux-$(uname -m).tar.gz}"
+  local URL="${URL-https://github.com/google/yamlfmt/releases/download/v${version}/yamlfmt_${version}_Linux_$(uname -m).tar.gz}"
 
   # download
-  curl -Lo "/tmp/nvim.tar.gz" "${URL}"
-  mkdir -p "/tmp/nvim"
-  tar -xf "/tmp/nvim.tar.gz" --strip-components=1 -C "/tmp/nvim"
+  curl -Lo "/tmp/yamlfmt.tar.gz" "${URL}"
+  mkdir -p "/tmp/yamlfmt"
+  tar -xf "/tmp/yamlfmt.tar.gz" -C "/tmp/yamlfmt"
 
   # exe
-  mkdir -p "${HOME}/.local/opt"
-  mv -i "/tmp/nvim" "${HOME}/.local/opt/nvim"
   mkdir -p "${HOME}/.local/bin"
-  ln -s "${HOME}/.local/opt/nvim/bin/nvim" "${HOME}/.local/bin/nvim"
-  chmod +x "${HOME}/.local/opt/nvim/bin/nvim"
+  mv -i "/tmp/yamlfmt/yamlfmt" "${HOME}/.local/bin/yamlfmt"
+  chmod +x "${HOME}/.local/bin/yamlfmt"
 
   # cleanup
-  rm -f /tmp/nvim.tar.gz
-  rm -rf /tmp/nvim
+  rm -f /tmp/yamlfmt.tar.gz
+  rm -rf /tmp/yamlfmt
 }
 
 # --------------------------------------------------------------------------------------
@@ -36,8 +34,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/nvim"
-  rm -rf "${HOME}/.local/opt/nvim/bin/nvim"
+  rm -rf "${HOME}/.local/bin/yamlfmt"
 }
 
 main "$@"

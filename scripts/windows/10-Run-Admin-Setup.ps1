@@ -29,6 +29,7 @@ param
     [switch] $Help,
     [switch] $Force,
     [nullable[bool]] $DoRemoveBloat,
+    [nullable[bool]] $DoInstallWinGet,
     [string] $OptDir = "C:\opt",
     [string] $PythonVersion = "3.12",
     [string] $DotNetSdkVersion = "8",
@@ -44,114 +45,7 @@ if ($Help.IsPresent) {
     Get-Help ".\10-Run-Admin-Setup.ps1"
     return
 }
-Import-Module $PSScriptRoot\Util\Dotfile-Functions.ps1
-
-function Remove-Bloatware {
-    $applications = @(
-        "*ACGMediaPlayer*"
-        "*ActiproSoftwareLLC*"
-        "*AdobeSystemsIncorporated.AdobePhotoshopExpress*"
-        "*Amazon.com.Amazon*"
-        "*Asphalt8Airborne*" 
-        "*AutodeskSketchBook*"
-        "*COOKINGFEVER*"
-        "*CaesarsSlotsFreeCasino*"
-        "*Clipchamp.Clipchamp*"
-        "*CyberLinkMediaSuiteEssentials*"
-        "*DisneyMagicKingdoms*"
-        "*DrawboardPDF*"
-        "*Duolingo-LearnLanguagesforFree*"
-        "*EclipseManager*"
-        "*Facebook*"
-        "*FarmVille2CountryEscape*"
-        "*Flipboard*"
-        "*HULULLC.HULUPLUS*"
-        "*HiddenCity*"
-        "*LinkedInforWindows*"
-        "*MarchofEmpires*"
-        "*Microsoft.3DBuilder*"
-        "*Microsoft.549981C3F5F10*"   # Cortana app
-        "*Microsoft.Asphalt8Airborne*"
-        "*Microsoft.BingFinance*"
-        "*Microsoft.BingFoodAndDrink*"
-        "*Microsoft.BingHealthAndFitness*"
-        "*Microsoft.BingNews*"
-        "*Microsoft.BingSports*"
-        "*Microsoft.BingTranslator*"
-        "*Microsoft.BingTravel* "
-        "*Microsoft.BingWeather*"
-        "*Microsoft.GetHelp*"
-        "*Microsoft.MSPaint*"   # Paint 3D
-        "*Microsoft.Messaging*"
-        "*Microsoft.Microsoft3DViewer*"
-        "*Microsoft.MicrosoftOfficeHub*"
-        "*Microsoft.MicrosoftSolitaireCollection*"
-        "*Microsoft.MixedReality.Portal*"
-        "*Microsoft.NetworkSpeedTest*"
-        "*Microsoft.News*"
-        "*Microsoft.Office.OneNote*"
-        "*Microsoft.Office.Sway*"
-        "*Microsoft.OneConnect*"
-        "*Microsoft.Print3D*"
-        "*Microsoft.RemoteDesktop*"
-        "*Microsoft.SkypeApp*"
-        "*Microsoft.Todos*"
-        "*Microsoft.WindowsAlarms*"
-        "*Microsoft.WindowsFeedbackHub*"
-        "*Microsoft.WindowsMaps*"
-        "*Microsoft.WindowsSoundRecorder*"
-        "*Microsoft.ZuneMusic*"
-        "*Microsoft.ZuneVideo*"
-        "*NYTCrossword*"
-        "*Netflix*"
-        "*OneCalendar*"
-        "*PandoraMediaInc*"
-        "*PhototasticCollage*"
-        "*PicsArt-PhotoStudio*"
-        "*Plex*"
-        "*PolarrPhotoEditorAcademicEdition*"
-        "*Royal Revolt*"
-        "*Shazam*"
-        "*Sidia.LiveWallpaper*"
-        "*SlingTV*"
-        "*Speed Test*"
-        "*TikTok*"
-        "*TuneInRadio*"
-        "*Twitter*"
-        "*Viber*"
-        "*WinZipUniversal*"
-        "*Wunderlist*"
-        "*XING*"
-        "*Zune*"
-        "*fitbit*"
-        "*iHeartRadio*"
-        "*king.com.BubbleWitch3Saga*"
-        "*king.com.CandyCrushSaga*"
-        "*king.com.CandyCrushSodaSaga*"
-    )
-
-    # Query Parameters
-    if ($Force) {
-        $DoRemoveBloat = $true
-    }
-    elseif ($null -eq $DoRemoveBloat) {
-        $appStr = $applications -join "`n"
-        $message = "Shall I Remove Windows Bloatware?"
-        $choices = @(
-            [System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Remove the following:`n$appStr")
-            [System.Management.Automation.Host.ChoiceDescription]::new("&No", "Do not remove any of the aforementioned applications")
-        )
-        $DoRemoveBloat = $Host.UI.PromptForChoice($null, $message, $choices, 1) -eq 0
-    }
-
-    if ($DoRemoveBloat -eq $true) {
-        foreach ($app in $applications) {
-            Write-Host "Removing $app"
-            Get-AppxPackage -Name $app -AllUsers | Remove-AppxPackage
-            Get-AppxProvisionedPackage -Online | Where-Object { $_.PackageName -like $app } | ForEach-Object { Remove-ProvisionedAppxPackage -Online -AllUsers -PackageName $_.PackageName }
-        }
-    }
-}
+Import-Module $PSScriptRoot\Util\Dotfile-Functions.psm1
 
 function Install-WinGet {
     Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
@@ -221,7 +115,7 @@ function Install-CliApps {
 
     winget install -e --id Neovim.Neovim
     winget install -e --id 7zip.7zip
-    winget install -e --id Git.Git --override "/VerySilent /NoRestart /o:PathOption=CmdTools /Components=""icons,assoc,assoc_sh,gitlfs"""
+    winget install -e --id Git.Git --override "/VerySilent /NoRestart /Components=""icons,assoc,assoc_sh,gitlfs"""
     winget install -e --id Starship.Starship # Invoke-Expression (&starship init powershell)
     winget install -e --id BurntSushi.ripgrep.MSVC
     winget install -e --id junegunn.fzf
@@ -338,4 +232,35 @@ function Install-CreativeApps {
         Invoke-WebRequest "${OpenTabletDriverUrl}" -OutFile "${env:Temp}\OpenTabletDriver.zip"
         Expand-Archive -Path "${env:Temp}\OpenTabletDriver.zip" -DestinationPath "${OptDir}\OpenTabletDriver"
     }
+}
+
+if ($Force) {
+    $DoRemoveBloat = $true
+}
+elseif ($null -eq $DoRemoveBloat) {
+    $appStr = $BloatApplications -join "`n"
+    $message = "Shall I Remove Windows Bloatware?"
+    $choices = @(
+        [System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Remove the following:`n$appStr")
+        [System.Management.Automation.Host.ChoiceDescription]::new("&No", "Do not remove any of the aforementioned applications")
+    )
+    $DoRemoveBloat = $Host.UI.PromptForChoice($null, $message, $choices, 1) -eq 0
+}
+if ($DoRemoveBloat -eq $true) {
+    Remove-Bloatware
+}
+
+if ($Force) {
+    $DoInstallWinGet = $true
+}
+elseif ($null -eq $DoInstallWinGet) {
+    $message = "Shall I Remove Windows Bloatware?"
+    $choices = @(
+        [System.Management.Automation.Host.ChoiceDescription]::new("&Yes", "Install WinGet")
+        [System.Management.Automation.Host.ChoiceDescription]::new("&No", "Do not install WinGet")
+    )
+    $DoInstallWinGet = $Host.UI.PromptForChoice($null, $message, $choices, 1) -eq 0
+}
+if ($DoInstallWinGet -eq $true) {
+    Install-WinGet
 }

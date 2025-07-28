@@ -46,6 +46,7 @@ sudo dnf install \
 sudo dnf install \
   thunderbird \
 
+uv tool install konsave --with setuptools
 git clone https://github.com/vinceliuice/Layan-kde.git ~/.local/src/Layan-kde
 sudo dnf install \
   kio-gdrive \
@@ -80,13 +81,6 @@ sudo mv libglib* disabled-libraries
 sudo mv libgio* disabled-libraries
 sudo mv libgmodule* disabled-libraries
 
-# kmonad
-sudo groupadd uinput
-sudo usermod -aG input "${USER}"
-sudo usermod -aG uinput "${USER}"
-echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/kmonad.rules
-sudo modprobe uinput
-
 # https://docs.fedoraproject.org/en-US/quick-docs/virtualization-getting-started/
 sudo dnf install \
   @virtualization \
@@ -118,3 +112,8 @@ sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 git https://github.com/Deathbyteacup/fluentbird.git ~/.local/src/fluentbird
 
+# steam
+flatpak permission-set kde-authorized remote-desktop "" yes
+flatpak permission-set kde-authorized remote-desktop com.valvesoftware.Steam yes
+sudo flatpak override com.valvesoftware.Steam --filesystem=home --talk-name=org.kde.KWin
+# to undo: flatpak override --reset com.valvesoftware.Steam

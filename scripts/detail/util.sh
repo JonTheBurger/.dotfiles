@@ -162,21 +162,25 @@ util::flatpak_install() {
 }
 
 # --------------------------------------------------------------------------------------
-## @fn util::pipx_install()
+## @fn util::uv_install()
 ## @brief Installs pip packages into separate virtual environments for the current user.
 ## @param packages List of packages to install.
 # --------------------------------------------------------------------------------------
-util::pipx_install() {
+util::uv_install() {
   util::notice "I'm going to install executables from pip into separated venvs:"
   for pkg in "$@"; do
     util::info "- $pkg"
   done
 
+  if ! [ -x "$(command -v uv)" ]; then
+    bash "$SCRIPT_DIR/../pkg/uv.sh"
+  fi
+
   if util::prompt "Is this acceptable"; then
     util::notice "... Installing ..."
     for pkg in "$@"; do
       util::info "- $pkg"
-      pipx install "${pkg}"
+      uv tool install "${pkg}"
     done
     util::notice "-- Installation Complete! --"
   else

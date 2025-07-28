@@ -10,7 +10,8 @@ cursor-invert-fg-bg = true
 cursor-style = block
 shell-integration-features = no-cursor
 unfocused-split-opacity = 1
-# window-decoration = server
+window-decoration = server
+command = tmux
 
 ################################################################################
 # Keys
@@ -86,5 +87,6 @@ keybind = ctrl+q>z=toggle_split_zoom
 ################################################################################
 # \cool
 keybind = ctrl+q>\>c>o>o>l=text:😎
+
 
 

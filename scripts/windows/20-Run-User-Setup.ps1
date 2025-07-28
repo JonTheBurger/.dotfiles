@@ -34,7 +34,7 @@ if ($Help.IsPresent) {
     Get-Help ".\20-Run-User-Setup.ps1"
     return
 }
-Import-Module $PSScriptRoot\Util\Dotfile-Functions.ps1
+Import-Module $PSScriptRoot\Util\Dotfile-Functions.psm1
 
 function Set-UserShell {
     # Query Parameters
@@ -86,10 +86,10 @@ function Set-UserShell {
     Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\GameDVR\AppCaptureEnabled" 0
     Set-Registry "HKCU:\System\GameConfigStore\GameDVR_Enabled" 0
     # Taskbar: Hide Taskbar Junk
-    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search" "SearchboxTaskbarMode" 0  # Search
-    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "ShowTaskViewButton" 0 # Task
-    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "TaskbarDa" 0 # Widgets
-    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" "TaskbarMn" 0 # Chat
+    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search\SearchboxTaskbarMode" 0  # Search
+    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ShowTaskViewButton" 0 # Task
+    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDa" 0 # Widgets
+    Set-Registry "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarMn" 0 # Chat
     Set-Registry "HKCU:\Software\Policies\Microsoft\Windows\WindowsCopilot\TurnOffWindowsCopilot" 1 # Copilot
 }
 

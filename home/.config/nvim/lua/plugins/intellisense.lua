@@ -2,6 +2,7 @@ return {
   {
     -- https://github.com/Saghen/blink.cmp
     "saghen/blink.cmp",
+    dependencies = { "fang2hou/blink-copilot" },
     enabled = not vim.g.vscode,
     version = "*",
 
@@ -46,7 +47,7 @@ return {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
-        default = { "lsp", "path", "snippets", }, --"buffer" },
+        default = { "lsp", "path", "snippets", "copilot" }, --"buffer" },
         providers = {
           snippets = {
             opts = {
@@ -56,6 +57,12 @@ return {
               },
             },
           },
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            score_offset = 100,
+            async = true,
+          }
         },
       },
 

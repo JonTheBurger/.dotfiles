@@ -10,25 +10,25 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.11.3"
+    version="0.8.3"
   fi
-  local URL="${URL-https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux-$(uname -m).tar.gz}"
+  local URL="${URL-https://github.com/astral-sh/uv/releases/download/${version}/uv-$(uname -m)-unknown-linux-gnu.tar.gz}"
 
   # download
-  curl -Lo "/tmp/nvim.tar.gz" "${URL}"
-  mkdir -p "/tmp/nvim"
-  tar -xf "/tmp/nvim.tar.gz" --strip-components=1 -C "/tmp/nvim"
+  curl -Lo "/tmp/uv.tar.gz" "${URL}"
+  mkdir -p "/tmp/uv"
+  tar -xf "/tmp/uv.tar.gz" --strip-components=1 -C "/tmp/uv"
 
   # exe
-  mkdir -p "${HOME}/.local/opt"
-  mv -i "/tmp/nvim" "${HOME}/.local/opt/nvim"
   mkdir -p "${HOME}/.local/bin"
-  ln -s "${HOME}/.local/opt/nvim/bin/nvim" "${HOME}/.local/bin/nvim"
-  chmod +x "${HOME}/.local/opt/nvim/bin/nvim"
+  mv -i "/tmp/uv/uv" "${HOME}/.local/bin/uv"
+  chmod +x "${HOME}/.local/bin/uv"
+  mv -i "/tmp/uv/uvx" "${HOME}/.local/bin/uvx"
+  chmod +x "${HOME}/.local/bin/uvx"
 
   # cleanup
-  rm -f /tmp/nvim.tar.gz
-  rm -rf /tmp/nvim
+  rm -f /tmp/uv.tar.gz
+  rm -rf /tmp/uv
 }
 
 # --------------------------------------------------------------------------------------
@@ -36,8 +36,8 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/nvim"
-  rm -rf "${HOME}/.local/opt/nvim/bin/nvim"
+  rm -rf "${HOME}/.local/bin/uv"
+  rm -rf "${HOME}/.local/bin/uvx"
 }
 
 main "$@"

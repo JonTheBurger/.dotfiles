@@ -39,4 +39,3 @@ local::do_uninstall() {
 }
 
 main "$@"
-

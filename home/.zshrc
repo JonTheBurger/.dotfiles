@@ -27,6 +27,7 @@ WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 # Sourced in-order
 local SCRIPTS=(
   /usr/share/doc/fzf/examples/key-bindings.zsh
+  /usr/share/fzf/shell/key-bindings.zsh
   /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   $HOME/.local/share/zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
@@ -66,6 +67,7 @@ unset XDG_DATA_DIRS
 [ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
 [ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
+[ -d "${HOME}/.local/share/zsh/completions" ] && fpath=(${HOME}/.local/share/zsh/completions $fpath)
 [ -d "${HOME}/.local/share/zsh/zsh-autopair" ] && source "${HOME}/.local/share/zsh/zsh-autopair/autopair.zsh" && autopair-init
 # [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 autoload -Uz compinit
@@ -191,6 +193,7 @@ alias goto='cd -P'
 alias gr='rg -S'
 alias grep4='rg -S -uu'
 alias history='history 0'
+alias icat='kitten icat'
 alias k='fc -e -'
 alias l='eza -l --icons --git --color-scale -o'
 alias lg='lazygit'

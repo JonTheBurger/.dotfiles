@@ -103,16 +103,4 @@ local::install_snap() {
   util::snap_install "${PKGS_SNAP[@]}"
 }
 
-# --------------------------------------------------------------------------------------
-## @fn local::install_pipx.
-## @brief Install pip programs for python development.
-# --------------------------------------------------------------------------------------
-local::install_pipx() {
-  ## @var PKGS_PIPX pip applications to install to the local user.
-  declare -a PKGS_PIPX
-  PKGS_PIPX+=(ruff)
-  PKGS_PIPX+=(ruff-lsp)
-  util::pipx_install "${PKGS_PIPX[@]}"
-}
-
 main "$@"

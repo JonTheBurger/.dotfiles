@@ -12,7 +12,6 @@ local::do_install() {
   if [ "${version}" == "latest" ]; then
     version="1.23.0"
   fi
-
   local URL="${URL-https://github.com/starship/starship/releases/download/v${version}/starship-$(uname -m)-unknown-linux-gnu.tar.gz}"
 
   # download
@@ -39,4 +38,3 @@ local::do_uninstall() {
 }
 
 main "$@"
-
