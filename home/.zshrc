@@ -57,7 +57,7 @@ done
 ## Command Hooks
 # ======================================================================================
 [ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
-unset XDG_DATA_DIRS
+# unset XDG_DATA_DIRS
 [ -x "$(command -v bat)" ] && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 [ -x "$(command -v bat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
@@ -69,6 +69,7 @@ unset XDG_DATA_DIRS
 [ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
 [ -d "${HOME}/.local/share/zsh/completions" ] && fpath=(${HOME}/.local/share/zsh/completions $fpath)
 [ -d "${HOME}/.local/share/zsh/zsh-autopair" ] && source "${HOME}/.local/share/zsh/zsh-autopair/autopair.zsh" && autopair-init
+[ -f "${HOME}/.local/bin/fzf-git.sh" ] && source "${HOME}/.local/bin/fzf-git.sh"
 # [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 autoload -Uz compinit
 if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
@@ -255,11 +256,23 @@ function mk() {
 function new() {
   copier copy ${HOME}/.new/$@ .
 }
-function nvmenv() {
+function lazy_load_nvm() {
   # https://github.com/nvm-sh/nvm/issues/2724
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  unset -f node npm nvm
+  export NVM_DIR=~/.nvm
+  [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+}
+function node() {
+  lazy_load_nvm
+  node $@
+}
+function npm() {
+ lazy_load_nvm
+ npm $@
+}
+function nvm() {
+  lazy_load_nvm
+  nvm $@
 }
 function onchange() {
   if [[ $# -lt 2 ]]; then

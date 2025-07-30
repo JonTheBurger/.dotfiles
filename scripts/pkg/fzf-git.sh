@@ -13,6 +13,7 @@ local::do_install() {
   if [ ! -f "${HOME}/.local/bin/fzf-git.sh" ]; then
     curl -Lo "${HOME}/.local/bin/fzf-git.sh" "${URL}"
   fi
+  chmod +x "${HOME}/.local/bin/fzf-git.sh"
 }
 
 # --------------------------------------------------------------------------------------

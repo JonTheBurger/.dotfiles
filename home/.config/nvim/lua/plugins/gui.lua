@@ -179,6 +179,10 @@ return {
     },
     opts = {
       sort = { "alphanum", "local", "order", "group", "mod" },
+      ---@type wk.Spec
+      spec = {
+        { "<leader>gx", group = "git conflict resolution", icon = "" }
+      },
     },
   },
   {
