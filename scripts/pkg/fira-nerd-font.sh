@@ -9,26 +9,13 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ## @param $version requested version to install, "latest" by default.
 # --------------------------------------------------------------------------------------
 local::do_install() {
-   local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
-
- if [ "${version}" == "latest" ]; then
-    version="1.23.0"
+  if [ "${version}" == "latest" ]; then
+    version="3.4.0"
   fi
-  local URL="${URL-https://github.com/starship/starship/releases/download/v${version}/starship-$(uname -m)-unknown-linux-gnu.tar.gz}"
-
-  # download
-  curl -Lo "/tmp/starship.tar.gz" "${URL}"
-  mkdir -p "/tmp/starship"
-  tar -xf "/tmp/starship.tar.gz" -C "/tmp/starship"
-
-  # exe
-  mkdir -p "${HOME}/.local/bin"
-  mv -i "/tmp/starship/starship" "${HOME}/.local/bin/starship"
-  chmod +x "${HOME}/.local/bin/starship"
-
-  # cleanup
-  rm -f /tmp/starship.tar.gz
-  rm -rf /tmp/starship
+  local URL="${URL-https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/FiraMono.zip}"
+  mkdir -p "${HOME}/.local/share/fonts"
+  curl -Lo "/tmp/fira-nerd.zip" "${URL}"
+  unzip "/tmp/fira-nerd.zip" '*.otf' -d "${HOME}/.local/share/fonts"
 }
 
 # --------------------------------------------------------------------------------------
@@ -36,7 +23,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/starship"
+  rm -rf "${HOME}/.local/share/fonts/"FiraMonoNerdFont*
 }
 
 main "$@"

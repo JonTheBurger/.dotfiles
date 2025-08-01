@@ -1,27 +1,4 @@
 sudo dnf install \
-  https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm 
-sudo dnf install \
-  https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-
-sudo dnf install \
-  bat \
-  fd-find \
-  fzf \
-  git \
-  git-lfs \
-  tig \
-  git-delta \
-  htop \
-  neovim \
-  stow \
-  trash-cli \
-  xxd \
-  uv \
-  zsh \
-  zsh-autosuggestions \
-  zsh-syntax-highlighting \
-
-sudo dnf install \
   ShellCheck \
   nodejs-bash-language-server \
   shfmt
@@ -57,6 +34,8 @@ sudo dnf install \
 
 sudo dnf install rustup
 rustup-init
+rustup component add rust-analyzer
+sudo dnf install lldb
 
 sudo dnf install \
   steam-devices
@@ -115,5 +94,5 @@ git https://github.com/Deathbyteacup/fluentbird.git ~/.local/src/fluentbird
 # steam
 flatpak permission-set kde-authorized remote-desktop "" yes
 flatpak permission-set kde-authorized remote-desktop com.valvesoftware.Steam yes
-sudo flatpak override com.valvesoftware.Steam --filesystem=home --talk-name=org.kde.KWin
+flatpak override com.valvesoftware.Steam --talk-name=org.kde.KWin
 # to undo: flatpak override --reset com.valvesoftware.Steam

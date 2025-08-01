@@ -148,17 +148,10 @@ Set-ExecutionPolicy Unrestricted -Scope Process
 <details>
 <summary markdown="span">TODO</summary>
 
-- qq keyboard layout
-- zshrc dependency installer
-- updatedb exclude /mnt & /media
-- if grep -q xmodmap "~/.profile"; then echo "xmodmap ~/.Xmodmap" >> "~/.profile" fi
-- sudo snap install node --channel=22/stable --classic
-- npm config set prefix '~/.local'
-- npm install --global yarn
 - konsave
+- `DP-2::NW:tile,HDMI-A-1::NW:spread,::SE:floating`
 - vlink
 - curl https://sh.rustup.rs -sSf | sh -s -- -y
     - rustup component add rust-analyzer
-- sudo loginctl enable-linger "$(whoami)" # Fix /var/run/$(id -u)
 
 </details>

@@ -229,11 +229,32 @@ function cls() {
   fi
   clear
 }
+function cmakeinstall() {
+  cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local -DBUILD_TESTING=OFF
+  cmake --build build
+  sudo cmake --install build
+}
 function dkr-rmgrep() {
   docker rmi $(docker images --format '{{.Repository}}:{{.Tag}}' | grep $@)
 }
 function dkr-ims() {
   docker images --format '{{.Repository}}' | uniq | sort
+}
+function drmi() {
+  docker images | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $3 }' | xargs -r docker rmi
+}
+function fkill() {
+  local pid
+  if [ "$UID" != "0" ]; then
+    pid=$(ps -f -u $UID | sed 1d | fzf -m | awk '{print $2}')
+  else
+    pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
+  fi
+
+  if [ "x$pid" != "x" ]
+  then
+    echo $pid | xargs kill -${1:-9}
+  fi
 }
 function fsmon() {
   inotifywait -r -m -e modify . |

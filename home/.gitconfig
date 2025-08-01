@@ -2,7 +2,7 @@
   path = /opt/provisioners/style/config/.gitconfig
 [user]
   name = Jon Povirk
-  email = jmp180@pitt.edu
+  email = JonPovirk@gmail.com
 [includeIf "gitdir:Projects/"]
   path = ~/Projects/.gitconfig
 [blame]
@@ -22,6 +22,8 @@
 [delta]
   navigate = true
   line-numbers = true
+  side-by-side = true
+  syntax-theme = TwoDark
 [diff]
   algorithm = histogram
   colorMoved = plain
@@ -133,3 +135,11 @@
   # Remove last commit, maintain working tree
   uncommit = reset --soft HEAD^
   staash = stash --all
+
+  ## fzf
+  fzco = "!f() { \
+    branches=$(git --no-pager branch --all --format='%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)' | sed '/^$/d') || return; \
+    tags=$(git --no-pager tag | awk '{print \"\\x1b[35;1mtag\\x1b[m\\\t\" $1}') || return; \
+    target=$( (echo \"$branches\"; echo \"$tags\") | fzf --no-hscroll --no-multi -n 2 --ansi --preview=\"git --no-pager log -150 --pretty=format:%s '..{2}'\") || return; \
+    git checkout $(awk '{print $2}' <<<\"$target\"); \
+  }; f"

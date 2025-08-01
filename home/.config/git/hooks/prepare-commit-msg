@@ -23,7 +23,7 @@ if commit_type != "":
     sys.exit(0)
 
 # Figure out which branch we're on
-branch: str = run(["git", "symbolic-ref", "--short", "HEAD"], check=True, text=True).stdout.strip()
+branch: str = (run(["git", "symbolic-ref", "--short", "HEAD"], check=True, text=True).stdout or "").strip()
 print(f"prepare-commit-msg: On branch '{branch}'")
 
 # Populate the commit message with the issue #, if there is one

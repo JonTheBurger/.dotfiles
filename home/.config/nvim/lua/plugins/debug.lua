@@ -66,7 +66,7 @@ return {
           id = "lldb",
           name = "lldb",
           type = "executable",
-          command = "lldb-dap",
+          command = "/usr/bin/lldb-dap",
         },
         cppdbg = {
           id = "cppdbg",

@@ -106,10 +106,17 @@ vim.api.nvim_create_user_command("Fmt", function()
   })
 end, { desc = "Format" })
 vim.keymap.set("n", "g.", vim.lsp.buf.code_action, { desc = "Code Action/Fix" })
+vim.keymap.set("n", "gC", vim.lsp.buf.incoming_calls, { desc = "Callers" })
 vim.keymap.set("n", "<F2>", function() vim.lsp.buf.rename() end, { desc = "Rename" })
 vim.keymap.set("i", "<F1>", vim.lsp.buf.signature_help, {})
 vim.keymap.set({"n", "i"}, "<F7>", require("config.fn").util.build, { desc = "Build" })
 vim.keymap.set("n", "?", vim.diagnostic.open_float, { desc = "Float Diagnostic" })
+
+vim.keymap.set("n", "<leader>JJ", 
+  function()
+    local client_id = vim.lsp.start_client { name = "tcp-test", connect = { address = "127.0.0.1", port = 4321, }, }
+    vim.lsp.buf_attach_client(0, client_id)
+  end, {})
 
 -- Lua
 vim.keymap.set("n", "<leader>LL", ":lua =", { desc = ":lua =" })

@@ -9,26 +9,20 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ## @param $version requested version to install, "latest" by default.
 # --------------------------------------------------------------------------------------
 local::do_install() {
-   local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
-
- if [ "${version}" == "latest" ]; then
-    version="1.23.0"
+  if [ "${version}" == "latest" ]; then
+    version="0.18.2"
   fi
-  local URL="${URL-https://github.com/starship/starship/releases/download/v${version}/starship-$(uname -m)-unknown-linux-gnu.tar.gz}"
+  local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
 
   # download
-  curl -Lo "/tmp/starship.tar.gz" "${URL}"
-  mkdir -p "/tmp/starship"
-  tar -xf "/tmp/starship.tar.gz" -C "/tmp/starship"
+  curl -Lo "/tmp/delta.tar.gz" "${URL}"
+  mkdir -p "/tmp/delta"
+  tar -xf "/tmp/delta.tar.gz" --strip-components=1 -C "/tmp/delta"
 
   # exe
   mkdir -p "${HOME}/.local/bin"
-  mv -i "/tmp/starship/starship" "${HOME}/.local/bin/starship"
-  chmod +x "${HOME}/.local/bin/starship"
-
-  # cleanup
-  rm -f /tmp/starship.tar.gz
-  rm -rf /tmp/starship
+  mv -i "/tmp/delta/delta" "${HOME}/.local/bin/delta"
+  chmod +x "${HOME}/.local/bin/delta"
 }
 
 # --------------------------------------------------------------------------------------
@@ -36,7 +30,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/starship"
+  rm -rf "${HOME}/.local/bin/delta"
 }
 
 main "$@"

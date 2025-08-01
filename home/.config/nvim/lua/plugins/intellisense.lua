@@ -231,7 +231,6 @@ return {
         },
         -- DAP configuration
         dap = {
-          adapter = cfg.get_codelldb_adapter(codelldb, liblldb),
         },
       }
     end,

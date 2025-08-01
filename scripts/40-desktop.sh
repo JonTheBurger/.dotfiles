@@ -12,7 +12,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # ======================================================================================
 # Can be overridden from command line
 ## @var NERD_FONT_VERSION Version of nerd fonts to install.
-NERD_FONT_VERSION="${NERD_FONT_VERSION-3.0.2}"
+NERD_FONT_VERSION="${NERD_FONT_VERSION-3.4.0}"
 ## @var NERD_FONT_URL Nerd font zipfile to download (https://www.nerdfonts.com/font-downloads).
 NERD_FONT_URL="${NERD_FONT_URL-https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraMono.zip}"
 
