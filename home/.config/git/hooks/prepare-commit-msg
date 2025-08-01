@@ -1,38 +1,27 @@
 #!/usr/bin/env python
-
 import re
 import sys
 from subprocess import run
 
-# Collect the parameters
-commit_msg_filepath = sys.argv[1]
-if len(sys.argv) > 2:
-    commit_type = sys.argv[2]
-else:
-    commit_type = ""
-if len(sys.argv) > 3:
-    commit_hash = sys.argv[3]
-else:
-    commit_hash = ""
+commit_msg_file = sys.argv[1]
+commit_type = sys.argv[2] if len(sys.argv) > 2 else ""
+commit_hash = sys.argv[3] if len(sys.argv) > 3 else ""
 
-print(
-    f"prepare-commit-msg: File: {commit_msg_filepath}\nType: {commit_type}\nHash: {commit_hash}"
-)
-
-if commit_type != "":
+# message (-m), template (-t), merge, squash, commit (-c)
+if commit_type not in ("", "message"):
     sys.exit(0)
 
-# Figure out which branch we're on
-branch: str = (run(["git", "symbolic-ref", "--short", "HEAD"], check=True, text=True).stdout or "").strip()
-print(f"prepare-commit-msg: On branch '{branch}'")
-
-# Populate the commit message with the issue #, if there is one
+cmd = ["git", "symbolic-ref", "--short", "HEAD"]
+branch = (run(cmd, check=True, text=True, capture_output=True).stdout or "").strip()
 match = re.match("^(feature|bugfix)/([A-Z0-9]+-[0-9]+).*", branch)
-if match is not None and len(match.groups()) >= 2:
-    ticket = match[2]
-    print(f"prepare-commit-msg: Ticket '{ticket}' detected")
 
-    with open(commit_msg_filepath, "r+", encoding="utf-8") as f:
-        content = f.read()
-        f.seek(0, 0)
-        f.write(f"{ticket} {content}")
+if match and len(match.groups()) >= 2:
+    ticket = match[2]
+
+    with open(commit_msg_file, "r+", encoding="utf-8") as f:
+        message = f.read()
+        if not message.startswith(ticket):
+            f.seek(0, 0)
+            f.write(f"{ticket} {message}")
+            if commit_type != "":
+                print(f'{__file__}: Prepended ticket "{ticket}"')
