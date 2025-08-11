@@ -1,7 +1,7 @@
 return {
   {
     "zbirenbaum/copilot.lua",
-    enabled = true,
+    enabled = os.getenv("USER") ~= "vagrant",
     cmd = {
       "Copilot",
     },

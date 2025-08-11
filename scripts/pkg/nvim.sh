@@ -37,7 +37,7 @@ local::do_install() {
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
   rm -rf "${HOME}/.local/bin/nvim"
-  rm -rf "${HOME}/.local/opt/nvim/bin/nvim"
+  rm -rf "${HOME}/.local/opt/nvim"
 }
 
 main "$@"

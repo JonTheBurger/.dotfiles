@@ -241,7 +241,7 @@ function dkr-ims() {
   docker images --format '{{.Repository}}' | uniq | sort
 }
 function drmi() {
-  docker images | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $3 }' | xargs -r docker rmi
+  docker images | sed 1d | fzf -q "$1" --no-sort -m --tac | awk '{ print $3 }' | xargs -r docker rmi --force
 }
 function fkill() {
   local pid

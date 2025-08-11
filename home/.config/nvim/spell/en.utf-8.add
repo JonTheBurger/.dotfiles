@@ -19,3 +19,4 @@ enqueued
 gzip/!
 lua
 Neovim
+idempotency

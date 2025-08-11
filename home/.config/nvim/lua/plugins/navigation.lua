@@ -244,7 +244,7 @@ return {
       vim.opt.foldlevel = 20
       vim.opt.indentexpr = "nvim_treesitter#indent()"
 
-      vim.g._ts_force_sync_parsing = true
+      vim.g._ts_force_sync_parsing = false
     end,
   },
 }

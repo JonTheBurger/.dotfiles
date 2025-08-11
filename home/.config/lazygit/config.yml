@@ -1,27 +1,45 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/jesseduffield/lazygit/master/schema/config.json
+disableStartupPopups: true
+quitOnTopLevelReturn: false
 git:
   paging:
     colorArg: always
     pager: delta --dark --paging=never
-  commitPrefix:
-    - pattern: "^\\w+\\/(\\w+-\\w+).*"
-      replace: "$1 "
+    # commitPrefix:
+    #   - pattern: "^\\w+\\/(\\w+-\\w+).*"
+    #     replace: "$1 "
 keybinding:
   universal:
-    return: x
+    quit: <esc>
+    return: q
+    nextPage: <c-d>
+    prevPage: <c-u>
+    nextTab: '>'
+    prevTab: '<'
+    nextScreenMode: ']'
+    prevScreenMode: '['
+    gotoBottom: G
+    gotoTop: g
+  commits:
+    viewResetOptions: o
+    openInBrowser: x
+  stash:
+    popStash: P
 gui:
   nerdFontsVersion: "3"
   filterMode: fuzzy
   branchColorPatterns:
-    'master': "#11cfff" # cyan
-    'main': "#11cfff" # cyan
-    'develop': "#11aaff" # blue
-    'feature/.*': "#0dd63c" # green
-    'bugfix.*': "#ff3333" # red
-    'release/.*': "#ff33f1" # pink
-    'integration/.*': "#ff9633" # orange
-    '.*tags.*': "#ffe733" # yellow
+    'master': "#11cfff"  # cyan
+    'main': "#11cfff"  # cyan
+    'develop': "#11aaff"  # blue
+    'feature/.*': "#0dd63c"  # green
+    'bugfix.*': "#ff3333"  # red
+    'release/.*': "#ff33f1"  # pink
+    'integration/.*': "#ff9633"  # orange
+    '.*tags.*': "#ffe733"  # yellow
   authorColors:
-    'Jon Povirk': '#11aaff' # blue
-    'Jonathan Povirk': '#11aaff' # blue
-    'Riccardi Dalexis': '#aa33ff' # purple
+    'Jon Povirk': '#11aaff'  # blue
+    'Jonathan Povirk': '#11aaff'  # blue
+    'Riccardi Dalexis': '#aa33ff'  # purple
+os:
+  editPreset: nvim

@@ -12,7 +12,21 @@
   "vim.handleKeys": {
     "<C-p>": false
   },
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["?"],
+      "commands": ["editor.action.showHover"]
+    },
+    {
+      "before": ["]", "d"],
+      "commands": ["editor.action.marker.next"]
+    },
+    {
+      "before": ["[", "d"],
+      "commands": ["editor.action.marker.prev"]
+    }
+  ],
   "vim.useSystemClipboard": true,
   "workbench.tree.indent": 16,
-  "workbench.colorTheme": "Visual Studio Dark - C++",
+  "workbench.colorTheme": "Visual Studio Dark - C++"
 }
