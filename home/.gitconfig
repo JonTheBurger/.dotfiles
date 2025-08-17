@@ -118,6 +118,7 @@
   heave = !git reset --hard origin/$(git rev-parse --abbrev-ref HEAD)
   force-apply = apply --reject --whitespace=fix
   fix-author = "!f() { git commit --amend --author=\"$(git config user.name) <$(git config user.email)>\"; }; f"
+  ignore = "!f() { for arg in "${@}"; do echo "${arg}" >> .gitignore; done; }; f"
   local-only-branches = !python ~/.local/bin/local-only-branches.py
   l = "!f() { lazygit --screen-mode full log; }; f"
   lg = "!f() { lazygit log; }; f"

@@ -26,6 +26,9 @@ vim.opt.showmode = false
 vim.opt.wildmode = { "longest:full", "full" }
 
 -- Host System Integration
+if vim.fn.executable("zsh") == 1 then
+  vim.opt.shell = "/usr/bin/zsh"
+end
 vim.opt.mouse = "a"
 vim.schedule(function()
   vim.opt.clipboard = "unnamedplus"
@@ -57,4 +60,9 @@ vim.opt.undodir = vim.fn.expand(vim.fn.stdpath("state") .. "/undo")
 vim.opt.undofile = true
 
 -- Gui
-vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
+-- vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
+if vim.g.neovide then
+  vim.keymap.set({ "n", "v" }, "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
+  vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
+  vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
+end

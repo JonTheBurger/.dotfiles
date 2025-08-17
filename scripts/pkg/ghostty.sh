@@ -39,6 +39,7 @@ X-TerminalArgAppId=--class
 X-TerminalArgDir=--working-directory
 X-TerminalArgHold=--hold
 EOF
+  chmod +x "${HOME}/.local/share/applications/ghostty.desktop"
 
   # cleanup
   rm -rf /tmp/ghostty

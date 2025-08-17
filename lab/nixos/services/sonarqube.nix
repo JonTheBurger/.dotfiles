@@ -1,0 +1,6 @@
+{ ... }:
+{
+  services.sonarqube = {
+    enable = true;
+  };
+}

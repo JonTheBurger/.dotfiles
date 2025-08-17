@@ -9,9 +9,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ## @param $version requested version to install, "latest" by default.
 # --------------------------------------------------------------------------------------
 local::do_install() {
-   local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
-
- if [ "${version}" == "latest" ]; then
+  if [ "${version}" == "latest" ]; then
     version="1.23.0"
   fi
   local URL="${URL-https://github.com/starship/starship/releases/download/v${version}/starship-$(uname -m)-unknown-linux-gnu.tar.gz}"

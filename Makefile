@@ -12,7 +12,22 @@ RST := \033[0m
 ################################################################################
 ## VERBOSE: [0] Set to 1 for more verbose output (VERBOSE=1)
 ifdef VERBOSE
-	STOWFLAGS += --verbose
+	STOWFLAGS+=--verbose
+endif
+
+## HOMELAB_IP: ["127.0.0.1"] IP Address of home lab
+ifndef HOMELAB_IP
+	HOMELAB_IP=127.0.0.1
+endif
+
+## HOMELAB: ["homelab"] Hostname of home lab
+ifndef HOMELAB
+	HOMELAB=homelab
+endif
+
+## HOMELAB_USER : ["$USER"] Username of home lab
+ifndef HOMELAB_USER
+	HOMELAB_USER=${USER}
 endif
 
 ################################################################################
@@ -50,3 +65,8 @@ jvim.clean:
 	rm -rf "${HOME}/.config/jvim"
 	rm -rf "${HOME}/.local/share/jvim"
 	rm -rf "${HOME}/.local/state/jvim"
+
+lab:
+	rsync -ahpruzvP ./lab/nixos/ ${HOMELAB_USER}@${HOMELAB}:/home/${HOMELAB_USER}/nixos/
+	ssh -t ${HOMELAB_USER}@${HOMELAB} "chmod 0600 /home/${HOMELAB_USER}/nixos/credentials.nix"
+	ssh -t ${HOMELAB_USER}@${HOMELAB} "sudo nixos-rebuild switch -I nixos-config=/home/${HOMELAB_USER}/nixos/configuration.nix"

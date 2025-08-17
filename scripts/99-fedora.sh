@@ -68,6 +68,7 @@ sudo dnf install \
   libvirt-daemon-driver-nodedev \
   libvirt-daemon-driver-qemu \
   libvirt-daemon-driver-storage-core \
+  qemu \
   qemu-audio-spice \
   qemu-char-spice \
   qemu-device-display-qxl \
@@ -79,6 +80,7 @@ sudo dnf install \
   virt-manager \
   virt-top
 sudo systemctl enable libvirtd
+sudo usermod -aG libvirt $(whoami)
 
 # sudo dnf install obs-studio xdg-desktop-portal xdg-desktop-portal-gtk pipewire
 sudo dnf install obs-studio obs-studio-plugin-vaapi gstreamer1-vaapi
