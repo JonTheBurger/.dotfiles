@@ -11,6 +11,11 @@ vim.filetype.add({
   },
 })
 
+vim.diagnostic.config({
+    float = {
+        border = "rounded",
+    },
+})
 local hover = vim.lsp.buf.hover
 vim.lsp.buf.hover = function()
   return hover({
@@ -30,13 +35,14 @@ vim.lsp.enable("lua")
 vim.lsp.enable("md")
 vim.lsp.enable("nixd")
 vim.lsp.enable("python")
--- vim.lsp.enable("pyrefly")
+vim.lsp.enable("pyrefly")
 vim.lsp.enable("qml")
 vim.lsp.enable("ruff")
 vim.lsp.enable("sh")
 vim.lsp.enable("toml")
 vim.lsp.enable("slint")
-vim.lsp.enable("ty")
+vim.lsp.enable("sonarlint")
+-- vim.lsp.enable("ty")
 vim.lsp.enable("typescript")
 vim.lsp.enable("vale")
 vim.lsp.enable("yaml")

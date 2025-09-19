@@ -17,6 +17,7 @@
     "tombi@0.4.42",
     "nixd@2.6.4",
     "nixpkgs-fmt@1.3.0",
-    "nixpkgs-lint@1"
+    "nixpkgs-lint@1",
+    "sonarlint-ls@3.25.0.76263"
   ]
 }

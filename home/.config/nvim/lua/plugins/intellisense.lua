@@ -146,6 +146,8 @@ return {
         ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
+        c = { "clang-format" },
+        cpp = { "clang-format" },
         cmake = { "gersemi" },
         c = { "clang-format" },
         cpp = { "clang-format" },
@@ -423,6 +425,13 @@ return {
       { "<leader>cmd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
       { "<leader>cmr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
       { "<C-S-F5>", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
+    },
+  },
+  {
+    "seblyng/roslyn.nvim",
+    ---@module 'roslyn.config'
+    ---@type RoslynNvimConfig
+    opts = {
     },
   },
   {

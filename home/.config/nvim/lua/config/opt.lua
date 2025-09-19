@@ -55,7 +55,9 @@ vim.opt.fillchars:append({ diff = "╱" })
 
 -- Undo File
 vim.opt.backup = false
+vim.opt.backupdir:prepend(vim.fn.stdpath("state") .. "/backup//")
 vim.opt.swapfile = false
+vim.opt.directory:prepend(vim.fn.stdpath("state") .. "/swap//")
 vim.opt.undodir = vim.fn.expand(vim.fn.stdpath("state") .. "/undo")
 vim.opt.undofile = true
 

@@ -93,9 +93,12 @@ vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').util.select_motion_char
 vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 
 -- LSP
+vim.api.nvim_create_user_command("TSExplore", function()
+  vim.cmd("InspectTree")
+end, { desc = "Show Parse Tree" })
 vim.api.nvim_create_user_command("Fmt", function()
-  require("conform").format({ async = true })
-  -- vim.lsp.buf.format()
+  vim.lsp.buf.format()
+  require("conform").format({ async = true, lsp_format = "fallback" })
   vim.lsp.buf.code_action({
     apply = true,
     context = {
