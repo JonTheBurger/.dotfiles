@@ -1,5 +1,30 @@
 return {
   {
+    "dmtrKovalenko/fff.nvim",
+    enabled = true,
+    -- build = "nix run .#release",
+    build = "cargo build --release",
+    opts = {
+      prompt = "🔎 ",
+      debug = {
+        enabled = false,
+        show_scores = true,
+      },
+      keymaps = {
+        close = "<C-C>",
+        toggle_debug = "<F1>",
+      },
+    },
+    lazy = false,
+    keys = {
+      {
+        "<leader><space>",
+        function() require("fff").find_files() end,
+        desc = "FFFind files",
+      }
+    }
+  },
+  {
     -- https://github.com/kylechui/nvim-surround
     "kylechui/nvim-surround",
     event = "VeryLazy",

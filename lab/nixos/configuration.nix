@@ -4,11 +4,13 @@
 
 let
   hostname = "homelab";
+  username = "jon";
 in {
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05"; # Did you read the comment?
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [ (import ./overlay.nix) ];
   imports =
     [
       /etc/nixos/hardware-configuration.nix
@@ -60,13 +62,17 @@ in {
   ];
 
   # Services
+  systemd.tmpfiles.rules = [
+    "d /etc/secrets 0700 root root -"
+    "f /etc/secrets/sonarqube-db-password 0600 root root -"
+  ];
   services.logind.lidSwitch = "ignore";
   services.openssh.enable = true;
 
   # Users
-  users.users.jon = {
+  users.users."${username}" = {
     isNormalUser = true;
-    description = "Jon";
+    description = "${username}";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
   };

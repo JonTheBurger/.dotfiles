@@ -1,6 +1,7 @@
-{ ... }:
-{
-  services.sonarqube = {
-    enable = true;
-  };
-}
+# { ... }:
+# {
+#   services.sonarqube = {
+#     enable = true;
+#   };
+# }
+

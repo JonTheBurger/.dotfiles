@@ -31,6 +31,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set({ "n", "o" }, "'", "`", { noremap = true })
 vim.keymap.set({ "n", "o" }, "`", "'", { noremap = true })
 
+-- Easy %
+vim.keymap.set("n", "mm", "%")
+vim.keymap.set({ "o", "x" }, "m", "%")
+
 -- Save <N>j/k to jumplist
 vim.keymap.set("n", "k", function()
   return vim.v.count > 0 and "m'" .. vim.v.count .. "k" or "gk"

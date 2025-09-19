@@ -38,7 +38,8 @@ rustup component add rust-analyzer
 sudo dnf install lldb
 
 sudo dnf install \
-  steam-devices
+  steam-devices \
+  xpad
 
 flatpak install flathub app/com.spotify.Client/x86_64/stable
 
