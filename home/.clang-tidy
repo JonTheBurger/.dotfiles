@@ -7,6 +7,7 @@ ExtraArgsBefore:
 Checks:
   - '*'
   - -objc-*
+  - -llvmlibc-*
 # https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html
 CheckOptions:
   - key: readability-identifier-naming.ClassCase

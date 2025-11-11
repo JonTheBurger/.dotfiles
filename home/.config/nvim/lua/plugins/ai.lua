@@ -1,15 +1,30 @@
+-- https://api.business.githubcopilot.com/models
+copilot_node_command = "node"
+if os.getenv("USER") == "vagrant" then
+  copilot_node_command = "/home/vagrant/.nvm/versions/node/v22.16.0/bin/node"
+end
+
 return {
   {
     "zbirenbaum/copilot.lua",
-    enabled = os.getenv("USER") ~= "vagrant",
+    -- enabled = os.getenv("USER") ~= "vagrant",
+    dependencies = {
+      "copilotlsp-nvim/copilot-lsp",
+    },
     cmd = {
       "Copilot",
     },
     event = "InsertEnter",
     opts = {
+      copilot_node_command=copilot_node_command,
       suggestion = {
         debounce = 3500,
       },
+      nes = {
+        enabled = true,
+        auto_trigger = false,
+      },
+      copilot_model = "",
       filetypes = {
         yaml = false,
         markdown = false,
@@ -38,7 +53,29 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
-    opts = {},
+    opts = {
+      strategies = {
+        chat = {
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4",
+          },
+        },
+      },
+      display = {
+        action_palette = {
+          width = 95,
+          height = 10,
+          prompt = "Prompt ", -- Prompt used for interactive LLM calls
+          provider = "snacks", -- Can be "default", "telescope", "fzf_lua", "mini_pick" or "snacks". If not specified, the plugin will autodetect installed providers.
+          opts = {
+            show_default_actions = true, -- Show the default actions in the action palette?
+            show_default_prompt_library = true, -- Show the default prompt library in the action palette?
+            title = "CodeCompanion actions", -- The title of the action palette
+          },
+        },
+      },
+    },
     keys = {
       { "<leader>C", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true, desc = "Code Companion" }},
     },

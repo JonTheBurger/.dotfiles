@@ -130,6 +130,7 @@ return {
       -- Custom Highlights --
       colors = {}, -- Override default colors
       highlights = { -- Override highlight groups
+        ["@comment.todo"] = { fmt = "bold" },
         ["BlinkCmpGhostText"] = { fg = colors.bg },
         ["DiffviewDiffDelete"] = { fg = colors.dark_grey },
         ["FloatBorder"] = { bg = "none" },
@@ -232,6 +233,7 @@ return {
     "nvim-lualine/lualine.nvim",
     enabled = not vim.g.vscode,
     dependencies = {
+      { "AndreM222/copilot-lualine" },
       { "Civitasv/cmake-tools.nvim" },
       { "MagicDuck/grug-far.nvim" },
       { "hedyhli/outline.nvim" },
@@ -239,6 +241,7 @@ return {
       { "mbbill/undotree" },
       { "mfussenegger/nvim-dap" },
       { "nvim-tree/nvim-web-devicons" },
+      { "zbirenbaum/copilot.lua" },
     },
     event = "VeryLazy",
     init = function()
@@ -313,6 +316,10 @@ return {
                 require("outline").open()
               end
             end,
+          },
+          {
+            "copilot",
+            show_colors = true,
           },
           {
             "%=",

@@ -8,10 +8,14 @@ return {
     "nvim-treesitter/nvim-treesitter",
   },
   ---@diagnostic disable missing-fields
+  ---@param opts neotest.Config
   config = function(_, opts)
     require("neotest").setup({
       summary = {
         animated = false,
+      },
+      floating = {
+        border = "rounded",
       },
       adapters = {
         require("neotest-gtest").setup({

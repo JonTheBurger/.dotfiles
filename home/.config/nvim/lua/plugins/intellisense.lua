@@ -408,10 +408,10 @@ return {
             components = {
               { "default" },
               { "on_output_parse", problem_matcher = "$gcc" },
-              -- { "on_result_diagnostics" },
+              { "on_result_diagnostics" },
             },
           },
-          ---@param overseer.Task
+          ---@param task overseer.TaskDefinition
           on_new_task = function(task)
             require("overseer").open({ enter = false, direction = "bottom" })
           end,

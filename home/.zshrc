@@ -205,6 +205,7 @@ alias lstar='tar tf'
 alias lszip='unzip -l'
 alias mtime='stat -c %Y'
 alias path='echo $PATH | sed "s#:#/\n#g"'
+alias splitlines="rg -oP '\S+'"
 alias sodu='sudo --preserve-env=PATH env'
 alias upd8='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"'
 alias trust-ssh-keys="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"

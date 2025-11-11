@@ -20,3 +20,5 @@ gzip/!
 lua
 Neovim
 idempotency
+if/!
+def/!

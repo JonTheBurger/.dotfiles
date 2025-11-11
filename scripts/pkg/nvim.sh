@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.11.3"
+    version="0.11.5"
   fi
   local URL="${URL-https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux-$(uname -m).tar.gz}"
 
@@ -23,7 +23,7 @@ local::do_install() {
   mkdir -p "${HOME}/.local/opt"
   mv -i "/tmp/nvim" "${HOME}/.local/opt/nvim"
   mkdir -p "${HOME}/.local/bin"
-  ln -s "${HOME}/.local/opt/nvim/bin/nvim" "${HOME}/.local/bin/nvim"
+  ln -sf "${HOME}/.local/opt/nvim/bin/nvim" "${HOME}/.local/bin/nvim"
   chmod +x "${HOME}/.local/opt/nvim/bin/nvim"
 
   # cleanup

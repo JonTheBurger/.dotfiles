@@ -111,3 +111,10 @@
       )
     )
 )
+
+; For to do comments
+(
+  (comment) @injection.content
+  (#match? @injection.content "TODO|BUG|FIXME|NOTE|HACK|FUTURE")
+  (#set! injection.language "comment" "todo")
+)

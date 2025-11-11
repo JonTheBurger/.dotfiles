@@ -14,7 +14,7 @@
     "vale-ls@0.3.8",
     "vscode-langservers-extracted@latest",
     "yaml-language-server@1.18.0",
-    "tombi@0.4.42",
+    "tombi@0.6.0",
     "nixd@2.6.4",
     "nixpkgs-fmt@1.3.0",
     "nixpkgs-lint@1",
