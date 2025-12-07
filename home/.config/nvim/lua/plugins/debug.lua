@@ -137,7 +137,7 @@ return {
         },
         lldb = {
           name = "lldb: launch",
-          type = "lldb", -- matches the adapter
+          type = "lldb",      -- matches the adapter
           request = "launch", -- could also attach to a currently running process
           program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
