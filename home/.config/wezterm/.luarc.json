@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/sumneko/vscode-lua/master/setting/schema.json",
+  "$comment": "https://github.com/DrKJeff16/wezterm-types",
+  "workspace.library": [
+    "~/.local/src/wezterm-types/lua"
+  ],
+  "diagnostics.disable": [
+    "unused-function",
+    "unused-local"
+  ]
+}

@@ -15,7 +15,7 @@ return {
     elseif vim.bo.filetype == "c" then
       cmd = "cc " .. file .. " && ./a.out"
     elseif vim.bo.filetype == "cpp" then
-      cmd = "c++ " .. file .. " && ./a.out"
+      cmd = "c++ -std=c++23 " .. file .. " && ./a.out"
     elseif vim.bo.filetype == "nix" then
       cmd = { "nix-instantiate", "--eval", "--strict", file }
     end

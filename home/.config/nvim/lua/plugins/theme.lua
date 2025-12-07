@@ -372,7 +372,7 @@ return {
             },
             on_click = function(n, mouse)
               if (n == 1) and (mouse == "l") then
-                vim.cmd("Trouble diagnostics toggle")
+                vim.cmd("Trouble diagnostics toggle win.position=right")
               end
             end,
           },

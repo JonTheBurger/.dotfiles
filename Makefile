@@ -70,3 +70,4 @@ lab:
 	rsync -ahpruzvP ./lab/nixos/ ${HOMELAB_USER}@${HOMELAB}:/home/${HOMELAB_USER}/nixos/
 	ssh -t ${HOMELAB_USER}@${HOMELAB} "chmod 0600 /home/${HOMELAB_USER}/nixos/credentials.nix"
 	ssh -t ${HOMELAB_USER}@${HOMELAB} "sudo nixos-rebuild switch -I nixos-config=/home/${HOMELAB_USER}/nixos/configuration.nix"
+	rsync -ahpruzvP ./home/ ${HOMELAB_USER}@${HOMELAB}:/home/${HOMELAB_USER}/

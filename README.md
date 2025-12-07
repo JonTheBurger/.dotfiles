@@ -141,6 +141,9 @@ Set-ExecutionPolicy Unrestricted -Scope Process
 # Set-ExecutionPolicy Unrestricted -Scope CurrentUser
 ```
 
+# OpenWRT
+- https://openwrt.org/docs/guide-user/installation/generic.sysupgrade
+
 --------------------------------------------------------------------------------
 
 [Filesystem Hierarchy Standard]: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html

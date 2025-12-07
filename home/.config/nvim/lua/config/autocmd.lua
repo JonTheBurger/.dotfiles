@@ -14,6 +14,9 @@ vim.api.nvim_create_user_command("AnimateOff", function()
   require("smear_cursor").enabled = false
   vim.notify("Animations Off")
 end, {})
+vim.api.nvim_create_user_command("Reverse", function(opts)
+  vim.cmd(string.format("%d,%d!tac", opts.line1, opts.line2))
+end, { range = true })
 
 -- AutoCommands
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {

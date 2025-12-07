@@ -8,6 +8,7 @@
 # ======================================================================================
 ## Zsh: https://zsh.sourceforge.io/Doc/Release/Options.html
 # ======================================================================================
+export EDITOR='nvim'
 autoload edit-command-line
 zle -N edit-command-line
 setopt auto_pushd
@@ -107,10 +108,12 @@ python_venv
 # ======================================================================================
 ## Theme
 # ======================================================================================
-ZSH_HIGHLIGHT_STYLES[comment]=fg=245                          # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=yellow
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=yellow
-ZSH_HIGHLIGHT_STYLES[path]=fg=blue,bold
+if [[ -n "${ZSH_HIGHLIGHT_STYLES+x}" ]]; then
+  ZSH_HIGHLIGHT_STYLES[comment]=fg=245                          # https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md
+  ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=yellow
+  ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=yellow
+  ZSH_HIGHLIGHT_STYLES[path]=fg=blue,bold
+fi
 # Colorize completions using default `ls` colors.
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select
@@ -121,6 +124,8 @@ bindkey '^[e'  _expand_alias      # Alt+E
 bindkey '^[b'  backward-word      # Alt+B
 bindkey '\e[1~' beginning-of-line # Home
 bindkey '\e[4~' end-of-line       # End
+bindkey '^[[H' beginning-of-line # Home
+bindkey '^[[F' end-of-line       # End
 bindkey '^[f'  forward-word       # Alt+F
 bindkey '^A'   beginning-of-line  # Ctrl+A
 bindkey '^E'   end-of-line        # Ctrl+E
@@ -157,7 +162,6 @@ export CMAKE_BUILD_TYPE='Debug'
 export CMAKE_COLOR_DIAGNOSTICS='ON'
 export CMAKE_EXPORT_COMPILE_COMMANDS='ON'
 export CMAKE_GENERATOR='Ninja'
-export EDITOR='nvim'
 export GPG_TTY=$(tty)
 export STARSHIP_LOG='error'
 
@@ -203,6 +207,7 @@ alias ll='eza -al --icons --git --color-scale -o'
 alias ls='ls --color=auto'
 alias lstar='tar tf'
 alias lszip='unzip -l'
+alias memcheck='valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes'
 alias mtime='stat -c %Y'
 alias path='echo $PATH | sed "s#:#/\n#g"'
 alias splitlines="rg -oP '\S+'"

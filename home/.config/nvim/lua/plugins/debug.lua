@@ -62,17 +62,17 @@ return {
     opts = {
       -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
       adapters = {
-        lldb = {
-          id = "lldb",
-          name = "lldb",
-          type = "executable",
-          command = "/usr/bin/lldb-dap",
-        },
         cppdbg = {
           id = "cppdbg",
           name = "cppdbg",
           type = "executable",
           command = require("config.fn").fs.find_vscode_binary("ms-vscode.cpptools", "OpenDebugAD7"),
+        },
+        lldb = {
+          id = "lldb",
+          name = "lldb",
+          type = "executable",
+          command = "/usr/bin/lldb-dap",
         },
         cmake = {
           id = "cmake",
@@ -110,17 +110,6 @@ return {
         end,
       },
       launchers = {
-        lldb = {
-          name = "lldb: launch",
-          type = "lldb",      -- matches the adapter
-          request = "launch", -- could also attach to a currently running process
-          program = require("config.fn").util.select_cxx_executable,
-          cwd = "${workspaceFolder}",
-          env = { "NOCOLOR=1" },
-          stopOnEntry = false,
-          args = {},
-          runInTerminal = false,
-        },
         -- https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)
         cppdbg = {
           name = "gdb: launch",
@@ -139,6 +128,17 @@ return {
               ignoreFailures = false,
             },
           },
+        },
+        lldb = {
+          name = "lldb: launch",
+          type = "lldb",      -- matches the adapter
+          request = "launch", -- could also attach to a currently running process
+          program = require("config.fn").util.select_cxx_executable,
+          cwd = "${workspaceFolder}",
+          env = { "NOCOLOR=1" },
+          stopOnEntry = false,
+          args = {},
+          runInTerminal = false,
         },
         -- CMake https://github.com/mfussenegger/nvim-dap/pull/992
         cmake = {
@@ -168,12 +168,12 @@ return {
       dap.adapters = opts.adapters
       dap.configurations = {
         c = {
-          opts.launchers.lldb,
           opts.launchers.cppdbg,
+          opts.launchers.lldb,
         },
         cpp = {
-          opts.launchers.lldb,
           opts.launchers.cppdbg,
+          opts.launchers.lldb,
         },
         cmake = {
           opts.launchers.cmake,

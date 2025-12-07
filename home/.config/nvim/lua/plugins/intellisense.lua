@@ -91,7 +91,7 @@ return {
       lint.linters_by_ft = {
         c = { "cppcheck" },
         cmake = { "cmakelint" },
-        cpp = { }, --"cppcheck",  clazy
+        cpp = { "cppcheck",  "clazy" }, --
         python = { "mypy", "pylint" },
         yaml = { "yamllint" },
       }
@@ -149,8 +149,6 @@ return {
         c = { "clang-format" },
         cpp = { "clang-format" },
         cmake = { "gersemi" },
-        c = { "clang-format" },
-        cpp = { "clang-format" },
         html = { "prettier" },
         json = { "jq" },
         lua = { "stylua" },
@@ -407,8 +405,9 @@ return {
             name = "cmake build",
             components = {
               { "default" },
+              { "unique" },
               { "on_output_parse", problem_matcher = "$gcc" },
-              { "on_result_diagnostics" },
+              { "on_result_diagnostics", remove_on_restart=true },
             },
           },
           ---@param task overseer.TaskDefinition
@@ -424,7 +423,7 @@ return {
       { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
       { "<leader>cmd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
       { "<leader>cmr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
-      { "<C-S-F5>", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
+      { "<F4>", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
     },
   },
   {

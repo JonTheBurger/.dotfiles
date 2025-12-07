@@ -33,6 +33,7 @@ return {
         ["d"] = '"', -- double quotes
       },
     },
+    -- ys
     init = function()
       -- stylua: ignore start
       vim.keymap.set("n", "gs", "<Plug>(nvim-surround-normal)aw", { noremap = true, desc = "Surround around word" })
@@ -43,8 +44,9 @@ return {
   {
     -- https://github.com/mrjones2014/smart-splits.nvim
     "mrjones2014/smart-splits.nvim",
+    lazy = false,
     dependencies = {
-      "hiasr/vim-zellij-navigator.nvim",
+      -- "hiasr/vim-zellij-navigator.nvim",
     },
     -- stylua: ignore start
     keys = {

@@ -3,6 +3,7 @@ return {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
     keys = {
+      { "<S-F7>", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>Wb", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
       { "<leader>Wo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>B",  "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
@@ -35,9 +36,12 @@ return {
       overseer.add_template_hook(
         { name = "^make.*", },
         function(task_defn, util)
+          util.add_component(task_defn, { "default" })
+          util.add_component(task_defn, { "unique" })
           util.add_component(task_defn, { "on_output_parse", problem_matcher = "$gcc" })
-          util.add_component(task_defn, { "on_result_diagnostics" })
+          util.add_component(task_defn, { "on_result_diagnostics", remove_on_restart=true })
           util.add_component(task_defn, { "on_result_diagnostics_trouble" })
+          util.add_component(task_defn, { "on_complete_dispose" })
         end)
 
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/tutorials.md#run-a-file-on-save
@@ -76,6 +80,7 @@ return {
     keys = {
       { "<leader>Wd", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
       { "<leader>TT", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
+      { "<leader>Tl", "<cmd>Trouble diagnostics toggle win.position=right win.relative=win<CR>", desc = "Trouble split right" },
     },
     opts = {
       padding = false,

@@ -27,7 +27,7 @@ M.gbl = {
   ---@type string[] Arguments to pass to cmake debug adapter. The cmake debugger doesn't
   ---respect "launch" "args" DAP setting, so we instead modify the original adapter
   ---command as a workaround.
-  cmake_args = { "--debugger", "--debugger-pipe", "${pipe}", },
+  cmake_args = { "--debugger", "--debugger-pipe", "${pipe}" },
 
   ---@type string Default <custom> arguments used for cmake; remembered across runs
   default_cmake_args = "-B build",
@@ -91,7 +91,6 @@ M.lst = {
     end
     return false
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -142,7 +141,7 @@ M.str = {
   ---@param char string character to search for
   ---@param idx? integer start index; defaults to 1
   ---@return integer? index of char, or nil if not found
-  find_char = function (str, char, idx)
+  find_char = function(str, char, idx)
     local ascii = char:byte(1)
     idx = idx or 1
     for i = idx, #str, 1 do
@@ -172,7 +171,7 @@ M.str = {
   --- Splits strings on \r or \n.
   ---@param str string to split
   ---@return string[] List of newline-delimited strings, with newlines removed.
-  split_lines = function (str)
+  split_lines = function(str)
     local lines = {}
     for line in str:gmatch("[^\r\n]+") do
       table.insert(lines, line)
@@ -191,7 +190,6 @@ M.str = {
     end
     return table.concat(t, by)
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -230,7 +228,6 @@ M.path = {
     rep, _ = rep:gsub("[/\\:]", "%%")
     return rep
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -277,17 +274,19 @@ M.fs = {
   ---@return string[] Executables list
   find_executables = function(opts)
     opts = opts or {}
-    local result = vim.system(
-      {
+    local result = vim
+      .system({
         "fd",
-        "--type", "x",
+        "--type",
+        "x",
         "--follow",
-        "--max-depth", tostring(opts.max_depth or 20),
+        "--max-depth",
+        tostring(opts.max_depth or 20),
         "--no-ignore",
-        "--exclude", "CMakeFiles",
-      },
-      { text = true }
-    ):wait(opts.timeout or 10000)
+        "--exclude",
+        "CMakeFiles",
+      }, { text = true })
+      :wait(opts.timeout or 10000)
     if result.code == nil then
       vim.notify("Finding executables timed out!", vim.log.levels.ERROR)
       return {}
@@ -315,8 +314,8 @@ M.fs = {
       local extensions = table.remove(paths, 1)
       if extensions:is_dir() then
         local dirs = scan.scan_dir(tostring(extensions), { depth = 1, only_dirs = true, search_pattern = extension })
-        if #dirs > 0 then
-          local dir = dirs[#dirs] -- get last alphabetically
+        for d = #dirs, 1, -1 do -- start with last alphabetically
+          local dir = dirs[d]
           local exe = scan.scan_dir(tostring(dir), { search_pattern = binary })
           if #exe > 0 then
             -- Try and mark as executable
@@ -328,9 +327,9 @@ M.fs = {
     end
 
     -- Give up and hope it's on $PATH
+    -- vim.notify("Could not find " .. binary, vim.log.levels.WARN)
     return Path:new(binary)
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -399,7 +398,6 @@ M.bkpt = {
       end
     end
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -493,7 +491,6 @@ M.buf = {
 
     vim.cmd("edit " .. tostring(path))
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -510,7 +507,7 @@ M.os = {
   end,
 
   ---Uses a clipboard program from the Windows host in a WSL distro
-  use_wsl_clip = function ()
+  use_wsl_clip = function()
     if vim.fn.has("wsl") == 1 then
       -- sudo ln -s /mnt/c/Program\ Files/Neovim/bin/win32yank.exe /usr/local/bin/win32yank
       local win32yank = "win32yank"
@@ -536,8 +533,8 @@ M.os = {
         vim.g.clipboard = {
           name = "powershell-windows",
           copy = {
-            ["+"] = powershell .. ' -NoProfile -Command $input | Set-Clipboard',
-            ["*"] = powershell .. ' -NoProfile -Command $input | Set-Clipboard',
+            ["+"] = powershell .. " -NoProfile -Command $input | Set-Clipboard",
+            ["*"] = powershell .. " -NoProfile -Command $input | Set-Clipboard",
           },
           paste = {
             ["+"] = powershell .. " -NoProfile -Command Get-Clipboard -Raw",
@@ -561,7 +558,6 @@ M.os = {
       return "python"
     end
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -618,11 +614,11 @@ M.util = {
     local overseer = require("overseer")
 
     if Path:new("Cargo.toml"):exists() then
-      overseer.run_template({name = "cargo build"})
+      overseer.run_template({ name = "cargo build" })
     elseif Path:new("CMakeLists.txt"):exists() and cmake_tools.is_cmake_project() then
       vim.cmd("CMakeBuild")
     elseif Path:new("Makefile"):exists() then
-      overseer.run_template({name = "make lint"})
+      overseer.run_template({ name = "make lint" })
     else
       vim.notify("No build task found", vim.log.levels.WARN)
     end
@@ -647,7 +643,9 @@ M.util = {
       -- CMake Project Detected!
       prompt = "Pick a target:"
       choices = targets.data.abs_paths
-      format_item = function(item) return M.path.basename(item) end
+      format_item = function(item)
+        return M.path.basename(item)
+      end
     end
 
     -- Prefer current CMake launch target
@@ -665,16 +663,18 @@ M.util = {
         prompt = prompt,
         format_item = format_item,
       }, function(choice)
-          -- Save choice for next time
-          M.gbl.dap_executable = choice
-          coroutine.resume(coro, choice)
-        end)
+        -- Save choice for next time
+        M.gbl.dap_executable = choice
+        coroutine.resume(coro, choice)
+      end)
     end)
   end,
 
   select_cmake_args = function()
     local file = io.open("CMakePresets.json", "r")
-    if not file then return nil end
+    if not file then
+      return nil
+    end
     local presets_json = file:read("a")
     file:close()
 
@@ -756,7 +756,6 @@ M.util = {
 
     return self._root2registry[normalized]
   end,
-
 }
 
 ----------------------------------------------------------------------------------------

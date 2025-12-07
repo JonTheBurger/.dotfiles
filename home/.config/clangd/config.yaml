@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://www.schemastore.org/clangd.json
+---
+Hover:
+  ShowAKA: true
+Diagnostics:
+  UnusedIncludes: Strict
+CompileFlags:
+  Add:
+    - -Wno-unknown-warning-option
+    - -Wall
+    - -Wextra
+    - -pedantic
+  Remove:
+    - -f*
+    # - -m*
+Documentation:
+  CommentFormat: Doxygen
+---
+If:
+  PathMatch:
+    - .*/build/.*
+    - .*/external/.*
+    - /lib*/.*
+    - /opt/.*
+    - /usr/.*
+Diagnostics:
+  ClangTidy:
+    Remove: "*"

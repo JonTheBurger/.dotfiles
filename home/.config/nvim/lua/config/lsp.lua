@@ -11,6 +11,12 @@ vim.filetype.add({
   },
 })
 
+vim.filetype.add({
+  pattern = {
+    [".*dtsi?$"]  = { "dts", { priority = 10 } },
+  },
+})
+
 vim.diagnostic.config({
     float = {
         border = "rounded",
@@ -30,6 +36,7 @@ vim.lsp.enable("ansible")
 vim.lsp.enable("bitbake")
 vim.lsp.enable("cmake")
 vim.lsp.enable("cxx")
+-- vim.lsp.enable("dts")
 vim.lsp.enable("json")
 vim.lsp.enable("lua")
 vim.lsp.enable("md")

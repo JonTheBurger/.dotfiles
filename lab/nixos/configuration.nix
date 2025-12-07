@@ -16,11 +16,13 @@ in {
       /etc/nixos/hardware-configuration.nix
       ./services/nginx.nix
       ./services/minecraft.nix
-      ./services/nextcloud.nix
       (import ./services/nextcloud.nix { inherit pkgs hostname; })
       # ./services/sonarqube.nix
       (import ./services/grafana.nix { inherit config hostname; })
       # (import ./services/gitlab.nix { inherit hostname; })
+
+      (import ./desktop/tools.nix { inherit pkgs; })
+      (import ./desktop/i3.nix { inherit pkgs; })
     ];
 
   # Bootloader

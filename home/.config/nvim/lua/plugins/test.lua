@@ -6,10 +6,24 @@ return {
     "nvim-lua/plenary.nvim",
     "nvim-neotest/neotest-python",
     "nvim-treesitter/nvim-treesitter",
+    "orjangj/neotest-ctest",
   },
   ---@diagnostic disable missing-fields
   ---@param opts neotest.Config
   config = function(_, opts)
+    -- Optional, but recommended, if you have enabled neotest's diagnostic option
+    -- local neotest_ns = vim.api.nvim_create_namespace("neotest")
+    -- vim.diagnostic.config({
+    --   virtual_text = {
+    --     format = function(diagnostic)
+    --       -- Convert newlines, tabs and whitespaces into a single whitespace
+    --       -- for improved virtual text readability
+    --       local message = diagnostic.message:gsub("[\r\n\t%s]+", " ")
+    --       return message
+    --     end,
+    --   },
+    -- }, neotest_ns)
+
     require("neotest").setup({
       summary = {
         animated = false,
@@ -18,6 +32,14 @@ return {
         border = "rounded",
       },
       adapters = {
+        -- https://github.com/orjangj/neotest-ctest
+        require("neotest-ctest").setup({
+          frameworks = { "catch2", "doctest", "cpputest", }, -- "gtest"
+          is_test_file = function(file_path)
+            return file_path:lower():match("**test.cpp$")
+          end,
+        }),
+        -- https://github.com/alfaix/neotest-gtest
         require("neotest-gtest").setup({
           debug_adapter = "cppdbg",
           is_test_file = function(file_path)

@@ -6,10 +6,15 @@ ExtraArgsBefore:
 # https://clang.llvm.org/extra/clang-tidy/checks/list.html
 Checks:
   - '*'
+  - -llvmlibc-*
   - -objc-*
   - -llvmlibc-*
 # https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html
 CheckOptions:
+  - key: readability-identifier-length.IgnoredVariableNames
+    value: ^(it)$
+  - key: readability-identifier-length.IgnoredParameterNames
+    value: ^(e)$
   - key: readability-identifier-naming.ClassCase
     value: CamelCase
   - key: readability-identifier-naming.AbstractClassPrefix
