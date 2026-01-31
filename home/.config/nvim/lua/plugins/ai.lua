@@ -39,6 +39,8 @@ return {
           -- accept = true,
           -- accept_word = "<Right>",
           -- accept_line = "<C-y>",
+          accept_and_goto = "<C-y>",
+          dismiss = "<Esc>",
         },
       },
       copilot_model = "",

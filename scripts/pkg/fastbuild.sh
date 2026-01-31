@@ -10,19 +10,23 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.18.2"
+    version="1.18"
   fi
-  local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
+  local URL="${URL-https://www.fastbuild.org/downloads/v${version}/FASTBuild-Linux-x64-v${version}.zip}"
 
   # download
-  curl -Lo "/tmp/delta.tar.gz" "${URL}"
-  mkdir -p "/tmp/delta"
-  tar -xf "/tmp/delta.tar.gz" --strip-components=1 -C "/tmp/delta"
+  curl -Lo "/tmp/FASTBuild.zip" "${URL}"
+  mkdir -p "/tmp/FASTBuild"
+  unzip "/tmp/FASTBuild.zip" -d "/tmp/FASTBuild"
 
   # exe
   mkdir -p "${HOME}/.local/bin"
-  mv -i "/tmp/delta/delta" "${HOME}/.local/bin/delta"
-  chmod +x "${HOME}/.local/bin/delta"
+  mv -i "/tmp/FASTBuild/fbuild"* "${HOME}/.local/bin/"
+  chmod +x "${HOME}/.local/bin/fbuild"*
+
+  # cleanup
+  rm -f /tmp/FASTBuild.zip
+  rm -rf /tmp/FASTBuild
 }
 
 # --------------------------------------------------------------------------------------
@@ -30,7 +34,8 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/delta"
+  rm -rf "${HOME}/.local/bin/fbuild"
+  rm -rf "${HOME}/.local/bin/fbuildworker"
 }
 
 main "$@"

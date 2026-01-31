@@ -10,19 +10,20 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.18.2"
+    version="3.1.0"
   fi
-  local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
+  local URL="${URL-https://github.com/asciinema/asciinema/releases/download/v${version}/asciinema-$(uname -m)-unknown-linux-gnu}"
 
   # download
-  curl -Lo "/tmp/delta.tar.gz" "${URL}"
-  mkdir -p "/tmp/delta"
-  tar -xf "/tmp/delta.tar.gz" --strip-components=1 -C "/tmp/delta"
+  curl -Lo "/tmp/asciinema" "${URL}"
 
   # exe
   mkdir -p "${HOME}/.local/bin"
-  mv -i "/tmp/delta/delta" "${HOME}/.local/bin/delta"
-  chmod +x "${HOME}/.local/bin/delta"
+  mv -i "/tmp/asciinema" "${HOME}/.local/bin/"
+  chmod +x "${HOME}/.local/bin/asciinema"
+
+  # cleanup
+  rm -f /tmp/asciinema
 }
 
 # --------------------------------------------------------------------------------------
@@ -30,7 +31,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/delta"
+  rm -rf "${HOME}/.local/bin/asciinema"
 }
 
 main "$@"

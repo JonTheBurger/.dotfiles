@@ -1,4 +1,4 @@
-[manager]
+[mgr]
 prepend_keymap = [
   { on = [ "<Esc>" ], run = "quit", desc = "Exit yazi" },
   { on = [ "f" ], run = "find --smart", desc = "Find next file" },

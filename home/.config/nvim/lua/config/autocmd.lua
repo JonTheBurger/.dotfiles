@@ -17,6 +17,11 @@ end, {})
 vim.api.nvim_create_user_command("Reverse", function(opts)
   vim.cmd(string.format("%d,%d!tac", opts.line1, opts.line2))
 end, { range = true })
+vim.api.nvim_create_user_command("LspInfo", function()
+  vim.print(vim.tbl_map(function(client)
+    return client.name
+  end, vim.lsp.get_clients({ bufnr = 0 })))
+end, { desc = "Show LSP for current bufffer" })
 
 -- AutoCommands
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {
@@ -43,7 +48,7 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
   callback = function()
     -- For some reason, this breaks snacks_input a little bit
     if vim.bo.filetype ~= "snacks_input" then
-      vim.cmd("normal zx")  -- zR
+      vim.cmd("normal zx") -- zR
     end
   end,
 })

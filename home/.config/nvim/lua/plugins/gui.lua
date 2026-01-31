@@ -135,16 +135,15 @@ return {
     },
   },
   {
+    -- https://github.com/esmuellert/vscode-diff.nvim
     "esmuellert/vscode-diff.nvim",
     dependencies = { "MunifTanjim/nui.nvim" },
     cmd = "CodeDiff",
     opts = {
       keymaps = {
-        view = {
-          next_hunk = "]h",
-          prev_hunk = "[h"
-        },
-      },
+        next_hunk = "]x",
+        prev_hunk = "[x",
+      }
     },
   },
   {

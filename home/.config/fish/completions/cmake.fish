@@ -1,0 +1,8 @@
+complete -c cmake -s D -x -a "CMAKE_INSTALL_PREFIX" -d "Installation directory prefix"
+complete -c cmake -s D -x -a "CMAKE_BUILD_TYPE" -d "Build type (Debug, Release, RelWithDebInfo, MinSizeRel)"
+complete -c cmake -s D -x -a "CMAKE_C_COMPILER" -d "C compiler"
+complete -c cmake -s D -x -a "CMAKE_CXX_COMPILER" -d "C++ compiler"
+complete -c cmake -s D -x -a "CMAKE_PREFIX_PATH" -d "Search path for find_package()"
+complete -c cmake -s D -x -a "CMAKE_EXPORT_COMPILE_COMMANDS" -d "Generate compile_commands.json"
+complete -c cmake -s D -x -a "BUILD_SHARED_LIBS" -d "Build shared libraries"
+complete -c cmake -s D -x -a "CMAKE_TOOLCHAIN_FILE" -d "Toolchain file path"

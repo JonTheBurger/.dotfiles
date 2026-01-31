@@ -10,19 +10,31 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.18.2"
+    version="2026.1.8"
   fi
-  local URL="${URL-https://github.com/dandavison/delta/releases/download/${version}/delta-${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
+  local URL="${URL-https://github.com/jdx/mise/releases/download/v${version}/mise-v${version}-linux-x64.tar.xz}"
 
   # download
-  curl -Lo "/tmp/delta.tar.gz" "${URL}"
-  mkdir -p "/tmp/delta"
-  tar -xf "/tmp/delta.tar.gz" --strip-components=1 -C "/tmp/delta"
+  curl -Lo "/tmp/mise.tar.xz" "${URL}"
+  mkdir -p "/tmp/mise"
+  tar -xf "/tmp/mise.tar.xz" --strip-components=1 -C "/tmp/mise"
 
   # exe
   mkdir -p "${HOME}/.local/bin"
-  mv -i "/tmp/delta/delta" "${HOME}/.local/bin/delta"
-  chmod +x "${HOME}/.local/bin/delta"
+  mv -i "/tmp/mise/"* "${HOME}/.local/bin/"
+  chmod +x "${HOME}/.local/bin/mise"*
+
+  # share
+  mkdir -p "${HOME}/.local/share/fish/vendor_conf.d"
+  mv -i "/tmp/mise/share/fish/vendor_conf.d/"* "${HOME}/.local/share/fish/vendor_conf.d/"
+
+  # man
+  mkdir -p "${HOME}/.local/man/man1"
+  cp -r "/tmp/mise/man/"* "${HOME}/.local/man/"
+
+  # cleanup
+  rm -f /tmp/mise.tar.xz
+  rm -rf /tmp/mise
 }
 
 # --------------------------------------------------------------------------------------
@@ -30,7 +42,10 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/delta"
+  rm -rf "${HOME}/.local/bin/mise"
+  rm -rf "${HOME}/.local/bin/mise.d"
+  rm -rf "${HOME}/.local/share/fish/vendor_conf.d/mise-activate.fish"
+  rm -rf "${HOME}/.local/man/man1/mise.1"
 }
 
 main "$@"
