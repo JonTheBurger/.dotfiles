@@ -57,6 +57,17 @@ done
 # ======================================================================================
 ## Command Hooks
 # ======================================================================================
+fzcmakec-widget() {
+  ~/.local/bin/fzcmakec
+  zle reset-prompt
+}
+zle -N fzcmakec-widget
+fzcmakeb-widget() {
+  ~/.local/bin/fzcmakeb
+  zle reset-prompt
+}
+zle -N fzcmakeb-widget
+
 [ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
 # unset XDG_DATA_DIRS
 [ -x "$(command -v bat)" ] && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
@@ -65,6 +76,8 @@ done
 [ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude .git'
 [ -x "$(command -v fd)" ] && export FZF_CTRL_T_COMMAND='fd . -t file --hidden --exclude .git'
 [ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
+[ -x "$(command -v fzf)" ] && bindkey "^T" fzcmakec-widget
+[ -x "$(command -v fzf)" ] && bindkey "^Y" fzcmakeb-widget
 [ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
 [ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
@@ -279,9 +292,6 @@ function mk() {
   else
     ninja "$@"
   fi
-}
-function new() {
-  copier copy ${HOME}/.new/$@ .
 }
 function lazy_load_nvm() {
   # https://github.com/nvm-sh/nvm/issues/2724

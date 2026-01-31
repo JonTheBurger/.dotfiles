@@ -10,11 +10,12 @@ CompileFlags:
     - -Wall
     - -Wextra
     - -pedantic
+    - -Wno-gnu-zero-variadic-macro-arguments
   Remove:
     - -f*
     # - -m*
-Documentation:
-  CommentFormat: Doxygen
+# Documentation:
+#   CommentFormat: Doxygen
 ---
 If:
   PathMatch:

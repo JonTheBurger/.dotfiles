@@ -118,3 +118,10 @@
   (#match? @injection.content "TODO|BUG|FIXME|NOTE|HACK|FUTURE")
   (#set! injection.language "comment" "todo")
 )
+
+; For lint comments
+(
+  (comment) @injection.content
+  (#match? @injection.content "NOLINT|NOLINTNEXTLINE|NOLINTBEGIN|NOLINTEND")
+  (#set! injection.language "comment" "todo")
+)

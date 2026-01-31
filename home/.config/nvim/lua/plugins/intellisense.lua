@@ -89,9 +89,9 @@ return {
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
-        c = { "cppcheck" },
+        -- c = { "cppcheck" },
         cmake = { "cmakelint" },
-        cpp = { "cppcheck",  "clazy" }, --
+        -- cpp = { "cppcheck",  "clazy" }, --
         python = { "mypy", "pylint" },
         yaml = { "yamllint" },
       }
@@ -162,6 +162,9 @@ return {
         lsp_format = "fallback",
       },
       formatters = {
+        gersemi = {
+          prepend_args = { "--indent", "2", "--line-length", "88", "--list-expansion", "favour-inlining" }
+        },
         shfmt = {
           prepend_args = { "-i", "2" },
         },
@@ -418,7 +421,8 @@ return {
       },
     },
     keys = {
-      { "<leader>cmb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
+      { "<leader>cmp", "<cmd>CMakeSelectConfigurePreset<CR>", desc = "CMake Select Configure Preset" },
+      { "<leader>cmb", "<cmd>CMakeSelectBuildPreset<CR>", desc = "CMake Select Build Preset" },
       { "<leader>cmt", "<cmd>CMakeSelectBuildTarget<CR>", desc = "CMake Launch Target" },
       { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
       { "<leader>cmd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },

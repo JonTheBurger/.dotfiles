@@ -1,4 +1,71 @@
 {
+  "cppcheck suppress": {
+    "prefix": "cpp",
+    "body": [
+      "cppcheck-suppress[${1:checkName}]"
+    ],
+    "description": "Suppress cppcheck warning"
+  },
+  "clang-tidy suppress": {
+    "prefix": "NO",
+    "body": [
+      "// NOLINT(${1:check-name})"
+    ],
+    "description": "Suppress clang-tidy warning on current line"
+  },
+  "clang-tidy suppress next line": {
+    "prefix": "NON",
+    "body": [
+      "// NOLINTNEXTLINE(${1:check-name})"
+    ],
+    "description": "Suppress clang-tidy warning for next line"
+  },
+  "clang-tidy suppress begin": {
+    "prefix": "NOB",
+    "body": [
+      "// NOLINTBEGIN(${1:check-name})"
+    ],
+    "description": "Suppress clang-tidy warning for block"
+  },
+  "clang-tidy suppress end": {
+    "prefix": "NOB",
+    "body": [
+      "// NOLINTEND(${1:check-name})"
+    ],
+    "description": "Suppress clang-tidy warning for block"
+  },
+  "GCC diagnostic push": {
+    "prefix": "gdiag",
+    "body": [
+      "#pragma GCC diagnostic push",
+      "#pragma GCC diagnostic ignored \"-W${1:warning-name}\"",
+      "${0}",
+      "#pragma GCC diagnostic pop"
+    ],
+    "description": "Suppress GCC warning for block"
+  },
+  "Clang diagnostic push": {
+    "prefix": "cdiag",
+    "body": [
+      "#pragma clang diagnostic push",
+      "#pragma clang diagnostic ignored \"-W${1:warning-name}\"",
+      "${0}",
+      "#pragma clang diagnostic pop"
+    ],
+    "description": "Suppress Clang warning for block"
+  },
+  "memset zero": {
+    "prefix": "mz",
+    "body": [
+      "memset(&${1}, 0, sizeof(${1}));"
+    ]
+  },
+  "pointer zero": {
+    "prefix": "pz",
+    "body": [
+      "memset(${1}, 0, sizeof(*${1}));"
+    ]
+  },
   "include guard": {
     "prefix": "#ifn",
     "body": [

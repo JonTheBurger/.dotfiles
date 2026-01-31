@@ -1,0 +1,2 @@
+#!/bin/sh
+cmake --preset="$(cmake --list-presets | grep '"' | sed -e 's#.*"\(.*\)"#\1#g' | fzf)"

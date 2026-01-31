@@ -19,10 +19,27 @@ return {
       copilot_node_command=copilot_node_command,
       suggestion = {
         debounce = 3500,
+        trigger_on_accept = true,
+        keymap = {
+          accept = "<C-y>",
+          -- accept_word = false,
+          -- accept_line = false,
+          -- next = "<M-]>",
+          -- prev = "<M-[>",
+          -- dismiss = "<C-]>",
+        },
       },
       nes = {
-        enabled = true,
+        enabled = false,
         auto_trigger = false,
+        keymap = {
+          -- accept_and_goto = false,
+          -- accept = false,
+          -- dismiss = false,
+          -- accept = true,
+          -- accept_word = "<Right>",
+          -- accept_line = "<C-y>",
+        },
       },
       copilot_model = "",
       filetypes = {
@@ -44,7 +61,7 @@ return {
     opts = {
       max_completions = 2,
       max_attempts = 4,
-      debounce = 3500,
+      debounce = 3000,
       auto_refresh = {
         backward = true,
         forward = true,

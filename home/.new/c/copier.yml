@@ -1,0 +1,6 @@
+_min_copier_version: 9.0.0
+_subdirectory: template
+
+filename:
+  help: "File Name"
+  type: str

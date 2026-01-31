@@ -137,6 +137,7 @@ return {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    branch = "master",
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-textobjects" },
@@ -266,12 +267,13 @@ return {
       require("nvim-treesitter.configs").setup(opts)
 
       -- Setup Folding
-      vim.opt.foldmethod = "expr"
-      vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-      vim.opt.foldlevel = 20
-      vim.opt.indentexpr = "nvim_treesitter#indent()"
+      -- vim.opt.foldmethod = "expr"
+      -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+      -- vim.opt.foldlevel = 20
+      -- vim.opt.indentexpr = "nvim_treesitter#indent()"
+      vim.opt.foldenable = false
 
-      -- vim.g._ts_force_sync_parsing = false
+      vim.g._ts_force_sync_parsing = true
     end,
   },
 }

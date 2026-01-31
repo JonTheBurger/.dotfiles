@@ -1,0 +1,16 @@
+# https://github.com/neocmakelsp/neocmakelsp?tab=readme-ov-file#configuration
+command_case = "lower_case"
+enable_external_cmake_lint = false
+line_max_words = 88
+
+# [format]
+# program = "gersemi"
+# args = [
+#   "--indent",
+#   "2",
+#   "--line-length",
+#   "88",
+#   "--list-expansion",
+#   "favour-inlining",
+#   "--no-warn-about-unknown-commands",
+# ]

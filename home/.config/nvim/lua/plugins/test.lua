@@ -33,12 +33,12 @@ return {
       },
       adapters = {
         -- https://github.com/orjangj/neotest-ctest
-        require("neotest-ctest").setup({
-          frameworks = { "catch2", "doctest", "cpputest", }, -- "gtest"
-          is_test_file = function(file_path)
-            return file_path:lower():match("**test.cpp$")
-          end,
-        }),
+        -- require("neotest-ctest").setup({
+        --   frameworks = { "catch2", "doctest", "cpputest", }, -- "gtest"
+        --   is_test_file = function(file_path)
+        --     return file_path:lower():match("**test.cpp$")
+        --   end,
+        -- }),
         -- https://github.com/alfaix/neotest-gtest
         require("neotest-gtest").setup({
           debug_adapter = "cppdbg",
@@ -59,8 +59,20 @@ return {
   end,
   -- stylua: ignore start
   keys = {
-    { "<leader>tt", function() require("neotest").run.run() end,                     desc = "Run Nearest" },
-    { "<leader>td", function() require("neotest").run.run({ strategy = "dap" }) end, desc = "Debug Nearest Test" },
+    { "<leader>tt",
+      function()
+        vim.cmd("OverseerClose")
+        require("neotest").run.run()
+      end,
+      desc = "Run Nearest"
+    },
+    { "<leader>td",
+      function()
+        vim.cmd("OverseerClose")
+        require("neotest").run.run({ strategy = "dap" })
+      end,
+      desc = "Debug Nearest Test"
+    },
     { "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end,   desc = "Run File" },
     { "<leader>te", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },
     { "<leader>Wt", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },

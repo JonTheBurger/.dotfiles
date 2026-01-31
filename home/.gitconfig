@@ -48,6 +48,7 @@
   aliases = false
   branch = false
 [rebase]
+  autosquash = true
   updateRefs = true
 [rerere]
   autoupdate = true

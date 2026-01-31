@@ -36,7 +36,8 @@ try:
 
         with open(commit_msg_file, "r+", encoding="utf-8") as f:
             message = f.read()
-            if not message.startswith(ticket):
+            # Don't prepend if ticket number is there, or if e.g. "fixup!" is used
+            if not message.startswith(ticket) and not re.match("^[a-z]!", message):
                 f.seek(0, 0)
                 f.write(f"{ticket} {message}")
                 if commit_type != "":

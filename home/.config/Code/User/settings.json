@@ -28,5 +28,9 @@
   ],
   "vim.useSystemClipboard": true,
   "workbench.tree.indent": 16,
-  "workbench.colorTheme": "Visual Studio Dark - C++"
+  "workbench.colorTheme": "Visual Studio Dark - C++",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "workbench.secondarySideBar.defaultVisibility": "hidden"
 }

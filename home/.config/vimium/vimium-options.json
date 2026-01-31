@@ -1,4 +1,28 @@
 {
-  "searchEngines": "w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia\naz: https://www.amazon.com/s/?field-keywords=%s\ng: https://www.google.com/search?q=%s Google\ny: https://www.youtube.com/results?search_query=%s Youtube\ngm: https://www.google.com/maps?q=%s Google maps\n\ncpp: https://duckduckgo.com/?sites=cppreference.com&q=%s cppreference\ncm: https://cmake.org/cmake/help/latest/search.html?q=%s CMake docs\nqt: https://doc.qt.io/qt-6/search-results.html?q=%s Qt docs\npy: https://docs.python.org/3/search.html?q=%s Python docs\nrs: https://doc.rust-lang.org/std/?search=%s Rust stdlib\nmdn: https://developer.mozilla.org/en-US/search?q=%s MDN Web Docs\nso: https://stackoverflow.com/search?q=%s Stack Overflow\ngh: https://github.com/search?q=%s GitHub\ngl: https://gitlab.com/search?search=%s GitLab\naur: https://aur.archlinux.org/packages?O=0&K=%s AUR search\narch: https://archlinux.org/packages/?q=%s Arch repos\ndd: https://devdocs.io/#q=%s DevDocs.io\nnx: https://www.nixhub.io/search?q=%s Devbox Nix\nnix: https://search.nixos.org/packages?channel=unstable&size=50&sort=relevance&type=packages&query=%s Nix\n\n\n# More examples.\n#\n# (Vimium supports search completion Wikipedia, as\n# above, and for these.)\n#\n# l: https://www.google.com/search?q=%s&btnI I'm feeling lucky...\n# b: https://www.bing.com/search?q=%s Bing\n# d: https://duckduckgo.com/?q=%s DuckDuckGo\n# qw: https://www.qwant.com/?q=%s Qwant",
-  "settingsVersion": "2.3"
+  "keyMappings": "unmap v\nunmap V\nunmap i",
+  "regexFindMode": true,
+  "searchEngines": "w: https://www.wikipedia.org/w/index.php?title=Special:Search&search=%s Wikipedia\naz: https://www.amazon.com/s/?field-keywords=%s\ng: https://www.google.com/search?q=%s Google\ny: https://www.youtube.com/results?search_query=%s Youtube\ngm: https://www.google.com/maps?q=%s Google maps\n\ncpp: https://duckduckgo.com/?sites=cppreference.com&q=%s cppreference\ncm: https://cmake.org/cmake/help/latest/search.html?q=%s CMake docs\nqt: https://doc.qt.io/qt-6/search-results.html?q=%s Qt docs\npy: https://docs.python.org/3/search.html?q=%s Python docs\nrs: https://doc.rust-lang.org/std/?search=%s Rust stdlib\nmdn: https://developer.mozilla.org/en-US/search?q=%s MDN Web Docs\nso: https://stackoverflow.com/search?q=%s Stack Overflow\ngh: https://github.com/search?q=%s GitHub\ngl: https://gitlab.com/search?search=%s GitLab\naur: https://aur.archlinux.org/packages?O=0&K=%s AUR search\narch: https://archlinux.org/packages/?q=%s Arch repos\ndd: https://devdocs.io/#q=%s DevDocs.io\nnx: https://www.nixhub.io/search?q=%s Devbox Nix\nnix: https://search.nixos.org/packages?channel=unstable&size=50&sort=relevance&type=packages&query=%s Nix\n\n# More examples.\n#\n# (Vimium supports search completion Wikipedia, as\n# above, and for these.)\n#\n# g: https://www.google.com/search?q=%s Google\n# l: https://www.google.com/search?q=%s&btnI I'm feeling lucky...\n# y: https://www.youtube.com/results?search_query=%s Youtube\n# gm: https://www.google.com/maps?q=%s Google maps\n# b: https://www.bing.com/search?q=%s Bing\n# d: https://duckduckgo.com/?q=%s DuckDuckGo\n# az: https://www.amazon.com/s/?field-keywords=%s\n# qw: https://www.qwant.com/?q=%s Qwant",
+  "settingsVersion": "2.3.1",
+  "exclusionRules": [
+    {
+      "passKeys": "",
+      "pattern": "https?://mail.google.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://uscl-vcenter.msanet.com/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://miro.com/*"
+    },
+    {
+      "passKeys": "[ v",
+      "pattern": "https?://bitbucket.org/*"
+    },
+    {
+      "passKeys": "",
+      "pattern": "https?://godbolt.org/*"
+    }
+  ]
 }

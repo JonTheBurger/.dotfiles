@@ -1,0 +1,51 @@
+#!/bin/env -S uv run --script
+"""Creates new files."""
+# /// script
+# requires-python = ">=3.10"
+# dependencies = [
+#   "copier~=9.0",
+#   "questionary~=2.0",
+# ]
+# ///
+
+# ==================================================================================== #
+#  SECTION: Imports                                                                    #
+# ==================================================================================== #
+# std
+from pathlib import Path
+
+# 3rd
+import copier
+import questionary
+
+
+# ==================================================================================== #
+#  SECTION: Functions                                                                  #
+# ==================================================================================== #
+def main() -> None:
+    choice = questionary.select(
+        "Which file type do you wish to create?",
+        choices=sorted(
+            [p.stem for p in (Path.home() / ".new").glob("*/") if p.is_dir()]
+        ),
+        use_shortcuts=True,
+        style=questionary.Style(
+            [
+                ("highlighted", "fg:cyan bold"),
+                ("instruction", "fg:green"),
+                ("pointer", "fg:cyan bold"),
+            ]
+        ),
+    ).ask()
+    if choice:
+        copier.run_copy(str(Path.home() / ".new" / choice), ".", unsafe=True)
+
+
+# ==================================================================================== #
+#  SECTION: Main                                                                       #
+# ==================================================================================== #
+if __name__ == "__main__":
+    try:
+        main()
+    except copier.CopierAnswersInterrupt:
+        print("\nCancelled by user\n")  # noqa: T201

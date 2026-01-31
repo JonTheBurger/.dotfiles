@@ -28,7 +28,13 @@ return {
       { "<leader>dk",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
       { "<leader>dj",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
       { "<M-?>",       function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
-      { "<F5>",        function() require("dap").continue() end,                                    desc = "Continue", },
+      { "<F5>",
+        function()
+          require("config.fn").buf.close_widgets()
+          require("dap").continue()
+        end,
+        desc = "Continue",
+      },
       { "<F6>",        function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
       { "<F9>",        function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
       { "<S-F9>",      function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
@@ -131,7 +137,7 @@ return {
         },
         lldb = {
           name = "lldb: launch",
-          type = "lldb",      -- matches the adapter
+          type = "lldb", -- matches the adapter
           request = "launch", -- could also attach to a currently running process
           program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
@@ -204,9 +210,9 @@ return {
           size = 40,
           elements = {
             { id = "breakpoints", size = 0.10 },
-            { id = "stacks",      size = 0.30 },
-            { id = "scopes",      size = 0.30 },
-            { id = "watches",     size = 0.30 },
+            { id = "stacks", size = 0.30 },
+            { id = "scopes", size = 0.30 },
+            { id = "watches", size = 0.30 },
           },
         },
         {
@@ -214,7 +220,7 @@ return {
           size = 10,
           elements = {
             { id = "console", size = 0.20 },
-            { id = "repl",    size = 0.80 },
+            { id = "repl", size = 0.80 },
           },
         },
       },

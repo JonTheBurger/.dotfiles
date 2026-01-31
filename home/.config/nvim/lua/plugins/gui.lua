@@ -2,6 +2,7 @@ return {
   {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
+    version = "<2.0.0",
     keys = {
       { "<S-F7>", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>Wb", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
@@ -131,6 +132,19 @@ return {
     },
     opts = {
       windowCreationCommand = "vsplit",
+    },
+  },
+  {
+    "esmuellert/vscode-diff.nvim",
+    dependencies = { "MunifTanjim/nui.nvim" },
+    cmd = "CodeDiff",
+    opts = {
+      keymaps = {
+        view = {
+          next_hunk = "]h",
+          prev_hunk = "[h"
+        },
+      },
     },
   },
   {

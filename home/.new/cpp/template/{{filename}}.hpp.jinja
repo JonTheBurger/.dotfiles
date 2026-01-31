@@ -1,0 +1,38 @@
+/** @file
+ *
+ *******************************************************************************
+ * @copyright
+ * Copyright {{ '%Y' | strftime }} MSA as unpublished work. All Rights Reserved.
+ * The information contained herein is confidential property of MSA. The use,
+ * copying, transfer or disclosure of such information is prohibited except
+ * by express written agreement with MSA.
+ ******************************************************************************/
+#pragma once
+#ifndef {{namespace | upper | replace('-', '_') | replace('.', '_') | replace(' ', '_')}}_{{filename | upper | replace('-', '_') | replace('.', '_') | replace(' ', '_')}}_HPP
+#define {{namespace | upper | replace('-', '_') | replace('.', '_') | replace(' ', '_')}}_{{filename | upper | replace('-', '_') | replace('.', '_') | replace(' ', '_')}}_HPP
+
+/* Includes
+ ******************************************************************************/
+// std
+#include <utility>
+
+// 3rd
+
+// local
+
+// namespace
+namespace {{namespace}} {
+inline namespace v1 {
+
+/* Constants
+ ******************************************************************************/
+
+/* Type Prototypes (Structures, Enum, Typedef)
+ ******************************************************************************/
+
+/* Function Prototypes
+ ******************************************************************************/
+
+}} /* namespace {{namespace}}::v1 */
+#endif /* {{namespace | upper | replace('-', '_') | replace('.', '_') | replace(' ', '_')}}_{{filename | upper | replace('-', '_') | replace('.', '_') | replace(' ', '_')}}_HPP */
+

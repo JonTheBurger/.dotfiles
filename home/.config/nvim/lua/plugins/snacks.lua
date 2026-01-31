@@ -13,7 +13,15 @@ return {
       { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
       { "<C-F>",           function() Snacks.picker.grep() end,                   desc = "Grep" },
       { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
-      { "<C-p>",           function() Snacks.picker.files({ hidden = true }) end, desc = "Find Files" },
+      { "<C-p>",           function() Snacks.picker.files({
+        hidden = true,
+        transform = function(item)
+          if item.file and item.file:match("Mock") then
+            -- item.score = (item.score or 0) * 0.1
+            item.score_add = (item.score_add or 0) - 30
+          end
+        end,
+      }) end, desc = "Find Files" },
       { "<C-M-p>",         function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
       { "<C-M-i>",         function() Snacks.picker.icons() end,                  desc = "Icons/Emoji",              mode = "i" },
       { "<leader>Wg",      function() Snacks.lazygit.open() end,                  desc = "LazyGit" },
@@ -41,9 +49,19 @@ return {
       { "<leader>gi",      function() Snacks.picker.git_diff() end,               desc = "Git Diff (Hunks)" },
       { "<leader>go",      function() Snacks.picker.git_log_file() end,           desc = "Git Log File" },
       -- Grep
+      { "<leader>sg",
+        function()
+          vim.ui.input({ prompt = "Enter filetype (e.g., py, js): " }, function(input)
+            if input then
+              Snacks.picker.grep({ft=input})
+            end
+          end)
+        end,
+        desc = "Grep by File Type"
+      },
       { "<leader>sb",      function() Snacks.picker.lines() end,                  desc = "Buffer Lines" },
       { "<leader>sB",      function() Snacks.picker.grep_buffers() end,           desc = "Grep Open Buffers" },
-      { "<leader>sg",      function() Snacks.picker.grep() end,                   desc = "Grep" },
+      -- { "<leader>sg",      function() Snacks.picker.grep() end,                   desc = "Grep" },
       { "<leader>sw",      function() Snacks.picker.grep_word() end,              desc = "Visual selection or word", mode = { "n", "x" } },
       -- search
       { '<leader>s"',      function() Snacks.picker.registers() end,              desc = "Registers" },
@@ -109,6 +127,9 @@ return {
       ---@class snacks.picker.Config
       picker = {
         enabled = true,
+        debug = {
+          scores = false,
+        },
         ui_select = true,
         -- https://github.com/folke/snacks.nvim/discussions/1798
         -- https://github.com/folke/snacks.nvim/discussions/1854
