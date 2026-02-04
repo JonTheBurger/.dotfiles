@@ -6,7 +6,7 @@ return {
   -- Plugin ID on github
   "githubname/repository",
   -- Set to false to disable plugin
-  enabled = true,
+  enabled = not vim.g.vscode,
   -- You can constrain the semantic version - note that lazy lock freezes all exact versions
   version = "*",
   -- Other plugins that must be loaded first - if they are present in your plugins, your config will be used

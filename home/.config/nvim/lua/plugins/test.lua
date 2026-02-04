@@ -1,6 +1,7 @@
 return {
   -- https://github.com/nvim-neotest/neotest
   "nvim-neotest/neotest",
+  enabled = not vim.g.vscode,
   dependencies = {
     "alfaix/neotest-gtest",
     "nvim-lua/plenary.nvim",

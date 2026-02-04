@@ -21,7 +21,7 @@ return {
         debounce = 3500,
         trigger_on_accept = true,
         keymap = {
-          accept = "<C-y>",
+          -- accept = "<C-y>",
           -- accept_word = false,
           -- accept_line = false,
           -- next = "<M-]>",

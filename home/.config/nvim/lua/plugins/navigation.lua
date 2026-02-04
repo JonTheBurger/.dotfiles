@@ -1,7 +1,7 @@
 return {
   {
     "dmtrKovalenko/fff.nvim",
-    enabled = true,
+    enabled = not vim.g.vscode,
     -- build = "nix run .#release",
     build = "cargo build --release",
     opts = {
@@ -44,6 +44,7 @@ return {
   {
     -- https://github.com/mrjones2014/smart-splits.nvim
     "mrjones2014/smart-splits.nvim",
+    enabled = not vim.g.vscode,
     lazy = false,
     dependencies = {
       -- "hiasr/vim-zellij-navigator.nvim",

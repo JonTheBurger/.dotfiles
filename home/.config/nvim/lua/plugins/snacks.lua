@@ -6,7 +6,7 @@ return {
   {
     "folke/snacks.nvim",
     priority = 1000,
-    enabled = true,
+    enabled = not vim.g.vscode,
     lazy = false,
     -- stylua: ignore start
     keys = {
@@ -105,7 +105,7 @@ return {
         line_length = 1000,
       },
       dashboard = {
-        enabled = true,
+        enabled = not vim.g.vscode,
         sections = {
           { section = "header" },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
@@ -116,7 +116,7 @@ return {
       },
       debug = { enabled = true },
       explorer = {
-        enabled = true,
+        enabled = not vim.g.vscode,
         hidden = true,
         replace_netrw = true,
         exclude = {
@@ -126,7 +126,7 @@ return {
       },
       ---@class snacks.picker.Config
       picker = {
-        enabled = true,
+        enabled = not vim.g.vscode,
         debug = {
           scores = false,
         },
@@ -211,26 +211,26 @@ return {
         },
       },
       image = {
-        enabled = false,
+        enabled = not vim.g.vscode,
         markdown = {
           float = true,
         },
       },
-      input = { enabled = true },
-      lazygit = { enabled = true },
+      input = { enabled = not vim.g.vscode },
+      lazygit = { enabled = not vim.g.vscode },
       quickfile = { enabled = true },
-      scroll = { enabled = true },
+      scroll = { enabled = not vim.g.vscode },
       ---@diagnostic disable-next-line missing-fields
       statuscolumn = {
-        enabled = true,
+        enabled = not vim.g.vscode,
         left = { "mark", "sign" },
         right = { "fold", "git" },
         folds = { open = true },
       },
-      terminal = { enabled = true, },
-      notifier = { enabled = true },
-      rename = { enabled = true },
-      win = { enabled = true },
+      terminal = { enabled = not vim.g.vscode },
+      notifier = { enabled = not vim.g.vscode },
+      rename = { enabled = not vim.g.vscode },
+      win = { enabled = not vim.g.vscode },
       styles = {
         -- Disable ugly header on toggle terminal
         terminal = { wo = { winbar = "" } },

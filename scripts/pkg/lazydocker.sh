@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.24.1"
+    version="0.24.4"
   fi
   local URL="${URL-https://github.com/jesseduffield/lazydocker/releases/download/v${version}/lazydocker_${version}_Linux_$(uname -m).tar.gz}"
 

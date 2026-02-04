@@ -2,6 +2,7 @@ return {
   {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
+    enabled = not vim.g.vscode,
     version = "<2.0.0",
     keys = {
       { "<S-F7>", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
@@ -64,6 +65,7 @@ return {
   {
     -- https://github.com/mbbill/undotree
     "mbbill/undotree",
+    enabled = not vim.g.vscode,
     event = "BufEnter",
     keys = {
       { "<leader>U",  "<cmd>UndotreeToggle<CR>", desc = "Toggle Undo Tree" },
@@ -76,6 +78,7 @@ return {
   {
     -- https://github.com/folke/trouble.nvim
     "folke/trouble.nvim",
+    enabled = not vim.g.vscode,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     keys = {
@@ -91,6 +94,7 @@ return {
   {
     -- https://github.com/hedyhli/outline.nvim
     "hedyhli/outline.nvim",
+    enabled = not vim.g.vscode,
     lazy = true,
     cmd = { "Outline", "OutlineOpen" },
     keys = {
@@ -106,6 +110,7 @@ return {
   {
     -- https://github.com/MagicDuck/grug-far.nvim
     "MagicDuck/grug-far.nvim",
+    enabled = not vim.g.vscode,
     config = true,
     keys = {
       {
@@ -137,6 +142,7 @@ return {
   {
     -- https://github.com/esmuellert/vscode-diff.nvim
     "esmuellert/vscode-diff.nvim",
+    enabled = not vim.g.vscode,
     dependencies = { "MunifTanjim/nui.nvim" },
     cmd = "CodeDiff",
     opts = {
@@ -149,6 +155,7 @@ return {
   {
     -- https://github.com/sindrets/diffview.nvim
     "sindrets/diffview.nvim",
+    enabled = not vim.g.vscode,
     keys = {
       { "<leader>gd", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
       { "<leader>gD", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
@@ -171,6 +178,7 @@ return {
   {
     -- https://github.com/lewis6991/gitsigns.nvim
     "lewis6991/gitsigns.nvim",
+    enabled = not vim.g.vscode,
     keys = {
       { "<leader>gb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
       { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Line Toggle" },
@@ -186,6 +194,7 @@ return {
   {
     -- https://github.com/folke/which-key.nvim
     "folke/which-key.nvim",
+    enabled = not vim.g.vscode,
     event = "VeryLazy",
     keys = {
       {
@@ -207,6 +216,7 @@ return {
   {
     -- https://github.com/nvim-treesitter/nvim-treesitter-context
     "nvim-treesitter/nvim-treesitter-context",
+    enabled = not vim.g.vscode,
     opts = {
       enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
       multiwindow = false, -- Enable multiwindow support.
@@ -225,6 +235,7 @@ return {
   {
     -- https://github.com/unblevable/quick-scope
     "unblevable/quick-scope",
+    enabled = not vim.g.vscode,
     init = function()
       vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
     end,
@@ -232,6 +243,7 @@ return {
   {
     -- https://github.com/NvChad/nvim-colorizer.lua
     "NvChad/nvim-colorizer.lua",
+    enabled = not vim.g.vscode,
     ft = {
       "css",
       "dosini",
@@ -263,6 +275,7 @@ return {
   {
     -- https://github.com/jontheburger/nvim-elf-file
     "jontheburger/nvim-elf-file",
+    enabled = not vim.g.vscode,
     opts = {},
   }
 }

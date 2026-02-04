@@ -10,23 +10,22 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.4.4"
+    version="0.63.2"
   fi
-  local URL="${URL-https://github.com/kmonad/kmonad/releases/download/${version}/kmonad}"
+  local URL="${URL-https://github.com/prefix-dev/pixi/releases/download/v${version}/pixi-$(uname -m)-unknown-linux-musl.tar.gz}"
 
   # download
-  mkdir -p "${HOME}/.local/bin"
-  curl -Lo "${HOME}/.local/bin/kmonad" "${URL}"
-  chmod +x "${HOME}/.local/bin/kmonad"
+  curl -Lo "/tmp/pixi.tar.gz" "${URL}"
+  mkdir -p "/tmp/pixi"
+  tar -xf "/tmp/pixi.tar.gz" -C "/tmp/pixi"
 
-  # System
-  sudo groupadd uinput
-  sudo usermod -aG input "${USER}"
-  sudo usermod -aG uinput "${USER}"
-  echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/kmonad.rules
-  sudo modprobe uinput
+  # exe
+  mv -i "/tmp/pixi/pixi" "${HOME}/.local/bin/pixi"
+  chmod +x "${HOME}/.local/bin/pixi"
 
-  util::notice "You may need to log out and back in for group changes to take effect."
+  # cleanup
+  rm -rf /tmp/pixi
+  rm -f /tmp/pixi.tar.gz
 }
 
 # --------------------------------------------------------------------------------------
@@ -34,7 +33,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/kmonad"
+  rm -rf "${HOME}/.local/bin/pixi"
 }
 
 main "$@"

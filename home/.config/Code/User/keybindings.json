@@ -1,0 +1,7 @@
+[
+  {
+    "key": "escape",
+    "command": "workbench.action.closeSidebar",
+    "when": "sideBarVisible && !inputFocus"
+  }
+]

@@ -14,7 +14,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ## @var NERD_FONT_VERSION Version of nerd fonts to install.
 NERD_FONT_VERSION="${NERD_FONT_VERSION-3.4.0}"
 ## @var NERD_FONT_URL Nerd font zipfile to download (https://www.nerdfonts.com/font-downloads).
-NERD_FONT_URL="${NERD_FONT_URL-https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraMono.zip}"
+NERD_FONT_URL="${NERD_FONT_URL-https://github.com/ryanoasis/nerd-fonts/releases/download/v${NERD_FONT_VERSION}/FiraCode.zip}"
 
 main() {
   local::parse_params "$@"
@@ -138,6 +138,7 @@ ${CYAN}${NERD_FONT_URL}${NOFMT}
     mkdir -p "${HOME}/.local/share/fonts"
     curl -Lo "/tmp/nerdfont.zip" "${NERD_FONT_URL}"
     unzip "/tmp/nerdfont.zip" '*.otf' -d "${HOME}/.local/share/fonts"
+    fc-cache -f -v
 
     util::notice "-- Nerd Fonts: Installed --"
   else
