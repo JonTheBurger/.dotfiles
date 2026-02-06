@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="10.2.0"
+    version="10.3.1"
   fi
   local URL="${URL-https://github.com/sharkdp/fd/releases/download/v${version}/fd-v${version}-$(uname -m)-unknown-linux-gnu.tar.gz}"
 

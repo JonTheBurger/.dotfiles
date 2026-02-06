@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="2.1.0"
+    version="2.3.1"
   fi
   local URL="${URL-https://github.com/JohnnyMorganz/StyLua/releases/download/v${version}/stylua-linux-$(uname -m).zip}"
 

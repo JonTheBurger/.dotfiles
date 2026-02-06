@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="1.23.0"
+    version="1.24.2"
   fi
   local URL="${URL-https://github.com/starship/starship/releases/download/v${version}/starship-$(uname -m)-unknown-linux-gnu.tar.gz}"
 

@@ -11,7 +11,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 local::do_install() {
   local DOTNET_SDK_VERSION=9.0
   if [ "${version}" == "latest" ]; then
-    version="4.5.1"
+    version="4.6"
   fi
   local URL="${URL-https://github.com/godotengine/godot/releases/download/${version}-stable/Godot_v${version}-stable_mono_linux_$(uname -m).zip}"
 

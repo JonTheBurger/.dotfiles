@@ -30,7 +30,7 @@ return {
       { "<M-?>",       function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
       { "<F5>",
         function()
-          require("config.fn").buf.close_widgets()
+          -- require("config.fn").buf.close_widgets()
           require("dap").continue()
         end,
         desc = "Continue",
@@ -245,6 +245,17 @@ return {
     -- https://github.com/theHamsta/nvim-dap-virtual-text
     "theHamsta/nvim-dap-virtual-text",
     enabled = not vim.g.vscode,
-    opts = {},
+    opts = {
+      display_callback = function(variable, buf, stackframe, node, options)
+        local value = variable.value:gsub("%s+", " ") -- strip new lines
+        value = value:gsub("%(anonymous namespace%)", "?")
+        value = value:gsub("::v%d::", "::")
+        if options.virt_text_pos == 'inline' then
+          return ' = ' .. value
+        else
+          return variable.name .. ' = ' .. value
+        end
+      end,
+    },
   },
 }

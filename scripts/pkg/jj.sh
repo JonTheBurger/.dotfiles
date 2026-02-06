@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.31.0"
+    version="0.38.0"
   fi
   local URL="${URL-https://github.com/jj-vcs/jj/releases/download/v${version}/jj-v${version}-$(uname -m)-unknown-linux-musl.tar.gz}"
 

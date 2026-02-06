@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="1.1.3"
+    version="1.2.3"
   fi
   local URL="${URL-https://github.com/pkgforge-dev/ghostty-appimage/releases/download/v${version}/Ghostty-${version}-$(uname -m).AppImage}"
 

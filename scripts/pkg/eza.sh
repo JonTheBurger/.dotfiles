@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.23.0"
+    version="0.23.4"
   fi
   local URL="${URL-https://github.com/eza-community/eza/releases/download/v${version}/eza_$(uname -m)-unknown-linux-gnu.tar.gz}"
 

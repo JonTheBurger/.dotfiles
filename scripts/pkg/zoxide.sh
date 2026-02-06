@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.9.8"
+    version="0.9.9"
   fi
   local URL="${URL-https://github.com/ajeetdsouza/zoxide/releases/download/v${version}/zoxide-${version}-$(uname -m)-unknown-linux-musl.tar.gz}"
 

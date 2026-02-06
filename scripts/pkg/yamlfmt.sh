@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.17.2"
+    version="0.21.0"
   fi
   local URL="${URL-https://github.com/google/yamlfmt/releases/download/v${version}/yamlfmt_${version}_Linux_$(uname -m).tar.gz}"
 

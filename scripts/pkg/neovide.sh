@@ -9,9 +9,8 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ## @param $version requested version to install, "latest" by default.
 # --------------------------------------------------------------------------------------
 local::do_install() {
-
   if [ "${version}" == "latest" ]; then
-    version="0.15.1"
+    version="0.15.2"
   fi
   local URL="${URL-https://github.com/neovide/neovide/releases/download/${version}/neovide-linux-$(uname -m).tar.gz}"
 

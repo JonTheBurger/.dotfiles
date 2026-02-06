@@ -1,6 +1,6 @@
 # source /opt/provisioners/style/config/.gdbinit
 focus cmd
-set history filename ~/.cache/gdb/history
+set history filename ~/.cache/gdb-history
 set history save
 # Do not step into includes matching
 skip -gfi */*san_handlers*

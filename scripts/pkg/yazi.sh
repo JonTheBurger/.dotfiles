@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="25.5.31"
+    version="26.1.22"
   fi
   local URL="${URL-https://github.com/sxyazi/yazi/releases/download/v${version}/yazi-$(uname -m)-unknown-linux-gnu.zip}"
 

@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="1.6.0"
+    version="1.7.0"
   fi
   local URL="${URL-https://github.com/ankitpokhrel/jira-cli/releases/download/v${version}/jira_${version}_linux_$(uname -m).tar.gz}"
 

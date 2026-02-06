@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="2026.1.8"
+    version="2026.2.5"
   fi
   local URL="${URL-https://github.com/jdx/mise/releases/download/v${version}/mise-v${version}-linux-x64.tar.xz}"
 

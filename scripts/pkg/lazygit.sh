@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.53.0"
+    version="0.58.1"
   fi
   local URL="${URL-https://github.com/jesseduffield/lazygit/releases/download/v${version}/lazygit_${version}_Linux_$(uname -m).tar.gz}"
 
