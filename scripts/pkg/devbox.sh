@@ -9,8 +9,24 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 ## @param $version requested version to install, "latest" by default.
 # --------------------------------------------------------------------------------------
 local::do_install() {
-  curl -fsSL https://get.jetify.com/devbox | bash
-  devbox --version
+  if [ "${version}" == "latest" ]; then
+    version="0.16.0"
+  fi
+  local URL="${URL-https://github.com/jetify-com/devbox/releases/download/0.16.0/devbox_0.16.0_linux_amd64.tar.gz}"
+
+  # download
+  curl -Lo "/tmp/devbox.tar.gz" "${URL}"
+  mkdir -p "/tmp/devbox"
+  tar -xf "/tmp/devbox.tar.gz" -C "/tmp/devbox"
+
+  # exe
+  mkdir -p "${HOME}/.local/bin"
+  mv -i "/tmp/devbox/devbox" "${HOME}/.local/bin/devbox"
+  chmod +x "${HOME}/.local/bin/devbox"
+
+  # cleanup
+  rm -f /tmp/devbox.tar.gz
+  rm -rf /tmp/devbox
 }
 
 # --------------------------------------------------------------------------------------
@@ -18,7 +34,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  sudo rm -rf /usr/local/bin/devbox
+  rm -rf "${HOME}/.local/bin/devbox"
 }
 
 main "$@"

@@ -22,7 +22,7 @@ local::do_install() {
   # exe
   mkdir -p "${HOME}/.local/bin"
   mv -i /tmp/yazi/*/ya* "${HOME}/.local/bin/"
-  chmod +x "${HOME}/.local/bin/ya*"
+  chmod +x "${HOME}/.local/bin/ya"*
 
   # cleanup
   rm -f /tmp/yazi.zip

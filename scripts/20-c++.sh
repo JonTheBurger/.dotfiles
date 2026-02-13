@@ -132,6 +132,7 @@ local::install_apt_embedded() {
   PKGS_APT+=(gdb-arm-none-eabi)
   PKGS_APT+=(gcc-arm-none-eabi)
   PKGS_APT+=(stutil)
+  PKGS_APT+=(stlink-tools)
   PKGS_APT+=(srecord)
   util::apt_install "${PKGS_APT[@]}"
 }

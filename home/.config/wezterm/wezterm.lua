@@ -96,24 +96,41 @@ end
 ---@return string|table[string, FormatItem] Title of tab
 local function format_tab(tab, tabs, panes, cfg, hover, max_width)
   local title = tab_title(tab)
-  if tab.is_active then
-    return {
-      { Foreground = { Color = TITLEBAR_COLOR } },
-      { Background = { Color = PEACH } },
-      { Text = " " .. tostring(tab.tab_index) .. " " },
-      { Foreground = { Color = TEXT } },
-      { Background = { Color = BASE } },
-      { Text = " " .. title .. " " },
-    }
+
+  if wezterm.target_triple:find("windows") ~= nil then
+    if tab.is_active then
+      return {
+        { Foreground = { Color = "#333333" } },
+        { Background = { Color = "#0992C2" } },
+        { Text = " " .. title .. " " },
+      }
+    else
+      return {
+        { Foreground = { Color = "#F6E7BC" } },
+        { Background = { Color = "#333333" } },
+        { Text = " " .. title .. " " },
+      }
+    end
   else
-    return {
-      { Foreground = { Color = TITLEBAR_COLOR } },
-      { Background = { Color = BLUE } },
-      { Text = " " .. tostring(tab.tab_index) .. " " },
-      { Foreground = { Color = SUBTEXT_0 } },
-      { Background = { Color = TITLEBAR_COLOR } },
-      { Text = " " .. title .. " " },
-    }
+    if tab.is_active then
+      return {
+        { Foreground = { Color = "#333333" } },
+        { Background = { Color = "#FAB387" } },
+        { Text = " " .. tostring(tab.tab_index) .. " " },
+        { Foreground = { Color = "#FFFFFF" } },
+        { Background = { Color = "#333333" } },
+        { Text = " " .. title .. " " },
+      }
+    else
+      return {
+        { Foreground = { Color = "#333333" } },
+        { Background = { Color = "#89B4FA" } },
+        { Text = " " .. tostring(tab.tab_index) .. " " },
+        { Foreground = { Color = "#AAAAAA" } },
+        { Background = { Color = "#333333" } },
+        { Text = " " .. title .. " " },
+      }
+    end
   end
 end
 
@@ -143,9 +160,9 @@ local RenameTab = act.PromptInputLine({
 --------------------------------------------------------------------------------
 --- https://wezterm.org/config/lua/keyassignment/index.html#available-key-assignments
 -- config.disable_default_key_bindings = true
-config.leader = { key = "q", mods = "CTRL", timeout_milliseconds = 1000 }
 config.keys = {
   -- Forward leader
+  { key = "b", mods = "LEADER|CTRL", action = act.SendKey({ key = "b", mods = "CTRL" }) },
   { key = "q", mods = "LEADER|CTRL", action = act.SendKey({ key = "q", mods = "CTRL" }) },
   -- Pane / Split Lifetime
   { key = "c", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
@@ -154,28 +171,11 @@ config.keys = {
   { key = "x", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
   -- { key = "Space", mods = "LEADER", action = act.CloseCurrentPane({ confirm = true }) },
   -- Navigation
-  split_nav("move", "h"),
-  split_nav("move", "j"),
-  split_nav("move", "k"),
-  split_nav("move", "l"),
   { key = "h", mods = "LEADER", action = act.ActivatePaneDirection("Left") },
   { key = "l", mods = "LEADER", action = act.ActivatePaneDirection("Right") },
   { key = "j", mods = "LEADER", action = act.ActivatePaneDirection("Down") },
   { key = "k", mods = "LEADER", action = act.ActivatePaneDirection("Up") },
-  { key = "1", mods = "ALT", action = act.ActivateTab(0) },
-  { key = "2", mods = "ALT", action = act.ActivateTab(1) },
-  { key = "3", mods = "ALT", action = act.ActivateTab(2) },
-  { key = "4", mods = "ALT", action = act.ActivateTab(3) },
-  { key = "5", mods = "ALT", action = act.ActivateTab(4) },
-  { key = "6", mods = "ALT", action = act.ActivateTab(5) },
-  { key = "7", mods = "ALT", action = act.ActivateTab(6) },
-  { key = "8", mods = "ALT", action = act.ActivateTab(7) },
-  { key = "9", mods = "ALT", action = act.ActivateTab(-1) },
-  { key = "j", mods = "ALT", action = act.ActivateTabRelative(-1) },
-  { key = "k", mods = "ALT", action = act.ActivateTabRelative(1) },
   -- Moving
-  { key = "j", mods = "ALT|SHIFT", action = act.MoveTabRelative(-1) },
-  { key = "k", mods = "ALT|SHIFT", action = act.MoveTabRelative(1) },
   { key = "}", mods = "LEADER|SHIFT", action = act.RotatePanes("Clockwise") },
   { key = "{", mods = "LEADER|SHIFT", action = act.RotatePanes("CounterClockwise") },
   -- Resizing
@@ -203,8 +203,49 @@ config.keys = {
   { key = "k", mods = "CTRL|SHIFT", action = act.ResetTerminal },
   { key = "R", mods = "CTRL|SHIFT", action = act.ReloadConfiguration },
   { key = "R", mods = "LEADER|SHIFT", action = RenameTab },
-  { key = "t", mods = "ALT", action = wezterm.action_callback(toggle_term) },
 }
+
+-- OS-specific keybinds
+if wezterm.target_triple:find("windows") ~= nil then
+  config.leader = { key = "b", mods = "CTRL", timeout_milliseconds = 1000 }
+  local windows_keys = {
+    -- Pane / Split Lifetime
+    { key = "t", mods = "CTRL|SHIFT", action = act.SpawnTab("CurrentPaneDomain") },
+    { key = "/", mods = "CTRL|SHIFT", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+    { key = "-", mods = "CTRL|SHIFT", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+  }
+  for _, k in ipairs(windows_keys) do
+    table.insert(config.keys, k)
+  end
+else
+  config.leader = { key = "q", mods = "CTRL", timeout_milliseconds = 1000 }
+  local linux_keys = {
+    -- Navigation
+    split_nav("move", "h"),
+    split_nav("move", "j"),
+    split_nav("move", "k"),
+    split_nav("move", "l"),
+    { key = "1", mods = "ALT", action = act.ActivateTab(0) },
+    { key = "2", mods = "ALT", action = act.ActivateTab(1) },
+    { key = "3", mods = "ALT", action = act.ActivateTab(2) },
+    { key = "4", mods = "ALT", action = act.ActivateTab(3) },
+    { key = "5", mods = "ALT", action = act.ActivateTab(4) },
+    { key = "6", mods = "ALT", action = act.ActivateTab(5) },
+    { key = "7", mods = "ALT", action = act.ActivateTab(6) },
+    { key = "8", mods = "ALT", action = act.ActivateTab(7) },
+    { key = "9", mods = "ALT", action = act.ActivateTab(-1) },
+    { key = "j", mods = "ALT", action = act.ActivateTabRelative(-1) },
+    { key = "k", mods = "ALT", action = act.ActivateTabRelative(1) },
+    -- Moving
+    { key = "j", mods = "ALT|SHIFT", action = act.MoveTabRelative(-1) },
+    { key = "k", mods = "ALT|SHIFT", action = act.MoveTabRelative(1) },
+    -- Misc
+    { key = "t", mods = "ALT", action = wezterm.action_callback(toggle_term) },
+  }
+  for _, k in ipairs(linux_keys) do
+    table.insert(config.keys, k)
+  end
+end
 
 if wezterm.gui then
   local copy_mode = wezterm.gui.default_key_tables().copy_mode
@@ -240,56 +281,65 @@ end
 --------------------------------------------------------------------------------
 -- @SECTION theme
 --------------------------------------------------------------------------------
-config.use_fancy_tab_bar = false
-config.hide_tab_bar_if_only_one_tab = true
+if wezterm.target_triple:find("windows") ~= nil then
+  config.use_fancy_tab_bar = true
+  config.hide_tab_bar_if_only_one_tab = false
+  config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
+  config.window_padding = { left = 0, right = 0, top = "3px", bottom = 0, }
+  config.default_prog = { "pwsh" }
+else
+  config.use_fancy_tab_bar = false
+  config.hide_tab_bar_if_only_one_tab = true
+  config.window_decorations = "NONE"
+  config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
+  config.default_prog = { "zsh" }
+end
 config.window_background_opacity = 0.85
 -- https://wezterm.org/colorschemes/c/index.html#catppuccin-mocha_1
 config.color_scheme = "CGA"
 -- https://wezterm.org/config/fonts.html
 config.font = wezterm.font_with_fallback({
+  "FiraCode Nerd Font",
   "FiraMono Nerd Font",
   "Fira Code",
   "JetBrains Mono",
 })
-config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
-if wezterm.target_triple:find("linux") ~= nil then
-  config.window_decorations = "NONE"
-  config.default_prog = { "zsh" }
-end
 
 wezterm.on("format-tab-title", format_tab)
 wezterm.on("update-status", function(window, pane)
-  local cells = {}
-  local hostname = wezterm.hostname()
-  table.insert(cells, " " .. hostname)
-  local date = wezterm.strftime(" %a %b %-d %H:%M")
-  table.insert(cells, date)
-  local d = wezterm.procinfo.current_working_dir_for_pid(wezterm.procinfo.pid())
-  table.insert(cells, d)
+  if wezterm.target_triple:find("linux") ~= nil then
+    local cells = {}
+    local hostname = wezterm.hostname()
+    table.insert(cells, " " .. hostname)
+    local date = wezterm.strftime(" %a %b %-d %H:%M")
+    table.insert(cells, date)
+    local d = wezterm.procinfo.current_working_dir_for_pid(wezterm.procinfo.pid())
+    table.insert(cells, d)
 
-  local text_fg = TITLEBAR_COLOR
-  local colors = {
-    TITLEBAR_COLOR,
-    MAUVE,
-    YELLOW,
-    GREEN,
-    RED,
-  }
+    local text_fg = TITLEBAR_COLOR
+    local colors = {
+      TITLEBAR_COLOR,
+      MAUVE,
+      YELLOW,
+      GREEN,
+      RED,
+    }
 
-  local elements = {}
-  while #cells > 0 and #colors > 1 do
-    local text = table.remove(cells, 1)
-    local prev_color = table.remove(colors, 1)
-    local curr_color = colors[1]
+    local elements = {}
+    while #cells > 0 and #colors > 1 do
+      local text = table.remove(cells, 1)
+      local prev_color = table.remove(colors, 1)
+      local curr_color = colors[1]
 
-    table.insert(elements, { Background = { Color = prev_color } })
-    table.insert(elements, { Foreground = { Color = curr_color } })
-    table.insert(elements, { Text = "" })
-    table.insert(elements, { Background = { Color = curr_color } })
-    table.insert(elements, { Foreground = { Color = text_fg } })
-    table.insert(elements, { Text = " " .. text .. " " })
+      table.insert(elements, { Background = { Color = prev_color } })
+      table.insert(elements, { Foreground = { Color = curr_color } })
+      table.insert(elements, { Text = "" })
+      table.insert(elements, { Background = { Color = curr_color } })
+      table.insert(elements, { Foreground = { Color = text_fg } })
+      table.insert(elements, { Text = " " .. text .. " " })
+    end
+    window:set_right_status(wezterm.format(elements))
   end
-  window:set_right_status(wezterm.format(elements))
 end)
 
 wezterm.on("augment-command-palette", function(w, p)

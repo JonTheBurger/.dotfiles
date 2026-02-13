@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.10.3"
+    version="0.10.2"
   fi
   local URL="${URL-https://github.com/astral-sh/uv/releases/download/${version}/uv-$(uname -m)-unknown-linux-gnu.tar.gz}"
 

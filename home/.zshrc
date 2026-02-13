@@ -39,6 +39,7 @@ local PATH_PREFIX=(
   $HOME/bin
   $HOME/.local/bin
   $HOME/.cargo/bin
+  $HOME/.nix-profile/bin
 )
 # Later paths = lower precedence
 local PATH_SUFFIX=(
@@ -70,6 +71,8 @@ zle -N fzcmakeb-widget
 
 [ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
 # unset XDG_DATA_DIRS
+[ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+[ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v bat)" ] && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 [ -x "$(command -v bat)" ] && export MANROFFOPT="-c"
 [ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"

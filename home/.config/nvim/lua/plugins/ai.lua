@@ -1,7 +1,7 @@
 -- https://api.business.githubcopilot.com/models
 copilot_node_command = "node"
 if os.getenv("USER") == "vagrant" then
-  copilot_node_command = "/home/vagrant/.nvm/versions/node/v22.16.0/bin/node"
+  copilot_node_command = "/home/vagrant/.nvm/versions/node/v24.13.1/bin/node"
 end
 
 return {
