@@ -1,6 +1,9 @@
 [mgr]
 prepend_keymap = [
   { on = [ "<Esc>" ], run = "quit", desc = "Exit yazi" },
-  { on = [ "f" ], run = "find --smart", desc = "Find next file" },
+  { on = [ "<S-f>" ], run = "find --smart", desc = "Find next file" },
+  { on = [ "<S-r>" ], run = "rename", desc = "Rename file" },
+  { on = [ "f" ], run = "noop", desc = "Find next file" },
+  { on = [ "r" ], run = "noop", desc = "" },
   { on = [ "/" ], run = "filter", desc = "Filter files" },
 ]
