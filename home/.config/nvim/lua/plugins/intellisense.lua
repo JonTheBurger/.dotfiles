@@ -2,13 +2,21 @@ return {
   {
     -- https://github.com/Saghen/blink.cmp
     "saghen/blink.cmp",
-    dependencies = { "fang2hou/blink-copilot" },
+    dependencies = {
+      "fang2hou/blink-copilot",
+      "rcarriga/cmp-dap",
+      "saghen/blink.compat",
+    },
     enabled = not vim.g.vscode,
     version = "*",
 
     ---@module "blink.cmp"
     ---@type blink.cmp.Config
     opts = {
+      enabled = function()
+        return vim.bo.buftype ~= "prompt" or require("cmp_dap").is_dap_buffer()
+      end,
+
       keymap = {
         preset = "super-tab", -- { "default", "super-tab" "enter" }
       },
@@ -46,8 +54,14 @@ return {
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
-        default = { "lsp", "path", "snippets", "copilot" }, --"buffer" },
+        default = function(_)
+          if require("cmp_dap").is_dap_buffer() then
+            return { "dap", "lsp", "path", "copilot" }
+          else
+            -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
+            return { "lsp", "path", "snippets", "copilot" } --"buffer" },
+          end
+        end,
         providers = {
           snippets = {
             opts = {
@@ -62,7 +76,11 @@ return {
             module = "blink-copilot",
             score_offset = 100,
             async = true,
-          }
+          },
+          dap = {
+            name = "dap",
+            module = "blink.compat.source",
+          },
         },
       },
 

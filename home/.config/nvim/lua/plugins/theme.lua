@@ -210,6 +210,7 @@ return {
     -- stylua: ignore end
     opts = {
       options = {
+        truncate_names = false,
         themable = true,
         numbers = function(opts)
           return string.format("%s%s", opts.id, opts.raise(opts.ordinal))

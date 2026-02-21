@@ -190,6 +190,14 @@ M.str = {
     end
     return table.concat(t, by)
   end,
+
+  ---@param by str String to strip
+  ---@return string String with leading and trailing whitespace removed
+  trim = function(str)
+    str = str:gsub("^%s+", "")
+    str = str:gsub("%s+$", "")
+    return str
+  end
 }
 
 ----------------------------------------------------------------------------------------

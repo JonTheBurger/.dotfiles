@@ -62,17 +62,24 @@ return {
       { "<leader>du",  function() require("dap").step_out() end,                                    desc = "Step Out", },
       { "<leader>dE",  function() require("dapui").eval(vim.fn.input "[Expression] > ") end,        desc = "Evaluate Input", },
       { "<leader>dC",  function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
-      { "<leader>dN",  function() require("osv").launch({ port = 8086 }) end,                       desc = "Launch nvim Server",     noremap = true, },
+      { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end,   desc = "Launch nvim Server",     noremap = true, },
     },
     -- stylua: ignore end
     opts = {
       -- https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
       adapters = {
+        gdb = {
+          id = "gdb",
+          name = "gdb",
+          type = "executable",
+          command = "gdb",
+          args = { "--quiet", "--interpreter=dap" }
+        },
         cppdbg = {
           id = "cppdbg",
           name = "cppdbg",
           type = "executable",
-          command = require("config.fn").fs.find_vscode_binary("ms-vscode.cpptools", "OpenDebugAD7"),
+          command = tostring(require("config.fn").fs.find_vscode_binary("ms-vscode.cpptools", "OpenDebugAD7")),
         },
         lldb = {
           id = "lldb",
@@ -116,14 +123,32 @@ return {
         end,
       },
       launchers = {
+        gdb = {
+          name = "gdb: launch",
+          type = "gdb",
+          request = "launch",
+          program = require("config.fn").util.select_cxx_executable,
+          cwd = "${workspaceFolder}",
+          env = { ["NOCOLOR"] = "1" },
+          stopOnEntry = false,
+          args = {},
+          runInTerminal = false,
+          setupCommands = {
+            {
+              text = "-enable-pretty-printing",
+              description = "enable pretty printing",
+              ignoreFailures = false,
+            },
+          },
+        },
         -- https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)
         cppdbg = {
-          name = "gdb: launch",
+          name = "cppdbg: launch",
           type = "cppdbg",
           request = "launch",
           program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
-          env = { "NOCOLOR=1" },
+          env = { ["NOCOLOR"] = "1" },
           stopOnEntry = false,
           args = {},
           runInTerminal = false,
@@ -141,7 +166,7 @@ return {
           request = "launch", -- could also attach to a currently running process
           program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
-          env = { "NOCOLOR=1" },
+          env = { ["NOCOLOR"] = "1" },
           stopOnEntry = false,
           args = {},
           runInTerminal = false,
@@ -174,10 +199,12 @@ return {
       dap.adapters = opts.adapters
       dap.configurations = {
         c = {
+          opts.launchers.gdb,
           opts.launchers.cppdbg,
           opts.launchers.lldb,
         },
         cpp = {
+          opts.launchers.gdb,
           opts.launchers.cppdbg,
           opts.launchers.lldb,
         },

@@ -1,9 +1,11 @@
 {
   "blink-copilot": { "branch": "main", "commit": "7ad8209b2f880a2840c94cdcd80ab4dc511d4f39" },
   "blink.cmp": { "branch": "main", "commit": "4b18c32adef2898f95cdef6192cbd5796c1a332d" },
+  "blink.compat": { "branch": "main", "commit": "1454f14a8d855a578ceeba77c62538fa1459a67c" },
   "bufferline.nvim": { "branch": "main", "commit": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3" },
   "clangd_extensions.nvim": { "branch": "main", "commit": "e84eaea7ca79610d7047fb1c9d74f15bb1c9db34" },
   "cmake-tools.nvim": { "branch": "master", "commit": "24502aec9166fd6b851762c5930ff316083acd85" },
+  "cmp-dap": { "branch": "master", "commit": "ea92773e84c0ad3288c3bc5e452ac91559669087" },
   "codecompanion.nvim": { "branch": "main", "commit": "42cf6d1637fc8934421fe69745fd01098068ece6" },
   "conform.nvim": { "branch": "master", "commit": "c2526f1cde528a66e086ab1668e996d162c75f4f" },
   "copilot-lsp": { "branch": "main", "commit": "1b6d8273594643f51bb4c0c1d819bdb21b42159d" },

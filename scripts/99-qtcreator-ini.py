@@ -35,6 +35,7 @@ def set_fake_vim_ex_commands(config: RawConfigParser):
         "ClangTools.RunOnCurrentFile": "^Clang$",
         "Coreplugin.OutputPane.clear": "^Cls$",
         "CppEditor.RenameSymbolUnderCursor": "^Rename$",
+        "CppEditor.SwitchDeclarationDefinition": "^Gd$",
         "Cppcheck.ManualRun": "^Cppcheck$",
         "Debugger.Continue": "^C$",
         "Debugger.Debug": "^Debug$",
@@ -69,6 +70,8 @@ def set_fake_vim_ex_commands(config: RawConfigParser):
         "AutoTest.RunSelected": "^GTest$",
         "AutoTest.RunUnderCursor": "^T$",
         "Bookmarks.Toggle": "^Bm$",
+        "Bookmarks.Next": "^Bn$",
+        "Bookmarks.Previous": "^Bp$",
         "CMakeProject.BuildFile": "^B$",
         "CMakeProject.ClearCache": "^CCache$",
     }

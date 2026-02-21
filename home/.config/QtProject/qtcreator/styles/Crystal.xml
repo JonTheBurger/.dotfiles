@@ -20,6 +20,7 @@
   <style name="Number" foreground="#4ef278"/>
   <style name="String" foreground="#55ff00"/>
   <style name="Type" foreground="#00ffd5"/>
+  <style name="Concept" foreground="#00ffd5"/>
   <style name="Namespace" foreground="#00ffd5"/>
   <style name="Local"/>
   <style name="Parameter" foreground="#ffe800"/>
@@ -36,6 +37,7 @@
   <style name="Preprocessor" foreground="#ff539e" bold="true"/>
   <style name="Macro" foreground="#ffe800" bold="true"/>
   <style name="Label" foreground="#834a0d" bold="true"/>
+  <style name="Attribute" foreground="#808000"/>
   <style name="Comment" foreground="#808080"/>
   <style name="Doxygen.Comment" foreground="#808080" italic="true"/>
   <style name="Doxygen.Tag" foreground="#7276b4"/>
@@ -68,6 +70,8 @@
   <style name="LogCommitHash" foreground="#fc1929"/>
   <style name="LogCommitSubject" foreground="#ff539e"/>
   <style name="LogDecoration" foreground="#c489ff"/>
+  <style name="Info" underlineColor="#262088" underlineStyle="DashUnderline"/>
+  <style name="InfoContext" underlineColor="#262088" underlineStyle="DotLine"/>
   <style name="Warning" underlineColor="#ffbe00" underlineStyle="SingleUnderline"/>
   <style name="WarningContext" underlineColor="#ffbe00" underlineStyle="DotLine"/>
   <style name="Error" underlineColor="#cc0000" underlineStyle="SingleUnderline"/>

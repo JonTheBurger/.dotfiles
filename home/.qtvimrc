@@ -1,0 +1,73 @@
+" Generic vim
+set relativenumber
+set number
+set nowrap
+scriptencoding utf-8
+set encoding=utf-8
+set list
+set listchars+=space:·
+set listchars+=eol:\ 
+set hlsearch
+set ignorecase
+set incsearch
+set smartcase
+set shiftwidth=2
+set expandtab
+set tabstop=2
+set fixeol
+set textwidth=120
+set colorcolumn=120
+set clipboard^=unnamed,unnamedplus
+set mouse=a
+syntax on
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap ' `
+onoremap ' `
+nnoremap ` '
+onoremap ` '
+nnoremap mm %
+vmap m %
+omap m %
+xmap m %
+vnoremap < <gv
+vnoremap > >gv
+nnoremap <space>wq :%s/'/"/g<CR>
+nnoremap <space>wp vipgq
+nnoremap <space>wt :%s/\s\+$//e<CR>
+nnoremap <space>wr :%s/\r//<CR>
+nnoremap <space>wn :s/\\n/\r/g<CR>
+vnoremap <space>wn :s/\\n/\r/g<CR>
+nnoremap <space>wo :s/\(\)/\1\r/g<left><left><left><left><left><left><left><left><left>
+vnoremap <space>wo :s/\(\)/\1\r/g<left><left><left><left><left><left><left><left><left>
+nnoremap <space>wl :let b:pat=@/<CR>:s/\s\+/\r/g<CR>:let @/=b:pat<CR>
+
+" QtCreator
+" NEXT ERROR
+" NEXT TEST
+" F6 swap last tab
+" Shift+K for help
+" ? for hover diagnostic on line
+nnoremap > :Tn<CR>
+nnoremap < :Tp<CR>
+map <C-p> :e<CR>
+map <space>bb :Build<CR>
+map <space>dk :Fd<CR>
+map <space>dj :Fu<CR>
+map <space>q :Bdel<CR>
+map <space>r :Run<CR>
+map <space>td :TBug<CR>
+map <space>tf :FTest<CR>
+map <space>tt :T<CR>
+map <space>to :To<CR>
+map <space>. :Fix<CR>
+map [b :Bp<CR>
+map ]b :Bn<CR>
+map gd :tag<CR>

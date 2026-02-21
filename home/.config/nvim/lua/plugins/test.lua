@@ -44,7 +44,7 @@ return {
         require("neotest-gtest").setup({
           debug_adapter = "cppdbg",
           is_test_file = function(file_path)
-            return file_path:lower():match("**test.cpp$")
+            return file_path:lower():match("test%.cpp$") or file_path:match(".*GTest.*%.cpp$")
           end,
         }),
         -- https://github.com/nvim-neotest/neotest-python
