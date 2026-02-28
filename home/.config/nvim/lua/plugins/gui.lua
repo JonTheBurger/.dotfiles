@@ -3,7 +3,7 @@ return {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
     enabled = not vim.g.vscode,
-    version = "<2.0.0",
+    -- version = "<2.0.0",
     keys = {
       { "<S-F7>", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>Wb", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },

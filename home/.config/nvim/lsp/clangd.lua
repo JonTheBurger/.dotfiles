@@ -8,7 +8,7 @@ local cmd = {
   "--header-insertion-decorators",
   "--enable-config",
   "-j", "4",
-  "--log=info",
+  "--log=error",
   "--pretty",
 }
 if vim.fn.filereadable("compile_commands.json") then

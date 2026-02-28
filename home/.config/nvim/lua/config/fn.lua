@@ -24,6 +24,9 @@ M.gbl = {
   ---@type string? Path to the most recently selected debug executable
   dap_executable = nil,
 
+  ---@type string Arguments passed to DAP executable
+  dap_exe_args = "",
+
   ---@type string[] Arguments to pass to cmake debug adapter. The cmake debugger doesn't
   ---respect "launch" "args" DAP setting, so we instead modify the original adapter
   ---command as a workaround.
@@ -272,6 +275,33 @@ M.fs = {
     local path = Path:new(rep)
     path:parent():mkdir({ parents = true, exists_ok = true })
     return Path:new(path)
+  end,
+
+  save_session = function()
+    -- breakpoints
+    M.bkpt.save()
+    -- fn.gbl
+    local json = M.fs.session_file(".fn.json")
+    json:write(vim.fn.json_encode({
+      ["dap_executable"] = M.gbl.dap_executable,
+      ["dap_exe_args"] = M.gbl.dap_exe_args,
+    }), "w")
+  end,
+
+  load_session = function()
+    -- breakpoints
+    M.bkpt.load()
+    -- fn.gbl
+    local json = M.fs.session_file(".fn.json")
+    local data = nil
+    if json:exists() then
+      data = vim.fn.json_decode(json:read())
+    end
+    if data == nil then
+      return
+    end
+    M.gbl.dap_executable = data["dap_executable"]
+    M.gbl.dap_exe_args = data["dap_exe_args"] or ""
   end,
 
   --- Finds executable files in the current directory down using fd.

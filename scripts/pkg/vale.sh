@@ -23,6 +23,7 @@ local::do_install() {
   mkdir -p "${HOME}/.local/bin"
   mv -i "/tmp/vale/vale" "${HOME}/.local/bin/vale"
   chmod +x "${HOME}/.local/bin/vale"
+  "${HOME}/.local/bin/vale" sync
 
   # cleanup
   rm -f /tmp/vale.tar.gz

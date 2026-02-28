@@ -21,11 +21,11 @@ set mem inaccessible-by-default off
 
 # Functions
 define bsave
-  save breakpoints ~/.cache/gdb/bkp.gdb
+  save breakpoints ~/.cache/gdb-bkp.gdb
 end
 
 define bload
-  source ~/.cache/gdb/bkp.gdb
+  source ~/.cache/gdb-bkp.gdb
 end
 
 # Hooks

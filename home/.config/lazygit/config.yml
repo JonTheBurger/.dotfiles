@@ -2,44 +2,87 @@
 disableStartupPopups: true
 quitOnTopLevelReturn: false
 git:
+  autoFetch: false
+  branchLogCmd: git log --oneline --color=always --abbrev-commit {{branchName}} --
   pagers:
     - colorArg: always
       pager: delta --dark --paging=never
-      # commitPrefix:
-      #   - pattern: "^\\w+\\/(\\w+-\\w+).*"
-      #     replace: "$1 "
+  commitPrefix:
+    - pattern: "^\\w+\\/(\\w+-\\d+).*"
+      replace: "$1 "
+
 keybinding:
   universal:
-    quit: <esc>
-    return: q
-    nextPage: <c-d>
-    prevPage: <c-u>
-    nextTab: '>'
-    prevTab: '<'
-    nextScreenMode: ']'
-    prevScreenMode: '['
+    return: h
+    nextItem: j
+    prevItem: k
+    goInto: l
+    focusMainView: <enter>
+
+    nextBlock: <down>
+    prevBlock: <up>
+    nextTab: <right>
+    prevTab: <left>
+
+    scrollLeft: H
+    scrollRight: L
+    scrollUpMain-alt1: K
+    scrollDownMain-alt1: J
+
     gotoBottom: G
     gotoTop: g
+    nextPage: <c-d>
+    prevPage: <c-u>
+    select: <tab>
+
+    nextScreenMode: ']'
+    prevScreenMode: '['
+
+    toggleRangeSelect: v
+    undo: u
+    redo: R
+
+    increaseContextInDiffView: +
+    decreaseContextInDiffView: '-'
+
+    nextItem-alt: <disabled>
+    prevItem-alt: <disabled>
+    prevBlock-alt: <disabled>
+    nextBlock-alt: <disabled>
+    nextBlock-alt2: <disabled>
+    prevBlock-alt2: <disabled>
+    cyclePagers: <disabled>
+
   commits:
     viewResetOptions: o
     openInBrowser: x
+
+  branches:
+    renameBranch: <f2>
+
   stash:
     popStash: P
+
+  status:
+    checkForUpdate: <disabled>
+
 gui:
+  tabWidth: 3
   nerdFontsVersion: "3"
   filterMode: fuzzy
   branchColorPatterns:
-    'master': "#11cfff" # cyan
-    'main': "#11cfff" # cyan
-    'develop': "#11aaff" # blue
-    'feature/.*': "#0dd63c" # green
-    'bugfix.*': "#ff3333" # red
-    'release/.*': "#ff33f1" # pink
-    'integration/.*': "#ff9633" # orange
+    '^(main|master|trunk|develop)$': "#11cfff" # cyan
+    '^release/.*': "#aa33ff" # purple
+    '^integration/.*': "#11aaff" # blue
+    '^feature/.*': "#0dd63c" # green
+    '^bugfix/.*': "#ff3333" # red
+    '^experiment/.*': "#ff9633" # orange
+    '^(hitl|sitl)/*': "#ff33f1" # pink
     '.*tags.*': "#ffe733" # yellow
   authorColors:
     'Jon Povirk': '#11aaff' # blue
     'Jonathan Povirk': '#11aaff' # blue
     'Riccardi Dalexis': '#aa33ff' # purple
+
 os:
   editPreset: nvim

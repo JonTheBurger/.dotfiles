@@ -12,6 +12,25 @@
   :luafile util.lua
 8. The breakpoint should hit and freeze the instance (B)
 --]]
+local fn = require("config.fn")
+
+local pick_args = function()
+  return coroutine.create(function(coro)
+    vim.ui.input({
+      prompt = "Arguments: ",
+      default = fn.gbl.dap_exe_args,
+      completion = "file",
+    }, function(choice)
+      if choice then
+        fn.gbl.dap_exe_args = choice
+      else
+        choice = ""
+      end
+      coroutine.resume(coro, vim.split(choice, " +"))
+    end)
+  end)
+end
+
 return {
   {
     -- https://github.com/mfussenegger/nvim-dap
@@ -25,8 +44,8 @@ return {
     -- stylua: ignore start
     keys = {
       -- Custom
-      { "<leader>dk",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
-      { "<leader>dj",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
+      { "<leader>dj",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
+      { "<leader>dk",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
       { "<M-?>",       function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
       { "<F5>",
         function()
@@ -41,6 +60,7 @@ return {
       { "<F10>",       function() require("dap").step_over() end,                                   desc = "Step Over", },
       { "<F11>",       function() require("dap").step_into() end,                                   desc = "Step In", },
       { "<S-F11>",     function() require("dap").step_out() end,                                    desc = "Step Out", },
+      { "<leader>dr",  function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception" }) end,                   desc = "Set Exception Breakpoints", },
       -- Standard
       { "<leader>dR",  function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
       { "<leader>dU",  function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
@@ -55,7 +75,7 @@ return {
       { "<leader>do",  function() require("dap").step_over() end,                                   desc = "Step Over", },
       { "<leader>dp",  function() require("dap").pause.toggle() end,                                desc = "Pause", },
       { "<leader>dq",  function() require("dap").close() end,                                       desc = "Quit", },
-      { "<leader>dr",  function() require("dap").repl.toggle() end,                                 desc = "Toggle REPL", },
+      -- { "<leader>dr",  function() require("dap").repl.toggle() end,                                 desc = "Toggle REPL", },
       { "<leader>ds",  function() require("dap").continue() end,                                    desc = "Start", },
       { "<leader>dt",  function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
       { "<leader>dx",  function() require("dap").terminate() end,                                   desc = "Terminate", },
@@ -150,7 +170,8 @@ return {
           cwd = "${workspaceFolder}",
           env = { ["NOCOLOR"] = "1" },
           stopOnEntry = false,
-          args = {},
+          -- args = {},
+          args = pick_args,
           runInTerminal = false,
           setupCommands = {
             {
@@ -199,13 +220,13 @@ return {
       dap.adapters = opts.adapters
       dap.configurations = {
         c = {
-          opts.launchers.gdb,
           opts.launchers.cppdbg,
+          opts.launchers.gdb,
           opts.launchers.lldb,
         },
         cpp = {
-          opts.launchers.gdb,
           opts.launchers.cppdbg,
+          opts.launchers.gdb,
           opts.launchers.lldb,
         },
         cmake = {
@@ -224,9 +245,18 @@ return {
     end,
   },
   {
+    "igorlfs/nvim-dap-view",
+    -- enabled = not vim.g.vscode,
+    enabled = false,
+    ---@module 'dap-view'
+    ---@type dapview.Config
+    opts = {},
+  },
+  {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
     enabled = not vim.g.vscode,
+    -- enabled = false,
     dependencies = {
       { "mfussenegger/nvim-dap" },
     },

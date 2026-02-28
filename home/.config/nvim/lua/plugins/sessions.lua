@@ -14,10 +14,7 @@ return {
       pattern = "PersistenceSavePost",
       callback = function()
         local fn = require("config.fn")
-        fn.bkpt.save()
-        -- Dap EXE
-        local linefile = fn.fs.session_file("dap_executable.txt")
-        linefile:write(fn.gbl.dap_executable, "w")
+        fn.fs.save_session()
       end,
     })
     -- vim.api.nvim_create_autocmd("User", {
@@ -27,12 +24,7 @@ return {
       pattern = "PersistenceLoadPost",
       callback = function()
         local fn = require("config.fn")
-        fn.bkpt.load()
-        -- Dap EXE
-        local linefile = fn.fs.session_file("dap_executable.txt")
-        if linefile:exists() then
-          fn.gbl.dap_executable = fn.str.trim(linefile:read())
-        end
+        fn.fs.load_session()
       end,
     })
   end,

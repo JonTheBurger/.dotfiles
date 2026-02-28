@@ -31,6 +31,10 @@ vim.keymap.set("n", "N", "Nzzzv")
 vim.keymap.set({ "n", "o" }, "'", "`", { noremap = true })
 vim.keymap.set({ "n", "o" }, "`", "'", { noremap = true })
 
+-- Swap gf and gF
+vim.keymap.set("n", "gf", "gF", { noremap = true })
+vim.keymap.set("n", "gF", "gf", { noremap = true })
+
 -- Easy %
 vim.keymap.set("n", "mm", "%")
 vim.keymap.set({ "v", "o", "x" }, "m", "%")

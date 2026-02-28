@@ -2,6 +2,31 @@
 local MB = 1024 * 1024
 local cfg_dir = vim.fn.stdpath("config")
 
+local downrank_undesirable_paths = function(item)
+  if item.file and item.file:match("Test") then
+    -- item.score = (item.score or 0) * 0.1
+    item.score_add = (item.score_add or 0) - 30
+  end
+  if item.file and item.file:match("Mock") then
+    -- item.score = (item.score or 0) * 0.1
+    item.score_add = (item.score_add or 0) - 30
+  end
+  if item.file and item.file:match("%.mock") then
+    -- item.score = (item.score or 0) * 0.1
+    item.score_add = (item.score_add or 0) - 30
+  end
+  if item.file and item.file:match("%.test") then
+    -- item.score = (item.score or 0) * 0.1
+    item.score_add = (item.score_add or 0) - 30
+  end
+  if item.file and item.file:match("tools") then
+    item.score_add = (item.score_add or 0) - 30
+  end
+  if item.file and item.file:match("external") then
+    item.score_add = (item.score_add or 0) - 30
+  end
+end
+
 return {
   {
     "folke/snacks.nvim",
@@ -13,15 +38,7 @@ return {
       { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
       { "<C-F>",           function() Snacks.picker.grep() end,                   desc = "Grep" },
       { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
-      { "<C-p>",           function() Snacks.picker.files({
-        hidden = true,
-        transform = function(item)
-          if item.file and item.file:match("Mock") then
-            -- item.score = (item.score or 0) * 0.1
-            item.score_add = (item.score_add or 0) - 30
-          end
-        end,
-      }) end, desc = "Find Files" },
+      { "<C-p>",           function() Snacks.picker.files({ hidden = true, transform = downrank_undesirable_paths, }) end, desc = "Find Files" },
       { "<C-M-p>",         function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
       { "<C-M-i>",         function() Snacks.picker.icons() end,                  desc = "Icons/Emoji",              mode = "i" },
       { "<leader>Wg",      function() Snacks.lazygit.open() end,                  desc = "LazyGit" },
@@ -29,7 +46,7 @@ return {
       -- Top Pickers & Explorer
       -- { "<leader><space>", function() Snacks.picker.smart() end,                  desc = "Smart Find Files" },
       { "<leader>,",       function() Snacks.picker.buffers() end,                desc = "Buffers" },
-      { "<leader>/",       function() Snacks.picker.grep() end,                   desc = "Grep" },
+      { "<leader>/",       function() Snacks.picker.grep({transform = downrank_undesirable_paths}) end,                   desc = "Grep" },
       { "<leader>:",       function() Snacks.picker.command_history() end,        desc = "Command History" },
       { "<leader>sn",      function() Snacks.picker.notifications() end,          desc = "Notification History" },
       { "<leader>e",       function() Snacks.explorer() end,                      desc = "File Explorer" },

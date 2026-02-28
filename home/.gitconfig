@@ -44,9 +44,14 @@
   autocorrect = prompt
 [interactive]
   diffFilter = delta --color-only
+[log]
+  decorate = short
+  pretty = medium
 [pager]
-  aliases = false
+  ; aliases = false
   branch = false
+[pull]
+  rebase = true
 [rebase]
   autosquash = true
   updateRefs = true
@@ -146,3 +151,5 @@
     target=$( (echo \"$branches\"; echo \"$tags\") | fzf --no-hscroll --no-multi -n 2 --ansi --preview=\"git --no-pager log -150 --pretty=format:%s '..{2}'\") || return; \
     git checkout $(echo \"$target\" | awk '{print $2}'); \
   }; f"
+[safe]
+	directory = /opt/vcpkg
