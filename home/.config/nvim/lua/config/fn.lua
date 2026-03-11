@@ -14,6 +14,11 @@ local M = {}
 ---@class Breakpoints
 ---@field [string] Breakpoint[] A table mapping file paths to arrays of breakpoints.
 
+---@class SourceLocation
+---@field file string Path to file on disk
+---@field line integer? Line number
+---@field col integer? Column number
+
 ----------------------------------------------------------------------------------------
 ---@endsection
 ---@section Globals
@@ -33,7 +38,45 @@ M.gbl = {
   cmake_args = { "--debugger", "--debugger-pipe", "${pipe}" },
 
   ---@type string Default <custom> arguments used for cmake; remembered across runs
-  default_cmake_args = "-B build",
+  default_cmake_args = "",
+}
+
+----------------------------------------------------------------------------------------
+---@endsection
+---@section Async
+----------------------------------------------------------------------------------------
+
+local awaitify = function(func, callback_index)
+  return function(...)
+    local args = { ... }
+    local coro = coroutine.running()
+    table.insert(args, callback_index, function(...)
+      coroutine.resume(coro, ...)
+    end)
+    func(unpack(args))
+    return coroutine.yield()
+  end
+end
+
+M.async = {
+  select = function(items, opts, coro)
+    local coro = coro or coroutine.running()
+    vim.ui.select(items, opts, function(choice)
+      coroutine.resume(coro, choice)
+    end)
+    return coroutine.yield()
+  end,
+
+  input = function(opts, coro)
+    local coro = coro or coroutine.running()
+    vim.ui.input(opts, function(choice)
+      coroutine.resume(coro, choice)
+    end)
+    return coroutine.yield()
+  end,
+
+  select2 = awaitify(vim.ui.select, 3),
+  input2 = awaitify(vim.ui.input, 2),
 }
 
 ----------------------------------------------------------------------------------------
@@ -452,7 +495,7 @@ M.buf = {
       local is_visible = vim.fn.bufwinnr(buffer.bufnr) > 0
       if not is_visible then
         if buffer ~= vim.api.nvim_get_current_buf() then
-          vim.api.nvim_buf_delete(buffer.bufnr, { force = true })
+          vim.api.nvim_buf_delete(buffer.bufnr, { force = false })
         end
       end
     end
@@ -528,6 +571,64 @@ M.buf = {
     end
 
     vim.cmd("edit " .. tostring(path))
+  end,
+
+  ---@return SourceLocation Contiguous non-whitespace text under the cursor
+  file_under_cursor = function()
+    ---@type SourceLocation
+    local loc = {file=""}
+    local row, col0 = unpack(vim.api.nvim_win_get_cursor(0)) -- row 1-based, col 0-based
+    local text = vim.api.nvim_get_current_line()
+    if text == "" then
+      return loc
+    end
+
+    local i = col0 + 1 -- convert to 1-based index into Lua string
+    if i > #text then
+      i = #text
+    end
+
+    -- If cursor is on whitespace, optionally step right to next non-ws (handy)
+    while i <= #text and text:sub(i, i):match("%s") do
+      i = i + 1
+    end
+    if i > #text then
+      return loc
+    end
+
+    local left = i
+    while left > 1 and not text:sub(left - 1, left - 1):match("%s") do
+      left = left - 1
+    end
+
+    local right = i
+    while right <= #text and not text:sub(right, right):match("%s") do
+      right = right + 1
+    end
+
+    text = text:sub(left, right - 1)
+
+    -- Get file name
+    loc.file = text
+    local sep = loc.file:find(":")
+    if sep then
+      loc.file = loc.file:sub(0, sep - 1)
+    end
+
+    -- Get Line Col
+    i = 0
+    for word in text:gmatch(":(%d+)") do
+      if i == 0 then
+        loc.line = tonumber(word)
+      elseif i == 1 then
+        loc.col = tonumber(word)
+      else
+        break
+      end
+      i = i + 1
+    end
+
+    return loc
   end,
 }
 
@@ -708,53 +809,81 @@ M.util = {
     end)
   end,
 
-  select_cmake_args = function()
-    local file = io.open("CMakePresets.json", "r")
-    if not file then
-      return nil
+  select_cmake_cwd = function()
+    local cwd = "${workspaceFolder}"
+    if vim.fn.filereadable("CMakePresets.json") == 0 then
+      cwd = vim.fn.expand("%:p:h")
     end
-    local presets_json = file:read("a")
-    file:close()
+    dd(cwd)
+    return cwd
+  end,
 
-    local configure_presets = {}
-    local presets = vim.fn.json_decode(presets_json)
-    if presets.configurePresets then
-      for _, preset in ipairs(presets.configurePresets) do
-        configure_presets[#configure_presets + 1] = preset.name
-      end
+  select_cmake_args = function()
+    -- Reset table to original 3 values
+    -- We do NOT reassign the table because we need the reference to stay the same
+    for i = 4, #M.gbl.cmake_args do
+      M.gbl.cmake_args[i] = nil
     end
-    configure_presets[#configure_presets + 1] = "<custom>"
+
+    -- Get configure presets
+    local configure_presets = {}
+    local file = io.open("CMakePresets.json", "r")
+    if file then
+      local presets_json = file:read("a")
+      local presets = vim.fn.json_decode(presets_json)
+      if presets.configurePresets then
+        for _, preset in ipairs(presets.configurePresets) do
+          configure_presets[#configure_presets + 1] = preset.name
+        end
+      end
+      configure_presets[#configure_presets + 1] = "<custom>"
+      file:close()
+    end
 
     return coroutine.create(function(coro)
-      vim.ui.select(configure_presets, {
-        format_item = M.util.identity,
-        prompt = "Select a configure preset:",
-      }, function(choice)
-        -- Reset table to original 3 values
-        -- We do NOT reassign the table because we need the reference to stay the same
-        for i = 4, #M.gbl.cmake_args do
-          M.gbl.cmake_args[i] = nil
+
+      local enter_cmake_args = function()
+        vim.ui.input({
+          prompt = "Enter CMake Args: ",
+          default = M.gbl.default_cmake_args,
+        }, function(args)
+          if args then
+            M.gbl.default_cmake_args = args
+            for word in string.gmatch(args, "%S+") do
+              M.gbl.cmake_args[#M.gbl.cmake_args + 1] = word
+            end
+            dd(M.gbl.cmake_args)
+            coroutine.resume(coro, {})
+          end
+        end)
+      end
+
+      if #configure_presets > 0 then
+        vim.ui.select(configure_presets, {
+          format_item = M.util.identity,
+          prompt = "Select a configure preset:",
+        }, function(choice)
+          if choice ~= "<custom>" then
+            M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "--preset=" .. choice
+            coroutine.resume(coro, {})
+          else -- == "<custom>"
+            enter_cmake_args()
+          end
+        end)
+      else
+        if vim.fn.expand("%:t") == "CMakeLists.txt" then
+          -- M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-S"
+          -- M.gbl.cmake_args[#M.gbl.cmake_args + 1] = vim.fn.expand("%:p:h")
+          M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-B"
+          M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "build"
+          M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-DMSA_CMAKE_MODULES=" .. vim.fn.expand("%:p:h") .. "/../../../.."
         end
 
-        if choice ~= "<custom>" then
-          M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "--preset=" .. choice
-          coroutine.resume(coro, {})
-        else -- == "<custom>"
-          vim.ui.input({
-            prompt = "Enter CMake Args: ",
-            default = M.gbl.default_cmake_args,
-          }, function(args)
-            if args then
-              M.gbl.default_cmake_args = args
-              for word in string.gmatch(args, "%S+") do
-                M.gbl.cmake_args[#M.gbl.cmake_args + 1] = word
-              end
-            end
-            coroutine.resume(coro, {})
-          end)
-        end
-      end)
+        enter_cmake_args()
+      end
+
     end)
+
   end,
 
   ---Monkey-patch GlobalExecutableRegistry:for_dir(...) to find cmake test executables

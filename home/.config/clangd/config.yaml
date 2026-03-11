@@ -4,6 +4,8 @@ Hover:
   ShowAKA: true
 Diagnostics:
   UnusedIncludes: Strict
+  Suppress:
+    - 'a'
 CompileFlags:
   Add:
     - -Wno-unknown-warning-option
@@ -11,11 +13,12 @@ CompileFlags:
     - -Wextra
     - -pedantic
     - -Wno-gnu-zero-variadic-macro-arguments
+    - -std=c++23
   Remove:
     - -f*
     # - -m*
-# Documentation:
-#   CommentFormat: Doxygen
+Documentation:
+  CommentFormat: Doxygen
 ---
 If:
   PathMatch:

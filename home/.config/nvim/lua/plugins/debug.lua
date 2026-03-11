@@ -43,46 +43,30 @@ return {
     },
     -- stylua: ignore start
     keys = {
-      -- Custom
-      { "<leader>dj",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
-      { "<leader>dk",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
-      { "<M-?>",       function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
-      { "<F5>",
-        function()
-          -- require("config.fn").buf.close_widgets()
-          require("dap").continue()
-        end,
-        desc = "Continue",
-      },
+      { "<leader>bN",  function() require("osv").launch({ port = 8086, log=true }) end,             desc = "Launch nvim Server",     noremap = true, },
+      { "<leader>bw",  function() require("dapui").elements.watches.add() end,                      desc = "Add symbol under cursor to watches", },
+      { "<leader>bj",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
+      { "<leader>bk",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
+      { "<leader>bx",  function() require("dap").terminate() require("dapui").close() end,                                   desc = "Terminate", },
+      { "<F4>",        function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception" }) end, desc = "Set Exception Breakpoints", },
+      { "<F5>",        function() require("dap").continue() end,                                    desc = "Continue", },
       { "<F6>",        function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
+      { "<F8>",        function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
       { "<F9>",        function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
-      { "<S-F9>",      function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
       { "<F10>",       function() require("dap").step_over() end,                                   desc = "Step Over", },
       { "<F11>",       function() require("dap").step_into() end,                                   desc = "Step In", },
-      { "<S-F11>",     function() require("dap").step_out() end,                                    desc = "Step Out", },
-      { "<leader>dr",  function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception" }) end,                   desc = "Set Exception Breakpoints", },
-      -- Standard
-      { "<leader>dR",  function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
-      { "<leader>dU",  function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
-      { "<leader>db",  function() require("dap").step_back() end,                                   desc = "Step Back", },
-      { "<leader>dc",  function() require("dap").continue() end,                                    desc = "Continue", },
-      { "<leader>dd",  function() require("dap").disconnect() end,                                  desc = "Disconnect", },
-      { "<leader>de",  function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
-      { "<leader>dg",  function() require("dap").session() end,                                     desc = "Get Session", },
-      { "<leader>dh",  function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
-      { "<leader>dS",  function() require("dap.ui.widgets").scopes() end,                           desc = "Scopes", },
-      { "<leader>di",  function() require("dap").step_into() end,                                   desc = "Step Into", },
-      { "<leader>do",  function() require("dap").step_over() end,                                   desc = "Step Over", },
-      { "<leader>dp",  function() require("dap").pause.toggle() end,                                desc = "Pause", },
-      { "<leader>dq",  function() require("dap").close() end,                                       desc = "Quit", },
+      { "<F12>",       function() require("dap").step_out() end,                                    desc = "Step Out", },
+      { "<leader>Wb",  function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
+      -- { "<leader>db",  function() require("dap").step_back() end,                                   desc = "Step Back", },
+      -- { "<leader>dd",  function() require("dap").disconnect() require("dapui").close() end,         desc = "Disconnect", },
+      -- { "<leader>de",  function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
+      -- { "<leader>dg",  function() require("dap").session() end,                                     desc = "Get Session", },
+      -- { "<leader>dh",  function() require("dap.ui.widgets").hover() end,                            desc = "Hover Variables", },
+      -- { "<leader>dS",  function() require("dap.ui.widgets").scopes() end,                           desc = "Scopes", },
+      -- { "<leader>dp",  function() require("dap").pause.toggle() end,                                desc = "Pause", },
+      -- { "<leader>dq",  function() require("dap").close() end,                                       desc = "Quit", },
       -- { "<leader>dr",  function() require("dap").repl.toggle() end,                                 desc = "Toggle REPL", },
-      { "<leader>ds",  function() require("dap").continue() end,                                    desc = "Start", },
-      { "<leader>dt",  function() require("dap").toggle_breakpoint() end,                           desc = "Toggle Breakpoint", },
-      { "<leader>dx",  function() require("dap").terminate() end,                                   desc = "Terminate", },
-      { "<leader>du",  function() require("dap").step_out() end,                                    desc = "Step Out", },
-      { "<leader>dE",  function() require("dapui").eval(vim.fn.input "[Expression] > ") end,        desc = "Evaluate Input", },
-      { "<leader>dC",  function() require("dap").set_breakpoint(vim.fn.input "[Condition] > ") end, desc = "Conditional Breakpoint", },
-      { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end,   desc = "Launch nvim Server",     noremap = true, },
+      -- { "<leader>dE",  function() require("dapui").eval(vim.fn.input "[Expression] > ") end,        desc = "Evaluate Input", },
     },
     -- stylua: ignore end
     opts = {
@@ -93,7 +77,7 @@ return {
           name = "gdb",
           type = "executable",
           command = "gdb",
-          args = { "--quiet", "--interpreter=dap" }
+          args = { "--quiet", "--interpreter=dap" },
         },
         cppdbg = {
           id = "cppdbg",
@@ -111,6 +95,8 @@ return {
           id = "cmake",
           name = "cmake",
           type = "pipe",
+          -- vagrant    43759  0.0  0.0 118256 19892 pts/10   Sl+  11:59   0:00 /usr/bin/cmake -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ --no-warn-unused-cli -S /home/vagrant/Projects/engprod/metl/tools/msa-cmake-modules -B /home/vagrant/Projects/engprod/metl/tools/msa-cmake-modules/build -G Ninja --debugger --debugger-pipe /tmp/cmake-debugger-pipe-9a4ad188-f3b4-4810-af4b-396742966126
+          cwd = require("config.fn").util.select_cmake_cwd,
           executable = {
             command = "cmake",
             args = require("config.fn").gbl.cmake_args,
@@ -183,7 +169,7 @@ return {
         },
         lldb = {
           name = "lldb: launch",
-          type = "lldb",      -- matches the adapter
+          type = "lldb", -- matches the adapter
           request = "launch", -- could also attach to a currently running process
           program = require("config.fn").util.select_cxx_executable,
           cwd = "${workspaceFolder}",
@@ -196,6 +182,7 @@ return {
         cmake = {
           name = "cmake: debug",
           type = "cmake",
+          -- cwd = require("config.fn").util.select_cmake_cwd,
           request = "launch",
           args = require("config.fn").util.select_cmake_args,
         },
@@ -246,8 +233,7 @@ return {
   },
   {
     "igorlfs/nvim-dap-view",
-    -- enabled = not vim.g.vscode,
-    enabled = false,
+    enabled = false and not vim.g.vscode,
     ---@module 'dap-view'
     ---@type dapview.Config
     opts = {},
@@ -255,8 +241,7 @@ return {
   {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
-    enabled = not vim.g.vscode,
-    -- enabled = false,
+    enabled = true and not vim.g.vscode,
     dependencies = {
       { "mfussenegger/nvim-dap" },
     },
@@ -296,6 +281,9 @@ return {
       dap.listeners.before.event_exited["dapui_config"] = function()
         dapui.close()
       end
+      dap.listeners.after.event_stopped["center_view"] = function()
+        vim.cmd("normal! zz")
+      end
     end,
   },
   {
@@ -307,10 +295,10 @@ return {
         local value = variable.value:gsub("%s+", " ") -- strip new lines
         value = value:gsub("%(anonymous namespace%)", "?")
         value = value:gsub("::v%d::", "::")
-        if options.virt_text_pos == 'inline' then
-          return ' = ' .. value
+        if options.virt_text_pos == "inline" then
+          return " = " .. value
         else
-          return variable.name .. ' = ' .. value
+          return variable.name .. " = " .. value
         end
       end,
     },

@@ -18,8 +18,8 @@ exhaustive list, the groupings here should help users discover key mappings.
 
 - `<leader>cm`: CMake
 - `<leader>d`: Debugger
-- `<leader>f`: Find
 - `<leader>g`: Git
+- `<leader>f`: Find
 - `<leader>s`: Search (additional Find)
 - `<leader>t`: Tests
 - `<leader>M`: Markdown
@@ -30,7 +30,19 @@ This section describes the basics of vim.
 
 ### Modes
 
+- `"i"` - `insert`: Text insertion mode
+- `"n"` - `normal`: Keyboard command execution mode
+- `"v"` - `visual | select`: Union of `x` and `s`
+- `"x"` - `visual`: Any visual mode, `v` (character), `V` (line), or `<C-v>` (block)
+- `"o"` - `operator pending`: Mode after an operator starts that requires a motion, e.g.
+  `d` or `c`
+- `"c"` - `command line`: Entered when you type `:` to write EX Commands
+- `"t"` - `terminal`: Neovim's integrated terminal
+- `"s"` - `select`: Highlighted selection will be replaced e.g. `gH` (rarely used)
+- `"R"` - `replace`: Similar to Insert key, typing will overwrite characters `<C-R>`
+
 ### Basic Keys
+
 - `h/j/k/l`: Move cursor left/down/up/right
 - `<C-d>`/`<C-u>` (`Ctrl+d`/`Ctrl+u`): Page down/up
 

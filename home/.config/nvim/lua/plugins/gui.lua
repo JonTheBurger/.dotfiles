@@ -6,7 +6,7 @@ return {
     -- version = "<2.0.0",
     keys = {
       { "<S-F7>", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
-      { "<leader>Wb", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
+      { "<leader>Wr", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
       { "<leader>Wo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>B",  "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
       { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
@@ -19,7 +19,7 @@ return {
         max_width = { 100, 0.4 },
         min_width = { 30, 0.2 },
         max_height = { 20, 0.2 },
-        bindings = {
+        keymaps = {
           ["<C-h>"] = false,
           ["<C-j>"] = false,
           ["<C-k>"] = false,
@@ -82,7 +82,7 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     keys = {
-      { "<leader>Wd", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
+      { "<leader>Wt", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
       { "<leader>TT", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
       { "<leader>Tl", "<cmd>Trouble diagnostics toggle win.position=right win.relative=win<CR>", desc = "Trouble split right" },
     },
@@ -182,7 +182,7 @@ return {
     keys = {
       { "<leader>gb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
       { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Line Toggle" },
-      { "<leader>Wb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame" },
+      -- { "<leader>Wb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame" },
       { "]g",         "<cmd>Gitsigns nav_hunk next<CR>",             desc = "Next Git Change" },
       { "[g",         "<cmd>Gitsigns nav_hunk prev<CR>",             desc = "Previous Git Change" },
     },

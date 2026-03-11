@@ -325,7 +325,6 @@ return {
       { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
       { "<leader>cmd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
       { "<leader>cmr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
-      { "<F4>", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
     },
   },
   {

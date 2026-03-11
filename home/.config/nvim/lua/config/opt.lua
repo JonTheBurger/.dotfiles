@@ -1,6 +1,6 @@
 -- <space> as <leader>
 vim.g.mapleader = " "
-vim.g.maplocalleader = ","
+vim.g.maplocalleader = "\\"
 vim.g.modelines = 2
 vim.opt.compatible = false
 vim.opt.cursorline = true
@@ -63,6 +63,7 @@ vim.opt.undofile = true
 
 -- Gui
 -- vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
+vim.o.winborder = "double"
 if vim.g.neovide then
   vim.keymap.set({ "n", "v" }, "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
   vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")

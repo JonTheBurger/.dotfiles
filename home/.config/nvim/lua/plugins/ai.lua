@@ -7,6 +7,7 @@ end
 return {
   {
     "zbirenbaum/copilot.lua",
+    enabled = false,
     -- enabled = os.getenv("USER") ~= "vagrant",
     dependencies = {
       "copilotlsp-nvim/copilot-lsp",

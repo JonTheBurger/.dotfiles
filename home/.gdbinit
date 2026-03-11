@@ -3,12 +3,12 @@
 set history filename ~/.cache/gdb-history
 set history save
 # Do not step into includes matching
-# skip -gfi /usr/include/c++/*/bits/*.h
+skip -gfi /usr/include/c++/*/bits/*.h
 # Do not step into functions matching
-# skip -rfu ^.*::(capacity|c_str|data|empty|length|max_size|size|begin|end|cbegin|cend|rbegin|rend|crbegin|crend).*
+skip -rfu ^.*::(capacity|c_str|data|empty|length|max_size|size|begin|end|cbegin|cend|rbegin|rend|crbegin|crend).*
 # skip -rfu ^boost::.*
 # skip -rfu ^Catch::.*
-# skip -rfu ^std::.*
+skip -rfu ^std::.*
 # skip -rfu ^testing::.*
 
 # FreeRTOS Desktop support

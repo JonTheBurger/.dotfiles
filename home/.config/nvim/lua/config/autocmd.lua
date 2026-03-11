@@ -1,4 +1,12 @@
 -- Commands
+vim.api.nvim_create_user_command("Sort", function(opts)
+  if opts.range == 0 then
+    vim.cmd("sort i")
+  else
+    vim.cmd(string.format("'<,'> sort i", opts.line1, opts.line2))
+  end
+end, { range = true, desc="Sort, case insensitive (sort i)" })
+-- vim.api.nvim_create_user_command("Sort", "sort i", { range = true, desc="Sort, case insensitive (sort i)" })
 vim.api.nvim_create_user_command("Colorize", function()
   Snacks.terminal.colorize()
   vim.wo.number = true
@@ -62,6 +70,38 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Support Makefile Tabs",
   pattern = { "make" },
   command = "setlocal noexpandtab",
+})
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  desc = "gd support for vim help",
+  pattern = { "help" },
+  callback = function()
+    vim.keymap.set("n", "gd", "<C-]>", { buffer = true, noremap = true, desc = "Go to help tag" })
+  end,
+})
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  desc = "Go to file from output window",
+  pattern = { "*output*", "*Output*" },
+  callback = function()
+    vim.keymap.set("n", "gf", function()
+      local window = require("snacks").picker.util.pick_win({
+        filter = function(win, buf)
+          return not vim.bo[buf].filetype:find("^snacks") and
+                 not vim.bo[buf].filetype:find("Overseer") and
+                 not vim.bo[buf].filetype:find("neotest") and
+                 not vim.bo[buf].filetype:find("trouble")
+        end
+      })
+      local loc = require("config.fn").buf.file_under_cursor()
+      if vim.api.nvim_win_is_valid(window) and vim.fn.filereadable(loc.file) == 1 then
+        vim.api.nvim_set_current_win(window)
+        vim.cmd.edit(loc.file)
+        if loc.line then
+          vim.api.nvim_win_set_cursor(0, { loc.line, (loc.col or 1) - 1 })
+          vim.cmd("normal! zz")
+        end
+      end
+    end, { buffer = true, noremap = true, })
+  end,
 })
 vim.api.nvim_create_autocmd({ "WinNew", "WinLeave", "BufWinEnter" }, {
   desc = "Keep Widgets out of BufferLine",

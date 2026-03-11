@@ -55,6 +55,9 @@ return {
         }),
         require("rustaceanvim.neotest"),
       },
+      consumers = {
+        overseer = require("neotest.consumers.overseer"),
+      },
     })
     require("neotest-gtest.executables.global_registry")["for_dir"] = require("config.fn").util.find_cxx_tests
   end,
@@ -62,7 +65,7 @@ return {
   keys = {
     { "<leader>tt",
       function()
-        vim.cmd("OverseerClose")
+        -- vim.cmd("OverseerClose")
         require("neotest").run.run()
       end,
       desc = "Run Nearest"
@@ -76,9 +79,8 @@ return {
     },
     { "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end,   desc = "Run File" },
     { "<leader>te", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },
-    { "<leader>Wt", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },
+    { "<leader>Wt", function() require("neotest").summary.toggle() end,              desc = "Toggle Tests" },
     { "<leader>WT", function() require("neotest").output_panel.toggle() end,         desc = "Toggle Output Panel" },
-    { "<leader>to", function() require("neotest").output_panel.toggle() end,         desc = "Toggle Output Panel" },
     { "<leader>tS", function() require("neotest").run.stop() end,                    desc = "Stop" },
     {
       "<leader>tT",
@@ -89,11 +91,12 @@ return {
     },
     {
       "<leader>tO",
-      function()
-        require("neotest").output.open({
-          enter = true, auto_close = true
-        })
-      end,
+      function() require("neotest").output.open({ enter = true, auto_close = true }) end,
+      desc = "Show Output"
+    },
+    {
+      "<leader>to",
+      function() require("neotest").output.open({ enter = true, auto_close = true }) end,
       desc = "Show Output"
     },
   },

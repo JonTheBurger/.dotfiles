@@ -219,6 +219,7 @@ return {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    -- "MeanderingProgrammer/treesitter-modules.nvim",
     branch = "master",
     lazy = false,
     -- event = { "BufReadPost", "BufNewFile" },
@@ -226,10 +227,6 @@ return {
       { "nvim-treesitter/nvim-treesitter-textobjects" },
     },
     cmd = { "TSUpdateSync" },
-    keys = {
-      { "<c-space>", desc = "Increment selection" },
-      { "<bs>",      desc = "Decrement selection", mode = "x" },
-    },
     ---@type TSConfig
     opts = {
       auto_install = true,
@@ -259,7 +256,15 @@ return {
         enable = true,
         disable = { "rst" },
       },
-      incremental_selection = { enable = true },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<A-o>",
+          node_incremental = "<A-o>",
+          scope_incremental = "<A-O>",
+          node_decremental = "<A-i>",
+        }
+      },
       textobjects = textobjects,
     },
     ---@param opts TSConfig

@@ -101,21 +101,54 @@ vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').util.select_motion_char
 vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 
 -- LSP
+-- vim.keymap.set({ "x" }, "[n", function()
+--   require "vim.treesitter._select".select_prev(vim.v.count1)
+-- end, { desc = "Select previous treesitter node" })
+-- vim.keymap.set({ "x" }, "]n", function()
+--   require "vim.treesitter._select".select_next(vim.v.count1)
+-- end, { desc = "Select next treesitter node" })
+-- vim.keymap.set({ "x", "o" }, "an", function()
+--   if vim.treesitter.get_parser(nil, nil, { error = false }) then
+--     require "vim.treesitter._select".select_parent(vim.v.count1)
+--   else
+--     vim.lsp.buf.selection_range(vim.v.count1)
+--   end
+-- end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
+-- vim.keymap.set({ "x", "o" }, "in", function()
+--   if vim.treesitter.get_parser(nil, nil, { error = false }) then
+--     require "vim.treesitter._select".select_child(vim.v.count1)
+--   else
+--     vim.lsp.buf.selection_range(-vim.v.count1)
+--   end
+-- end, { desc = "Select child treesitter node or inner incremental lsp selections" })
+
 vim.api.nvim_create_user_command("TSExplore", function()
   vim.cmd("InspectTree")
 end, { desc = "Show Parse Tree" })
-vim.api.nvim_create_user_command("Fmt", function()
-  vim.lsp.buf.format()
-  require("conform").format({ async = true, lsp_format = "fallback" })
-  vim.lsp.buf.code_action({
-    apply = true,
-    context = {
-      triggerKind = 1, -- 1: Invoked, 2: Automatic
-      diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }),
-      only = { "source.organizeImports" },
-    },
-  })
-end, { desc = "Format" })
+
+vim.api.nvim_create_user_command("Fmt", function(args)
+  local range = nil
+  if args.count ~= -1 then
+    local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+    range = {
+      start = { args.line1, 0 },
+      ["end"] = { args.line2, end_line:len() },
+    }
+  end
+  vim.lsp.buf.format({ range = range })
+  require("conform").format({ async = true, lsp_format = "fallback", range = range })
+  if not range then
+    vim.lsp.buf.code_action({
+      apply = true,
+      context = {
+        triggerKind = 1,
+        diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }),
+        only = { "source.organizeImports" },
+      },
+    })
+  end
+end, { desc = "Format", range = true })
+
 vim.keymap.set("n", "g.", vim.lsp.buf.code_action, { desc = "Code Action/Fix" })
 vim.keymap.set("n", "gC", vim.lsp.buf.incoming_calls, { desc = "Callers" })
 vim.keymap.set("n", "<F2>", function()
@@ -123,7 +156,13 @@ vim.keymap.set("n", "<F2>", function()
 end, { desc = "Rename" })
 vim.keymap.set("i", "<F1>", vim.lsp.buf.signature_help, {})
 vim.keymap.set({ "n", "i" }, "<F7>", require("config.fn").util.build, { desc = "Build" })
-vim.keymap.set("n", "?", vim.diagnostic.open_float, { desc = "Float Diagnostic" })
+vim.keymap.set("n", "?", function()
+  if require("dap").session() then
+    require("dapui").eval()
+  else
+    vim.diagnostic.open_float()
+  end
+end, { desc = "Float Diagnostic" })
 
 vim.keymap.set("n", "]e", function()
   vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR })
@@ -159,6 +198,30 @@ end, { desc = "Substitute visual selection" })
 
 vim.keymap.set("v", "<leader>lf", [[:s/\%V/\r/]], { desc = "Insert newline" })
 
+-- Yanks
+vim.keymap.set("n", "yF", function()
+  local path = vim.api.nvim_buf_get_name(0)
+  for _, reg in ipairs({'"', "+", "*"}) do
+    vim.fn.setreg(reg, path)
+  end
+end, { desc = "Yank Filename" })
+vim.keymap.set("n", "yR", function()
+  local path = vim.fn.expand("%:.")
+  for _, reg in ipairs({'"', "+", "*"}) do
+    vim.fn.setreg(reg, path)
+  end
+end, { desc = "Yank Filename, Relative" })
+vim.keymap.set("n", "yN", function()
+  local path = vim.fn.expand("%:.")
+  local pos = require("config.fn").str.rfind_char(path, "/")
+  if pos then
+    path = path:sub(pos + 1)
+  end
+  for _, reg in ipairs({'"', "+", "*"}) do
+    vim.fn.setreg(reg, path)
+  end
+end, { desc = "Yank Filename, Basename" })
+
 vim.keymap.set("n", "<leader>wq", [[:%s/'/"/g<CR>]], { desc = "Rewrite quotes" })
 vim.keymap.set("n", "<leader>wp", "vipgq", { desc = "Wrap paragraph" })
 vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Trim Whitespace" })
@@ -178,3 +241,9 @@ end, { desc = "Insert TODO" })
 vim.keymap.set("n", "<leader>Tda", function()
   vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false)
 end, { desc = "Append TODO" })
+
+-- Gui
+vim.keymap.set("n", ",1", "<cmd>OverseerToggle<CR>", { desc = "Overseer toggle" })
+vim.keymap.set("n", ",2", function() require("neotest").summary.toggle() end, { desc = "Toggle Tests" })
+vim.keymap.set("n", ",3", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Trouble" })
+vim.keymap.set("n", ",4", "<cmd>Outline<CR>", { desc = "Toggle Symbol Outline" })

@@ -208,6 +208,7 @@ alias copy='rsync -ahpruzvP'
 alias d='dirs -v'
 alias e="$EDITOR"
 alias f='y'
+alias g='git'
 alias getmode='stat -c %a'
 alias goodbye='sudo zsh -c "upd8 && shutdown now"'
 alias goto='cd -P'

@@ -17,6 +17,7 @@
     "shellcheck@0.11.0",
     "slint-lsp@1.12.1",
     "sonarlint-ls@3.25.0.76263",
+    "stylua@2.3.1",
     "tombi@0.6.0",
     "vale-ls@0.3.8",
     "vscode-langservers-extracted@latest",

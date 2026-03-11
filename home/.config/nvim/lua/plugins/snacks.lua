@@ -2,28 +2,25 @@
 local MB = 1024 * 1024
 local cfg_dir = vim.fn.stdpath("config")
 
+-- item.score = (item.score or 0) * 0.1
 local downrank_undesirable_paths = function(item)
-  if item.file and item.file:match("Test") then
-    -- item.score = (item.score or 0) * 0.1
-    item.score_add = (item.score_add or 0) - 30
-  end
-  if item.file and item.file:match("Mock") then
-    -- item.score = (item.score or 0) * 0.1
-    item.score_add = (item.score_add or 0) - 30
-  end
-  if item.file and item.file:match("%.mock") then
-    -- item.score = (item.score or 0) * 0.1
-    item.score_add = (item.score_add or 0) - 30
-  end
   if item.file and item.file:match("%.test") then
-    -- item.score = (item.score or 0) * 0.1
-    item.score_add = (item.score_add or 0) - 30
+    item.score = (item.score or 0) * 0.1
   end
   if item.file and item.file:match("tools") then
-    item.score_add = (item.score_add or 0) - 30
+    item.score = (item.score or 0) * 0.01
   end
-  if item.file and item.file:match("external") then
-    item.score_add = (item.score_add or 0) - 30
+  if item.file and item.file:match("Test") then
+    item.score_mul = 0.001
+  end
+  if item.file and item.file:match("xternal") then
+    item.score = (item.score or 0) * 0.0001
+  end
+  if item.file and item.file:match("%.mock") then
+    item.score_mul = 0.00001
+  end
+  if item.file and item.file:match("Mock") then
+    item.score_mul = 0.000001
   end
 end
 
@@ -131,7 +128,7 @@ return {
           { section = "startup" },
         },
       },
-      debug = { enabled = true },
+      debug = { enabled = false },
       explorer = {
         enabled = not vim.g.vscode,
         hidden = true,
@@ -166,7 +163,7 @@ return {
               for _, win in ipairs(vim.api.nvim_list_wins()) do
                 local buf = vim.api.nvim_win_get_buf(win)
                 local cfg = vim.api.nvim_win_get_config(win)
-                if (vim.bo[buf].buflisted and cfg.relative == '') or vim.bo[buf].ft == 'snacks_dashboard' then
+                if (vim.bo[buf].buflisted and cfg.relative == "") or vim.bo[buf].ft == "snacks_dashboard" then
                   local file = vim.api.nvim_buf_get_name(buf)
                   table.insert(targets, { win = win, buf = buf, file = file })
                 end
@@ -175,14 +172,14 @@ return {
             end
             local targets = target_wins()
             for _, targ in ipairs(targets) do
-              if targ.file == item.file or vim.bo[targ.buf].ft == 'snacks_dashboard' then
+              if targ.file == item.file or vim.bo[targ.buf].ft == "snacks_dashboard" then
                 picker.opts.jump.reuse_win = true --[[Override]]
-                picker:action 'jump'
+                picker:action("jump")
                 return
               end
             end
-            picker:action 'pick_win'
-            picker:action 'jump'
+            picker:action("pick_win")
+            picker:action("jump")
           end,
         },
         win = {
