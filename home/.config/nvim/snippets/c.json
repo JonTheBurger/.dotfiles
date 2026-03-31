@@ -76,7 +76,7 @@
     ]
   },
   "typedef struct": {
-    "prefix": "typedef",
+    "prefix": "typed",
     "body": [
       "typedef struct ${1} {",
       "  ${2}",

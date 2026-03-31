@@ -10,7 +10,7 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.11.6"
+    version="0.12.0"
   fi
   local URL="${URL-https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux-$(uname -m).tar.gz}"
 

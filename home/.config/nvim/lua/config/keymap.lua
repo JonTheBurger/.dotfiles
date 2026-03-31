@@ -243,7 +243,7 @@ vim.keymap.set("n", "<leader>Tda", function()
 end, { desc = "Append TODO" })
 
 -- Gui
-vim.keymap.set("n", ",1", "<cmd>OverseerToggle<CR>", { desc = "Overseer toggle" })
-vim.keymap.set("n", ",2", function() require("neotest").summary.toggle() end, { desc = "Toggle Tests" })
-vim.keymap.set("n", ",3", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Trouble" })
-vim.keymap.set("n", ",4", "<cmd>Outline<CR>", { desc = "Toggle Symbol Outline" })
+vim.keymap.set("n", "_1", "<cmd>OverseerToggle<CR>", { desc = "Overseer toggle" })
+vim.keymap.set("n", "_2", function() require("neotest").summary.toggle() end, { desc = "Toggle Tests" })
+vim.keymap.set("n", "_3", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Trouble" })
+vim.keymap.set("n", "_4", "<cmd>Outline<CR>", { desc = "Toggle Symbol Outline" })

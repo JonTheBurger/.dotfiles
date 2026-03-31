@@ -876,7 +876,6 @@ M.util = {
           -- M.gbl.cmake_args[#M.gbl.cmake_args + 1] = vim.fn.expand("%:p:h")
           M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-B"
           M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "build"
-          M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-DMSA_CMAKE_MODULES=" .. vim.fn.expand("%:p:h") .. "/../../../.."
         end
 
         enter_cmake_args()

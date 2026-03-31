@@ -1,77 +1,3 @@
-local textobjects = {
-  swap = {
-    enable = true,
-    swap_next = { ["<leader>a"] = "@parameter.inner" },
-    swap_previous = { ["<leader>A"] = "@parameter.inner" },
-  },
-  select = {
-    enable = true,
-    lookahead = true,
-    keymaps = {
-      ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
-      ["af"] = { query = "@function.outer", desc = "Around Function" },
-      ["if"] = { query = "@function.inner", desc = "Inside Function" },
-      ["ac"] = { query = "@class.outer", desc = "Around Class" },
-      ["ic"] = { query = "@class.inner", desc = "Inside Class" },
-      ["a/"] = { query = "@comment.outer", desc = "Around Comment" },
-      ["i/"] = { query = "@comment.inner", desc = "Inside Comment" },
-      ["aa"] = { query = "@parameter.outer", desc = "Around Argument" },
-      ["ia"] = { query = "@parameter.inner", desc = "Inside Argument" },
-      ["al"] = { query = "@loop.outer", desc = "Around Loop" },
-      ["il"] = { query = "@loop.inner", desc = "Inside Loop" },
-      ["ai"] = { query = "@conditional.outer", desc = "Around If" },
-      ["ii"] = { query = "@conditional.inner", desc = "Inside If" },
-    },
-    -- You can choose the select mode  ('v' (default), 'V', or '<c-v>')
-    selection_modes = {
-      ["@parameter.outer"] = "v",
-      ["@function.outer"] = "V",
-      ["@class.outer"] = "V",
-    },
-    include_surrounding_whitespace = false,
-  },
-  move = {
-    enable = true,
-    set_jumps = true,
-    goto_next_start = {
-      ["]f"] = { query = "@function.outer", desc = "Next function start" },
-      ["]c"] = { query = "@class.outer", desc = "Next class start" },
-      ["]/"] = { query = "@comment.outer", desc = "Next comment start" },
-      ["]a"] = { query = "@parameter.inner", desc = "Next parameter" },
-      ["]b"] = { query = "@block.outer", desc = "Next block" },
-      ["]l"] = { query = "@loop.*", desc = "Next loop part" },
-      ["]i"] = { query = "@conditional.outer", desc = "Next if" },
-      ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-      ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-    },
-    goto_next_end = {
-      ["]F"] = "@function.outer",
-      ["]C"] = "@class.outer",
-      ["]?"] = "@comment.outer",
-      ["]A"] = "@parameter.inner",
-      ["]B"] = "@block.outer",
-      ["]I"] = "@conditional.outer",
-    },
-    goto_previous_start = {
-      ["[f"] = "@function.outer",
-      ["[c"] = "@class.outer",
-      ["[/"] = "@comment.outer",
-      ["[a"] = "@parameter.inner",
-      ["[b"] = "@block.outer",
-      ["[i"] = "@conditional.outer",
-      ["[z"] = { query = "@fold", query_group = "folds" },
-    },
-    goto_previous_end = {
-      ["[F"] = "@function.outer",
-      ["[T"] = "@class.outer",
-      ["[?"] = "@comment.outer",
-      ["[A"] = "@parameter.inner",
-      ["[B"] = "@block.outer",
-      ["[I"] = "@conditional.outer",
-    },
-  },
-}
-
 return {
   {
     "dmtrKovalenko/fff.nvim",
@@ -212,15 +138,75 @@ return {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter-textobjects",
     lazy = false,
-    branch = "master",
-    -- opts = textobjects,
+    branch = "main",
+    opts = {
+      select = {
+        lookahead = true,
+        include_surrounding_whitespace = true,
+        selection_modes = {
+          -- <c-v> for blockwise
+          ["@parameter.outer"] = "v",
+          ["@class.outer"] = "V",
+          ["@function.outer"] = "V",
+        },
+      },
+      move = {
+        set_jumps = true,
+      },
+    },
+    keys = {
+      -- Selection
+      { "af", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Function" },
+      { "if", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Function" },
+      { "ac", function() require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Class" },
+      { "ic", function() require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Class" },
+      { "a/", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Comment" },
+      { "i/", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Comment" },
+      { "aa", function() require("nvim-treesitter-textobjects.select").select_textobject("@parameter.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Parameter/Argument" },
+      { "ia", function() require("nvim-treesitter-textobjects.select").select_textobject("@parameter.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Parameter/Argument" },
+      { "al", function() require("nvim-treesitter-textobjects.select").select_textobject("@loop.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Loop" },
+      { "il", function() require("nvim-treesitter-textobjects.select").select_textobject("@loop.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Loop" },
+      { "ai", function() require("nvim-treesitter-textobjects.select").select_textobject("@conditional.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around If" },
+      { "ii", function() require("nvim-treesitter-textobjects.select").select_textobject("@conditional.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside If" },
+      { "as", function() require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals") end, mode = { "o", "x" }, desc = "Around Scope" },
+      -- Move
+      { "]f", function() require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Function"},
+      { "[f", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Function"},
+      { "]c", function() require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Class"},
+      { "[c", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Class"},
+      { "]l", function() require("nvim-treesitter-textobjects.move").goto_next_start({"@loop.inner", "@loop.outer"}, "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Loop"},
+      { "]s", function() require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals") end, mode = { "n", "x", "o" }, desc = "Next Local"},
+      { "]z", function() require("nvim-treesitter-textobjects.move").goto_next_start("@fold", "folds") end, mode = { "n", "x", "o" }, desc = "Next Fold"},
+      { "]i", function() require("nvim-treesitter-textobjects.move").goto_next("@conditional.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Conditional"},
+      { "[i", function() require("nvim-treesitter-textobjects.move").goto_previous("@conditional.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Conditional"},
+      -- Repeat Move
+      { ";", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next() end, mode = { "n", "x", "o" }, desc = "Repeat Next Move"},
+      { ",", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous() end, mode = { "n", "x", "o" }, desc = "Repeat Previous Move"},
+      -- Swap
+      { "<leader>a", function() require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner") end, mode = { "n" }, desc = "Swap Next Argument" },
+      { "<leader>A", function() require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner") end, mode = { "n" }, desc = "Swap Previous Argument" },
+    },
+    init = function()
+      -- Disable entire built-in ftplugin mappings to avoid conflicts.
+      -- See https://github.com/neovim/neovim/tree/master/runtime/ftplugin for built-in ftplugins.
+      vim.g.no_plugin_maps = true
+
+      local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
+      vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true, desc = "Built-In f" })
+      vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true, desc = "Built-In F" })
+      vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true, desc = "Built-In t" })
+      vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true, desc = "Built-In T" })
+    end,
+    config = function(_, opts)
+      require("nvim-treesitter-textobjects").setup(opts)
+    end,
   },
   {
     -- https://github.com/nvim-treesitter/nvim-treesitter
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     -- "MeanderingProgrammer/treesitter-modules.nvim",
-    branch = "master",
+    branch = "main",
     lazy = false,
     -- event = { "BufReadPost", "BufNewFile" },
     dependencies = {
@@ -267,6 +253,18 @@ return {
       },
       textobjects = textobjects,
     },
+    init = function()
+      vim.opt.foldmethod = "expr"
+      vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+      -- vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
+
+      vim.opt.foldenable = true
+      vim.opt.foldlevel = 20
+      -- vim.opt.foldlevelstart = 20
+      -- vim.opt.indentexpr = "nvim_treesitter#indent()"
+
+      vim.g._ts_force_sync_parsing = false
+    end,
     ---@param opts TSConfig
     config = function(_, opts)
       if type(opts.ensure_installed) == "table" then
@@ -280,16 +278,6 @@ return {
           return true
         end, opts.ensure_installed)
       end
-      require("nvim-treesitter.configs").setup(opts)
-
-      -- Setup Folding
-      -- vim.opt.foldmethod = "expr"
-      -- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
-      -- vim.opt.foldlevel = 20
-      -- vim.opt.indentexpr = "nvim_treesitter#indent()"
-      vim.opt.foldenable = false
-
-      vim.g._ts_force_sync_parsing = false
     end,
   },
 }

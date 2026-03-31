@@ -343,8 +343,19 @@ function onchange() {
   done
   [ -n "$verbose" ] && echo "-- [Goodbye]"
 }
+function ppe() {
+  # python print & execute
+  if [ $# -gt 0 ]; then
+    python -c 'import sys; print(eval(" ".join(sys.argv[1:])))' $@
+  else
+    python -c 'import sys; print(eval(sys.stdin.read()))'
+  fi
+}
 function uncrust() {
   uncrustify -c ~/.config/uncrustify.cfg -l C --mtime --replace --no-backup $@
+}
+function urldecode() {
+  python -c 'import sys; import urllib.parse; print(urllib.parse.unquote(sys.argv[1]))' $@
 }
 function venv() {
   if [ ! -d .venv ]; then

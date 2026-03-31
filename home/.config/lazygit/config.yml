@@ -2,6 +2,7 @@
 disableStartupPopups: true
 quitOnTopLevelReturn: false
 git:
+  overrideGpg: true
   autoFetch: false
   branchLogCmd: git log --oneline --color=always --abbrev-commit {{branchName}} --
   pagers:

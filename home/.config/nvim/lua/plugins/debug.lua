@@ -96,7 +96,7 @@ return {
           name = "cmake",
           type = "pipe",
           -- vagrant    43759  0.0  0.0 118256 19892 pts/10   Sl+  11:59   0:00 /usr/bin/cmake -DCMAKE_BUILD_TYPE:STRING=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=TRUE -DCMAKE_C_COMPILER:FILEPATH=/usr/bin/gcc -DCMAKE_CXX_COMPILER:FILEPATH=/usr/bin/g++ --no-warn-unused-cli -S /home/vagrant/Projects/engprod/metl/tools/msa-cmake-modules -B /home/vagrant/Projects/engprod/metl/tools/msa-cmake-modules/build -G Ninja --debugger --debugger-pipe /tmp/cmake-debugger-pipe-9a4ad188-f3b4-4810-af4b-396742966126
-          cwd = require("config.fn").util.select_cmake_cwd,
+          -- cwd = require("config.fn").util.select_cmake_cwd,
           executable = {
             command = "cmake",
             args = require("config.fn").gbl.cmake_args,
@@ -303,4 +303,35 @@ return {
       end,
     },
   },
+  {
+    -- https://github.com/stevearc/profile.nvim
+    "stevearc/profile.nvim",
+    init = function ()
+      local should_profile = os.getenv("NVIM_PROFILE")
+      if should_profile then
+        require("profile").instrument_autocmds()
+        if should_profile:lower():match("^start") then
+          require("profile").start("*")
+        else
+          require("profile").instrument("*")
+        end
+      end
+
+      local function toggle_profile()
+        local prof = require("profile")
+        if prof.is_recording() then
+          prof.stop()
+          vim.ui.input({ prompt = "Save profile to:", completion = "file", default = "profile.json" }, function(filename)
+            if filename then
+              prof.export(filename)
+              vim.notify(string.format("Wrote %s", filename))
+            end
+          end)
+        else
+          prof.start("*")
+        end
+      end
+      vim.api.nvim_create_user_command("Profile", toggle_profile, { desc = "Profile NeoVim" })
+    end
+  }
 }

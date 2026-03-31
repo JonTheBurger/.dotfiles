@@ -1,14 +1,14 @@
-local Path = require("plenary.path")
-
-local neocmakelsp = "neocmakelsp"
-local local_build = Path:new("/home/vagrant/.local/src/neocmakelsp/target/debug/neocmakelsp")
-if local_build:exists() then
-  neocmakelsp = tostring(local_build)
-end
+--local Path = require("plenary.path")
+--
+--local neocmakelsp = "neocmakelsp"
+--local local_build = Path:new("/home/vagrant/.local/src/neocmakelsp/target/debug/neocmakelsp")
+--if local_build:exists() then
+--  neocmakelsp = tostring(local_build)
+--end
 
 return {
   -- cmd = { "/home/vagrant/.local/src/neocmakelsp/target/debug/neocmakelsp", "stdio" },
-  cmd = { neocmakelsp, "stdio" },
+  cmd = { "neocmakelsp", "stdio" },
   filetypes = { "cmake", },
   root_markers = { "CMakePresets.json", },
   init_options = {

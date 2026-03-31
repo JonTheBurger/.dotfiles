@@ -13,6 +13,9 @@ local downrank_undesirable_paths = function(item)
   if item.file and item.file:match("Test") then
     item.score_mul = 0.001
   end
+  if item.file and item.file:match("ibraries") then
+    item.score = (item.score or 0) * 0.0001
+  end
   if item.file and item.file:match("xternal") then
     item.score = (item.score or 0) * 0.0001
   end

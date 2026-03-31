@@ -232,14 +232,14 @@ return {
       on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
     }
   },
-  {
-    -- https://github.com/unblevable/quick-scope
-    "unblevable/quick-scope",
-    enabled = not vim.g.vscode,
-    init = function()
-      vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
-    end,
-  },
+  -- {
+  --   -- https://github.com/unblevable/quick-scope
+  --   "unblevable/quick-scope",
+  --   enabled = not vim.g.vscode,
+  --   init = function()
+  --     vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
+  --   end,
+  -- },
   {
     -- https://github.com/NvChad/nvim-colorizer.lua
     "NvChad/nvim-colorizer.lua",

@@ -47,7 +47,6 @@ return {
     -- }
     require("mini.ai").setup(opts.ai)
     require("mini.align").setup(opts.align)
-    require("mini.bracketed").setup(opts.bracketed)
     require("mini.comment").setup(opts.comment)
     require("mini.cursorword").setup(opts.comment)
     require("mini.move").setup(opts.move)

@@ -8,7 +8,7 @@ return {
       "saghen/blink.compat",
     },
     enabled = not vim.g.vscode,
-    version = "*",
+    version = "1.*",
 
     ---@module "blink.cmp"
     ---@type blink.cmp.Config
@@ -284,6 +284,13 @@ return {
       },
     },
     ft = { "c", "cpp" },
+    opts = {
+      inline = false,
+      only_current_line = false,
+      show_parameter_hints = false,
+      parameter_hints_prefix = "",
+      other_hints_prefix = "",
+    },
     init = function()
       vim.api.nvim_create_user_command("A", "ClangdSwitchSourceHeader", {})
     end,
