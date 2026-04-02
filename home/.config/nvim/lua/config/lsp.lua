@@ -33,6 +33,7 @@ vim.lsp.buf.hover = function()
 end
 
 vim.lsp.enable("ansible")
+vim.lsp.enable("armls")
 vim.lsp.enable("bitbake")
 vim.lsp.enable("clangd")
 -- vim.lsp.enable("dts")

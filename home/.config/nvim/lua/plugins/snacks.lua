@@ -186,6 +186,11 @@ return {
           end,
         },
         win = {
+          input = {
+            keys = {
+              ["<C-c>"] = { "close", mode = { "n" } },
+            },
+          },
           list = {
             -- stylua: ignore start
             keys = {

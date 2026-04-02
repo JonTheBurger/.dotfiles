@@ -51,15 +51,30 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   end,
 })
 vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
-  desc = "Enable TreeSitter Folds",
-  pattern = { "*" },
+  desc = "Enable TreeSitter Highlights",
+  pattern = {
+    "bash",
+    "c",
+    "cpp",
+    "lua",
+    "markdown",
+    "python",
+    "rust",
+ },
   callback = function()
-    -- For some reason, this breaks snacks_input a little bit
-    if vim.bo.filetype ~= "snacks_input" then
-      vim.cmd("normal zx") -- zR
-    end
+    vim.treesitter.start()
   end,
 })
+-- vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
+--   desc = "Enable TreeSitter Folds",
+--   pattern = { "*" },
+--   callback = function()
+--     -- For some reason, this breaks snacks_input a little bit
+--     if vim.bo.filetype ~= "snacks_input" then
+--       vim.cmd("normal zx") -- zR
+--     end
+--   end,
+-- })
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
   desc = "Lint Files",
   callback = function()
@@ -80,8 +95,9 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Go to file from output window",
-  pattern = { "*output*", "*Output*" },
+  pattern = { "*output*", "*Output*", "terminal", "" },
   callback = function()
+    dd'hi'
     vim.keymap.set("n", "gf", function()
       local window = require("snacks").picker.util.pick_win({
         filter = function(win, buf)

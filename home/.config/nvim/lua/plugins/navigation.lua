@@ -122,8 +122,8 @@ return {
     keys = {
       { "i$", "<cmd>lua require('various-textobjs').lineCharacterwise('inner')<CR>",    mode = { "o", "x" } },
       { "a$", "<cmd>lua require('various-textobjs').lineCharacterwise('outer')<CR>",    mode = { "o", "x" } },
-      { "as", "<cmd>lua require('various-textobjs').subword('outer')<CR>",              mode = { "o", "x" } },
-      { "is", "<cmd>lua require('various-textobjs').subword('inner')<CR>",              mode = { "o", "x" } },
+      { "au", "<cmd>lua require('various-textobjs').subword('outer')<CR>",              mode = { "o", "x" } },
+      { "iu", "<cmd>lua require('various-textobjs').subword('inner')<CR>",              mode = { "o", "x" } },
       { "ik", "<cmd>lua require('various-textobjs').key('inner')<CR>",                  mode = { "o", "x" } },
       { "ak", "<cmd>lua require('various-textobjs').key('outer')<CR>",                  mode = { "o", "x" } },
       { "iv", "<cmd>lua require('various-textobjs').value('inner')<CR>",                mode = { "o", "x" } },
@@ -251,7 +251,6 @@ return {
           node_decremental = "<A-i>",
         }
       },
-      textobjects = textobjects,
     },
     init = function()
       vim.opt.foldmethod = "expr"
@@ -259,9 +258,10 @@ return {
       -- vim.opt.foldtext = "v:lua.vim.treesitter.foldtext()"
 
       vim.opt.foldenable = true
-      vim.opt.foldlevel = 20
-      -- vim.opt.foldlevelstart = 20
+      vim.opt.foldlevel = 99
+      vim.opt.foldlevelstart = 99
       -- vim.opt.indentexpr = "nvim_treesitter#indent()"
+      vim.opt.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
       vim.g._ts_force_sync_parsing = false
     end,

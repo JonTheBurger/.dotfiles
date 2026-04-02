@@ -27,10 +27,52 @@ return {
 
     require("neotest").setup({
       summary = {
-        animated = false,
+        animated = true,
+        expand_errors = true,
+        mappings = {
+          parent = "H",
+          prev_sibling = "K",
+          next_sibling = "J",
+          prev_failed = "<",
+          next_failed = ">",
+          expand_all = "z",
+          run = "r",
+          debug = "d",
+          attach = "a",
+          stop = { "u", "s", "x" },
+          output = "o",
+          short = "O",
+          help = "?",
+          watch = "w",
+          target = "t",
+          jumpto = "i",
+          expand = { "l", "h", "<CR>" },
+          mark = { "<TAB>", "m" },
+          run_marked = "R",
+          debug_marked = "D",
+          clear_marked = "M",
+        },
+      },
+      discovery = {
+        filter_dir = function(name, rel_path, root)
+          local dir = name:lower()
+          if dir:match("mock") or dir:match("external") or dir:match("tools") or dir:match("libraries") then
+            return false
+          end
+          return true
+        end
+      },
+      running = {
+        concurrent = 4,
       },
       floating = {
         border = "rounded",
+      },
+      watch = {
+        symbol_queries = {
+          -- cpp = "(import_from_statement (_ (identifier) @symbol))\n" ..
+          --       "(import_statement (_ (identifier) @symbol))\n"
+        },
       },
       adapters = {
         -- https://github.com/orjangj/neotest-ctest
