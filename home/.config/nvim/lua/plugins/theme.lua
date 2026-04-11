@@ -14,6 +14,7 @@ local colors = {
   dark_grey = "#20303b",
   brown = "#885a2c",
 }
+local clickable_widgets = false
 
 local conditions = {
   buffer_not_empty = function()
@@ -52,6 +53,7 @@ local function cmake_line()
       icon = " ",
       cond = conditions.is_cmake_project,
       on_click = function(n, mouse)
+        if clickable_widgets ~= true then return end
         if (n == 1) and (mouse == "l") then
           cmake.select_configure_preset()
         end
@@ -64,6 +66,7 @@ local function cmake_line()
       icon = " ",
       cond = cmake.is_cmake_project,
       on_click = function(n, mouse)
+        if clickable_widgets ~= true then return end
         if (n == 1) and (mouse == "l") then
           cmake.select_build_target()
         end
@@ -75,6 +78,7 @@ local function cmake_line()
       end,
       cond = cmake.is_cmake_project,
       on_click = function(n, mouse)
+        if clickable_widgets ~= true then return end
         if (n == 1) and (mouse == "l") then
           cmake.run()
         end
@@ -86,6 +90,7 @@ local function cmake_line()
       end,
       cond = cmake.is_cmake_project,
       on_click = function(n, mouse)
+        if clickable_widgets ~= true then return end
         if (n == 1) and (mouse == "l") then
           cmake.select_launch_target()
         end
@@ -99,6 +104,23 @@ return {
     "sphamba/smear-cursor.nvim",
     opts = {
       enabled = false,
+      stiffness = 0.8,                      -- 0.6      [0, 1]
+      trailing_stiffness = 0.6,             -- 0.45     [0, 1]
+      stiffness_insert_mode = 0.7,          -- 0.5      [0, 1]
+      trailing_stiffness_insert_mode = 0.7, -- 0.5      [0, 1]
+      damping = 0.95,                       -- 0.85     [0, 1]
+      damping_insert_mode = 0.95,           -- 0.9      [0, 1]
+      distance_stop_animating = 0.5,        -- 0.1      > 0
+    },
+  },
+  -- https://github.com/catppuccin/nvim
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    opts = {
+      flavour = "latte",
+      -- transparent_background = true,
+      term_colors = true,
     },
   },
   {
@@ -181,6 +203,7 @@ return {
       vim.fn.sign_define("DapBreakpointRejected", { text = "ⓧ", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" })
       vim.fn.sign_define("DapLogPoint", { text = "✎", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
       vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticSignWarn", linehl = "DiagnosticSignError", numhl = "DiagnosticSignError" })
+      -- vim.api.nvim_set_hl(0, "SpellBad", { underdashed = true, bold = true, underdouble = true })
     end,
     config = function(_, opts)
       require("onedark").setup(opts)
@@ -263,6 +286,7 @@ return {
           {
             "mode",
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 Snacks.picker.help()
               end
@@ -278,6 +302,7 @@ return {
             color = { fg = colors.blue },
             padding = { left = 0, right = 1 }, -- We don't need space before this
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 Snacks.terminal.toggle()
               end
@@ -289,6 +314,7 @@ return {
             cond = conditions.hide_in_width,
             color = { fg = colors.green, gui = "bold" },
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 require("grug-far").open({ transient = true })
               end
@@ -313,6 +339,7 @@ return {
             icon = "󰡱",
             color = { fg = colors.white },
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 require("outline").open()
               end
@@ -330,6 +357,7 @@ return {
             icon = "",
             color = { fg = colors.violet, gui = "bold" },
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 vim.cmd("DiffviewOpen")
               elseif (n == 1) and (mouse == "r") then
@@ -347,6 +375,7 @@ return {
             },
             cond = conditions.hide_in_width,
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 require("gitsigns").blame()
               end
@@ -372,6 +401,7 @@ return {
               color_info = { fg = colors.cyan },
             },
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 vim.cmd("Trouble diagnostics toggle win.position=right")
               end
@@ -380,6 +410,7 @@ return {
           {
             "overseer",
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 vim.cmd("OverseerToggle")
               end
@@ -392,6 +423,7 @@ return {
             cond = conditions.buffer_not_empty,
             color = { gui = "bold" },
             on_click = function(n, mouse)
+              if clickable_widgets ~= true then return end
               if (n == 1) and (mouse == "l") then
                 vim.cmd("UndotreeToggle")
               end

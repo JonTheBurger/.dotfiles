@@ -159,6 +159,7 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up    # Up
 bindkey "$terminfo[kcud1]" history-substring-search-down  # Down
 bindkey -M menuselect '^[[Z' reverse-menu-complete  # Shift+Tab
 bindkey '^X^e' edit-command-line  # Ctrl+X, Ctrl+E
+bindkey -e # Disable ESC for vi mode
 
 # ======================================================================================
 ## Environment

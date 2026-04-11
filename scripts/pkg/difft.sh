@@ -10,25 +10,23 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.12.1"
+    version="0.68.0"
   fi
-  local URL="${URL-https://github.com/neovim/neovim/releases/download/v${version}/nvim-linux-$(uname -m).tar.gz}"
+  local URL="${URL-https://github.com/Wilfred/difftastic/releases/download/${version}/difft-$(uname -m)-unknown-linux-gnu.tar.gz}"
 
   # download
-  curl -Lo "/tmp/nvim.tar.gz" "${URL}"
-  mkdir -p "/tmp/nvim"
-  tar -xf "/tmp/nvim.tar.gz" --strip-components=1 -C "/tmp/nvim"
+  curl -Lo "/tmp/difft.tar.gz" "${URL}"
+  mkdir -p "/tmp/difft"
+  tar -xf "/tmp/difft.tar.gz" -C "/tmp/difft"
 
   # exe
-  mkdir -p "${HOME}/.local/opt"
-  mv -i "/tmp/nvim" "${HOME}/.local/opt/nvim"
   mkdir -p "${HOME}/.local/bin"
-  ln -sf "${HOME}/.local/opt/nvim/bin/nvim" "${HOME}/.local/bin/nvim"
-  chmod +x "${HOME}/.local/opt/nvim/bin/nvim"
+  mv -i "/tmp/difft/difft" "${HOME}/.local/bin/difft"
+  chmod +x "${HOME}/.local/bin/difft"
 
   # cleanup
-  rm -f /tmp/nvim.tar.gz
-  rm -rf /tmp/nvim
+  rm -f /tmp/difft.tar.gz
+  rm -rf /tmp/difft
 }
 
 # --------------------------------------------------------------------------------------
@@ -36,8 +34,7 @@ local::do_install() {
 ## @brief Removes the package.
 # --------------------------------------------------------------------------------------
 local::do_uninstall() {
-  rm -rf "${HOME}/.local/bin/nvim"
-  rm -rf "${HOME}/.local/opt/nvim"
+  rm -rf "${HOME}/.local/bin/difft"
 }
 
 main "$@"

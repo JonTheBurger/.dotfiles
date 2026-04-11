@@ -8,7 +8,7 @@ vim.keymap.set("n", "<leader>q", "<cmd>bp|bd#<CR>", { desc = "Delete Buffer, Kee
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Yanks
-vim.keymap.set("n", "yaa", "gg0yG<C-o>", { desc = "Yank all" })
+vim.keymap.set("n", "yA", "gg0yG<C-o>", { desc = "Yank all" })
 vim.keymap.set("n", "yd", "yyp", { desc = "Duplicate line" })
 
 -- Inclusive reverse delete find/till (also delete char under cursor)
@@ -100,7 +100,26 @@ vim.keymap.set("x", "i_", ":<C-u>lua require('config.fn').util.select_motion_cha
 vim.keymap.set("o", "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 vim.keymap.set("x", "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true })
 
+vim.cmd("packadd nvim.undotree")
+vim.keymap.set("n", "<leader>U", require("undotree").open, { desc = "Toggle Undotree" })
+
 -- LSP
+-- incremental selection treesitter/lsp
+vim.keymap.set({ "n", "x", "o" }, "<A-o>", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_parent(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(vim.v.count1)
+  end
+end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
+vim.keymap.set({ "n", "x", "o" }, "<A-i>", function()
+  if vim.treesitter.get_parser(nil, nil, { error = false }) then
+    require("vim.treesitter._select").select_child(vim.v.count1)
+  else
+    vim.lsp.buf.selection_range(-vim.v.count1)
+  end
+end, { desc = "Select child treesitter node or inner incremental lsp selections" })
+
 -- vim.keymap.set({ "x" }, "[n", function()
 --   require "vim.treesitter._select".select_prev(vim.v.count1)
 -- end, { desc = "Select previous treesitter node" })
@@ -184,6 +203,7 @@ vim.keymap.set("n", "<leader>LF", ":lua F.", { desc = ":lua F." })
 -- Custom Functions
 local fn = require("config.fn")
 vim.keymap.set("n", "<leader>Wx", fn.buf.close_widgets, { desc = "Close all widget windows" })
+vim.keymap.set("n", "__", fn.buf.close_widgets, { desc = "Close all widget windows" })
 vim.api.nvim_create_user_command("QAEV", fn.buf.close_non_visible, { desc = "Quit All Except Visible" })
 vim.keymap.set("n", "<leader>x", "<Plug>(nvim-elf-file-toggle-bin)", { noremap = true, silent = true, desc = "Toggle Hex" })
 vim.api.nvim_create_user_command("Vh", "vertical help<CR>", {})
@@ -233,17 +253,3 @@ vim.keymap.set("n", "<leader>wl", function()
   vim.cmd([[:s/\s\+/\r/g]])
   vim.fn.setreg("/", pattern)
 end, { desc = "Split words on lines" })
-
--- To-do
-vim.keymap.set("n", "<leader>Tdi", function()
-  vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false)
-end, { desc = "Insert TODO" })
-vim.keymap.set("n", "<leader>Tda", function()
-  vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false)
-end, { desc = "Append TODO" })
-
--- Gui
-vim.keymap.set("n", "_1", "<cmd>OverseerToggle<CR>", { desc = "Overseer toggle" })
-vim.keymap.set("n", "_2", function() require("neotest").summary.toggle() end, { desc = "Toggle Tests" })
-vim.keymap.set("n", "_3", "<cmd>Trouble diagnostics toggle<CR>", { desc = "Trouble" })
-vim.keymap.set("n", "_4", "<cmd>Outline<CR>", { desc = "Toggle Symbol Outline" })

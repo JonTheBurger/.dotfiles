@@ -40,6 +40,15 @@ return {
         line_up = "<S-M-k>",
       },
     },
+    --- @type MiniIndentScop.config
+    indentscope = {
+      mappings = {
+        object_scope = "i1",
+        object_scope_with_border = "a1",
+        goto_top = "[1",
+        goto_bottom = "]1",
+      },
+    },
   },
   config = function(_, opts)
     -- opts.align.steps = {

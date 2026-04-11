@@ -12,19 +12,15 @@ local TEMPLATE = [[
 
 ]]
 
-vim.keymap.set("n", "<leader>wW", function()
-  edit_file(WIKI .. "/index.md")
-end, { desc = "Open Wiki Index, keep pwd" })
-
-vim.keymap.set("n", "<leader>ww", function()
+vim.keymap.set("n", "<leader>WW", function()
   edit_file(WIKI .. "/index.md", { chdir = true })
 end, { desc = "Open Wiki Index" })
 
-vim.keymap.set("n", "<leader>wk", function()
+vim.keymap.set("n", "<leader>WK", function()
   edit_file(DIARY .. os.date("/%Y/%m/w%U.md"), { initial_contents = os.date("# %Y-%m: Week %U\n\n") .. TEMPLATE })
 end, { desc = "Open Weekly Notes" })
 
-vim.keymap.set("n", "<leader>wi", function()
+vim.keymap.set("n", "<leader>WU", function()
   local Path = require("plenary.path")
   local scan = require("plenary.scandir")
   local fn = require("config.fn")

@@ -18,10 +18,44 @@ return {
     lazy = false,
     keys = {
       {
-        "<leader><space>",
+        "<leader>fzf",
         function() require("fff").find_files() end,
         desc = "FFFind files",
-      }
+      },
+      {
+        "<leader>fzg",
+        function() require("fff").live_grep({
+          grep = {
+            modes = { "fuzzy" }
+          }
+        }) end,
+        desc = "FFF grep",
+      },
+      {
+        "<leader>fzr",
+        function()
+          require("fff").live_grep({
+            grep = {
+              modes = { "regex" }
+            }
+          })
+        end,
+        desc = "FFF regex grep",
+      },
+      {
+        "<leader>fzs",
+        function() require("fff").live_grep({
+          grep = {
+            modes = { "plain" }
+          }
+        }) end,
+        desc = "FFF string search",
+      },
+      {
+        "fzc",
+        function() require("fff").live_grep({ query = vim.fn.expand("<cword>") }) end,
+        desc = "Search current word",
+      },
     }
   },
   {
@@ -57,6 +91,20 @@ return {
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Move right one pane" },
     },
     -- stylua: ignore end
+    init = function ()
+      vim.keymap.set("t", "<C-h>", function()
+        require("smart-splits").move_cursor_left()
+      end, { desc = "Move left one pane" })
+      vim.keymap.set("t", "<C-j>", function()
+        require("smart-splits").move_cursor_down()
+      end, { desc = "Move down one pane" })
+      vim.keymap.set("t", "<C-k>", function()
+        require("smart-splits").move_cursor_up()
+      end, { desc = "Move up one pane" })
+      vim.keymap.set("t", "<C-l>", function()
+        require("smart-splits").move_cursor_right()
+      end, { desc = "Move right one pane" })
+    end
   },
   {
     --https://github.com/jake-stewart/multicursor.nvim
@@ -73,9 +121,7 @@ return {
 
       -- Add or skip adding a new cursor by matching word/selection
       vim.keymap.set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
-      vim.keymap.set({"n", "x"}, "<leader>m", function() mc.matchSkipCursor(1) end)
-      vim.keymap.set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-      vim.keymap.set({"n", "x"}, "<leader>MM", function() mc.matchSkipCursor(-1) end)
+      vim.keymap.set({"n", "x"}, "<leader>N", function() mc.matchSkipCursor(1) end)
 
       -- Add and remove cursors with control + left click.
       vim.keymap.set("n", "<c-leftmouse>", mc.handleMouse)
@@ -83,7 +129,7 @@ return {
       vim.keymap.set("n", "<c-leftrelease>", mc.handleMouseRelease)
 
       -- Disable and enable cursors.
-      vim.keymap.set({"n", "x"}, "<c-q>", mc.toggleCursor)
+      -- vim.keymap.set({"n", "x"}, "<c-q>", mc.toggleCursor)
 
       -- Mappings defined in a keymap layer only apply when there are
       -- multiple cursors. This lets you have overlapping mappings.
@@ -160,28 +206,33 @@ return {
       { "if", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Function" },
       { "ac", function() require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Class" },
       { "ic", function() require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Class" },
-      { "a/", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Comment" },
-      { "i/", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Comment" },
+      { "a#", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Comment" },
+      { "i#", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Comment" },
       { "aa", function() require("nvim-treesitter-textobjects.select").select_textobject("@parameter.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Parameter/Argument" },
       { "ia", function() require("nvim-treesitter-textobjects.select").select_textobject("@parameter.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Parameter/Argument" },
       { "al", function() require("nvim-treesitter-textobjects.select").select_textobject("@loop.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around Loop" },
       { "il", function() require("nvim-treesitter-textobjects.select").select_textobject("@loop.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside Loop" },
+      { "av", function() require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals") end, mode = { "o", "x" }, desc = "Around Scope" },
       { "ai", function() require("nvim-treesitter-textobjects.select").select_textobject("@conditional.outer", "textobjects") end, mode = { "o", "x" }, desc = "Around If" },
       { "ii", function() require("nvim-treesitter-textobjects.select").select_textobject("@conditional.inner", "textobjects") end, mode = { "o", "x" }, desc = "Inside If" },
-      { "as", function() require("nvim-treesitter-textobjects.select").select_textobject("@local.scope", "locals") end, mode = { "o", "x" }, desc = "Around Scope" },
       -- Move
-      { "]f", function() require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Function"},
+      { "[a", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@parameter.inner", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Parameter/Argument"},
+      { "]a", function() require("nvim-treesitter-textobjects.move").goto_next_start("@parameter.inner", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Parameter/Argument"},
       { "[f", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Function"},
-      { "]c", function() require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Class"},
+      { "]f", function() require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Function"},
       { "[c", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Class"},
+      { "]c", function() require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Class"},
+      { "[l", function() require("nvim-treesitter-textobjects.move").goto_previous_start({"@loop.inner", "@loop.outer"}, "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Loop"},
       { "]l", function() require("nvim-treesitter-textobjects.move").goto_next_start({"@loop.inner", "@loop.outer"}, "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Loop"},
-      { "]s", function() require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals") end, mode = { "n", "x", "o" }, desc = "Next Local"},
+      { "[v", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@local.scope", "locals") end, mode = { "n", "x", "o" }, desc = "Next Local"},
+      { "]v", function() require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals") end, mode = { "n", "x", "o" }, desc = "Next Local"},
+      { "[z", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@fold", "folds") end, mode = { "n", "x", "o" }, desc = "Next Fold"},
       { "]z", function() require("nvim-treesitter-textobjects.move").goto_next_start("@fold", "folds") end, mode = { "n", "x", "o" }, desc = "Next Fold"},
-      { "]i", function() require("nvim-treesitter-textobjects.move").goto_next("@conditional.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Conditional"},
-      { "[i", function() require("nvim-treesitter-textobjects.move").goto_previous("@conditional.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Conditional"},
+      { "[i", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@conditional.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Previous Conditional"},
+      { "]i", function() require("nvim-treesitter-textobjects.move").goto_next_start("@conditional.outer", "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Conditional"},
       -- Repeat Move
-      { ";", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next() end, mode = { "n", "x", "o" }, desc = "Repeat Next Move"},
-      { ",", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous() end, mode = { "n", "x", "o" }, desc = "Repeat Previous Move"},
+      { ";", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next() vim.cmd("normal! zz") end, mode = { "n", "x", "o" }, desc = "Repeat Next Move"},
+      { ",", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous() vim.cmd("normal! zz") end, mode = { "n", "x", "o" }, desc = "Repeat Previous Move"},
       -- Swap
       { "<leader>a", function() require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner") end, mode = { "n" }, desc = "Swap Next Argument" },
       { "<leader>A", function() require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner") end, mode = { "n" }, desc = "Swap Previous Argument" },
@@ -232,6 +283,7 @@ return {
         "markdown_inline",
         "python",
         "rust",
+        "xml",
         "yaml",
       },
       highlight = {
@@ -241,15 +293,6 @@ return {
       indent = {
         enable = true,
         disable = { "rst" },
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<A-o>",
-          node_incremental = "<A-o>",
-          scope_incremental = "<A-O>",
-          node_decremental = "<A-i>",
-        }
       },
     },
     init = function()

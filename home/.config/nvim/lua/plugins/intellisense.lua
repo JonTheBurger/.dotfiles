@@ -1,3 +1,7 @@
+local is_dap_buf = function()
+  return vim.startswith(vim.api.nvim_get_option_value("filetype", { buf = 0 }), "dap")
+end
+
 return {
   {
     -- https://github.com/Saghen/blink.cmp
@@ -14,7 +18,7 @@ return {
     ---@type blink.cmp.Config
     opts = {
       enabled = function()
-        return vim.bo.buftype ~= "prompt" or require("cmp_dap").is_dap_buffer()
+        return vim.bo.buftype ~= "prompt" or is_dap_buf()
       end,
 
       keymap = {
@@ -55,12 +59,12 @@ return {
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
         default = function(_)
-          if require("cmp_dap").is_dap_buffer() then
-            return { "dap", "lsp", "path", "copilot" }
-          else
-            -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
-            return { "lsp", "path", "snippets", "copilot" } --"buffer" },
+          -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
+          local srcs = { "lsp", "path", "snippets", "copilot" } --"buffer", "omni" },
+          if is_dap_buf() then
+            table.insert(srcs, "dap")
           end
+          return srcs
         end,
         providers = {
           snippets = {
@@ -93,6 +97,7 @@ return {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     opts = {
+      disable_filetype = { "snacks_picker_input", "dap-repl" },
       map_cr = true,
     },
   },
@@ -305,6 +310,23 @@ return {
     ft = { "cmake", "c", "cpp" },
     opts = {
       cmake_regenerate_on_save = false,
+      cmake_runner = {
+        name = "overseer",
+        opts = {
+          ---@class overseer.TaskDefinition
+          new_task_opts = {
+            name = "cmake run",
+            components = {
+              { "default" },
+              { "unique" },
+            },
+          },
+          ---@param task overseer.TaskDefinition
+          on_new_task = function(task)
+            require("overseer").open({ enter = false, direction = "bottom" })
+          end,
+        },
+      },
       cmake_executor = {
         name = "overseer",
         opts = {
@@ -326,12 +348,13 @@ return {
       },
     },
     keys = {
-      { "<leader>cmp", "<cmd>CMakeSelectConfigurePreset<CR>", desc = "CMake Select Configure Preset" },
-      { "<leader>cmb", "<cmd>CMakeSelectBuildPreset<CR>", desc = "CMake Select Build Preset" },
-      { "<leader>cmt", "<cmd>CMakeSelectBuildTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>cmT", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>cmd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
-      { "<leader>cmr", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
+      { "<leader>bc", "<cmd>CMakeSelectConfigurePreset<CR>", desc = "CMake Select Configure Preset" },
+      { "<leader>bp", "<cmd>CMakeSelectBuildPreset<CR>", desc = "CMake Select Build Preset" },
+      { "<leader>bt", "<cmd>CMakeSelectBuildTarget<CR>", desc = "CMake Launch Target" },
+      { "<leader>bl", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
+      { "<leader>bd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
+      { "<leader>br", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
+      { "<leader>bb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
     },
   },
   {

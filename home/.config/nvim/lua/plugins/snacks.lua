@@ -29,10 +29,47 @@ end
 
 return {
   {
+    "folke/todo-comments.nvim",
+    enabled = true,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    event = "VeryLazy",
+    keys = {
+      { "]o", function() require("todo-comments").jump_next() end, mode = { "n", }, desc = "Next TO DO Comment", },
+      { "[o", function() require("todo-comments").jump_prev() end, mode = { "n", }, desc = "Previous TO DO Comment", },
+    },
+    opts = {
+      highlight = {
+        multiline = false,
+        pattern = [[.*<((KEYWORDS)%(\(.{-1,}\))?):]],
+      },
+      search = {
+        pattern = [[\b(KEYWORDS)(\(\w*\))*:]],
+      }
+    },
+    init = function()
+      -- To-do
+      vim.keymap.set("n", "<leader>TI", function()
+        vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false)
+      end, { desc = "Insert TO DO" })
+      vim.keymap.set("n", "<leader>TT", function()
+        vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false)
+      end, { desc = "Append TO DO" })
+      vim.keymap.set("n", "<leader>T/", function()
+        vim.api.nvim_feedkeys("a// TODO(POVIRK): ", "n", false)
+      end, { desc = "Append / TO DO" })
+      vim.keymap.set("n", "<leader>T#", function()
+        vim.api.nvim_feedkeys("a# TODO(POVIRK): ", "n", false)
+      end, { desc = "Append # TO DO" })
+    end
+  },
+  {
     "folke/snacks.nvim",
     priority = 1000,
     enabled = not vim.g.vscode,
     lazy = false,
+    dependencies = {
+      "folke/todo-comments.nvim",
+    },
     -- stylua: ignore start
     keys = {
       { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
@@ -101,7 +138,9 @@ return {
       { "<leader>sq",      function() Snacks.picker.qflist() end,                 desc = "Quickfix List" },
       { "<leader>sR",      function() Snacks.picker.resume() end,                 desc = "Resume" },
       { "<leader>su",      function() Snacks.picker.undo() end,                   desc = "Undo History" },
-      { "<leader>uC",      function() Snacks.picker.colorschemes() end,           desc = "Colorschemes" },
+      { "<leader>st",      function () Snacks.picker.todo_comments({ keywords = { "TODO", "HACK", "WARNING", "BUG", "NOTE", "INFO", "PERF", "ERROR" } }) end, desc = "Todo Comment Tags" },
+      { "<leader>sT",      function() Snacks.picker.todo_comments() end, desc = "Todo" },
+      { "<leader>fC",      function() Snacks.picker.colorschemes() end,           desc = "Colorschemes" },
       -- LSP
       { "gd",              function() Snacks.picker.lsp_definitions() end,        desc = "Goto Definition" },
       { "gD",              function() Snacks.picker.lsp_declarations() end,       desc = "Goto Declaration" },
@@ -259,15 +298,29 @@ return {
       },
     },
     init = function()
-      _G.dd = function(...)
-        Snacks.debug.inspect(...)
-      end
-      _G.bt = function()
-        Snacks.debug.backtrace()
-      end
-      vim.print = _G.dd
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = function()
+          _G.dd = function(...)
+            Snacks.debug.inspect(...)
+          end
+          _G.bt = function()
+            Snacks.debug.backtrace()
+          end
+          vim.print = _G.dd
 
-      vim.g.snacks_animate = false
+          vim.g.snacks_animate = false
+
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ls")
+          Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceil" }):map("<leader>lc")
+          Snacks.toggle.treesitter():map("<leader>lt")
+          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>lb")
+          Snacks.toggle.inlay_hints():map("<leader>lh")
+          Snacks.toggle.dim():map("<leader>ld")
+          Snacks.toggle.words():map("<leader>lw")
+          Snacks.toggle.indent():map("<leader>lz")
+        end,
+      })
     end,
   },
 }

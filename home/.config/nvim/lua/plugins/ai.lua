@@ -97,7 +97,7 @@ return {
       },
     },
     keys = {
-      { "<leader>C", "<cmd>CodeCompanionActions<cr>", { noremap = true, silent = true, desc = "Code Companion" }},
+      { "<leader>c", "<cmd>CodeCompanionActions<cr>", noremap = true, silent = true, desc = "Code Companion" },
     },
     dependencies = {
       "nvim-lua/plenary.nvim",

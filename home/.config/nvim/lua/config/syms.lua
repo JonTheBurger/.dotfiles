@@ -101,3 +101,8 @@ vim.api.nvim_set_keymap("i", "\\:)", "🙂", { noremap = true })
 vim.api.nvim_set_keymap("i", "\\smile", "🙂", { noremap = true })
 vim.api.nvim_set_keymap("i", "\\B)", "😎", { noremap = true })
 vim.api.nvim_set_keymap("i", "\\cool", "😎", { noremap = true })
+
+vim.keymap.set("i", "\\cr", function()
+  local keys = vim.api.nvim_replace_termcodes("<C-v><CR>", true, false, true)
+  vim.api.nvim_feedkeys(keys, "i", false)
+end, { noremap = true, desc = "Insert literal ^M (CR)" })

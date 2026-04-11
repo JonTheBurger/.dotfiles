@@ -5,11 +5,11 @@ return {
     enabled = not vim.g.vscode,
     -- version = "<2.0.0",
     keys = {
-      { "<S-F7>", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
-      { "<leader>Wr", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
-      { "<leader>Wo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
-      { "<leader>B",  "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
+      { "<leader>bm", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
+      { "<leader>bo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
+      { "<leader>o",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
+      { "_o",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
     },
     ---@type overseer.Config
     opts = {
@@ -68,11 +68,24 @@ return {
     enabled = not vim.g.vscode,
     event = "BufEnter",
     keys = {
-      { "<leader>U",  "<cmd>UndotreeToggle<CR>", desc = "Toggle Undo Tree" },
-      { "<leader>Wu", "<cmd>UndotreeToggle<CR>",        desc = "Undo Tree" },
+      { "<leader>u",  "<cmd>UndotreeToggle<CR>", desc = "Toggle Undo Tree" },
+      { "_u",  "<cmd>UndotreeToggle<CR>", desc = "Toggle Undo Tree" },
     },
     init = function()
-      vim.g.undotree_WindowLayout = 4
+      vim.g.undotree_SetFocusWhenToggle = 1
+      vim.g.undotree_WindowLayout = 1
+      vim.g.undotree_DiffpanelHeight = 20
+      vim.g.undotree_DiffAutoOpen = 0
+      vim.g.undotree_DiffCommand = "diff"
+      vim.api.nvim_create_autocmd("FileType", {
+        desc = "UndoTree maps",
+        pattern = { "undotree" },
+        callback = function()
+          vim.keymap.set("n", "l", "J", { buffer = true, remap = true })
+          vim.keymap.set("n", "h", "K", { buffer = true, remap = true })
+          vim.keymap.set("n", "d", "D", { buffer = true, remap = true })
+        end,
+      })
     end,
   },
   {
@@ -82,30 +95,48 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     keys = {
-      { "<leader>Wt", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
-      { "<leader>TT", "<cmd>Trouble diagnostics toggle win.position=right<CR>", desc = "Diagnostics (Trouble)" },
-      { "<leader>Tl", "<cmd>Trouble diagnostics toggle win.position=right win.relative=win<CR>", desc = "Trouble split right" },
+      { "<leader>wb", "<cmd>Trouble buffer_diagnostics toggle<CR>", desc = "Toggle Diagnostics (bottom)" },
+      { "<leader>we", "<cmd>Trouble buffer_errors toggle win.position=right win.relative=win<CR>", desc = "Toggle Errors" },
+      { "<leader>ww", "<cmd>Trouble buffer_diagnostics toggle win.position=right win.relative=win<CR>", desc = "Toggle Diagnostics" },
+      { "_e",         "<cmd>Trouble buffer_errors toggle win.position=right win.relative=win<CR>", desc = "Toggle Errors" },
+      { "_w",         "<cmd>Trouble buffer_diagnostics toggle win.position=right win.relative=win<CR>", desc = "Toggle Diagnostics (right)" },
+      { "_y",         "<cmd>Trouble symbols toggle<CR>", desc = "Toggle Symbols" },
+      { "<leader>y",  "<cmd>Trouble symbols toggle<CR>", desc = "Toggle Symbols" },
+      { "_q",         "<cmd>Trouble qflist toggle<CR>", desc = "Toggle qflist" },
+      { "<leader>Q",  "<cmd>Trouble qflist toggle<CR>", desc = "Toggle qflist" },
+      { "_2",         "<cmd>Trouble todo toggle<CR>", desc = "Toggle TO DO" },
     },
     opts = {
       padding = false,
-      -- mode = "document_diagnostics",
+      modes = {
+        buffer_diagnostics = {
+          mode = "diagnostics", -- inherit from diagnostics mode
+          filter = { buf = 0 },
+        },
+        buffer_errors = {
+          mode = "diagnostics",
+          filter = function(items)
+            -- item = { buf, ft, dirname, filename, severity, source }
+            return vim.tbl_filter(function(item)
+              return (item.item.source == "cmake build")
+            end, items)
+          end,
+        },
+      }
     },
-  },
-  {
-    -- https://github.com/hedyhli/outline.nvim
-    "hedyhli/outline.nvim",
-    enabled = not vim.g.vscode,
-    lazy = true,
-    cmd = { "Outline", "OutlineOpen" },
-    keys = {
-      { "<leader>y",  "<cmd>Outline<CR>", desc = "Toggle Symbol Outline" },
-      { "<leader>Wy", "<cmd>Outline<CR>", desc = "Symbol Outline" },
-    },
-    opts = {
-      symbol_folding = {
-        autofold_depth = 5,
-      },
-    },
+    init = function ()
+      -- This is NOT RECOMMENDED, but I like it
+      vim.api.nvim_create_autocmd("BufRead", {
+        callback = function(ev)
+          if vim.bo[ev.buf].buftype == "quickfix" then
+            vim.schedule(function()
+              vim.cmd([[cclose]])
+              vim.cmd([[Trouble qflist open]])
+            end)
+          end
+        end,
+      })
+    end
   },
   {
     -- https://github.com/MagicDuck/grug-far.nvim
@@ -128,7 +159,7 @@ return {
         desc = "Find/Replace",
       },
       {
-        "<leader>Wr",
+        "_r",
         function()
           require("grug-far").open({ transient = true })
         end,
@@ -158,7 +189,9 @@ return {
     enabled = not vim.g.vscode,
     keys = {
       { "<leader>gd", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
+      { "_d", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
       { "<leader>gD", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
+      { "_D", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
       { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "Git FileHistory" },
       { "<leader>gxo", function() require("diffview.actions").conflict_choose("ours")() end, desc = "Git Conflict accept ours" },
       { "<leader>gxt", function() require("diffview.actions").conflict_choose("theirs")() end, desc = "Git Conflict accept theirs" },
@@ -181,8 +214,8 @@ return {
     enabled = not vim.g.vscode,
     keys = {
       { "<leader>gb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
+      { "_b", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
       { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Line Toggle" },
-      -- { "<leader>Wb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame" },
       { "]g",         "<cmd>Gitsigns nav_hunk next<CR>",             desc = "Next Git Change" },
       { "[g",         "<cmd>Gitsigns nav_hunk prev<CR>",             desc = "Previous Git Change" },
     },
@@ -196,15 +229,6 @@ return {
     "folke/which-key.nvim",
     enabled = not vim.g.vscode,
     event = "VeryLazy",
-    keys = {
-      {
-        "<leader>?",
-        function()
-          require("which-key").show({ global = false })
-        end,
-        desc = "Buffer Local Keymaps (which-key)",
-      },
-    },
     opts = {
       sort = { "alphanum", "local", "order", "group", "mod" },
       ---@type wk.Spec

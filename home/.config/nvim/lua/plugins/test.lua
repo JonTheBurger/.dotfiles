@@ -121,8 +121,7 @@ return {
     },
     { "<leader>tf", function() require("neotest").run.run(vim.fn.expand("%")) end,   desc = "Run File" },
     { "<leader>te", function() require("neotest").summary.toggle() end,              desc = "Toggle Summary" },
-    { "<leader>Wt", function() require("neotest").summary.toggle() end,              desc = "Toggle Tests" },
-    { "<leader>WT", function() require("neotest").output_panel.toggle() end,         desc = "Toggle Output Panel" },
+    { "_t",         function() require("neotest").summary.toggle() end,              desc = "Toggle Tests" },
     { "<leader>tS", function() require("neotest").run.stop() end,                    desc = "Stop" },
     {
       "<leader>tT",

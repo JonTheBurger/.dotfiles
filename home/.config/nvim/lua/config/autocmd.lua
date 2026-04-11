@@ -65,16 +65,13 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
     vim.treesitter.start()
   end,
 })
--- vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
---   desc = "Enable TreeSitter Folds",
---   pattern = { "*" },
---   callback = function()
---     -- For some reason, this breaks snacks_input a little bit
---     if vim.bo.filetype ~= "snacks_input" then
---       vim.cmd("normal zx") -- zR
---     end
---   end,
--- })
+vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
+  desc = "Expand Folds",
+  pattern = { "nvim-undotree" },
+  callback = function()
+    vim.cmd("normal zR") -- zx
+  end,
+})
 vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
   desc = "Lint Files",
   callback = function()
@@ -95,28 +92,20 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Go to file from output window",
-  pattern = { "*output*", "*Output*", "terminal", "" },
+  pattern = { "*output*", "*Output*", "" },
   callback = function()
-    dd'hi'
     vim.keymap.set("n", "gf", function()
-      local window = require("snacks").picker.util.pick_win({
-        filter = function(win, buf)
-          return not vim.bo[buf].filetype:find("^snacks") and
-                 not vim.bo[buf].filetype:find("Overseer") and
-                 not vim.bo[buf].filetype:find("neotest") and
-                 not vim.bo[buf].filetype:find("trouble")
-        end
-      })
-      local loc = require("config.fn").buf.file_under_cursor()
-      if vim.api.nvim_win_is_valid(window) and vim.fn.filereadable(loc.file) == 1 then
-        vim.api.nvim_set_current_win(window)
-        vim.cmd.edit(loc.file)
-        if loc.line then
-          vim.api.nvim_win_set_cursor(0, { loc.line, (loc.col or 1) - 1 })
-          vim.cmd("normal! zz")
-        end
-      end
-    end, { buffer = true, noremap = true, })
+      require("config.fn").buf.gf()
+    end, { buffer = true, noremap = true, desc = "Go to file, pick split" })
+  end,
+})
+vim.api.nvim_create_autocmd({ "TermOpen" }, {
+  pattern = "*",
+  callback = function(ev)
+    local opts = { buffer = ev.buf, noremap = true, silent = true }
+    vim.keymap.set("n", "gf", function() require("config.fn").buf.gf() end, opts)
+    vim.keymap.set("n", "]d", function() require("config.fn").buf.jump_to_diagnostic("next") end, opts)
+    vim.keymap.set("n", "[d", function() require("config.fn").buf.jump_to_diagnostic("prev") end, opts)
   end,
 })
 vim.api.nvim_create_autocmd({ "WinNew", "WinLeave", "BufWinEnter" }, {

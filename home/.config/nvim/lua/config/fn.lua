@@ -630,6 +630,44 @@ M.buf = {
 
     return loc
   end,
+
+  gf = function ()
+    local window = require("snacks").picker.util.pick_win({
+      filter = function(win, buf)
+        return not vim.bo[buf].filetype:find("^snacks") and
+               not vim.bo[buf].filetype:find("Overseer") and
+               not vim.bo[buf].filetype:find("neotest") and
+               not vim.bo[buf].filetype:find("trouble")
+      end
+    })
+    local loc = require("config.fn").buf.file_under_cursor()
+    if vim.api.nvim_win_is_valid(window) and vim.fn.filereadable(loc.file) == 1 then
+      vim.api.nvim_set_current_win(window)
+      vim.cmd.edit(loc.file)
+      if loc.line then
+        vim.api.nvim_win_set_cursor(0, { loc.line, (loc.col or 1) - 1 })
+        vim.cmd("normal! zz")
+      end
+    end
+  end,
+
+  jump_to_diagnostic = function(direction)
+    local buf = vim.api.nvim_get_current_buf()
+
+    -- Matches GCC/Clang style: file:line:col: warning/error/note: ...
+    local pattern = [[\v^[^:]+:\d+:\d+:\s*(error|warning|note|hint)\s*:]]
+
+    local flags = direction == "next" and "W" or "Wb"
+    local result = vim.fn.search(pattern, flags)
+
+    if result == 0 then
+      vim.notify(
+        direction == "next" and "No next diagnostic" or "No previous diagnostic",
+        vim.log.levels.INFO
+      )
+    end
+  end,
+
 }
 
 ----------------------------------------------------------------------------------------
