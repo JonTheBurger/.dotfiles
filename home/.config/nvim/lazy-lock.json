@@ -58,6 +58,7 @@
   "todo-comments.nvim": { "branch": "main", "commit": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668" },
   "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
   "undotree": { "branch": "master", "commit": "6fa6b57cda8459e1e4b2ca34df702f55242f4e4d" },
+  "vim-dirtytalk": { "branch": "master", "commit": "aa57ba902b04341a04ff97214360f56856493583" },
   "vim-log-highlighting": { "branch": "master", "commit": "1037e26f3120e6a6a2c0c33b14a84336dee2a78f" },
   "vscode-diff.nvim": { "branch": "main", "commit": "832f1ecc5f8b15a44cf7537e31d3266d657775b1" },
   "which-key.nvim": { "branch": "main", "commit": "3aab2147e74890957785941f0c1ad87d0a44c15a" }

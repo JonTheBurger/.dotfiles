@@ -1,7 +1,3 @@
-local is_dap_buf = function()
-  return vim.startswith(vim.api.nvim_get_option_value("filetype", { buf = 0 }), "dap")
-end
-
 return {
   {
     -- https://github.com/Saghen/blink.cmp
@@ -14,11 +10,27 @@ return {
     enabled = not vim.g.vscode,
     version = "1.*",
 
+    init = function()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuOpen",
+        callback = function()
+          require("copilot.suggestion").dismiss()
+          vim.b.copilot_suggestion_hidden = true
+        end,
+      })
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "BlinkCmpMenuClose",
+        callback = function()
+          vim.b.copilot_suggestion_hidden = false
+        end,
+      })
+    end,
+
     ---@module "blink.cmp"
     ---@type blink.cmp.Config
     opts = {
       enabled = function()
-        return vim.bo.buftype ~= "prompt" or is_dap_buf()
+        return vim.bo.buftype ~= "prompt" or vim.startswith(vim.bo.filetype, "dap")
       end,
 
       keymap = {
@@ -26,16 +38,10 @@ return {
       },
 
       completion = {
-        -- accept = {
-        --   auto_brackets = {
-        --     enabled = true,
-        --     default_brackets = { "(", ")", "{", "}", "[", "]" },
-        --   },
-        -- },
         keyword = { range = "full" },
-        -- Show documentation when selecting a completion item
-        documentation = { auto_show = true, auto_show_delay_ms = 500 },
-        menu = { auto_show = true },
+        accept = { auto_brackets = { enabled = true }, },
+        documentation = { auto_show = true },
+        menu = { auto_show = true, draw = { treesitter = { "lsp" } }, },
         ghost_text = { enabled = true },
       },
 
@@ -44,7 +50,14 @@ return {
         keymap = { preset = "inherit" },
         completion = {
           menu = { auto_show = true },
-          -- ghost_text = { enabled = true },
+        },
+      },
+
+      term = {
+        enabled = true,
+        keymap = { preset = "inherit" },
+        completion = {
+          menu = { auto_show = true },
         },
       },
 
@@ -58,15 +71,21 @@ return {
       -- Default list of enabled providers defined so that you can extend it
       -- elsewhere in your config, without redefining it, due to `opts_extend`
       sources = {
-        default = function(_)
-          -- Remove 'buffer' if you don't want text completions, by default it's only enabled when LSP returns no items
-          local srcs = { "lsp", "path", "snippets", "copilot" } --"buffer", "omni" },
-          if is_dap_buf() then
+        default = function(ctx)
+          local srcs = { "lsp", "path", "snippets", "copilot" }
+          if vim.startswith(vim.bo.filetype, "dap") then
             table.insert(srcs, "dap")
+            table.insert(srcs, "buffer")
           end
           return srcs
         end,
         providers = {
+          lsp = {
+            score_offset = 2,
+          },
+          path = {
+            score_offset = 1,
+          },
           snippets = {
             opts = {
               search_paths = {
@@ -74,16 +93,29 @@ return {
                 vim.fn.stdpath("config") .. "/snippets",
               },
             },
+            score_offset = 3,
           },
           copilot = {
             name = "copilot",
             module = "blink-copilot",
-            score_offset = 100,
+            score_offset = 10,
             async = true,
+          },
+          buffer = {
+            opts = {
+              -- get all "normal" buffers
+              get_bufnrs = function()
+                return vim.tbl_filter(function(bufnr)
+                  return vim.bo[bufnr].buftype == ''
+                end, vim.api.nvim_list_bufs())
+              end
+            },
+            score_offset = -1,
           },
           dap = {
             name = "dap",
             module = "blink.compat.source",
+            score_offset = 4,
           },
         },
       },
@@ -95,6 +127,7 @@ return {
   {
     -- https://github.com/windwp/nvim-autopairs
     "windwp/nvim-autopairs",
+    enabled = true,
     event = "InsertEnter",
     opts = {
       disable_filetype = { "snacks_picker_input", "dap-repl" },
