@@ -1,11 +1,11 @@
-local lls = {
-  cmd = { "lua-language-server", },
+return {
+  cmd = { "emmylua_ls", },
   filetypes = { "lua", },
   root_markers = { ".luarc.json", ".luarc.jsonc", "init.lua", },
   settings = {
     Lua = {
       format = {
-        enable = false,
+        enable = true,
       },
       runtime = {
         version = "LuaJIT",
@@ -18,19 +18,11 @@ local lls = {
       },
       workspace = {
         library = {
-          vim.api.nvim_get_runtime_file("", true),
-          "$VIMRUNTIME"
+          -- vim.api.nvim_get_runtime_file("", true),
+          "$VIMRUNTIME",
+          "$HOME/.dotfiles/home/.config/nvim/lua"
         }
       },
     },
   },
 }
-
-local emmy = {
-  cmd = { "emmylua_ls", },
-  filetypes = lls.filetypes,
-  root_markers = lls.root_markers,
-  settings = lls.settings,
-}
-
-return lls

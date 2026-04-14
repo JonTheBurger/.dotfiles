@@ -177,7 +177,8 @@ vim.keymap.set("i", "<F1>", vim.lsp.buf.signature_help, {})
 vim.keymap.set({ "n", "i" }, "<F7>", require("config.fn").util.build, { desc = "Build" })
 vim.keymap.set("n", "?", function()
   if require("dap").session() then
-    require("dapui").eval()
+    -- require("dapui").eval()
+    require("dap.ui.widgets").hover()
   else
     vim.diagnostic.open_float()
   end

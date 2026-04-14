@@ -79,6 +79,7 @@ return {
           end
           return srcs
         end,
+
         providers = {
           lsp = {
             score_offset = 2,
@@ -106,7 +107,8 @@ return {
               -- get all "normal" buffers
               get_bufnrs = function()
                 return vim.tbl_filter(function(bufnr)
-                  return vim.bo[bufnr].buftype == ''
+                  local visible = require("config.fn").buf.get_visible()
+                  return vim.bo[bufnr].buftype == '' and vim.tbl_contains(visible, bufnr)
                 end, vim.api.nvim_list_bufs())
               end
             },
@@ -116,6 +118,11 @@ return {
             name = "dap",
             module = "blink.compat.source",
             score_offset = 4,
+          },
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            score_offset = 2,
           },
         },
       },
@@ -264,6 +271,16 @@ return {
     "chrisgrieser/nvim-lsp-endhints",
     event = "LspAttach",
     opts = {},
+  },
+  {
+    -- https://github.com/folke/lazydev.nvim
+    "folke/lazydev.nvim",
+    ft = "lua", -- only load on lua files
+    opts = {
+      library = {
+        { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+      },
+    },
   },
   {
     -- https://github.com/mrcjkb/rustaceanvim

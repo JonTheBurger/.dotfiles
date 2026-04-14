@@ -347,6 +347,17 @@ M.fs = {
     M.gbl.dap_exe_args = data["dap_exe_args"] or ""
   end,
 
+  ---@param filepath string Path to a file on disk
+  ---@param pattern string String pattern to check
+  ---@return boolean true if the file contains the given pattern
+  file_contains = function(filepath, pattern)
+    local f = io.open(filepath, "r")
+    if not f then return false end
+    local content = f:read("*all")
+    f:close()
+    return content:find(pattern, 1, true) ~= nil
+  end,
+
   --- Finds executable files in the current directory down using fd.
   ---@param opts table? Options
   ---@class find_executable_opts
@@ -668,6 +679,16 @@ M.buf = {
     end
   end,
 
+  get_visible = function()
+    local visible_buffers = {}
+    for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+      if vim.fn.bufwinnr(bufnr) ~= -1 then
+        table.insert(visible_buffers, bufnr)
+      end
+    end
+    return visible_buffers
+  end,
+
 }
 
 ----------------------------------------------------------------------------------------
@@ -960,6 +981,23 @@ M.util = {
 
     return self._root2registry[normalized]
   end,
+
+  git_blame_toggle = function()
+    local window = -1
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      if vim.bo[buf].filetype == "gitsigns-blame" then
+        window = win
+        break
+      end
+    end
+    if window == -1 then
+      require("gitsigns").blame()
+    else
+      vim.api.nvim_win_close(window, true)
+    end
+  end,
+
 }
 
 ----------------------------------------------------------------------------------------

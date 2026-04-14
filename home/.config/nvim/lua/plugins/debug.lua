@@ -12,17 +12,17 @@
   :luafile util.lua
 8. The breakpoint should hit and freeze the instance (B)
 --]]
-local fn = require("config.fn")
+local DAP_VIEW = true
 
 local pick_args = function()
   return coroutine.create(function(coro)
     vim.ui.input({
       prompt = "Arguments: ",
-      default = fn.gbl.dap_exe_args,
+      default = require("config.fn").gbl.dap_exe_args,
       completion = "file",
     }, function(choice)
       if choice then
-        fn.gbl.dap_exe_args = choice
+        require("config.fn").gbl.dap_exe_args = choice
       else
         choice = ""
       end
@@ -44,10 +44,8 @@ return {
     -- stylua: ignore start
     keys = {
       { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end,             desc = "Launch nvim Server",     noremap = true, },
-      { "<leader>dw",  function() require("dapui").elements.watches.add() end,                      desc = "Add symbol under cursor to watches", },
       { "<leader>dj",  function() require("dap").up() end,                                          desc = "Go Up 1 Stack Frame", },
       { "<leader>dk",  function() require("dap").down() end,                                        desc = "Go Down 1 Stack Frame", },
-      { "<leader>dx",  function() require("dap").terminate() require("dapui").close() end,          desc = "Terminate", },
       { "<F4>",        function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception" }) end, desc = "Set Exception Breakpoints", },
       { "<F5>",        function() require("dap").continue() end,                                    desc = "Continue", },
       { "<F6>",        function() require("dap").run_to_cursor() end,                               desc = "Run to Cursor", },
@@ -56,7 +54,6 @@ return {
       { "<F10>",       function() require("dap").step_over() end,                                   desc = "Step Over", },
       { "<F11>",       function() require("dap").step_into() end,                                   desc = "Step In", },
       { "<F12>",       function() require("dap").step_out() end,                                    desc = "Step Out", },
-      { "_d",          function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
       -- { "<leader>db",  function() require("dap").step_back() end,                                   desc = "Step Back", },
       -- { "<leader>dd",  function() require("dap").disconnect() require("dapui").close() end,         desc = "Disconnect", },
       -- { "<leader>de",  function() require("dapui").eval() end,                                      desc = "Evaluate",               mode = { "n", "v" }, },
@@ -233,15 +230,144 @@ return {
   },
   {
     "igorlfs/nvim-dap-view",
-    enabled = false and not vim.g.vscode,
+    enabled = DAP_VIEW and not vim.g.vscode,
+    lazy = false,
+    version = "1.*",
+    keys = {
+      { "<leader>dw", "<cmd>DapViewWatch<CR>", desc = "Add symbol under cursor to watches", },
+      { "<leader>ds", function() require("dap-view").show_view("scopes") end, desc = "Show view scopes", },
+      { "<leader>dS", function() require("dap-view").jump_to_view("scopes") end, desc = "Jump view scopes", },
+      { "<leader>db", function() require("dap-view").show_view("breakpoints") end, desc = "Show view breakpoints", },
+      { "<leader>dB", function() require("dap-view").jump_to_view("breakpoints") end, desc = "Jump view breakpoints", },
+      { "<leader>de", function() require("dap-view").show_view("exceptions") end, desc = "Show view exceptions", },
+      { "<leader>dE", function() require("dap-view").jump_to_view("exceptions") end, desc = "Jump view exceptions", },
+      { "<leader>dW", function() require("dap-view").jump_to_view("watches") end, desc = "Jump view watches", },
+      { "<leader>dt", function() require("dap-view").show_view("threads") end, desc = "Show view threads", },
+      { "<leader>dT", function() require("dap-view").jump_to_view("threads") end, desc = "Jump view threads", },
+      { "<leader>dr", function() require("dap-view").show_view("repl") end, desc = "Show view repl", },
+      { "<leader>dR", function() require("dap-view").jump_to_view("repl") end, desc = "Jump view repl", },
+      { "<leader>dc", function() require("dap-view").show_view("console") end, desc = "Show view console", },
+      { "<leader>dC", function() require("dap-view").jump_to_view("console") end, desc = "Jump view console", },
+    },
     ---@module 'dap-view'
     ---@type dapview.Config
-    opts = {},
+    opts = {
+      winbar = {
+        show = true,
+        sections = { "console", "watches", "scopes", "breakpoints", "threads", "repl", "exceptions", "disassembly", },
+        default_section = "console",
+        show_keymap_hints = true,
+        separators = nil,
+        base_sections = {
+          breakpoints = { label = " Bkp", keymap = "B" },
+          scopes = { label = "󱡠 Sco", keymap = "S" },
+          exceptions = { label = "󱐋 Exc", keymap = "E" },
+          watches = { label = " Wtch", keymap = "W" },
+          threads = { label = "  Thrd", keymap = "T" },
+          repl = { label = "  REPL", keymap = "R" },
+          sessions = { label = "  Sess", keymap = "K" },
+          console = { label = " Con", keymap = "C" },
+        },
+        -- https://igorlfs.github.io/nvim-dap-view/custom-views
+        custom_sections = {},
+        controls = {
+          enabled = true,
+          position = "right",
+          buttons = {
+            "play",
+            -- "step_into",
+            -- "step_over",
+            "step_out",
+            "step_back",
+            "run_last",
+            "terminate",
+            "disconnect",
+          },
+          custom_buttons = {},
+        },
+      },
+      windows = {
+        size = 0.25,
+        position = "below",
+        terminal = {
+          size = 0.5,
+          position = "left",
+          -- List of debug adapters for which the terminal should be ALWAYS hidden
+          hide = {},
+        },
+      },
+      help = {
+        border = nil,
+      },
+      render = {
+        -- https://igorlfs.github.io/nvim-dap-view/custom-formatting
+        -- threads = {
+        --   format = function(name, lnum, path)
+        --     local value = name:gsub("%(anonymous namespace%)", "?")
+        --     value = value:gsub("::v%d::", "::")
+        --     return {
+        --       { part = value },
+        --       { part = path, hl = "FileName",  separator = ":" },
+        --       { part = lnum, hl = "LineNumber" },
+        --     }
+        --   end,
+        -- },
+      },
+      virtual_text = {
+        enabled = true,
+        format = function(variable, _, _)
+          local value = variable.value:gsub("%s+", " ") -- strip new lines
+          value = value:gsub("%(anonymous namespace%)", "?")
+          value = value:gsub("::v%d::", "::")
+          return " " .. value
+        end,
+      },
+      switchbuf = "usetab,uselast",
+      auto_toggle = false,
+      follow_tab = false,
+    },
+    config = function(_, opts)
+      local dapview = require("dap-view")
+      dapview.setup(opts)
+
+      local dap = require("dap")
+      dap.listeners.after.event_initialized["dapview_config"] = function()
+        dapview.open()
+      end
+      dap.listeners.before.event_terminated["dapview_config"] = function()
+        dapview.close()
+      end
+      dap.listeners.before.event_exited["dapview_config"] = function()
+        dapview.close()
+      end
+      dap.listeners.after.event_stopped["center_view"] = function()
+        vim.cmd("normal! zz")
+      end
+
+      vim.api.nvim_create_autocmd({ "FileType" }, {
+        desc = "Buffer local keymaps for DAP View",
+        pattern = { "dap-view", "dap-view-term", "dap-repl", "dap-disassembly" },
+        callback = function()
+          vim.keymap.set("n", "<", function()
+            require("dap-view").navigate({ count=-1, wrap=true, type = "views", })
+          end, { buf = 0 })
+          vim.keymap.set("n", ">", function()
+            require("dap-view").navigate({ count=1, wrap=true, type = "views", })
+          end, { buf = 0 })
+          vim.keymap.set("n", "?", "g?", { buf = 0, remap = true })
+        end,
+      })
+    end,
+  },
+  {
+    url = "https://codeberg.org/Jorenar/nvim-dap-disasm.git",
+    dependencies = "igorlfs/nvim-dap-view",
+    config = true,
   },
   {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
-    enabled = true and not vim.g.vscode,
+    enabled = not DAP_VIEW and not vim.g.vscode,
     dependencies = {
       { "mfussenegger/nvim-dap" },
     },
@@ -285,11 +411,16 @@ return {
         vim.cmd("normal! zz")
       end
     end,
+    keys = {
+      { "<leader>dw",  function() require("dapui").elements.watches.add() end, desc = "Add symbol under cursor to watches", },
+      { "<leader>dx",  function() require("dap").terminate() require("dapui").close() end,          desc = "Terminate", },
+      { "_d",          function() require("dapui").toggle() end,                                    desc = "Toggle UI", },
+    },
   },
   {
     -- https://github.com/theHamsta/nvim-dap-virtual-text
     "theHamsta/nvim-dap-virtual-text",
-    enabled = not vim.g.vscode,
+    enabled = not DAP_VIEW and not vim.g.vscode,
     opts = {
       display_callback = function(variable, buf, stackframe, node, options)
         local value = variable.value:gsub("%s+", " ") -- strip new lines

@@ -2,7 +2,7 @@ local cmd = {
   "clangd",
   -- "--experimental-modules-support",
   -- "--query-driver=/usr/bin/arm-none-eabi-g++,/usr/bin/arm-none-eabi-gcc",
-  "--query-driver=/usr/bin/**/g++*,/usr/bin/**/clang++*,/usr/bin/**/gcc*,/usr/bin/**/clang*",
+  -- "--query-driver=/usr/bin/**/g++*,/usr/bin/**/clang++*,/usr/bin/**/gcc*,/usr/bin/**/clang*",
   "--clang-tidy",
   "--header-insertion=iwyu",
   "--header-insertion-decorators",
@@ -11,8 +11,13 @@ local cmd = {
   "--log=error",
   "--pretty",
 }
-if vim.fn.filereadable("compile_commands.json") then
+
+if vim.fn.filereadable("compile_commands.json") == 1 then
   table.insert(cmd, "--compile-commands-dir=.")
+
+  if require("config.fn").fs.file_contains("compile_commands.json", "arm-none-eabi") then
+    table.insert(cmd, "--query-driver=/usr/bin/arm-none-eabi-*")
+  end
 end
 
 return {

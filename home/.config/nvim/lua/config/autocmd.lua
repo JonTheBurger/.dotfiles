@@ -15,16 +15,6 @@ vim.api.nvim_create_user_command("Colorize", function()
   vim.wo.number = true
   vim.wo.relativenumber = true
 end, {})
-vim.api.nvim_create_user_command("AnimateOn", function()
-  vim.g.snacks_animate = true
-  require("smear_cursor").enabled = true
-  vim.notify("Animations On")
-end, {})
-vim.api.nvim_create_user_command("AnimateOff", function()
-  vim.g.snacks_animate = false
-  require("smear_cursor").enabled = false
-  vim.notify("Animations Off")
-end, {})
 vim.api.nvim_create_user_command("Reverse", function(opts)
   vim.cmd(string.format("%d,%d!tac", opts.line1, opts.line2))
 end, { range = true })

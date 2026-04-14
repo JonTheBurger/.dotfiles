@@ -5,9 +5,8 @@ return {
     enabled = not vim.g.vscode,
     -- version = "<2.0.0",
     keys = {
-      { "<leader>bm", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
+      { "<leader>bx", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
       { "<leader>bo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
-      { "<leader>o",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
       { "_o",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
     },
@@ -213,11 +212,10 @@ return {
     "lewis6991/gitsigns.nvim",
     enabled = not vim.g.vscode,
     keys = {
-      { "<leader>gb", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
-      { "_b", "<cmd>Gitsigns blame<CR>",                     desc = "Git Blame Toggle" },
-      { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<CR>", desc = "Git Blame Line Toggle" },
-      { "]g",         "<cmd>Gitsigns nav_hunk next<CR>",             desc = "Next Git Change" },
-      { "[g",         "<cmd>Gitsigns nav_hunk prev<CR>",             desc = "Previous Git Change" },
+      { "<leader>gb", require("config.fn").util.git_blame_toggle, desc = "Git Blame Toggle" },
+      { "_b",         require("config.fn").util.git_blame_toggle, desc = "Git Blame Toggle" },
+      { "]g",         "<cmd>Gitsigns nav_hunk next<CR>",          desc = "Next Git Change" },
+      { "[g",         "<cmd>Gitsigns nav_hunk prev<CR>",          desc = "Previous Git Change" },
     },
     cmd = {
       "Gitsigns",

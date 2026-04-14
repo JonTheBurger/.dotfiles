@@ -313,12 +313,64 @@ return {
 
           Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ls")
           Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceil" }):map("<leader>lc")
+          Snacks.toggle.diagnostics({ name = "Diagnostics" }):map("<leader>ld")
           Snacks.toggle.treesitter():map("<leader>lt")
-          Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>lb")
+          -- Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>lg")
           Snacks.toggle.inlay_hints():map("<leader>lh")
-          Snacks.toggle.dim():map("<leader>ld")
-          Snacks.toggle.words():map("<leader>lw")
+          Snacks.toggle.dim():map("<leader>lm")
+          Snacks.toggle.option("list", { name = "Visible Whitespace" }):map("<leader>l ")
+          Snacks.toggle.option("wrap", { name = "Wrap Long Lines" }):map("<leader>lw")
           Snacks.toggle.indent():map("<leader>lz")
+          Snacks.toggle.new({
+            id = "virtual text",
+            name = "DAP Virtual Text Toggle",
+            get = function()
+              return true
+            end,
+            set = function(state)
+              require("dap-view").virtual_text_toggle()
+            end,
+          }):map("<leader>lv")
+          Snacks.toggle.new({
+            id = "git blame",
+            name = "Git Blame",
+            get = function()
+              return require("gitsigns.config").config.current_line_blame
+            end,
+            set = function(state)
+              require("gitsigns").toggle_current_line_blame(state)
+            end,
+          }):map("<leader>lb")
+          Snacks.toggle.new({
+            id = "animate",
+            name = "Animate",
+            get = function()
+              return vim.g.snacks_animate == true
+            end,
+            set = function(state)
+              if state then
+                vim.g.snacks_animate = true
+                require("smear_cursor").enabled = true
+              else
+                vim.g.snacks_animate = false
+                require("smear_cursor").enabled = false
+              end
+            end,
+          }):map("<leader>la")
+          Snacks.toggle.new({
+            id = "theme",
+            name = "Light Theme",
+            get = function()
+              return vim.g.colors_name ~= "onedark"
+            end,
+            set = function(state)
+              if state then
+                vim.cmd.colorscheme("catppuccin-latte")
+              else
+                vim.cmd.colorscheme("onedark")
+              end
+            end,
+          }):map("<leader>lt")
         end,
       })
     end,
