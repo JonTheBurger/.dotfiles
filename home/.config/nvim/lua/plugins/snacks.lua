@@ -36,6 +36,8 @@ return {
     keys = {
       { "]o", function() require("todo-comments").jump_next() end, mode = { "n", }, desc = "Next TO DO Comment", },
       { "[o", function() require("todo-comments").jump_prev() end, mode = { "n", }, desc = "Previous TO DO Comment", },
+      { "]2", function() require("todo-comments").jump_next() end, mode = { "n", }, desc = "Next TO DO Comment", },
+      { "[2", function() require("todo-comments").jump_prev() end, mode = { "n", }, desc = "Previous TO DO Comment", },
     },
     opts = {
       highlight = {
@@ -73,12 +75,11 @@ return {
     -- stylua: ignore start
     keys = {
       { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
-      { "<C-F>",           function() Snacks.picker.grep() end,                   desc = "Grep" },
+      { "<C-F>",           function() Snacks.picker.grep({transform = downrank_undesirable_paths, }) end,                   desc = "Grep" },
       { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
       { "<C-p>",           function() Snacks.picker.files({ hidden = true, transform = downrank_undesirable_paths, }) end, desc = "Find Files" },
       { "<C-M-p>",         function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
       { "<C-M-i>",         function() Snacks.picker.icons() end,                  desc = "Icons/Emoji",              mode = "i" },
-      { "<leader>Wg",      function() Snacks.lazygit.open() end,                  desc = "LazyGit" },
 
       -- Top Pickers & Explorer
       -- { "<leader><space>", function() Snacks.picker.smart() end,                  desc = "Smart Find Files" },
@@ -149,8 +150,10 @@ return {
       { "gy",              function() Snacks.picker.lsp_type_definitions() end,   desc = "Goto T[y]pe Definition" },
       { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,            desc = "LSP Symbols" },
       { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
+      { "<leader>gw",      function() Snacks.gitbrowse({ commit = vim.fn.system("git rev-parse HEAD"), }) end,   desc = "Git web view" },
     },
     -- stylua: ignore end
+    ---@module "snacks"
     ---@type snacks.Config
     opts = {
       ---@class snacks.bigfile.Config
@@ -178,6 +181,21 @@ return {
         exclude = {
           ".git/*",
           ".venv/*",
+        },
+      },
+      ---@class snacks.gitbrowse.Config
+      ---@field url_patterns? table<string, table<string, string|fun(fields:snacks.gitbrowse.Fields):string>>
+      gitbrowse = {
+        notify = true, -- show notification on open
+        ---@type "repo" | "branch" | "file" | "commit" | "permalink"
+        what = "commit", -- what to open. not all remotes support all types
+        url_patterns = {
+          ["bitbucket%.org"] = {
+            branch = "/branch/{branch}",
+            file = "/commits/{commit}#chg-{file}",
+            permalink = "/src/{commit}/{file}#lines-{line_start}-L{line_end}",
+            commit = "/commits/{commit}#chg-{file}",
+          },
         },
       },
       ---@class snacks.picker.Config
@@ -278,7 +296,6 @@ return {
         },
       },
       input = { enabled = not vim.g.vscode },
-      lazygit = { enabled = not vim.g.vscode },
       quickfile = { enabled = true },
       scroll = { enabled = not vim.g.vscode },
       ---@diagnostic disable-next-line missing-fields
@@ -310,17 +327,18 @@ return {
           vim.print = _G.dd
 
           vim.g.snacks_animate = false
+          vim.keymap.set("n", "z=", function() Snacks.picker.spelling() end, { desc = "Spelling" })
 
-          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>ls")
-          Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceil" }):map("<leader>lc")
-          Snacks.toggle.diagnostics({ name = "Diagnostics" }):map("<leader>ld")
-          Snacks.toggle.treesitter():map("<leader>lt")
-          -- Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>lg")
-          Snacks.toggle.inlay_hints():map("<leader>lh")
-          Snacks.toggle.dim():map("<leader>lm")
-          Snacks.toggle.option("list", { name = "Visible Whitespace" }):map("<leader>l ")
-          Snacks.toggle.option("wrap", { name = "Wrap Long Lines" }):map("<leader>lw")
-          Snacks.toggle.indent():map("<leader>lz")
+          Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>os")
+          Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceil" }):map("<leader>oc")
+          Snacks.toggle.diagnostics({ name = "Diagnostics" }):map("<leader>od")
+          Snacks.toggle.treesitter():map("<leader>ot")
+          -- Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>og")
+          Snacks.toggle.inlay_hints():map("<leader>oh")
+          Snacks.toggle.dim():map("<leader>oi")
+          Snacks.toggle.option("list", { name = "Visible Whitespace" }):map("<leader>o ")
+          Snacks.toggle.option("wrap", { name = "Wrap Long Lines" }):map("<leader>ow")
+          Snacks.toggle.indent():map("<leader>oz")
           Snacks.toggle.new({
             id = "virtual text",
             name = "DAP Virtual Text Toggle",
@@ -330,7 +348,7 @@ return {
             set = function(state)
               require("dap-view").virtual_text_toggle()
             end,
-          }):map("<leader>lv")
+          }):map("<leader>ov")
           Snacks.toggle.new({
             id = "git blame",
             name = "Git Blame",
@@ -340,7 +358,7 @@ return {
             set = function(state)
               require("gitsigns").toggle_current_line_blame(state)
             end,
-          }):map("<leader>lb")
+          }):map("<leader>ob")
           Snacks.toggle.new({
             id = "animate",
             name = "Animate",
@@ -356,7 +374,7 @@ return {
                 require("smear_cursor").enabled = false
               end
             end,
-          }):map("<leader>la")
+          }):map("<leader>oa")
           Snacks.toggle.new({
             id = "theme",
             name = "Light Theme",
@@ -370,7 +388,19 @@ return {
                 vim.cmd.colorscheme("onedark")
               end
             end,
-          }):map("<leader>lt")
+          }):map("<leader>ot")
+          Snacks.toggle.new({
+            id = "markdown",
+            name = "Markdown Preview",
+            get = function() return require("render-markdown").get() end,
+            set = function(state)
+              if state then
+                require("render-markdown").enable()
+              else
+                require("render-markdown").disable()
+              end
+            end,
+          }):map("<leader>om")
         end,
       })
     end,

@@ -164,6 +164,28 @@ return {
             },
           },
         },
+        gdbserver = {
+          name = "gdb: server",
+          type = "cppdbg",
+          request = "launch",
+          cwd = "${workspaceFolder}",
+          program = require("config.fn").util.select_cxx_executable,
+          stopAtEntry = false,
+          MIMode = "gdb",
+          miDebuggerServerAddress = "localhost:2331",
+          miDebuggerPath = "/usr/bin/gdb-multiarch",
+          serverLaunchTimeout = 5000,
+          postRemoteConnectCommands = {
+            {
+              text = "monitor reset",
+              ignoreFailures = false
+            },
+            {
+              text = "load",
+              ignoreFailures = false
+            },
+          },
+        },
         lldb = {
           name = "lldb: launch",
           type = "lldb", -- matches the adapter
@@ -205,11 +227,13 @@ return {
       dap.configurations = {
         c = {
           opts.launchers.cppdbg,
+          opts.launchers.gdbserver,
           opts.launchers.gdb,
           opts.launchers.lldb,
         },
         cpp = {
           opts.launchers.cppdbg,
+          opts.launchers.gdbserver,
           opts.launchers.gdb,
           opts.launchers.lldb,
         },
@@ -235,6 +259,8 @@ return {
     version = "1.*",
     keys = {
       { "<leader>dw", "<cmd>DapViewWatch<CR>", desc = "Add symbol under cursor to watches", },
+      { "_d",         function() require("dap-view").toggle() end, desc = "Toggle UI", },
+      { "<leader>dx", function() require("dap").terminate() require("dap-view").close() end, desc = "Terminate", },
       { "<leader>ds", function() require("dap-view").show_view("scopes") end, desc = "Show view scopes", },
       { "<leader>dS", function() require("dap-view").jump_to_view("scopes") end, desc = "Jump view scopes", },
       { "<leader>db", function() require("dap-view").show_view("breakpoints") end, desc = "Show view breakpoints", },

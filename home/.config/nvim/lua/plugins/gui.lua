@@ -170,41 +170,22 @@ return {
     },
   },
   {
-    -- https://github.com/esmuellert/vscode-diff.nvim
-    "esmuellert/vscode-diff.nvim",
-    enabled = not vim.g.vscode,
-    dependencies = { "MunifTanjim/nui.nvim" },
+    -- https://github.com/esmuellert/codediff.nvim
+    "esmuellert/codediff.nvim",
+    enabled = true and not vim.g.vscode,
     cmd = "CodeDiff",
-    opts = {
-      keymaps = {
-        next_hunk = "]x",
-        prev_hunk = "[x",
-      }
-    },
-  },
-  {
-    -- https://github.com/sindrets/diffview.nvim
-    "sindrets/diffview.nvim",
-    enabled = not vim.g.vscode,
     keys = {
-      { "<leader>gd", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
-      { "_d", "<cmd>DiffviewOpen<CR>",        desc = "Git DiffView Open" },
-      { "<leader>gD", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
-      { "_D", "<cmd>DiffviewClose<CR>",       desc = "Git DiffView Close" },
-      { "<leader>gh", "<cmd>DiffviewFileHistory<CR>", desc = "Git FileHistory" },
-      { "<leader>gxo", function() require("diffview.actions").conflict_choose("ours")() end, desc = "Git Conflict accept ours" },
-      { "<leader>gxt", function() require("diffview.actions").conflict_choose("theirs")() end, desc = "Git Conflict accept theirs" },
-      { "<leader>gxb", function() require("diffview.actions").conflict_choose("base")() end, desc = "Git Conflict accept base" },
-      { "<leader>gxa", function() require("diffview.actions").conflict_choose("all")() end, desc = "Git Conflict accept all" },
+      { "_g", "<cmd>CodeDiff<CR>", desc = "Git DiffView" },
     },
-    cmd = {
-      "DiffviewClose",
-      "DiffviewFileHistory",
-      "DiffviewFocusFiles",
-      "DiffviewLog",
-      "DiffviewOpen",
-      "DiffviewRefresh",
-      "DiffviewToggleFiles",
+    opts = {
+      explorer = {
+        view_mode = "tree",
+      },
+      keymaps = {
+        view = {
+          toggle_stage = "<tab>",
+        },
+      }
     },
   },
   {

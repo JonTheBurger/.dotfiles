@@ -48,8 +48,10 @@ return {
       cmdline = {
         enabled = true,
         keymap = { preset = "inherit" },
+        sources = { "cmdline", "lazydev", "buffer" },
         completion = {
           menu = { auto_show = true },
+          ghost_text = { enabled = true },
         },
       },
 
@@ -59,6 +61,7 @@ return {
         completion = {
           menu = { auto_show = true },
         },
+        sources = { "path" },
       },
 
       appearance = {
@@ -79,6 +82,10 @@ return {
           end
           return srcs
         end,
+
+        per_filetype = {
+          codecompanion = { "codecompanion" },
+        },
 
         providers = {
           lsp = {

@@ -6,6 +6,20 @@ end
 
 return {
   {
+    -- https://github.com/copilotlsp-nvim/copilot-lsp
+    "copilotlsp-nvim/copilot-lsp",
+    enabled = true,
+    config = {
+      nes = {
+        move_count_threshold = 3,
+      },
+    },
+    init = function()
+      vim.g.copilot_nes_debounce = 3000
+    end,
+  },
+  {
+    -- https://github.com/zbirenbaum/copilot.lua
     "zbirenbaum/copilot.lua",
     enabled = true,
     -- enabled = os.getenv("USER") ~= "vagrant",
@@ -19,7 +33,7 @@ return {
     opts = {
       copilot_node_command=copilot_node_command,
       suggestion = {
-        debounce = 3500,
+        debounce = 2500,
         trigger_on_accept = true,
         keymap = {
           -- accept = "<C-y>",
@@ -31,8 +45,8 @@ return {
         },
       },
       nes = {
-        enabled = false,
-        auto_trigger = false,
+        enabled = true,
+        auto_trigger = true,
         keymap = {
           -- accept_and_goto = false,
           -- accept = false,
@@ -73,13 +87,18 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "ravitemer/mcphub.nvim",
+    },
     opts = {
       strategies = {
         chat = {
-          adapter = {
-            name = "copilot",
-            model = "claude-sonnet-4",
-          },
+          -- adapter = {
+          --   name = "copilot",
+          --   model = "claude-sonnet-4",
+          -- },
         },
       },
       display = {
@@ -96,21 +115,20 @@ return {
         },
       },
     },
+    cmd = {
+      "CodeCompanion",
+      "CodeCompanionActions",
+      "CodeCompanionCLI",
+      "CodeCompanionCommand",
+      "CodeCompanionChat",
+    },
     keys = {
-      { "<leader>c", "<cmd>CodeCompanionActions<cr>", noremap = true, silent = true, desc = "Code Companion" },
+      { "<leader>C", "<cmd>CodeCompanionActions<CR>", desc = "Code Companion" },
+      { "_a", "<cmd>CodeCompanionChat toggle<CR>", desc = "Toggle AI Chat" },
+      -- { "<leader>C", "<cmd>CodeCompanionActions<CR>", desc = "Code Companion" },
     },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-    },
-  },
-  {
-    "MeanderingProgrammer/render-markdown.nvim",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "nvim-tree/nvim-web-devicons",
-    },
-    ft = { "codecompanion" },
-    opts = {},
+    init = function()
+      vim.cmd("cab ai CodeCompanion")
+    end,
   },
 }
