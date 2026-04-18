@@ -2,22 +2,24 @@
 local MB = 1024 * 1024
 local cfg_dir = vim.fn.stdpath("config")
 
--- item.score = (item.score or 0) * 0.1
 local downrank_undesirable_paths = function(item)
   if item.file and item.file:match("%.test") then
-    item.score = (item.score or 0) * 0.1
+    item.score_mul = 0.1
+  end
+  if item.file and item.file:match("CMake/") then
+    item.score_mul = 0.01
   end
   if item.file and item.file:match("tools") then
-    item.score = (item.score or 0) * 0.01
+    item.score_mul = 0.01
   end
   if item.file and item.file:match("Test") then
     item.score_mul = 0.001
   end
   if item.file and item.file:match("ibraries") then
-    item.score = (item.score or 0) * 0.0001
+    item.score_mul = 0.0001
   end
   if item.file and item.file:match("xternal") then
-    item.score = (item.score or 0) * 0.0001
+    item.score_mul = 0.0001
   end
   if item.file and item.file:match("%.mock") then
     item.score_mul = 0.00001
@@ -75,14 +77,13 @@ return {
     -- stylua: ignore start
     keys = {
       { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
-      { "<C-F>",           function() Snacks.picker.grep({transform = downrank_undesirable_paths, }) end,                   desc = "Grep" },
-      { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
-      { "<C-p>",           function() Snacks.picker.files({ hidden = true, transform = downrank_undesirable_paths, }) end, desc = "Find Files" },
+      { "<C-F>",           function() Snacks.picker.grep({ hidden = true, transform = downrank_undesirable_paths }) end,                   desc = "Grep" },
+      { "<C-p>",           function() Snacks.picker.files({ hidden = true, transform = downrank_undesirable_paths }) end, desc = "Find Files" },
       { "<C-M-p>",         function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
       { "<C-M-i>",         function() Snacks.picker.icons() end,                  desc = "Icons/Emoji",              mode = "i" },
+      { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
 
       -- Top Pickers & Explorer
-      -- { "<leader><space>", function() Snacks.picker.smart() end,                  desc = "Smart Find Files" },
       { "<leader>,",       function() Snacks.picker.buffers() end,                desc = "Buffers" },
       { "<leader>/",       function() Snacks.picker.grep({transform = downrank_undesirable_paths}) end,                   desc = "Grep" },
       { "<leader>:",       function() Snacks.picker.command_history() end,        desc = "Command History" },
@@ -90,13 +91,14 @@ return {
       { "<leader>e",       function() Snacks.explorer() end,                      desc = "File Explorer" },
       -- find
       { "<leader>fb",      function() Snacks.picker.buffers() end,                desc = "Buffers" },
+      { "<leader>fB",      function() require("config.fn").pickers.pick_breakpoints() end, desc = "Breakpoints" },
       { "<leader>fc",      function() Snacks.picker.files({ cwd = cfg_dir }) end, desc = "Find Config File" },
-      { "<leader>ff",      function() Snacks.picker.files() end,                  desc = "Find Files" },
-      { "<leader>fg",      function() Snacks.picker.git_files() end,              desc = "Find Git Files" },
+      { "<leader>ff",      function() Snacks.picker.smart({transform = downrank_undesirable_paths}) end,                desc = "Find Files" },
+      { "<leader>fg",      function() Snacks.picker.git_files({transform = downrank_undesirable_paths}) end,              desc = "Find Git Files" },
       { "<leader>fp",      function() Snacks.picker.projects() end,               desc = "Projects" },
       { "<leader>fr",      function() Snacks.picker.recent() end,                 desc = "Recent" },
       -- git
-      { "<leader>gb",      function() Snacks.picker.git_branches() end,           desc = "Git Branches" },
+      { "<leader>gB",      function() Snacks.picker.git_branches() end,           desc = "Git Branches" },
       { "<leader>gl",      function() Snacks.picker.git_log() end,                desc = "Git Log" },
       { "<leader>gL",      function() Snacks.picker.git_log_line() end,           desc = "Git Log Line" },
       { "<leader>gs",      function() Snacks.picker.git_status() end,             desc = "Git Status" },
@@ -108,7 +110,7 @@ return {
         function()
           vim.ui.input({ prompt = "Enter filetype (e.g., py, js): " }, function(input)
             if input then
-              Snacks.picker.grep({ft=input})
+              Snacks.picker.grep({ft=input, transform = downrank_undesirable_paths})
             end
           end)
         end,
@@ -116,7 +118,6 @@ return {
       },
       { "<leader>sb",      function() Snacks.picker.lines() end,                  desc = "Buffer Lines" },
       { "<leader>sB",      function() Snacks.picker.grep_buffers() end,           desc = "Grep Open Buffers" },
-      -- { "<leader>sg",      function() Snacks.picker.grep() end,                   desc = "Grep" },
       { "<leader>sw",      function() Snacks.picker.grep_word() end,              desc = "Visual selection or word", mode = { "n", "x" } },
       -- search
       { '<leader>s"',      function() Snacks.picker.registers() end,              desc = "Registers" },
@@ -204,6 +205,13 @@ return {
         debug = {
           scores = false,
         },
+        -- sort = { fields = { "score:desc", "#text", "idx", }, },
+        --- @param lhs snacks.picker.Item
+        --- @param rhs snacks.picker.Item
+        --- @return boolean
+        sort = function(lhs, rhs)
+          return lhs.score > rhs.score
+        end,
         ui_select = true,
         -- https://github.com/folke/snacks.nvim/discussions/1798
         -- https://github.com/folke/snacks.nvim/discussions/1854
@@ -287,6 +295,7 @@ return {
         },
         matcher = {
           frecency = true,
+          history_bonus = false,
         },
       },
       image = {
@@ -388,7 +397,7 @@ return {
                 vim.cmd.colorscheme("onedark")
               end
             end,
-          }):map("<leader>ot")
+          }):map("<leader>ol")
           Snacks.toggle.new({
             id = "markdown",
             name = "Markdown Preview",

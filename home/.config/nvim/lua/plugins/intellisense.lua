@@ -367,6 +367,10 @@ return {
     ft = { "cmake", "c", "cpp" },
     opts = {
       cmake_regenerate_on_save = false,
+      cmake_compile_commands_options = {
+        action = "lsp", -- "soft_link"
+        target = vim.uv.cwd,
+      },
       cmake_runner = {
         name = "overseer",
         opts = {

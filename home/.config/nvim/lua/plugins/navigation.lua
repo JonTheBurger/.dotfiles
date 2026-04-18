@@ -66,6 +66,13 @@ return {
       aliases = {
         ["d"] = '"', -- double quotes
       },
+      surrounds = {
+        ["c"] = {
+          add = { "/* ", " */" },
+          find = "/%*.-%*/",
+          delete = "^(/%* )().*( %*/)$",
+        },
+      },
     },
     -- ys
     init = function()
@@ -91,7 +98,7 @@ return {
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Move right one pane" },
     },
     -- stylua: ignore end
-    init = function ()
+    init = function()
       vim.keymap.set("t", "<C-h>", function()
         require("smart-splits").move_cursor_left()
       end, { desc = "Move left one pane" })
@@ -105,6 +112,33 @@ return {
         require("smart-splits").move_cursor_right()
       end, { desc = "Move right one pane" })
     end
+  },
+  {
+    -- https://github.com/monaqa/dial.nvim
+    "monaqa/dial.nvim",
+    config = function()
+      local augend = require("dial.augend")
+      require("dial.config").augends:register_group {
+        -- default augends used when no group name is specified
+        default = {
+          augend.integer.alias.decimal, -- nonnegative decimal number (0, 1, 2, 3, ...)
+          augend.integer.alias.hex, -- nonnegative hex number  (0x01, 0x1a1f, etc.)
+          augend.date.alias["%Y/%m/%d"], -- date (2022/02/19, etc.)
+          augend.constant.alias.bool,
+          augend.semver.alias.semver,
+        },
+      }
+    end,
+    keys = {
+      { "<C-a>",  function() require("dial.map").manipulate("increment", "normal") end,  mode = { "n" } },
+      { "<C-x>",  function() require("dial.map").manipulate("decrement", "normal") end,  mode = { "n" } },
+      { "g<C-a>", function() require("dial.map").manipulate("increment", "gnormal") end, mode = { "n" } },
+      { "g<C-x>", function() require("dial.map").manipulate("decrement", "gnormal") end, mode = { "n" } },
+      { "<C-a>",  function() require("dial.map").manipulate("increment", "visual") end,  mode = { "x" } },
+      { "<C-x>",  function() require("dial.map").manipulate("decrement", "visual") end,  mode = { "x" } },
+      { "g<C-a>", function() require("dial.map").manipulate("increment", "gvisual") end, mode = { "x" } },
+      { "g<C-x>", function() require("dial.map").manipulate("decrement", "gvisual") end, mode = { "x" } },
+    },
   },
   {
     --https://github.com/jake-stewart/multicursor.nvim
@@ -291,7 +325,7 @@ return {
         disable = {},
       },
       indent = {
-        enable = true,
+        enable = false,
         disable = { "rst" },
       },
     },
@@ -303,7 +337,6 @@ return {
       vim.opt.foldenable = true
       vim.opt.foldlevel = 99
       vim.opt.foldlevelstart = 99
-      -- vim.opt.indentexpr = "nvim_treesitter#indent()"
       vim.opt.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 
       vim.g._ts_force_sync_parsing = false

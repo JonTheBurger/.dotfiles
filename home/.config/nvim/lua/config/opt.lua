@@ -45,7 +45,6 @@ vim.opt.signcolumn = "yes"
 vim.opt.expandtab = true
 vim.opt.fixeol = true
 vim.opt.breakindent = true
-vim.opt.indentexpr = ""
 vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3

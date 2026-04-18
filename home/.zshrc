@@ -290,12 +290,10 @@ function tailog() {
   tail -f "$@" | bat --paging=never -p -l log
 }
 function mk() {
-  if [ -f "bamboo.mk" ]; then
-    make -f bamboo.mk "$@"
-  elif [ -f "Makefile" ]; then
+  if [ -f "Makefile" ]; then
     make "$@"
   else
-    ninja "$@"
+    ninja "$@" -k0 || ninja "$@" -j1
   fi
 }
 function lazy_load_nvm() {

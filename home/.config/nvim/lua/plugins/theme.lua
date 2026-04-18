@@ -1,3 +1,4 @@
+local opts = require("grug-far.opts")
 -- vim.api.nvim_get_hl(0, {name="WinSeparator"})
 local colors = {
   bg = "#455574",
@@ -98,8 +99,25 @@ local function cmake_line()
     },
   }
 end
-
 return {
+  {
+    -- https://github.com/mvllow/modes.nvim
+    "mvllow/modes.nvim",
+    opts = {
+      colors = {
+        bg = "", -- Optional bg param, defaults to Normal hl group
+        copy = "#f5c359",
+        delete = "#c75c6a",
+        change = "#c75c6a", -- Optional param, defaults to delete
+        format = "#c79585",
+        insert = "#78ccc5",
+        replace = "#245361",
+        select = "#9745be", -- Optional param, defaults to visual
+        visual = "#9745be",
+      },
+      line_opacity = 0.25,
+    },
+  },
   {
     "sphamba/smear-cursor.nvim",
     opts = {

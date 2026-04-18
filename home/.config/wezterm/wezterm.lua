@@ -41,6 +41,49 @@ local config = wezterm.config_builder()
 ---@param key string Key to forward to neovim
 ---@return Key WezTerm Key mapping
 local function split_nav(resize_or_move, key)
+local wezterm = require("wezterm")
+local act = wezterm.action
+local HJKL2DIRECTION = { h = "Left", j = "Down", k = "Up", l = "Right" }
+local PREVIOUS_WORKSPACE = "default"
+local ROSEWATER = "#f5e0dc"
+local FLAMINGO = "#f2cdcd"
+local PINK = "#f5c2e7"
+local MAUVE = "#cba6f7"
+local RED = "#f38ba8"
+local MAROON = "#eba0ac"
+local PEACH = "#fab387"
+local YELLOW = "#f9e2af"
+local GREEN = "#a6e3a1"
+local TEAL = "#94e2d5"
+local SKY = "#89dceb"
+local SAPPHIRE = "#74c7ec"
+local BLUE = "#89b4fa"
+local LAVENDER = "#b4befe"
+local TEXT = "#cdd6f4"
+local SUBTEXT_1 = "#bac2de"
+local SUBTEXT_0 = "#a6adc8"
+local OVERLAY_2 = "#9399b2"
+local OVERLAY_1 = "#7f849c"
+local OVERLAY_0 = "#6c7086"
+local SURFACE_2 = "#585b70"
+local SURFACE_1 = "#45475a"
+local SURFACE_0 = "#313244"
+local BASE = "#1e1e2e"
+local MANTLE = "#181825"
+local CRUST = "#11111b"
+local TITLEBAR_COLOR = SURFACE_0
+
+--- @type Config
+local config = wezterm.config_builder()
+
+--------------------------------------------------------------------------------
+-- @SECTION functions
+--------------------------------------------------------------------------------
+--- Smart splits integration
+---@param resize_or_move "move"|"resize" action to delegate to smart-splits.nvim
+---@param key string Key to forward to neovim
+---@return Key WezTerm Key mapping
+local function split_nav(resize_or_move, key)
   return {
     key = key,
     mods = resize_or_move == "resize" and "META" or "CTRL",
@@ -100,13 +143,13 @@ local function format_tab(tab, tabs, panes, cfg, hover, max_width)
   if wezterm.target_triple:find("windows") ~= nil then
     if tab.is_active then
       return {
-        { Foreground = { Color = "#333333" } },
-        { Background = { Color = "#0992C2" } },
+        { Foreground = { Color = "#F6E7BC" } },
+        { Background = { Color = "#21283b" } },
         { Text = " " .. title .. " " },
       }
     else
       return {
-        { Foreground = { Color = "#F6E7BC" } },
+        { Foreground = { Color = "#A99F81" } },
         { Background = { Color = "#333333" } },
         { Text = " " .. title .. " " },
       }
@@ -282,6 +325,9 @@ end
 -- @SECTION theme
 --------------------------------------------------------------------------------
 if wezterm.target_triple:find("windows") ~= nil then
+  -- config.enable_csi_u_key_encoding = false
+  config.enable_kitty_keyboard = true
+  -- config.term = "xterm-256color"
   config.use_fancy_tab_bar = true
   config.hide_tab_bar_if_only_one_tab = false
   config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
@@ -294,9 +340,16 @@ else
   config.window_padding = { left = 0, right = 0, top = 0, bottom = 0 }
   config.default_prog = { "zsh" }
 end
-config.window_background_opacity = 0.85
--- https://wezterm.org/colorschemes/c/index.html#catppuccin-mocha_1
-config.color_scheme = "CGA"
+config.window_background_opacity = 0.92
+-- https://wezterm.org/colorschemes/c/index.html
+-- config.color_scheme = "CGA"
+-- config.color_scheme = 'Breeze (Gogh)'
+-- config.color_scheme = '3024 (dark) (terminal.sexy)'
+-- config.color_scheme = 'Arthur (Gogh)'
+-- config.color_scheme = 'Argonaut (Gogh)'
+-- config.color_scheme = 'Brogrammer'
+config.color_scheme = 'Builtin Tango Dark'
+
 -- https://wezterm.org/config/fonts.html
 config.font = wezterm.font_with_fallback({
   "FiraCode Nerd Font",

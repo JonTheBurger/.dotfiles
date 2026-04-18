@@ -520,11 +520,11 @@ M.buf = {
       "terminal",
     }
     local x_filetype = {
-      "neotest-summary",
-      "snacks_picker_input",
-      "trouble",
-      "snacks_picker_list",
-      "undotree",
+      -- "neotest-summary",
+      -- "snacks_picker_input",
+      -- "trouble",
+      -- "snacks_picker_list",
+      -- "undotree",
     }
     local try_close = function(buffer)
       local winid = vim.fn.bufwinid(buffer.bufnr)
@@ -556,8 +556,6 @@ M.buf = {
 
       ::continue::
     end
-
-    vim.cmd("DiffviewClose")
   end,
 
   ---Open a file for editing, creating it if it doesn't exist.
@@ -756,6 +754,140 @@ M.os = {
       return "python"
     end
   end,
+}
+
+----------------------------------------------------------------------------------------
+---@endsection
+---@section Pickers
+----------------------------------------------------------------------------------------
+
+M.pickers = {
+  pick_breakpoints = function()
+    local bkps = M.bkpt.get()
+
+    ---@type snacks.picker.Item[]
+    local items = {}
+
+    for filepath, breakpoints in pairs(bkps) do
+      local short = vim.fn.fnamemodify(filepath, ":~:.")
+      for _, bp in ipairs(breakpoints) do
+        -- Build a label summarising the breakpoint type
+        local kind
+        if bp.log_message then
+          kind = "󰎛 log"
+        elseif bp.condition then
+          kind = "󰯲 cond"
+        elseif bp.hit_condition then
+          kind = "󰱷 hit"
+        else
+          kind = "● break"
+        end
+
+        -- Secondary text shown in the preview / details column
+        local detail = bp.condition
+          or bp.log_message
+          or bp.hit_condition
+          or ""
+
+        table.insert(items, {
+          -- snacks.picker required fields
+          text = ("%s:%d  %s  %s"):format(short, bp.line, kind, detail),
+          file = filepath,
+          pos  = { bp.line, 0 },
+          -- carry the raw breakpoint for the action
+          _bp  = bp,
+          _filepath = filepath,
+          -- fields used for display columns (optional but nice)
+          filename = short,
+          lnum     = bp.line,
+          kind     = kind,
+          detail   = detail,
+        })
+      end
+    end
+
+    -- Sort: file first, then line number
+    table.sort(items, function(a, b)
+      if a.file ~= b.file then return a.file < b.file end
+      return a.lnum < b.lnum
+    end)
+
+    require("snacks").picker({
+      title  = "Breakpoints",
+      items  = items,
+      format = "file",   -- uses snacks' built-in file+lnum formatter
+
+      -- Column layout shown in the picker list
+      ---@param item snacks.picker.Item
+      ---@param ctx  snacks.picker.format.ctx
+      formatter = function(item, ctx)
+        local ret = {}
+        -- filename in dim colour
+        ret[#ret+1] = { item.filename .. ":", "SnacksPickerDimmed" }
+        -- line number highlighted
+        ret[#ret+1] = { tostring(item.lnum), "SnacksPickerLnum" }
+        ret[#ret+1] = { "  " }
+        -- breakpoint kind badge
+        local hl = ({
+          ["● break"] = "DiagnosticError",
+          ["󰯲 cond"]  = "DiagnosticWarn",
+          ["󰱷 hit"]   = "DiagnosticInfo",
+          ["󰎛 log"]   = "DiagnosticHint",
+        })[item.kind] or "Normal"
+        ret[#ret+1] = { item.kind, hl }
+        -- optional detail
+        if item.detail ~= "" then
+          ret[#ret+1] = { "  " .. item.detail, "SnacksPickerDimmed" }
+        end
+        return ret
+      end,
+
+      -- Jump to the breakpoint location on confirm
+      confirm = function(picker, item)
+        picker:close()
+        if not item then return end
+        vim.schedule(function()
+          vim.cmd("edit " .. vim.fn.fnameescape(item._filepath))
+          vim.api.nvim_win_set_cursor(0, { item.lnum, 0 })
+          vim.cmd("normal! zz")
+        end)
+      end,
+
+      -- Extra keymaps
+      actions = {
+        -- <C-d> deletes the breakpoint under the cursor
+        delete_breakpoint = function(picker, item)
+          if not item then return end
+          -- delegate to your existing removal helper if you have one,
+          -- or use nvim-dap directly:
+          local ok, dap = pcall(require, "dap")
+          if ok then
+            local bps = dap.list_breakpoints()
+            for _, b in ipairs(bps) do
+              if b.line == item.lnum and b.file == item._filepath then
+                -- dap uses remove_breakpoint / toggle_breakpoint
+                dap.toggle_breakpoint(nil, nil, nil) -- position cursor first
+                break
+              end
+            end
+          end
+          picker:close()
+        end,
+      },
+
+      win = {
+        input = {
+          keys = {
+            ["<C-d>"] = { "delete_breakpoint", mode = { "i", "n" } },
+          },
+        },
+      },
+
+      -- Live preview in the right pane
+      preview = "file",
+    })
+  end
+
 }
 
 ----------------------------------------------------------------------------------------

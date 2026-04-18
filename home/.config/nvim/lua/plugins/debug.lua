@@ -327,17 +327,17 @@ return {
       },
       render = {
         -- https://igorlfs.github.io/nvim-dap-view/custom-formatting
-        -- threads = {
-        --   format = function(name, lnum, path)
-        --     local value = name:gsub("%(anonymous namespace%)", "?")
-        --     value = value:gsub("::v%d::", "::")
-        --     return {
-        --       { part = value },
-        --       { part = path, hl = "FileName",  separator = ":" },
-        --       { part = lnum, hl = "LineNumber" },
-        --     }
-        --   end,
-        -- },
+        threads = {
+          format = function(name, lnum, path)
+            local value = name:gsub("%(anonymous namespace%)", "?")
+            value = value:gsub("::v%d::", "::")
+            return {
+              { text = value },
+              { text = path, hl = "FileName",  separator = ":" },
+              { text = lnum, hl = "LineNumber" },
+            }
+          end,
+        },
       },
       virtual_text = {
         enabled = true,
@@ -394,6 +394,7 @@ return {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
     enabled = not DAP_VIEW and not vim.g.vscode,
+    lazy = false,
     dependencies = {
       { "mfussenegger/nvim-dap" },
     },
