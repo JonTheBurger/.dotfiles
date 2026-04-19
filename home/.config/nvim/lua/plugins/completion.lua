@@ -139,121 +139,12 @@ return {
     opts_extend = { "sources.default" },
   },
   {
-    -- https://github.com/windwp/nvim-autopairs
-    "windwp/nvim-autopairs",
-    enabled = true,
-    event = "InsertEnter",
-    opts = {
-      disable_filetype = { "snacks_picker_input", "dap-repl" },
-      map_cr = true,
-    },
-  },
-  {
-    --https://github.com/mfussenegger/nvim-lint
-    "mfussenegger/nvim-lint",
-    enabled = true,
-    event = {
-      "BufNewFile",
-      "BufReadPre",
-    },
-    config = function()
-      local lint = require("lint")
-      lint.linters_by_ft = {
-        -- c = { "cppcheck" },
-        cmake = { "cmakelint" },
-        -- cpp = { "cppcheck",  "clazy" }, --
-        python = { "mypy", "pylint" },
-        yaml = { "yamllint" },
-      }
-
-      -- Remove a linter if it doesn't exist
-      for _, linters in pairs(lint.linters_by_ft) do
-        for i = #linters, 1, -1 do
-          if vim.fn.executable(linters[i]) == 0 then
-            table.remove(linters, i)
-          end
-        end
-      end
-
-      vim.api.nvim_create_user_command("Lint", function()
-        lint.try_lint()
-      end, { desc = "Lint" })
-    end,
-  },
-  {
-    --https://github.com/stevearc/conform.nvim
-    "stevearc/conform.nvim",
-    event = {
-      "BufNewFile",
-      "BufReadPre",
-    },
-    cmd = {
-      "ConformInfo",
-    },
-    keys = {
-      {
-        "<leader>FF",
-        function()
-          if vim.bo.filetype == "bigfile" then
-            local ext = vim.fn.expand("%:e")
-            if ext == "json" then
-              require("conform").format({ formatters = { "jq" } })
-            else
-              vim.notify("No bigfile formatter found for " .. ext)
-            end
-          else
-            require("conform").format({ async = true })
-          end
-        end,
-        mode = "n",
-        desc = "Format buffer",
-      },
-    },
-    ---@module "conform"
-    ---@type conform.setupOpts
-    opts = {
-      formatters_by_ft = {
-        ["*"] = { "codespell" },
-        ["_"] = { "trim_whitespace" },
-        bash = { "shfmt" },
-        c = { "clang-format" },
-        cpp = { "clang-format" },
-        cmake = { "gersemi" },
-        html = { "prettier" },
-        json = { "jq" },
-        lua = { "stylua" },
-        markdown = { "prettier", "injected" },
-        python = { "ruff_format", "ruff_organize_imports" },
-        sh = { "shfmt" },
-        yaml = { "yamlfmt" },
-        zsh = { "shfmt" },
-      },
-      default_format_opts = {
-        lsp_format = "fallback",
-      },
-      formatters = {
-        gersemi = {
-          prepend_args = { "--indent", "2", "--line-length", "88", "--list-expansion", "favour-inlining" }
-        },
-        shfmt = {
-          prepend_args = { "-i", "2" },
-        },
-        prettier = {
-          prepend_args = { "--prose-wrap", "always", "--print-width", "80" },
-        },
-      },
-    },
-    init = function()
-      -- vim.opt.formatexpr = "v:lua.require'conform'.formatexpr()"
-    end,
-  },
-  {
     -- https://github.com/danymat/neogen
     "danymat/neogen",
     version = "*",
     keys = {
       {
-        "<leader>KK",
+        "<leader>/",
         function()
           require("neogen").generate()
         end,
@@ -358,76 +249,20 @@ return {
     end,
   },
   {
-    -- https://github.com/Civitasv/cmake-tools.nvim/blob/master/docs/all_commands.md
-    "Civitasv/cmake-tools.nvim",
-    dependencies = {
-      { "mfussenegger/nvim-dap" },
-      { "nvim-lua/plenary.nvim" },
-    },
-    ft = { "cmake", "c", "cpp" },
-    opts = {
-      cmake_regenerate_on_save = false,
-      cmake_compile_commands_options = {
-        action = "lsp", -- "soft_link"
-        target = vim.uv.cwd,
-      },
-      cmake_runner = {
-        name = "overseer",
-        opts = {
-          ---@class overseer.TaskDefinition
-          new_task_opts = {
-            name = "cmake run",
-            components = {
-              { "default" },
-              { "unique" },
-            },
-          },
-          ---@param task overseer.TaskDefinition
-          on_new_task = function(task)
-            require("overseer").open({ enter = false, direction = "bottom" })
-          end,
-        },
-      },
-      cmake_executor = {
-        name = "overseer",
-        opts = {
-          ---@class overseer.TaskDefinition
-          new_task_opts = {
-            name = "cmake build",
-            components = {
-              { "default" },
-              { "unique" },
-              { "on_output_parse", problem_matcher = "$gcc" },
-              { "on_result_diagnostics", remove_on_restart=true },
-            },
-          },
-          ---@param task overseer.TaskDefinition
-          on_new_task = function(task)
-            require("overseer").open({ enter = false, direction = "bottom" })
-          end,
-        },
-      },
-    },
-    keys = {
-      { "<leader>bc", "<cmd>CMakeSelectConfigurePreset<CR>", desc = "CMake Select Configure Preset" },
-      { "<leader>bp", "<cmd>CMakeSelectBuildPreset<CR>", desc = "CMake Select Build Preset" },
-      { "<leader>bt", "<cmd>CMakeSelectBuildTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>bl", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>bd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
-      { "<leader>br", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
-      { "<leader>bb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
-    },
-  },
-  {
     "seblyng/roslyn.nvim",
     ---@module 'roslyn.config'
     ---@type RoslynNvimConfig
-    opts = {
-    },
+    opts = {},
   },
   {
     -- https://github.com/MTDL9/vim-log-highlighting
     "MTDL9/vim-log-highlighting",
     ft = { "log" },
   },
+  {
+    -- https://github.com/jontheburger/nvim-elf-file
+    "jontheburger/nvim-elf-file",
+    enabled = not vim.g.vscode,
+    opts = {},
+  }
 }

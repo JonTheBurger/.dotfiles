@@ -31,40 +31,17 @@ end
 
 return {
   {
-    "folke/todo-comments.nvim",
-    enabled = true,
-    dependencies = { "nvim-lua/plenary.nvim" },
+    -- https://github.com/folke/which-key.nvim
+    "folke/which-key.nvim",
+    enabled = not vim.g.vscode,
     event = "VeryLazy",
-    keys = {
-      { "]o", function() require("todo-comments").jump_next() end, mode = { "n", }, desc = "Next TO DO Comment", },
-      { "[o", function() require("todo-comments").jump_prev() end, mode = { "n", }, desc = "Previous TO DO Comment", },
-      { "]2", function() require("todo-comments").jump_next() end, mode = { "n", }, desc = "Next TO DO Comment", },
-      { "[2", function() require("todo-comments").jump_prev() end, mode = { "n", }, desc = "Previous TO DO Comment", },
-    },
     opts = {
-      highlight = {
-        multiline = false,
-        pattern = [[.*<((KEYWORDS)%(\(.{-1,}\))?):]],
+      sort = { "alphanum", "local", "order", "group", "mod" },
+      ---@type wk.Spec
+      spec = {
+        { "<leader>gx", group = "git conflict resolution", icon = "" }
       },
-      search = {
-        pattern = [[\b(KEYWORDS)(\(\w*\))*:]],
-      }
     },
-    init = function()
-      -- To-do
-      vim.keymap.set("n", "<leader>TI", function()
-        vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false)
-      end, { desc = "Insert TO DO" })
-      vim.keymap.set("n", "<leader>TT", function()
-        vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false)
-      end, { desc = "Append TO DO" })
-      vim.keymap.set("n", "<leader>T/", function()
-        vim.api.nvim_feedkeys("a// TODO(POVIRK): ", "n", false)
-      end, { desc = "Append / TO DO" })
-      vim.keymap.set("n", "<leader>T#", function()
-        vim.api.nvim_feedkeys("a# TODO(POVIRK): ", "n", false)
-      end, { desc = "Append # TO DO" })
-    end
   },
   {
     "folke/snacks.nvim",
@@ -85,7 +62,6 @@ return {
 
       -- Top Pickers & Explorer
       { "<leader>,",       function() Snacks.picker.buffers() end,                desc = "Buffers" },
-      { "<leader>/",       function() Snacks.picker.grep({transform = downrank_undesirable_paths}) end,                   desc = "Grep" },
       { "<leader>:",       function() Snacks.picker.command_history() end,        desc = "Command History" },
       { "<leader>sn",      function() Snacks.picker.notifications() end,          desc = "Notification History" },
       { "<leader>e",       function() Snacks.explorer() end,                      desc = "File Explorer" },
@@ -106,11 +82,12 @@ return {
       { "<leader>gi",      function() Snacks.picker.git_diff() end,               desc = "Git Diff (Hunks)" },
       { "<leader>go",      function() Snacks.picker.git_log_file() end,           desc = "Git Log File" },
       -- Grep
-      { "<leader>sg",
+      {
+        "<leader>sg",
         function()
           vim.ui.input({ prompt = "Enter filetype (e.g., py, js): " }, function(input)
             if input then
-              Snacks.picker.grep({ft=input, transform = downrank_undesirable_paths})
+              Snacks.picker.grep({ ft = input, transform = downrank_undesirable_paths })
             end
           end)
         end,

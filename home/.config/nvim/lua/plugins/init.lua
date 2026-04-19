@@ -1,6 +1,6 @@
----@diagnostic disable:missing-fields
 -- This is an example for how to download a lazy package: https://github.com/folke/lazy.nvim?tab=readme-ov-file#-plugin-spec
---- @class LazyPlugin
+--- @module "lazy.nvim"
+--- @type LazyPluginSpec
 return {
   --[[
   -- Plugin ID on github
@@ -38,7 +38,7 @@ return {
     ... -- plugin-specific
   },
   -- Allows you to call setup yourself when the plugin loads, using the opts from above
-  config = function(plugin_spec, opts)
+  config = function(lazyplugin, opts)
     require("theplugin").setup(opts)
   end,
   -- Init is always run at startup

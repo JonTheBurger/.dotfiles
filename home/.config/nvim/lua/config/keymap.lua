@@ -121,53 +121,9 @@ vim.keymap.set({ "n", "x", "o" }, "<A-i>", function()
   end
 end, { desc = "Select child treesitter node or inner incremental lsp selections" })
 
--- vim.keymap.set({ "x" }, "[n", function()
---   require "vim.treesitter._select".select_prev(vim.v.count1)
--- end, { desc = "Select previous treesitter node" })
--- vim.keymap.set({ "x" }, "]n", function()
---   require "vim.treesitter._select".select_next(vim.v.count1)
--- end, { desc = "Select next treesitter node" })
--- vim.keymap.set({ "x", "o" }, "an", function()
---   if vim.treesitter.get_parser(nil, nil, { error = false }) then
---     require "vim.treesitter._select".select_parent(vim.v.count1)
---   else
---     vim.lsp.buf.selection_range(vim.v.count1)
---   end
--- end, { desc = "Select parent treesitter node or outer incremental lsp selections" })
--- vim.keymap.set({ "x", "o" }, "in", function()
---   if vim.treesitter.get_parser(nil, nil, { error = false }) then
---     require "vim.treesitter._select".select_child(vim.v.count1)
---   else
---     vim.lsp.buf.selection_range(-vim.v.count1)
---   end
--- end, { desc = "Select child treesitter node or inner incremental lsp selections" })
-
 vim.api.nvim_create_user_command("TSExplore", function()
   vim.cmd("InspectTree")
 end, { desc = "Show Parse Tree" })
-
-vim.api.nvim_create_user_command("Fmt", function(args)
-  local range = nil
-  if args.count ~= -1 then
-    local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-    range = {
-      start = { args.line1, 0 },
-      ["end"] = { args.line2, end_line:len() },
-    }
-  end
-  vim.lsp.buf.format({ range = range })
-  require("conform").format({ async = true, lsp_format = "fallback", range = range })
-  if not range then
-    vim.lsp.buf.code_action({
-      apply = true,
-      context = {
-        triggerKind = 1,
-        diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 }),
-        only = { "source.organizeImports" },
-      },
-    })
-  end
-end, { desc = "Format", range = true })
 
 vim.keymap.set("n", "g.", vim.lsp.buf.code_action, { desc = "Code Action/Fix" })
 vim.keymap.set("n", "gC", vim.lsp.buf.incoming_calls, { desc = "Callers" })

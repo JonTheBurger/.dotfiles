@@ -17,20 +17,20 @@ This section describes the functionality in jvim not present in vanilla neovim.
 exhaustive list, the groupings here should help users discover key mappings.
 
 - `<leader>b`: Build
-- `<leader>cm`: CMake
 - `<leader>d`: Debugger
-- `<leader>g`: Git
 - `<leader>f`: Find
+- `<leader>g`: Git
+- `<leader>h`: Hover
 - `<leader>s`: Search (additional Find)
 - `<leader>t`: Tests
-- `<leader>l`: ToggLe options
+- `<leader>o`: Toggle Options
+- `<leader>w`: Warnings (diagnostics)
+- `_`: Window and Widget Management (`__` to close all)
+
+- `<leader>C`: Code Companion
 - `<leader>L`: Lua
 - `<leader>M`: Markdown
-- `<leader>w`: Warnings (diagnostics)
 - `<leader>W`: Wiki (notes)
-- `_`: Window and Widget Management
-hijklprv
-- `<leader>c`: Code Companion
 
 ## Vim
 

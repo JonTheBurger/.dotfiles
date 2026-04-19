@@ -46,11 +46,21 @@ stow:  ## Distributes softlinks in home to dotfiles
 
 format:  ## Formats shell scripts
 	shfmt -s -w .
+	stylua home/.config/nvim/lua/
 
 lint:  ## Lints shell scripts
 	find . -name '*.sh' -type f -exec shellcheck -x --color {} \;
 
 jvim:
+	mkdir -p "${HOME}/.local/bin/"
+	echo "#!/bin/bash" > "${HOME}/.local/bin/jvim"
+	echo "export NVIM_APPNAME=jvim" >> "${HOME}/.local/bin/jvim"
+	echo 'nvim "$$@"' >> "${HOME}/.local/bin/jvim"
+	chmod +x "${HOME}/.local/bin/jvim"
+	rm -f "${HOME}/.config/jvim"
+	cp -r "${PWD}/home/.config/nvim" "${HOME}/.config/jvim"
+
+jvim.link:
 	mkdir -p "${HOME}/.local/bin/"
 	echo "#!/bin/bash" > "${HOME}/.local/bin/jvim"
 	echo "export NVIM_APPNAME=jvim" >> "${HOME}/.local/bin/jvim"
