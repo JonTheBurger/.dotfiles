@@ -1,3 +1,5 @@
+---@module "lazy"
+---@type LazyPluginSpec[]
 return {
   {
     -- https://github.com/windwp/nvim-autopairs
@@ -13,6 +15,8 @@ return {
     -- https://github.com/kylechui/nvim-surround
     "kylechui/nvim-surround",
     event = "VeryLazy",
+    ---@module "nvim-surround"
+    ---@type user_options
     opts = {
       aliases = {
         ["d"] = '"', -- double quotes
@@ -21,11 +25,13 @@ return {
         ["c"] = {
           add = { "/* ", " */" },
           find = "/%*.-%*/",
-          delete = "^(/%* )().*( %*/)$",
+          delete = "^(/%*%s*)().-(%s*%*/)()$",
+          change = {
+            target = "^(/%*%s*)().-(%s*%*/)()$",
+          },
         },
       },
     },
-    -- ys
     init = function()
       -- stylua: ignore start
       vim.keymap.set("n", "gs", "<Plug>(nvim-surround-normal)aw", { noremap = true, desc = "Surround around word" })
@@ -38,31 +44,33 @@ return {
     "monaqa/dial.nvim",
     config = function()
       local augend = require("dial.augend")
-      require("dial.config").augends:register_group {
+      require("dial.config").augends:register_group({
         -- default augends used when no group name is specified
         default = {
-          augend.integer.alias.decimal,  -- nonnegative decimal number (0, 1, 2, 3, ...)
-          augend.integer.alias.hex,      -- nonnegative hex number  (0x01, 0x1a1f, etc.)
+          augend.integer.alias.decimal, -- nonnegative decimal number (0, 1, 2, 3, ...)
+          augend.integer.alias.hex, -- nonnegative hex number  (0x01, 0x1a1f, etc.)
           augend.date.alias["%Y/%m/%d"], -- date (2022/02/19, etc.)
           augend.constant.alias.bool,
           augend.semver.alias.semver,
         },
-      }
+      })
     end,
     keys = {
-      { "<C-a>",  function() require("dial.map").manipulate("increment", "normal") end,  mode = { "n" } },
-      { "<C-x>",  function() require("dial.map").manipulate("decrement", "normal") end,  mode = { "n" } },
-      { "g<C-a>", function() require("dial.map").manipulate("increment", "gnormal") end, mode = { "n" } },
-      { "g<C-x>", function() require("dial.map").manipulate("decrement", "gnormal") end, mode = { "n" } },
-      { "<C-a>",  function() require("dial.map").manipulate("increment", "visual") end,  mode = { "x" } },
-      { "<C-x>",  function() require("dial.map").manipulate("decrement", "visual") end,  mode = { "x" } },
-      { "g<C-a>", function() require("dial.map").manipulate("increment", "gvisual") end, mode = { "x" } },
-      { "g<C-x>", function() require("dial.map").manipulate("decrement", "gvisual") end, mode = { "x" } },
+      -- stylua: ignore start
+      { "<C-a>",  function() require("dial.map").manipulate("increment", "normal") end,  mode = { "n" }, desc = "Increment" },
+      { "<C-x>",  function() require("dial.map").manipulate("decrement", "normal") end,  mode = { "n" }, desc = "Decrement" },
+      { "g<C-a>", function() require("dial.map").manipulate("increment", "gnormal") end, mode = { "n" }, desc = "Increment" },
+      { "g<C-x>", function() require("dial.map").manipulate("decrement", "gnormal") end, mode = { "n" }, desc = "Decrement" },
+      { "<C-a>",  function() require("dial.map").manipulate("increment", "visual") end,  mode = { "x" }, desc = "Increment" },
+      { "<C-x>",  function() require("dial.map").manipulate("decrement", "visual") end,  mode = { "x" }, desc = "Decrement" },
+      { "g<C-a>", function() require("dial.map").manipulate("increment", "gvisual") end, mode = { "x" }, desc = "Increment" },
+      { "g<C-x>", function() require("dial.map").manipulate("decrement", "gvisual") end, mode = { "x" }, desc = "Decrement" },
+      -- stylua: ignore end
     },
   },
   {
-    -- https://github.com/NvChad/nvim-colorizer.lua
-    "NvChad/nvim-colorizer.lua",
+    -- https://github.com/catgoose/nvim-colorizer.lua
+    "catgoose/nvim-colorizer.lua",
     enabled = not vim.g.vscode,
     ft = {
       "css",
@@ -71,21 +79,20 @@ return {
       "qss",
       "slint",
     },
+    ---@module "colorizer"
+    ---@type colorizer.SetupOptions
     opts = {
       filetypes = { "*" },
       user_default_options = {
-        RGB = true,           -- #RGB hex codes
-        RRGGBB = true,        -- #RRGGBB hex codes
-        names = false,        -- "Name" codes like Blue or blue
-        RRGGBBAA = false,     -- #RRGGBBAA hex codes
-        AARRGGBB = false,     -- 0xAARRGGBB hex codes
-        rgb_fn = false,       -- CSS rgb() and rgba() functions
-        hsl_fn = false,       -- CSS hsl() and hsla() functions
-        css = false,          -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-        css_fn = false,       -- Enable all CSS *functions*: rgb_fn, hsl_fn
+        RGB = true, -- #RGB hex codes
+        RRGGBB = true, -- #RRGGBB hex codes
+        names = true, -- "Name" codes like Blue or blue
+        RRGGBBAA = false, -- #RRGGBBAA hex codes
+        AARRGGBB = false, -- 0xAARRGGBB hex codes
+        css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
         mode = "virtualtext", -- "foreground", "background", "virtualtext"
-        tailwind = false,
-        sass = { enable = false, parsers = { "css" } },
+        tailwind = true,
+        sass = { enable = true, parsers = { "css" } },
         virtualtext = "■",
         always_update = false,
       },
@@ -100,28 +107,20 @@ return {
     dependencies = {
       -- "hiasr/vim-zellij-navigator.nvim",
     },
-    -- stylua: ignore start
     keys = {
+      -- stylua: ignore start
       { "<C-h>", function() require("smart-splits").move_cursor_left() end,  desc = "Move left one pane" },
       { "<C-j>", function() require("smart-splits").move_cursor_down() end,  desc = "Move down one pane" },
       { "<C-k>", function() require("smart-splits").move_cursor_up() end,    desc = "Move up one pane" },
       { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Move right one pane" },
+      -- stylua: ignore end
     },
-    -- stylua: ignore end
     init = function()
-      vim.keymap.set("t", "<C-h>", function()
-        require("smart-splits").move_cursor_left()
-      end, { desc = "Move left one pane" })
-      vim.keymap.set("t", "<C-j>", function()
-        require("smart-splits").move_cursor_down()
-      end, { desc = "Move down one pane" })
-      vim.keymap.set("t", "<C-k>", function()
-        require("smart-splits").move_cursor_up()
-      end, { desc = "Move up one pane" })
-      vim.keymap.set("t", "<C-l>", function()
-        require("smart-splits").move_cursor_right()
-      end, { desc = "Move right one pane" })
-    end
+      vim.keymap.set("t", "<C-h>", function() require("smart-splits").move_cursor_left() end, { desc = "Move left one pane" })
+      vim.keymap.set("t", "<C-j>", function() require("smart-splits").move_cursor_down() end, { desc = "Move down one pane" })
+      vim.keymap.set("t", "<C-k>", function() require("smart-splits").move_cursor_up() end, { desc = "Move up one pane" })
+      vim.keymap.set("t", "<C-l>", function() require("smart-splits").move_cursor_right() end, { desc = "Move right one pane" })
+    end,
   },
   {
     --https://github.com/jake-stewart/multicursor.nvim
@@ -131,22 +130,19 @@ return {
       mc.setup()
 
       -- Add or skip cursor above/below the main cursor.
-      vim.keymap.set({ "n", "x" }, "<up>", function() mc.lineAddCursor(-1) end)
-      vim.keymap.set({ "n", "x" }, "<down>", function() mc.lineAddCursor(1) end)
-      vim.keymap.set({ "n", "x" }, "<leader><up>", function() mc.lineSkipCursor(-1) end)
-      vim.keymap.set({ "n", "x" }, "<leader><down>", function() mc.lineSkipCursor(1) end)
+      vim.keymap.set({ "n", "x" }, "<up>", function() mc.lineAddCursor(-1) end, { desc = "Add Cursor " })
+      vim.keymap.set({ "n", "x" }, "<down>", function() mc.lineAddCursor(1) end, { desc = "Add Cursor " })
+      vim.keymap.set({ "n", "x" }, "<leader><up>", function() mc.lineSkipCursor(-1) end, { desc = "Skip Cursor " })
+      vim.keymap.set({ "n", "x" }, "<leader><down>", function() mc.lineSkipCursor(1) end, { desc = "Skip Cursor " })
 
       -- Add or skip adding a new cursor by matching word/selection
-      vim.keymap.set({ "n", "x" }, "<leader>n", function() mc.matchAddCursor(1) end)
-      vim.keymap.set({ "n", "x" }, "<leader>N", function() mc.matchSkipCursor(1) end)
+      vim.keymap.set({ "n", "x" }, "<leader>n", function() mc.matchAddCursor(1) end, { desc = "Add Cursor on Next Word" })
+      vim.keymap.set({ "n", "x" }, "<leader>N", function() mc.matchSkipCursor(1) end, { desc = "Add Cursor on Previous Word" })
 
       -- Add and remove cursors with control + left click.
-      vim.keymap.set("n", "<c-leftmouse>", mc.handleMouse)
-      vim.keymap.set("n", "<c-leftdrag>", mc.handleMouseDrag)
-      vim.keymap.set("n", "<c-leftrelease>", mc.handleMouseRelease)
-
-      -- Disable and enable cursors.
-      -- vim.keymap.set({"n", "x"}, "<c-q>", mc.toggleCursor)
+      vim.keymap.set("n", "<C-leftmouse>", mc.handleMouse, { desc = "Add Cursor" })
+      vim.keymap.set("n", "<C-leftdrag>", mc.handleMouseDrag, { desc = "Add Cursor" })
+      vim.keymap.set("n", "<C-leftrelease>", mc.handleMouseRelease, { desc = "Finish Cursor Add" })
 
       -- Mappings defined in a keymap layer only apply when there are
       -- multiple cursors. This lets you have overlapping mappings.
@@ -154,9 +150,6 @@ return {
         -- Select a different cursor as the main one.
         layerSet({ "n", "x" }, "<left>", mc.prevCursor)
         layerSet({ "n", "x" }, "<right>", mc.nextCursor)
-
-        -- Delete the main cursor.
-        layerSet({ "n", "x" }, "<leader>x", mc.deleteCursor)
 
         -- Enable and clear cursors using escape.
         layerSet("n", "<esc>", function()
@@ -176,36 +169,22 @@ return {
       vim.api.nvim_set_hl(0, "MultiCursorDisabledCursor", { link = "Visual" })
       vim.api.nvim_set_hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
       vim.api.nvim_set_hl(0, "MultiCursorDisabledSign", { link = "SignColumn" })
-    end
+    end,
   },
   {
     -- https://github.com/MagicDuck/grug-far.nvim
     "MagicDuck/grug-far.nvim",
     enabled = not vim.g.vscode,
-    config = true,
     keys = {
-      {
-        "<leader>far",
-        function()
-          require("grug-far").open({ transient = true })
-        end,
-        desc = "Find/Replace",
-      },
-      {
-        "<C-M-h>",
-        function()
-          require("grug-far").open({ transient = true })
-        end,
-        desc = "Find/Replace",
-      },
-      {
-        "_r",
-        function()
-          require("grug-far").open({ transient = true })
-        end,
-        desc = "Find/Replace",
-      },
+      -- stylua: ignore start
+      { "<leader>far", function() require("grug-far").open({ transient = true }) end, desc = "Find/Replace", },
+      { "<C-M-h>",     function() require("grug-far").open({ transient = true }) end, desc = "Find/Replace", },
+      { "_r",          function() require("grug-far").open({ transient = true }) end, desc = "Find/Replace", },
+      -- stylua: ignore end
     },
+    ---@module "grug-far.nvim"
+    ---@type grug.far.Options
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       windowCreationCommand = "vsplit",
     },

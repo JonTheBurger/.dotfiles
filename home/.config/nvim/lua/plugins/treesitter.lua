@@ -61,6 +61,7 @@ return {
     opts = {
       select = {
         lookahead = true,
+        lookbehind = true,
         include_surrounding_whitespace = true,
         selection_modes = {
           ["@parameter.outer"] = "v", -- charwise

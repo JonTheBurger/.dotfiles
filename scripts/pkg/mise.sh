@@ -21,7 +21,7 @@ local::do_install() {
 
   # exe
   mkdir -p "${HOME}/.local/bin"
-  mv -i "/tmp/mise/"* "${HOME}/.local/bin/"
+  cp -ir "/tmp/mise/"* "${HOME}/.local/"
   chmod +x "${HOME}/.local/bin/mise"*
 
   # share

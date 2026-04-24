@@ -243,7 +243,20 @@ M.str = {
     str = str:gsub("^%s+", "")
     str = str:gsub("%s+$", "")
     return str
-  end
+  end,
+
+  ---Checks :match() on each string in  list
+  ---@param str string Value to check
+  ---@param list string[] List of patterns to match against
+  ---@return boolean True if str matches any list items.
+  match_any = function(str, list)
+    for _, pattern in ipairs(list) do
+      if str:match(pattern) then
+        return true
+      end
+    end
+    return false
+  end,
 }
 
 ----------------------------------------------------------------------------------------
@@ -761,8 +774,26 @@ M.os = {
 ---@section Pickers
 ----------------------------------------------------------------------------------------
 
-M.pickers = {
-  pick_breakpoints = function()
+M.pick = {
+
+  args = function()
+    return coroutine.create(function(coro)
+      vim.ui.input({
+        prompt = "Arguments: ",
+        default = require("config.fn").gbl.dap_exe_args,
+        completion = "file",
+      }, function(choice)
+        if choice then
+          require("config.fn").gbl.dap_exe_args = choice
+        else
+          choice = ""
+        end
+        coroutine.resume(coro, vim.split(choice, " +"))
+      end)
+    end)
+  end,
+
+  breakpoints = function()
     local bkps = M.bkpt.get()
 
     ---@type snacks.picker.Item[]
@@ -1000,15 +1031,6 @@ M.util = {
     end)
   end,
 
-  select_cmake_cwd = function()
-    local cwd = "${workspaceFolder}"
-    if vim.fn.filereadable("CMakePresets.json") == 0 then
-      cwd = vim.fn.expand("%:p:h")
-    end
-    dd(cwd)
-    return cwd
-  end,
-
   select_cmake_args = function()
     -- Reset table to original 3 values
     -- We do NOT reassign the table because we need the reference to stay the same
@@ -1112,22 +1134,6 @@ M.util = {
     end
 
     return self._root2registry[normalized]
-  end,
-
-  git_blame_toggle = function()
-    local window = -1
-    for _, win in ipairs(vim.api.nvim_list_wins()) do
-      local buf = vim.api.nvim_win_get_buf(win)
-      if vim.bo[buf].filetype == "gitsigns-blame" then
-        window = win
-        break
-      end
-    end
-    if window == -1 then
-      require("gitsigns").blame()
-    else
-      vim.api.nvim_win_close(window, true)
-    end
   end,
 
 }

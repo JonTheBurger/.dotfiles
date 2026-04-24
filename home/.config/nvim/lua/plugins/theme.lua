@@ -1,119 +1,92 @@
-local opts = require("grug-far.opts")
--- vim.api.nvim_get_hl(0, {name="WinSeparator"})
-local colors = {
-  bg = "#455574",
-  fg = "#bbc2cf",
-  red = "#ec5f67",
-  orange = "#ff8800",
-  yellow = "#ecbe7b",
-  green = "#4ef278",
-  blue = "#51afef",
-  cyan = "#0084ff",
-  violet = "#c489ff",
-  magenta = "#ff539e",
-  white = "#cccccc",
-  dark_grey = "#20303b",
-  brown = "#885a2c",
-}
-local clickable_widgets = false
+---@module "config.preferences"
+---@type ConfigPreferences
+local PREFERENCES = require("config.preferences")
+local CLICKABLE_WIDGETS = PREFERENCES.clickable_status_line
+local COLORS = PREFERENCES.colors
+local buffer_not_empty = function() return vim.fn.empty(vim.fn.expand("%:t")) ~= 1 end
+local hide_in_width = function() return vim.fn.winwidth(0) > 80 end
+local present = function(text) return "[" .. (text and text or "?") .. "]" end
 
-local conditions = {
-  buffer_not_empty = function()
-    return vim.fn.empty(vim.fn.expand("%:t")) ~= 1
-  end,
-  hide_in_width = function()
-    return vim.fn.winwidth(0) > 80
-  end,
-  check_git_workspace = function()
-    local filepath = vim.fn.expand("%:p:h")
-    local gitdir = vim.fn.finddir(".git", filepath .. ";")
-    return gitdir and #gitdir > 0 and #gitdir < #filepath
-  end,
-  is_cmake_project = function()
-    local cmake = require("cmake-tools")
-    return cmake.is_cmake_project() and cmake.has_cmake_preset()
-  end,
-}
-
-local function cmake_line()
-  local cmake_presets = io.open(vim.fn.getcwd() .. "/CMakePresets.json", "r")
-  if cmake_presets == nil then
-    return {}
-  end
-  io.close(cmake_presets)
-  local present = function(text)
-    return "[" .. (text and text or "?") .. "]"
-  end
-  local cmake = require("cmake-tools")
-
-  return {
-    {
-      function()
-        return present(cmake.get_configure_preset())
-      end,
-      icon = " ",
-      cond = conditions.is_cmake_project,
-      on_click = function(n, mouse)
-        if clickable_widgets ~= true then return end
-        if (n == 1) and (mouse == "l") then
-          cmake.select_configure_preset()
-        end
-      end,
-    },
-    {
-      function()
-        return present(cmake.get_build_target())
-      end,
-      icon = " ",
-      cond = cmake.is_cmake_project,
-      on_click = function(n, mouse)
-        if clickable_widgets ~= true then return end
-        if (n == 1) and (mouse == "l") then
-          cmake.select_build_target()
-        end
-      end,
-    },
-    {
-      function()
-        return ""
-      end,
-      cond = cmake.is_cmake_project,
-      on_click = function(n, mouse)
-        if clickable_widgets ~= true then return end
-        if (n == 1) and (mouse == "l") then
-          cmake.run()
-        end
-      end,
-    },
-    {
-      function()
-        return present(cmake.get_launch_target())
-      end,
-      cond = cmake.is_cmake_project,
-      on_click = function(n, mouse)
-        if clickable_widgets ~= true then return end
-        if (n == 1) and (mouse == "l") then
-          cmake.select_launch_target()
-        end
-      end,
-    },
-  }
-end
+---@module "lazy"
+---@type LazyPluginSpec[]
 return {
+  {
+    -- https://github.com/folke/which-key.nvim
+    "folke/which-key.nvim",
+    enabled = not vim.g.vscode,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    event = "VeryLazy",
+    keys = {
+      -- stylua: ignore start
+      { "<leader>hk", function() require("which-key").show() end, mode = { "n", "x" }, desc = "Hover Keymap" },
+      -- stylua: ignore end
+    },
+    ---@module "which-key"
+    ---@type wk.Config
+    ---@diagnostic disable-next-line: missing-fields
+    opts = {
+      sort = { "group" },
+      spec = {
+        { "<leader>C", group = "Copilot", icon = "" },
+        { "<leader>L", group = "Lua", icon = "" },
+        { "<leader>M", group = "Markdown", icon = "" },
+        { "<leader>W", group = "Wiki", icon = "" },
+        { "<leader>b", group = "Build", icon = "" },
+        { "<leader>c", group = "Create / C++", icon = "󰙲" },
+        { "<leader>d", group = "Debug / Delete", icon = "" },
+        { "<leader>f", group = "Find", icon = "" },
+        { "<leader>g", group = "Git", icon = "" },
+        { "<leader>gx", group = "Conflicts", icon = "" },
+        { "<leader>h", group = "Hover", icon = "󰉧" },
+        { "<leader>o", group = "Options", icon = "" },
+        { "<leader>s", group = "Search", icon = "" },
+        { "<leader>t", group = "Test", icon = "󰂖" },
+        { "<leader>T", group = "To Do", icon = "" },
+        { "<leader>w", group = "Warnings / Wrap", icon = "" },
+      },
+      icons = {
+        mappings = true,
+        rules = {
+          { pattern = "cmake", icon = "󰙲" },
+          { pattern = "coverage", icon = "" },
+          { pattern = "cursor", icon = "󰗧" },
+          { pattern = "debug", icon = "" },
+          { pattern = "delete", icon = "" },
+          { pattern = "diagnostic", icon = "" },
+          { pattern = "exe", icon = "" },
+          { pattern = "error", icon = "" },
+          { pattern = "find", icon = "" },
+          { pattern = "git", icon = "" },
+          { pattern = "pick", icon = "󰮫" },
+          { pattern = "replace", icon = "" },
+          { pattern = "run", icon = "" },
+          { pattern = "search", icon = "" },
+          { pattern = "select", icon = "󰮫" },
+          { pattern = "split", icon = "󰃻" },
+          { pattern = "swap", icon = "󰓡" },
+          { pattern = "test", icon = "󰂖" },
+          { pattern = "warn", icon = "" },
+          { pattern = "wrap", icon = "󰣁" },
+        },
+      },
+    },
+  },
   {
     -- https://github.com/mvllow/modes.nvim
     "mvllow/modes.nvim",
     opts = {
       colors = {
         bg = "", -- Optional bg param, defaults to Normal hl group
-        copy = "#f5c359",
-        delete = "#c75c6a",
-        change = "#c75c6a", -- Optional param, defaults to delete
-        format = "#c79585",
-        insert = "#78ccc5",
-        replace = "#245361",
-        select = "#9745be", -- Optional param, defaults to visual
-        visual = "#9745be",
+        copy = COLORS.cyan,
+        delete = COLORS.red,
+        change = COLORS.orange, -- Optional param, defaults to delete
+        format = COLORS.blue,
+        insert = COLORS.cyan,
+        replace = COLORS.green,
+        select = COLORS.magenta, -- Optional param, defaults to visual
+        visual = COLORS.purple,
       },
       line_opacity = 0.25,
     },
@@ -122,19 +95,21 @@ return {
     "sphamba/smear-cursor.nvim",
     opts = {
       enabled = false,
-      stiffness = 0.8,                      -- 0.6      [0, 1]
-      trailing_stiffness = 0.6,             -- 0.45     [0, 1]
-      stiffness_insert_mode = 0.7,          -- 0.5      [0, 1]
-      trailing_stiffness_insert_mode = 0.7, -- 0.5      [0, 1]
-      damping = 0.95,                       -- 0.85     [0, 1]
-      damping_insert_mode = 0.95,           -- 0.9      [0, 1]
-      distance_stop_animating = 0.5,        -- 0.1      > 0
+      stiffness = 0.8,
+      trailing_stiffness = 0.6,
+      stiffness_insert_mode = 0.7,
+      trailing_stiffness_insert_mode = 0.7,
+      damping = 0.95,
+      damping_insert_mode = 0.95,
+      distance_stop_animating = 0.5,
     },
   },
   -- https://github.com/catppuccin/nvim
   {
     "catppuccin/nvim",
     name = "catppuccin",
+    ---@module "catppuccin"
+    ---@type CatppuccinOptions
     opts = {
       transparent_background = false,
       term_colors = true,
@@ -170,12 +145,10 @@ return {
       colors = {}, -- Override default colors
       highlights = { -- Override highlight groups
         ["@comment.todo"] = { fmt = "bold" },
-        ["BlinkCmpGhostText"] = { fg = colors.bg },
-        ["DiffviewDiffDelete"] = { fg = colors.dark_grey },
-        ["FloatBorder"] = { bg = "none" },
+        ["BlinkCmpGhostText"] = { fg = COLORS.bg },
         ["Folded"] = { fg = "$light_grey" },
         ["NormalFloat"] = { bg = "none" },
-        ["NvimSurroundHighlight"] = { bg = colors.brown },
+        ["NvimSurroundHighlight"] = { bg = COLORS.brown },
         ["SpellBad"] = { sp = "$fg" },
         ["SpellCap"] = { sp = "$fg" },
         ["SpellLocal"] = { sp = "$fg" },
@@ -190,38 +163,6 @@ return {
         background = true, -- use background color for virtual text
       },
     },
-    init = function()
-      vim.diagnostic.config({
-        signs = {
-          text = {
-            [vim.diagnostic.severity.ERROR] = "",
-            [vim.diagnostic.severity.WARN] = "",
-            [vim.diagnostic.severity.HINT] = "⚑",
-            [vim.diagnostic.severity.INFO] = "",
-          },
-          linehl = {
-            [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-            [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-            [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-            [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-          },
-          numhl = {
-            [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
-            [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
-            [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
-            [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
-          },
-        },
-        virtual_lines = false,
-        virtual_text = true,
-      })
-      vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointCondition", { text = "🯄", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointRejected", { text = "ⓧ", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapLogPoint", { text = "✎", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticSignWarn", linehl = "DiagnosticSignError", numhl = "DiagnosticSignError" })
-      -- vim.api.nvim_set_hl(0, "SpellBad", { underdashed = true, bold = true, underdouble = true })
-    end,
     config = function(_, opts)
       require("onedark").setup(opts)
       require("onedark").load()
@@ -236,13 +177,13 @@ return {
     -- stylua: ignore start
     keys = {
       { "<leader>1", function() require("bufferline").go_to(1, true) end, desc = "GoTo Ordinal Buffer 1", },
-      { "<leader>2", function() require("bufferline").go_to(2, true) end, desc = "GoTo Ordinal Buffer 2", },
-      { "<leader>3", function() require("bufferline").go_to(3, true) end, desc = "GoTo Ordinal Buffer 3", },
-      { "<leader>4", function() require("bufferline").go_to(4, true) end, desc = "GoTo Ordinal Buffer 4", },
-      { "<leader>5", function() require("bufferline").go_to(5, true) end, desc = "GoTo Ordinal Buffer 5", },
-      { "<leader>6", function() require("bufferline").go_to(6, true) end, desc = "GoTo Ordinal Buffer 6", },
-      { "<leader>7", function() require("bufferline").go_to(7, true) end, desc = "GoTo Ordinal Buffer 7", },
-      { "<leader>8", function() require("bufferline").go_to(8, true) end, desc = "GoTo Ordinal Buffer 8", },
+      { "<leader>2", function() require("bufferline").go_to(2, true) end, desc = "which_key_ignore", },
+      { "<leader>3", function() require("bufferline").go_to(3, true) end, desc = "which_key_ignore", },
+      { "<leader>4", function() require("bufferline").go_to(4, true) end, desc = "which_key_ignore", },
+      { "<leader>5", function() require("bufferline").go_to(5, true) end, desc = "which_key_ignore", },
+      { "<leader>6", function() require("bufferline").go_to(6, true) end, desc = "which_key_ignore", },
+      { "<leader>7", function() require("bufferline").go_to(7, true) end, desc = "which_key_ignore", },
+      { "<leader>8", function() require("bufferline").go_to(8, true) end, desc = "which_key_ignore", },
       { "<leader>9", function() require("bufferline").go_to(9, true) end, desc = "GoTo Ordinal Buffer 9", },
       { "<leader><", function() require("bufferline").move(-1) end,       desc = "Move buffer to the left", },
       { "<leader>>", function() require("bufferline").move(1) end,        desc = "Move buffer to the right", },
@@ -252,9 +193,7 @@ return {
       options = {
         truncate_names = false,
         themable = true,
-        numbers = function(opts)
-          return string.format("%s%s", opts.id, opts.raise(opts.ordinal))
-        end,
+        numbers = function(opts) return string.format("%s%s", opts.id, opts.raise(opts.ordinal)) end,
         diagnostics = "nvim_lsp",
         indicator = {
           icon = "█",
@@ -285,12 +224,6 @@ return {
       { "zbirenbaum/copilot.lua" },
     },
     event = "VeryLazy",
-    init = function()
-      vim.opt.fillchars:append({
-        stl = "─",
-        stlnc = "─",
-      })
-    end,
     opts = {
       extensions = { "quickfix", "trouble", "overseer" },
       options = {
@@ -303,63 +236,65 @@ return {
           {
             "mode",
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                Snacks.picker.help()
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then Snacks.picker.help() end
             end,
           },
         },
-        lualine_b = cmake_line(),
+        lualine_b = {
+          {
+            function() return present(require("cmake-tools").get_configure_preset()) end,
+            icon = " ",
+            cond = require("cmake-tools").is_cmake_project,
+            on_click = function(n, mouse)
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("cmake-tools").select_configure_preset() end
+            end,
+          },
+          {
+            function() return present(require("cmake-tools").get_build_target()) end,
+            icon = " ",
+            cond = require("cmake-tools").is_cmake_project,
+            on_click = function(n, mouse)
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("cmake-tools").select_build_target() end
+            end,
+          },
+          {
+            function() return "" end,
+            cond = require("cmake-tools").is_cmake_project,
+            on_click = function(n, mouse)
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("cmake-tools").run() end
+            end,
+          },
+          {
+            function() return present(require("cmake-tools").get_launch_target()) end,
+            cond = require("cmake-tools").is_cmake_project,
+            on_click = function(n, mouse)
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("cmake-tools").select_launch_target() end
+            end,
+          },
+        },
         lualine_c = {
           {
-            function()
-              return "█"
-            end,
-            color = { fg = colors.blue },
+            function() return "█" end,
+            color = { fg = COLORS.blue },
             padding = { left = 0, right = 1 }, -- We don't need space before this
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                Snacks.terminal.toggle()
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then Snacks.terminal.toggle() end
             end,
           },
           {
             "o:encoding",
             fmt = string.upper,
-            cond = conditions.hide_in_width,
-            color = { fg = colors.green, gui = "bold" },
+            cond = hide_in_width,
+            color = { fg = COLORS.green, gui = "bold" },
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                require("grug-far").open({ transient = true })
-              end
-            end,
-          },
-          {
-            function()
-              local msg = ""
-              local clients = vim.lsp.get_clients()
-              if next(clients) == nil then
-                return msg
-              end
-              local ftype = vim.api.nvim_get_option_value("filetype", { buf = 0 })
-              for _, client in ipairs(clients) do
-                local filetypes = client.config.filetypes
-                if filetypes and vim.fn.index(filetypes, ftype) ~= -1 then
-                  return client.name
-                end
-              end
-              return msg
-            end,
-            icon = "󰡱",
-            color = { fg = colors.white },
-            on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                require("outline").open()
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("grug-far").open({ transient = true }) end
             end,
           },
           {
@@ -367,44 +302,53 @@ return {
             show_colors = true,
           },
           {
+            function()
+              local clients = vim.lsp.get_clients()
+              for _, client in ipairs(clients) do
+                if client.name ~= "copilot" then return "" .. client.name end
+              end
+              return ""
+            end,
+            icon = "󰡱",
+            color = { fg = COLORS.white },
+            on_click = function(n, mouse)
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("outline").open() end
+            end,
+          },
+          {
             "%=",
           },
           {
             "branch",
             icon = "",
-            color = { fg = colors.violet, gui = "bold" },
-            on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                vim.cmd("DiffviewOpen")
-              elseif (n == 1) and (mouse == "r") then
-                vim.cmd("DiffviewClose")
-              end
+            color = { fg = COLORS.violet, gui = "bold" },
+            on_click = function(n, _mouse)
+              if CLICKABLE_WIDGETS ~= true then return end
+              if n == 1 then vim.cmd("CodeDiff") end
             end,
           },
           {
             "diff",
             symbols = { added = " ", modified = "󰝤 ", removed = " " },
             diff_color = {
-              added = { fg = colors.green },
-              modified = { fg = colors.orange },
-              removed = { fg = colors.red },
+              added = { fg = COLORS.green },
+              modified = { fg = COLORS.orange },
+              removed = { fg = COLORS.red },
             },
-            cond = conditions.hide_in_width,
+            cond = hide_in_width,
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                require("gitsigns").blame()
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then require("gitsigns").blame() end
             end,
           },
         },
         lualine_x = {
           {
             "filesize",
-            cond = conditions.buffer_not_empty,
+            cond = buffer_not_empty,
           },
-          { "progress", color = { fg = colors.fg, gui = "bold" } },
+          { "progress", color = { fg = COLORS.fg, gui = "bold" } },
           { "location" },
         },
         lualine_y = {
@@ -413,37 +357,31 @@ return {
             sources = { "nvim_diagnostic" },
             symbols = { error = " ", warn = " ", info = " " },
             diagnostics_color = {
-              color_error = { fg = colors.red },
-              color_warn = { fg = colors.yellow },
-              color_info = { fg = colors.cyan },
+              color_error = { fg = COLORS.red },
+              color_warn = { fg = COLORS.yellow },
+              color_info = { fg = COLORS.cyan },
             },
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                vim.cmd("Trouble diagnostics toggle win.position=right")
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then vim.cmd("Trouble diagnostics toggle win.position=right") end
             end,
           },
           {
             "overseer",
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                vim.cmd("OverseerToggle")
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then vim.cmd("OverseerToggle") end
             end,
           },
         },
         lualine_z = {
           {
             "filename",
-            cond = conditions.buffer_not_empty,
+            cond = buffer_not_empty,
             color = { gui = "bold" },
             on_click = function(n, mouse)
-              if clickable_widgets ~= true then return end
-              if (n == 1) and (mouse == "l") then
-                vim.cmd("UndotreeToggle")
-              end
+              if CLICKABLE_WIDGETS ~= true then return end
+              if (n == 1) and (mouse == "l") then vim.cmd("UndotreeToggle") end
             end,
           },
         },

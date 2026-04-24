@@ -59,11 +59,10 @@ vim.keymap.set("n", "<", ":bprevious<CR>")
 -- Tab Through Tabs
 vim.keymap.set({ "n", "i" }, "<C-TAB>", ":tabnext<CR>")
 vim.keymap.set({ "n", "i" }, "<C-S-TAB>", ":tabprevious<CR>")
-vim.keymap.set("n", "<leader><C-TAB>", ":tabnew<CR>")
 vim.keymap.set("n", "<leader>c<TAB>", ":tabnew<CR>", { desc = "New Tab", noremap = true })
 vim.keymap.set("n", "<leader><TAB>", "gt", { desc = "Next Tab", noremap = true })
-vim.keymap.set("n", "<leader><S-TAB>", "gT", { desc = "Next Previous", noremap = true })
-vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { desc = "TabClose", noremap = true })
+vim.keymap.set("n", "<leader><S-TAB>", "gT", { desc = "Previous Tab", noremap = true })
+vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { desc = "Tab Close", noremap = true })
 
 -- Resize Splits with Arrows
 vim.keymap.set({ "n", "i" }, "<C-Left>", function()
@@ -147,11 +146,6 @@ end, { desc = "Go to next error" })
 vim.keymap.set("n", "[e", function()
   vim.diagnostic.jump({ count = 1, float = true, severity = vim.diagnostic.severity.ERROR })
 end, { desc = "Go to previous error" })
-
-vim.keymap.set("n", "<leader>JJ", function()
-  local client_id = vim.lsp.start_client({ name = "tcp-test", connect = { address = "127.0.0.1", port = 4321 } })
-  vim.lsp.buf_attach_client(0, client_id)
-end, {})
 
 -- Lua
 vim.keymap.set("n", "<leader>LL", ":lua =", { desc = ":lua =" })

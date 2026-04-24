@@ -1,48 +1,17 @@
----@diagnostic disable:undefined-global
-local MB = 1024 * 1024
-local cfg_dir = vim.fn.stdpath("config")
-
 local downrank_undesirable_paths = function(item)
-  if item.file and item.file:match("%.test") then
-    item.score_mul = 0.1
-  end
-  if item.file and item.file:match("CMake/") then
-    item.score_mul = 0.01
-  end
-  if item.file and item.file:match("tools") then
-    item.score_mul = 0.01
-  end
-  if item.file and item.file:match("Test") then
-    item.score_mul = 0.001
-  end
-  if item.file and item.file:match("ibraries") then
-    item.score_mul = 0.0001
-  end
-  if item.file and item.file:match("xternal") then
-    item.score_mul = 0.0001
-  end
-  if item.file and item.file:match("%.mock") then
-    item.score_mul = 0.00001
-  end
-  if item.file and item.file:match("Mock") then
-    item.score_mul = 0.000001
-  end
+  if item.file and item.file:match("%.test") then item.score_mul = 0.1 end
+  if item.file and item.file:match("CMake/") then item.score_mul = 0.01 end
+  if item.file and item.file:match("tools") then item.score_mul = 0.01 end
+  if item.file and item.file:match("Test") then item.score_mul = 0.001 end
+  if item.file and item.file:match("ibraries") then item.score_mul = 0.0001 end
+  if item.file and item.file:match("xternal") then item.score_mul = 0.0001 end
+  if item.file and item.file:match("%.mock") then item.score_mul = 0.00001 end
+  if item.file and item.file:match("Mock") then item.score_mul = 0.000001 end
 end
 
+---@module "lazy"
+---@type LazyPluginSpec[]
 return {
-  {
-    -- https://github.com/folke/which-key.nvim
-    "folke/which-key.nvim",
-    enabled = not vim.g.vscode,
-    event = "VeryLazy",
-    opts = {
-      sort = { "alphanum", "local", "order", "group", "mod" },
-      ---@type wk.Spec
-      spec = {
-        { "<leader>gx", group = "git conflict resolution", icon = "" }
-      },
-    },
-  },
   {
     "folke/snacks.nvim",
     priority = 1000,
@@ -51,28 +20,27 @@ return {
     dependencies = {
       "folke/todo-comments.nvim",
     },
-    -- stylua: ignore start
     keys = {
-      { "<C-\\>",          function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
-      { "<C-F>",           function() Snacks.picker.grep({ hidden = true, transform = downrank_undesirable_paths }) end,                   desc = "Grep" },
-      { "<C-p>",           function() Snacks.picker.files({ hidden = true, transform = downrank_undesirable_paths }) end, desc = "Find Files" },
-      { "<C-M-p>",         function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
-      { "<C-M-i>",         function() Snacks.picker.icons() end,                  desc = "Icons/Emoji",              mode = "i" },
-      { "<C-S-p>",         function() Snacks.picker.commands() end,               desc = "Commands" },
-
+      -- stylua: ignore start
+      { "<C-\\>",  function() Snacks.terminal.toggle() end,               mode = { "n", "t", },              desc = "Toggle Terminal", },
+      { "<C-F>",   function() Snacks.picker.grep({ hidden = true, transform = downrank_undesirable_paths }) end,                   desc = "Grep" },
+      { "<C-p>",   function() Snacks.picker.files({ hidden = true, transform = downrank_undesirable_paths }) end, desc = "Find Files" },
+      { "<C-M-p>", function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
+      { "<C-M-i>", function() Snacks.picker.icons() end,                  desc = "Icons/Emoji",              mode = "i" },
+      { "<C-S-p>", function() Snacks.picker.commands() end,               desc = "Commands" },
       -- Top Pickers & Explorer
-      { "<leader>,",       function() Snacks.picker.buffers() end,                desc = "Buffers" },
-      { "<leader>:",       function() Snacks.picker.command_history() end,        desc = "Command History" },
-      { "<leader>sn",      function() Snacks.picker.notifications() end,          desc = "Notification History" },
-      { "<leader>e",       function() Snacks.explorer() end,                      desc = "File Explorer" },
+      { "<leader>,",       function() Snacks.picker.buffers() end,         desc = "Buffers" },
+      { "<leader>:",       function() Snacks.picker.command_history() end, desc = "Command History" },
+      { "<leader>sn",      function() Snacks.picker.notifications() end,   desc = "Notification History" },
+      { "<leader>e",       function() Snacks.explorer() end,               desc = "File Explorer" },
       -- find
       { "<leader>fb",      function() Snacks.picker.buffers() end,                desc = "Buffers" },
-      { "<leader>fB",      function() require("config.fn").pickers.pick_breakpoints() end, desc = "Breakpoints" },
-      { "<leader>fc",      function() Snacks.picker.files({ cwd = cfg_dir }) end, desc = "Find Config File" },
+      { "<leader>fc",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
       { "<leader>ff",      function() Snacks.picker.smart({transform = downrank_undesirable_paths}) end,                desc = "Find Files" },
       { "<leader>fg",      function() Snacks.picker.git_files({transform = downrank_undesirable_paths}) end,              desc = "Find Git Files" },
       { "<leader>fp",      function() Snacks.picker.projects() end,               desc = "Projects" },
       { "<leader>fr",      function() Snacks.picker.recent() end,                 desc = "Recent" },
+      { "<leader>fB",      function() require("config.fn").pick.breakpoints() end, desc = "Breakpoints" },
       -- git
       { "<leader>gB",      function() Snacks.picker.git_branches() end,           desc = "Git Branches" },
       { "<leader>gl",      function() Snacks.picker.git_log() end,                desc = "Git Log" },
@@ -86,9 +54,7 @@ return {
         "<leader>sg",
         function()
           vim.ui.input({ prompt = "Enter filetype (e.g., py, js): " }, function(input)
-            if input then
-              Snacks.picker.grep({ ft = input, transform = downrank_undesirable_paths })
-            end
+            if input then Snacks.picker.grep({ ft = input, transform = downrank_undesirable_paths }) end
           end)
         end,
         desc = "Grep by File Type"
@@ -117,7 +83,7 @@ return {
       { "<leader>sq",      function() Snacks.picker.qflist() end,                 desc = "Quickfix List" },
       { "<leader>sR",      function() Snacks.picker.resume() end,                 desc = "Resume" },
       { "<leader>su",      function() Snacks.picker.undo() end,                   desc = "Undo History" },
-      { "<leader>st",      function () Snacks.picker.todo_comments({ keywords = { "TODO", "HACK", "WARNING", "BUG", "NOTE", "INFO", "PERF", "ERROR" } }) end, desc = "Todo Comment Tags" },
+      { "<leader>st",      function () Snacks.picker.todo_comments({ keywords = { "TODO", "HACK", "WARN", "WARNING", "BUG", "NOTE", "INFO", "PERF", "ERROR" } }) end, desc = "Todo Comment Tags" },
       { "<leader>sT",      function() Snacks.picker.todo_comments() end, desc = "Todo" },
       { "<leader>fC",      function() Snacks.picker.colorschemes() end,           desc = "Colorschemes" },
       -- LSP
@@ -129,18 +95,21 @@ return {
       { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,            desc = "LSP Symbols" },
       { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end,  desc = "LSP Workspace Symbols" },
       { "<leader>gw",      function() Snacks.gitbrowse({ commit = vim.fn.system("git rev-parse HEAD"), }) end,   desc = "Git web view" },
+      -- stylua: ignore end
     },
-    -- stylua: ignore end
     ---@module "snacks"
     ---@type snacks.Config
     opts = {
-      ---@class snacks.bigfile.Config
+      ---@type snacks.bigfile.Config
+      ---@diagnostic disable-next-line: missing-fields
       bigfile = {
         enabled = true,
         notify = true,
-        size = 1.5 * MB,
+        size = 1.5 * 1024 * 1024,
         line_length = 1000,
       },
+      ---@type snacks.dashboard.Config
+      ---@diagnostic disable-next-line: missing-fields
       dashboard = {
         enabled = not vim.g.vscode,
         sections = {
@@ -151,9 +120,10 @@ return {
           { section = "startup" },
         },
       },
-      debug = { enabled = false },
+      ---@type snacks.explorer.Config
       explorer = {
         enabled = not vim.g.vscode,
+        trash = true,
         hidden = true,
         replace_netrw = true,
         exclude = {
@@ -161,8 +131,8 @@ return {
           ".venv/*",
         },
       },
-      ---@class snacks.gitbrowse.Config
-      ---@field url_patterns? table<string, table<string, string|fun(fields:snacks.gitbrowse.Fields):string>>
+      ---@type snacks.gitbrowse.Config
+      ---@diagnostic disable-next-line: missing-fields
       gitbrowse = {
         notify = true, -- show notification on open
         ---@type "repo" | "branch" | "file" | "commit" | "permalink"
@@ -176,7 +146,7 @@ return {
           },
         },
       },
-      ---@class snacks.picker.Config
+      ---@type snacks.picker.Config
       picker = {
         enabled = not vim.g.vscode,
         debug = {
@@ -186,14 +156,12 @@ return {
         --- @param lhs snacks.picker.Item
         --- @param rhs snacks.picker.Item
         --- @return boolean
-        sort = function(lhs, rhs)
-          return lhs.score > rhs.score
-        end,
+        sort = function(lhs, rhs) return lhs.score > rhs.score end,
         ui_select = true,
         -- https://github.com/folke/snacks.nvim/discussions/1798
         -- https://github.com/folke/snacks.nvim/discussions/1854
         actions = {
-          open_or_pick = function(picker, item, action)
+          open_or_pick = function(picker, item, _action)
             -- 1 file open, plus 2 splits for explorer + search
             if not item.dir and #vim.api.nvim_tabpage_list_wins(0) > 3 then
               picker:action("pick_win")
@@ -250,7 +218,7 @@ return {
           explorer = {
             hidden = true,
             layout = {
-              auto_hide = {"input"},
+              auto_hide = { "input" },
             },
             win = {
               list = {
@@ -259,14 +227,15 @@ return {
                   ["<c-c>"] = false,
                   ["<c-f>"] = "toggle_focus",
                   ["C"] = "tcd", -- tab change dir
-                  ['<C-w>w'] = { '<cmd>wincmd 2w<CR>', expr = true },
+                  ["<C-w>w"] = { "<cmd>wincmd 2w<CR>", expr = true },
                 },
-                ---@class snacks.win.Config
+                ---@type snacks.win.Config
+                ---@diagnostic disable-next-line: missing-fields
                 wo = {
                   number = true,
                   relativenumber = true,
                 },
-              }
+              },
             },
           },
         },
@@ -275,25 +244,39 @@ return {
           history_bonus = false,
         },
       },
+      ---@type snacks.image.Config
+      ---@diagnostic disable-next-line: missing-fields
       image = {
         enabled = not vim.g.vscode,
         markdown = {
           float = true,
         },
       },
+      ---@type snacks.input.Config
+      ---@diagnostic disable-next-line: missing-fields
       input = { enabled = not vim.g.vscode },
+      ---@type snacks.quickfile.Config
+      ---@diagnostic disable-next-line: missing-fields
       quickfile = { enabled = true },
+      ---@type snacks.scroll.Config
+      ---@diagnostic disable-next-line: missing-fields
       scroll = { enabled = not vim.g.vscode },
+      ---@type snacks.statuscolumn.Config
       ---@diagnostic disable-next-line missing-fields
       statuscolumn = {
         enabled = not vim.g.vscode,
         left = { "mark", "sign" },
         right = { "fold", "git" },
         folds = { open = true },
+        refresh = 100,
       },
+      ---@type snacks.terminal.Config
       terminal = { enabled = not vim.g.vscode },
+      ---@type snacks.notifier.Config
+      ---@diagnostic disable-next-line: missing-fields
       notifier = { enabled = not vim.g.vscode },
-      rename = { enabled = not vim.g.vscode },
+      ---@type snacks.win.Config
+      ---@diagnostic disable-next-line: missing-fields
       win = { enabled = not vim.g.vscode },
       styles = {
         -- Disable ugly header on toggle terminal
@@ -304,12 +287,10 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          _G.dd = function(...)
-            Snacks.debug.inspect(...)
-          end
-          _G.bt = function()
-            Snacks.debug.backtrace()
-          end
+          ---@diagnostic disable-next-line: global-in-non-module
+          _G.dd = function(...) Snacks.debug.inspect(...) end
+          ---@diagnostic disable-next-line: global-in-non-module
+          _G.bt = function() Snacks.debug.backtrace() end
           vim.print = _G.dd
 
           vim.g.snacks_animate = false
@@ -325,68 +306,66 @@ return {
           Snacks.toggle.option("list", { name = "Visible Whitespace" }):map("<leader>o ")
           Snacks.toggle.option("wrap", { name = "Wrap Long Lines" }):map("<leader>ow")
           Snacks.toggle.indent():map("<leader>oz")
-          Snacks.toggle.new({
-            id = "virtual text",
-            name = "DAP Virtual Text Toggle",
-            get = function()
-              return true
-            end,
-            set = function(state)
-              require("dap-view").virtual_text_toggle()
-            end,
-          }):map("<leader>ov")
-          Snacks.toggle.new({
-            id = "git blame",
-            name = "Git Blame",
-            get = function()
-              return require("gitsigns.config").config.current_line_blame
-            end,
-            set = function(state)
-              require("gitsigns").toggle_current_line_blame(state)
-            end,
-          }):map("<leader>ob")
-          Snacks.toggle.new({
-            id = "animate",
-            name = "Animate",
-            get = function()
-              return vim.g.snacks_animate == true
-            end,
-            set = function(state)
-              if state then
-                vim.g.snacks_animate = true
-                require("smear_cursor").enabled = true
-              else
-                vim.g.snacks_animate = false
-                require("smear_cursor").enabled = false
-              end
-            end,
-          }):map("<leader>oa")
-          Snacks.toggle.new({
-            id = "theme",
-            name = "Light Theme",
-            get = function()
-              return vim.g.colors_name ~= "onedark"
-            end,
-            set = function(state)
-              if state then
-                vim.cmd.colorscheme("catppuccin-latte")
-              else
-                vim.cmd.colorscheme("onedark")
-              end
-            end,
-          }):map("<leader>ol")
-          Snacks.toggle.new({
-            id = "markdown",
-            name = "Markdown Preview",
-            get = function() return require("render-markdown").get() end,
-            set = function(state)
-              if state then
-                require("render-markdown").enable()
-              else
-                require("render-markdown").disable()
-              end
-            end,
-          }):map("<leader>om")
+          Snacks.toggle
+            .new({
+              id = "virtual text",
+              name = "DAP Virtual Text Toggle",
+              get = function() return true end,
+              set = function(_state) require("dap-view").virtual_text_toggle() end,
+            })
+            :map("<leader>ov")
+          Snacks.toggle
+            .new({
+              id = "git blame",
+              name = "Git Blame",
+              get = function() return require("gitsigns.config").config.current_line_blame end,
+              set = function(state) require("gitsigns").toggle_current_line_blame(state) end,
+            })
+            :map("<leader>ob")
+          Snacks.toggle
+            .new({
+              id = "animate",
+              name = "Animate",
+              get = function() return vim.g.snacks_animate == true end,
+              set = function(state)
+                if state then
+                  vim.g.snacks_animate = true
+                  require("smear_cursor").enabled = true
+                else
+                  vim.g.snacks_animate = false
+                  require("smear_cursor").enabled = false
+                end
+              end,
+            })
+            :map("<leader>oa")
+          Snacks.toggle
+            .new({
+              id = "theme",
+              name = "Light Theme",
+              get = function() return vim.g.colors_name ~= "onedark" end,
+              set = function(state)
+                if state then
+                  vim.cmd.colorscheme("catppuccin-latte")
+                else
+                  vim.cmd.colorscheme("onedark")
+                end
+              end,
+            })
+            :map("<leader>ol")
+          Snacks.toggle
+            .new({
+              id = "markdown",
+              name = "Markdown Preview",
+              get = function() return require("render-markdown").get() end,
+              set = function(state)
+                if state then
+                  require("render-markdown").enable()
+                else
+                  require("render-markdown").disable()
+                end
+              end,
+            })
+            :map("<leader>om")
         end,
       })
     end,

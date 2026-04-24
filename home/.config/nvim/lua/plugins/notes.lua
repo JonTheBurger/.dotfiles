@@ -1,27 +1,17 @@
+---@type LazyPluginSpec[]
 return {
   {
-    -- https://github.com/iamcco/markdown-preview.nvim
-    "iamcco/markdown-preview.nvim",
-    enabled = not vim.g.vscode,
-    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && yarn install",
-    keys = {
-      { "<leader>MP", "<cmd>MarkdownPreview<CR>",       desc = "MarkdownPreview" },
-      { "<leader>MS", "<cmd>MarkdownPreviewStop<CR>",   desc = "MarkdownPreviewStop" },
-      { "<leader>MT", "<cmd>MarkdownPreviewToggle<CR>", desc = "MarkdownPreviewToggle" },
-    },
-    init = function()
-      vim.g.mkdp_filetypes = { "markdown" }
-    end,
-    ft = { "markdown" },
-  },
-  {
+    -- https://github.com/MeanderingProgrammer/render-markdown.nvim
     "MeanderingProgrammer/render-markdown.nvim",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
     },
     ft = { "codecompanion", "markdown" },
-    opts = {},
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {
+      enabled = false,
+    },
   },
 }

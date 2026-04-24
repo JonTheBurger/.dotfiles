@@ -1,0 +1,19 @@
+---@meta
+
+---@class overseer.Api
+---@field setup fun(opts?: overseer.SetupOpts)
+---@field enable_dap fun(enabled?: boolean)
+---@field new_task fun(def: overseer.TaskDefinition): overseer.Task
+---@field toggle fun(opts: overseer.WindowOpts?)
+---@field open fun(opts: overseer.WindowOpts?)
+---@field close fun()
+---@field list_tasks fun(opts: overseer.ListTaskOpts?): overseer.Task[]
+---@field run_task fun(opts: overseer.TemplateRunOpts?, callback: fun(task: overseer.Task?, err: string?))
+---@field preload_task_cache fun(opts: overseer.SearchParams?, cb: fun()?)
+---@field clear_task_cache fun(opts: overseer.SearchParams?)
+---@field run_action fun(task: overseer.Task, name: string?)
+---@field add_template_hook fun(opts: overseer.HookOptions?, hook: fun(task_defn: overseer.TaskDefinition, util: overseer.TaskUtil))
+---@field remove_template_hook fun(opts: overseer.HookOptions?, hook: fun(task_defn: overseer.TaskDefinition, util: overseer.TaskUtil))
+---@field register_template fun(defn: overseer.TemplateDefinition|overseer.TemplateProvider)
+---@field register_alias fun(name: string, components: overseer.Serialized[], override: boolean?)
+---@field create_task_output_view fun(winid: integer?, opts: overseer.TaskViewOpts?)

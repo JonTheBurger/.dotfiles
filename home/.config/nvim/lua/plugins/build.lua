@@ -3,17 +3,18 @@ return {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
     enabled = not vim.g.vscode,
-    -- version = "<2.0.0",
     keys = {
-      { "<leader>bx", "<cmd>OverseerRun<CR>",    desc = "Execute Task" },
-      { "<leader>bo", "<cmd>OverseerToggle<CR>", desc = "Task Output" },
-      { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
-      { "_o",  "<cmd>OverseerToggle<CR>", desc = "Task Output" },
+      -- stylua: ignore start
+      { "<leader>bx", "<cmd>OverseerRun<CR>",    desc = "Execute" },
+      { "<leader>bo", "<cmd>OverseerToggle<CR>", desc = "Toggle Output" },
+      { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Toggle Output" },
+      { "_o",         "<cmd>OverseerToggle<CR>", desc = "Toggle Output" },
+      -- stylua: ignore end
     },
-    ---@type overseer.Config
+    ---@module "overseer"
+    ---@type overseer.SetupOpts
     opts = {
-      -- templates = { "make", "vscode", "cargo", "just", "user.run_script", },
-      templates = { "builtin", "user.run_script", },
+      templates = { "builtin", "user.run_script" },
       task_list = {
         max_width = { 100, 0.4 },
         min_width = { 30, 0.2 },
@@ -30,27 +31,26 @@ return {
         },
       },
     },
-    config = function(_, opts)
+    config = function(opts)
+      ---@type overseer.Api
       local overseer = require("overseer")
       overseer.setup(opts)
+
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/reference.md#add_template_hookopts-hook
-      overseer.add_template_hook(
-        { name = "^make.*", },
-        function(task_defn, util)
-          util.add_component(task_defn, { "default" })
-          util.add_component(task_defn, { "unique" })
-          util.add_component(task_defn, { "on_output_parse", problem_matcher = "$gcc" })
-          util.add_component(task_defn, { "on_result_diagnostics", remove_on_restart=true })
-          util.add_component(task_defn, { "on_result_diagnostics_trouble" })
-          util.add_component(task_defn, { "on_complete_dispose" })
-        end)
+      overseer.add_template_hook({ name = "^make.*" }, function(task_defn, util)
+        util.add_component(task_defn, { "default" })
+        util.add_component(task_defn, { "unique" })
+        util.add_component(task_defn, { "on_output_parse", problem_matcher = "$gcc" })
+        util.add_component(task_defn, { "on_result_diagnostics", remove_on_restart = true })
+        util.add_component(task_defn, { "on_result_diagnostics_trouble" })
+        util.add_component(task_defn, { "on_complete_dispose" })
+      end)
 
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/tutorials.md#run-a-file-on-save
       vim.api.nvim_create_user_command("Rerun", function()
-        local overseer = require("overseer")
-        overseer.run_template({ name = "run script" }, function(task)
+        overseer.run_task({ name = "run script" }, function(task)
           if task then
-            task:add_component({ "restart_on_save", paths = {vim.fn.expand("%:p")} })
+            task:add_component({ "restart_on_save", paths = { vim.fn.expand("%:p") } })
             local main_win = vim.api.nvim_get_current_win()
             overseer.run_action(task, "open hsplit")
             vim.api.nvim_set_current_win(main_win)
@@ -69,16 +69,28 @@ return {
       { "nvim-lua/plenary.nvim" },
     },
     ft = { "cmake", "c", "cpp" },
+    keys = {
+      -- stylua: ignore start
+      { "<leader>bc", "<cmd>CMakeSelectConfigurePreset<CR>", desc = "CMake Select Configure Preset" },
+      { "<leader>bp", "<cmd>CMakeSelectBuildPreset<CR>",     desc = "CMake Select Build Preset" },
+      { "<leader>bt", "<cmd>CMakeSelectBuildTarget<CR>",     desc = "CMake Launch Target" },
+      { "<leader>bl", "<cmd>CMakeSelectLaunchTarget<CR>",    desc = "CMake Launch Target" },
+      { "<leader>bd", "<cmd>CMakeDebug<CR>",                 desc = "CMake Debug" },
+      { "<leader>br", "<cmd>CMakeRun<CR>",                   desc = "CMake Run" },
+      { "<leader>bb", "<cmd>CMakeBuild<CR>",                 desc = "CMake Build" },
+      -- stylua: ignore end
+    },
     opts = {
       cmake_regenerate_on_save = false,
       cmake_compile_commands_options = {
-        action = "lsp", -- "soft_link"
+        action = "soft_link", -- "lsp"
         target = vim.uv.cwd,
       },
       cmake_runner = {
         name = "overseer",
         opts = {
-          ---@class overseer.TaskDefinition
+          ---@type overseer.TaskDefinition
+          ---@diagnostic disable-next-line: missing-fields
           new_task_opts = {
             name = "cmake run",
             components = {
@@ -87,39 +99,27 @@ return {
             },
           },
           ---@param task overseer.TaskDefinition
-          on_new_task = function(task)
-            require("overseer").open({ enter = false, direction = "bottom" })
-          end,
+          on_new_task = function(_task) require("overseer").open({ enter = false, direction = "bottom" }) end,
         },
       },
       cmake_executor = {
         name = "overseer",
         opts = {
-          ---@class overseer.TaskDefinition
+          ---@type overseer.TaskDefinition
+          ---@diagnostic disable-next-line: missing-fields
           new_task_opts = {
             name = "cmake build",
             components = {
               { "default" },
               { "unique" },
               { "on_output_parse", problem_matcher = "$gcc" },
-              { "on_result_diagnostics", remove_on_restart=true },
+              { "on_result_diagnostics", remove_on_restart = true },
             },
           },
           ---@param task overseer.TaskDefinition
-          on_new_task = function(task)
-            require("overseer").open({ enter = false, direction = "bottom" })
-          end,
+          on_new_task = function(_task) require("overseer").open({ enter = false, direction = "bottom" }) end,
         },
       },
-    },
-    keys = {
-      { "<leader>bc", "<cmd>CMakeSelectConfigurePreset<CR>", desc = "CMake Select Configure Preset" },
-      { "<leader>bp", "<cmd>CMakeSelectBuildPreset<CR>", desc = "CMake Select Build Preset" },
-      { "<leader>bt", "<cmd>CMakeSelectBuildTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>bl", "<cmd>CMakeSelectLaunchTarget<CR>", desc = "CMake Launch Target" },
-      { "<leader>bd", "<cmd>CMakeDebug<CR>", desc = "CMake Debug" },
-      { "<leader>br", "<cmd>CMakeRun<CR>", desc = "CMake Run" },
-      { "<leader>bb", "<cmd>CMakeBuild<CR>", desc = "CMake Build" },
     },
   },
 }
