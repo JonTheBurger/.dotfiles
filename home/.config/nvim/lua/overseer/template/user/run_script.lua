@@ -7,13 +7,13 @@ return {
     if vim.bo.filetype == "go" then
       cmd = { "go", "run", file }
     elseif vim.bo.filetype == "cmake" then
-      cmd = { "cmake", "-P", file}
+      cmd = { "cmake", "-P", file }
     elseif vim.bo.filetype == "python" then
-      cmd = { "python", file}
+      cmd = { "python", file }
     elseif vim.bo.filetype == "lua" then
-      cmd = { "lua", file}
+      cmd = { "lua", file }
     elseif vim.bo.filetype == "c" then
-      cmd = "cc " .. file .. " && ./a.out"
+      cmd = { "cc " .. file .. " && ./a.out" }
     elseif vim.bo.filetype == "cpp" then
       cmd = "c++ -g -std=c++23 " .. file .. " && ./a.out"
     elseif vim.bo.filetype == "nix" then

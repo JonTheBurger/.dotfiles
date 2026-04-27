@@ -1,3 +1,4 @@
+---@type vim.lsp.Config
 local cmd = {
   "clangd",
   -- "--experimental-modules-support",
@@ -7,7 +8,8 @@ local cmd = {
   "--header-insertion=iwyu",
   "--header-insertion-decorators",
   "--enable-config",
-  "-j", "4",
+  "-j",
+  "4",
   "--log=error",
   "--pretty",
 }
@@ -15,13 +17,11 @@ local cmd = {
 if vim.fn.filereadable("compile_commands.json") == 1 then
   table.insert(cmd, "--compile-commands-dir=.")
 
-  if require("config.fn").fs.file_contains("compile_commands.json", "arm-none-eabi") then
-    table.insert(cmd, "--query-driver=/usr/bin/arm-none-eabi-*")
-  end
+  if require("config.fn").fs.file_contains("compile_commands.json", "arm-none-eabi") then table.insert(cmd, "--query-driver=/usr/bin/arm-none-eabi-*") end
 end
 
 return {
   cmd = cmd,
-  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
   root_markers = { ".clangd", "compile_commands.json", "CMakePresets.json" },
 }

@@ -1,8 +1,8 @@
 ---@type vim.lsp.Config
 return {
   cmd = { "pyright-langserver", "--stdio" },
-  filetypes = { "python", },
-  root_markers = { "pyproject.toml", ".git", "main.py" },
+  filetypes = { "python" },
+  root_markers = { "pyproject.toml", "main.py" },
   single_file_support = true,
   settings = {
     python = {
@@ -10,8 +10,8 @@ return {
       analysis = {
         autoSearchPaths = true,
         diagnosticMode = "openFilesOnly",
-        useLibraryCodeForTypes = true
-      }
-    }
-  }
+        useLibraryCodeForTypes = true,
+      },
+    },
+  },
 }

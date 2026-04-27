@@ -1,9 +1,10 @@
+---@type vim.lsp.Config
 return {
   cmd = { "harper-ls", "--stdio" },
   filetypes = { "markdown", "rst" },
   settings = {
     ["harper-ls"] = {
-      userDictPath = "~/.config/nvim/spell/en.utf-8.add",
+      userDictPath = "~/.local/share/nvim/site/spell/en.utf-8.add",
       workspaceDictPath = "",
       fileDictPath = "",
       linters = {

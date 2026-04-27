@@ -150,4 +150,33 @@ This section lists some of common, useful Neovim Lua API functions.
 
 --------------------------------------------------------------------------------
 
+## To Do List
+
+- Refactor
+- nvim '*' color, IncSearch color
+- OverseerClose on Debug
+- S-h S-l should be M-h and M-l
+- disable mdview for files by default
+- NES C-y in insert mode
+- [d in overseer output]
+- snacks git hover
+
+### Plugins
+
+- sidekick.nvim
+- mini modules
+- snacks
+    - profiler
+    - indent scope
+    - <leader>q
+- rustaceanvim v9
+
+### Dev
+
+- gtest
+    - watch doesn't work
+- coverage
+
+--------------------------------------------------------------------------------
+
 [pattern]: https://www.lua.org/pil/20.2.html

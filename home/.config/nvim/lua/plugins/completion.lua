@@ -243,8 +243,8 @@ return {
     -- https://github.com/cordx56/rustowl
     "cordx56/rustowl",
     enabled = true,
-    build = "cd rustowl && cargo install --path . --locked",
-    lazy = false,
+    build = "cargo install --path . --locked",
+    ft = { "rust" },
     opts = {
       client = {
         on_attach = function(_, buffer)

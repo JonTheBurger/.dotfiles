@@ -79,6 +79,21 @@ vim.diagnostic.config({
   virtual_lines = false,
   virtual_text = true,
 })
+vim.diagnostic.config({
+  float = {
+    border = "rounded",
+  },
+})
+local hover = vim.lsp.buf.hover
+vim.lsp.buf.hover = function()
+  return hover({
+    wrap = false,
+    max_width = 100,
+    max_height = 40,
+    border = "rounded",
+  })
+end
+
 
 -- Undo File
 vim.opt.backup = false
