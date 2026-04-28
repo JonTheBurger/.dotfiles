@@ -1,3 +1,4 @@
+---@module "Symbol Aliases"
 vim.api.nvim_set_keymap("i", "\\alpha", "α", { noremap = true })
 vim.api.nvim_set_keymap("i", "\\beta", "β", { noremap = true })
 vim.api.nvim_set_keymap("i", "\\gamma", "γ", { noremap = true })

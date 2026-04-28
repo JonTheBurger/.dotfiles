@@ -1,3 +1,4 @@
+---@module "Note Taking"
 local edit_file = require("config.fn").buf.edit_file
 local WIKI = vim.fn.expand("~/Documents/wiki")
 local DIARY = vim.fn.expand(WIKI .. "/diary")

@@ -3,10 +3,6 @@
 This document explains the basics of getting started with `jvim`. If you are new
 to `vim`, consider reading the `Vim` section below for the basics.
 
-> [!NOTE]
-> `jvim` does not use `mason` for LSP installation. This repo prefers to use
-> `nix` via `devbox.json` (or your system package manager) to install LSPs.
-
 ## Features
 
 This section describes the functionality in jvim not present in vanilla neovim.
@@ -60,7 +56,7 @@ This section describes the basics of vim.
 
 ## Lua
 
-This section serves as a desk reference for lua.
+This section serves as a desk reference for Lua.
 
 ### General
 
@@ -152,12 +148,14 @@ This section lists some of common, useful Neovim Lua API functions.
 
 ## To Do List
 
+This section contains upcoming changes to jvim.
+
 - Refactor
 - S-h S-l should be M-h and M-l
+- mason auto-install
 - disable mdview for files by default
 - bufdelete deletes breakpoints
 - NES C-y in insert mode
-- Check for kitty before setting smear cursor
 
 ### Plugins
 

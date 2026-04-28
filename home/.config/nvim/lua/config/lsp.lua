@@ -1,3 +1,4 @@
+---@module "Language Server Protocol Config"
 vim.lsp.enable("ansible")
 vim.lsp.enable("armls")
 vim.lsp.enable("bitbake")

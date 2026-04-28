@@ -1,3 +1,5 @@
+---@module "JVim Personalization"
+
 ---@class Colors
 ---@field bg string
 ---@field fg string
@@ -21,6 +23,8 @@
 ---@field ignore_patterns string[]
 ---@field clickable_status_line bool
 ---@field use_dap_view bool
+---@field animate_scroll bool
+---@field animate_cursor bool
 ---User-configurable preferences to tweak the behavior of jvim
 
 ---@type ConfigPreferences
@@ -83,5 +87,11 @@ M.clickable_status_line = false
 
 --- `true` to use "nvim-dap-view", `false` to use "nvim-dap-ui"
 M.use_dap_view = true
+
+--- `true` for the animate option to animate scrolling (no GUI)
+M.animate_scroll = vim.fn.has("gui_running") == 0
+
+--- `true` for the animate option to add cursor smear (no GUI and not kitty)
+M.animate_cursor = (vim.fn.has("gui_running") == 0) and (vim.env.KITTY_WINDOW_ID == nil)
 
 return M

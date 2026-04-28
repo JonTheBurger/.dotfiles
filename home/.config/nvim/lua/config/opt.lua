@@ -1,4 +1,5 @@
--- <space> as <leader>
+---@module "Neovim Settings"
+-- General
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.g.modelines = 2
@@ -25,19 +26,6 @@ vim.opt.smartcase = true
 vim.opt.showmode = false
 vim.opt.wildmode = { "longest:full", "full" }
 
--- Host System Integration
-if vim.fn.executable("zsh") == 1 then
-  vim.opt.shell = "/usr/bin/zsh"
-end
-vim.opt.mouse = "a"
-vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
-end)
-
--- Disable netrw
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 -- Document Spacing
 vim.opt.colorcolumn = "80,88,120"
 vim.opt.shiftwidth = 2
@@ -49,6 +37,26 @@ vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3
 vim.opt.textwidth = 0
+
+-- Host System Integration
+if vim.fn.executable("zsh") == 1 then vim.opt.shell = "/usr/bin/zsh" end
+vim.opt.mouse = "a"
+vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
+
+-- Disable netrw
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- Undo File
+vim.opt.backup = false
+vim.opt.backupdir:prepend(vim.fn.stdpath("state") .. "/backup//")
+vim.opt.swapfile = false
+vim.opt.directory:prepend(vim.fn.stdpath("state") .. "/swap//")
+vim.opt.undodir = vim.fn.expand(vim.fn.stdpath("state") .. "/undo")
+vim.opt.undofile = true
+
+-- Style
+vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
 vim.opt.listchars = { space = "·", tab = "»»", nbsp = "␣" }
 vim.opt.fillchars:append({
   diff = "╱",
@@ -93,20 +101,4 @@ vim.lsp.buf.hover = function()
     max_height = 40,
     border = "rounded",
   })
-end
-
--- Undo File
-vim.opt.backup = false
-vim.opt.backupdir:prepend(vim.fn.stdpath("state") .. "/backup//")
-vim.opt.swapfile = false
-vim.opt.directory:prepend(vim.fn.stdpath("state") .. "/swap//")
-vim.opt.undodir = vim.fn.expand(vim.fn.stdpath("state") .. "/undo")
-vim.opt.undofile = true
-
--- Gui
--- vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
-if vim.g.neovide then
-  vim.keymap.set({ "n", "v" }, "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
-  vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
-  vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
 end

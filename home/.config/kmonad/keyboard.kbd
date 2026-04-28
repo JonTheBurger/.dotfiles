@@ -64,10 +64,10 @@
 
 (deflayer nav
   _    _    _    _    _    _    _    _    _    _    _    _    _         _    _    _
-  _    _    _    @inc _    _    _    _    _    _    _    _    _    _    _    _    _
+  @sym _    _    @inc _    _    _    _    _    _    _    _    _    _    _    _    _
   _    [    ]    _    %    _    _    pgup home end  _    _    _    _    _    _    _
   _    {    }    pgdn _    _    lft  down up   rght _    _    _
-  _    _    del  _    _    _    _    M-1  M-2  M-3  M-4  _                   _
+  _    _    del  _    _    _    M-1  M-2  M-3  M-4  M-4  _                   _
   _    _    _              pp             _    _    _    _   volumedecrement _    volumeincrement
 )
 

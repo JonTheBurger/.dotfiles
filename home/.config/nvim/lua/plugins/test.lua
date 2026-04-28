@@ -44,7 +44,7 @@ return {
         },
       },
       discovery = {
-        filter_dir = function(name, _rel_path, _root) return not require("config.fn").str.match_any(name:lower(), require("config.preferences").ignore_patterns) end,
+        filter_dir = function(name, _rel_path, _root) return not require("config.fn").str.match_any(name:lower(), require("config.prefs").ignore_patterns) end,
       },
       running = { concurrent = 4 },
       floating = { border = "rounded" },

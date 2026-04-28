@@ -1,3 +1,4 @@
+---@module "Custom utility functions"
 ---@diagnostic disable: duplicate-doc-field
 local M = {}
 

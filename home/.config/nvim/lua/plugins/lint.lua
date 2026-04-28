@@ -26,6 +26,10 @@ return {
       end
 
       vim.api.nvim_create_user_command("Lint", function() lint.try_lint() end, { desc = "Lint" })
+      vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+        desc = "Lint Files",
+        callback = function() require("lint").try_lint() end,
+      })
     end,
   },
   {
@@ -120,10 +124,12 @@ return {
       },
     },
     init = function()
-      vim.keymap.set("n", "<leader>TI", function() vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false) end, { desc = "Insert TO DO" })
-      vim.keymap.set("n", "<leader>TT", function() vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false) end, { desc = "Append TO DO" })
+      -- stylua: ignore start
+      vim.keymap.set("n", "<leader>TI", function() vim.api.nvim_feedkeys("iTODO(POVIRK): ", "n", false) end,    { desc = "Insert TO DO" })
+      vim.keymap.set("n", "<leader>TT", function() vim.api.nvim_feedkeys("aTODO(POVIRK): ", "n", false) end,    { desc = "Append TO DO" })
       vim.keymap.set("n", "<leader>T/", function() vim.api.nvim_feedkeys("a// TODO(POVIRK): ", "n", false) end, { desc = "Append / TO DO" })
-      vim.keymap.set("n", "<leader>T#", function() vim.api.nvim_feedkeys("a# TODO(POVIRK): ", "n", false) end, { desc = "Append # TO DO" })
+      vim.keymap.set("n", "<leader>T#", function() vim.api.nvim_feedkeys("a# TODO(POVIRK): ", "n", false) end,  { desc = "Append # TO DO" })
+      -- stylua: ignore end
     end,
   },
   {

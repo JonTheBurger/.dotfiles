@@ -1,6 +1,6 @@
 ---@module "config.preferences"
 ---@type ConfigPreferences
-local PREFERENCES = require("config.preferences")
+local PREFERENCES = require("config.prefs")
 local CLICKABLE_WIDGETS = PREFERENCES.clickable_status_line
 local COLORS = PREFERENCES.colors
 local buffer_not_empty = function() return vim.fn.empty(vim.fn.expand("%:t")) ~= 1 end
@@ -144,17 +144,16 @@ return {
       -- Custom Highlights --
       colors = {}, -- Override default colors
       highlights = { -- Override highlight groups
-        ["@comment.todo"] = { fmt = "bold" },
         ["BlinkCmpGhostText"] = { fg = COLORS.bg },
-        ["Folded"] = { fg = "$light_grey" },
-        ["NormalFloat"] = { bg = "none" },
+        ["CurSearch"] = { fg = COLORS.purple },
         ["FloatBorder"] = { bg = "none" },
         ["FloatShadowThrough"] = { bg = "none" },
+        ["Folded"] = { fg = "$light_grey" },
+        ["IncSearch"] = { fg = COLORS.purple },
+        ["NormalFloat"] = { bg = "none" },
         ["NvimSurroundHighlight"] = { bg = COLORS.purple },
         ["Pmenu"] = { bg = "none" },
-        -- ["Search"] = { fg = COLORS.white, bg = COLORS.blue },
-        -- ["CurSearch"] = { fg = COLORS.white, bg = COLORS.blue },
-        -- ["IncSearch"] = { fg = COLORS.white, bg = COLORS.blue },
+        ["Search"] = { fg = COLORS.purple },
         ["SpellBad"] = { sp = "$fg" },
         ["SpellCap"] = { sp = "$fg" },
         ["SpellLocal"] = { sp = "$fg" },

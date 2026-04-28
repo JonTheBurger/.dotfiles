@@ -373,6 +373,12 @@ return {
           _G.bt = function() Snacks.debug.backtrace() end
           vim.print = _G.dd
 
+          vim.api.nvim_create_user_command("Colorize", function()
+            Snacks.terminal.colorize()
+            vim.wo.number = true
+            vim.wo.relativenumber = true
+          end, {})
+
           Snacks.toggle.option("spell", { name = "Spelling" }):map("<leader>os")
           Snacks.toggle.option("conceallevel", { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = "Conceil" }):map("<leader>oc")
           Snacks.toggle.diagnostics({ name = "Diagnostics" }):map("<leader>od")
@@ -410,8 +416,8 @@ return {
               get = function() return vim.g.snacks_animate == true end,
               set = function(state)
                 if state then
-                  vim.g.snacks_animate = true
-                  require("smear_cursor").enabled = true
+                  vim.g.snacks_animate = require("config.prefs").animate_scroll
+                  require("smear_cursor").enabled = require("config.prefs").animate_cursor
                 else
                   vim.g.snacks_animate = false
                   require("smear_cursor").enabled = false

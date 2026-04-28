@@ -43,7 +43,7 @@ return {
       ts.setup(opts)
 
       local installed = ts.get_installed()
-      local ensure_installed = require("config.preferences").ts_languages
+      local ensure_installed = require("config.prefs").ts_languages
       local needed = vim.tbl_filter(function(lang) return not vim.tbl_contains(installed, lang) end, ensure_installed)
       local parser = require("nvim-treesitter.install")
       for _, lang in ipairs(needed) do

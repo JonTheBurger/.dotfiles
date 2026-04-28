@@ -232,7 +232,7 @@ return {
   },
   {
     "igorlfs/nvim-dap-view",
-    enabled = require("config.preferences").use_dap_view and not vim.g.vscode,
+    enabled = require("config.prefs").use_dap_view and not vim.g.vscode,
     lazy = false,
     version = "1.*",
     keys = {
@@ -369,7 +369,7 @@ return {
   {
     -- https://github.com/rcarriga/nvim-dap-ui
     "rcarriga/nvim-dap-ui",
-    enabled = not require("config.preferences").use_dap_view and not vim.g.vscode,
+    enabled = not require("config.prefs").use_dap_view and not vim.g.vscode,
     lazy = false,
     dependencies = {
       { "mfussenegger/nvim-dap" },
@@ -418,7 +418,7 @@ return {
   {
     -- https://github.com/theHamsta/nvim-dap-virtual-text
     "theHamsta/nvim-dap-virtual-text",
-    enabled = not require("config.preferences").use_dap_view and not vim.g.vscode,
+    enabled = not require("config.prefs").use_dap_view and not vim.g.vscode,
     opts = {
       display_callback = function(variable, _buf, _stackframe, _node, options)
         local value = variable.value:gsub("%s+", " ") -- strip new lines

@@ -10,14 +10,14 @@ SCRIPT_DIR="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
 # --------------------------------------------------------------------------------------
 local::do_install() {
   if [ "${version}" == "latest" ]; then
-    version="0.15.2"
+    version="0.16.2"
   fi
-  local URL="${URL-https://github.com/neovide/neovide/releases/download/${version}/neovide-linux-$(uname -m).tar.gz}"
+  local URL="${URL-https://github.com/neovide/neovide/releases/download/${version}/neovide-linux-$(uname -m).tar}"
 
   # download
-  curl -Lo "/tmp/neovide.tar.gz" "${URL}"
+  curl -Lo "/tmp/neovide.tar" "${URL}"
   mkdir -p "/tmp/neovide"
-  tar -xf "/tmp/neovide.tar.gz" -C "/tmp/neovide"
+  tar -xf "/tmp/neovide.tar" -C "/tmp/neovide"
 
   # exe
   mkdir -p "${HOME}/.local/bin"
