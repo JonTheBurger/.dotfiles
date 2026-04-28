@@ -34,8 +34,10 @@ return {
     enabled = true and not vim.g.vscode,
     cmd = "CodeDiff",
     keys = {
+      -- stylua: ignore start
       { "<leader>gd", "<cmd>CodeDiff<CR>", desc = "Git DiffView" },
       { "_g",         "<cmd>CodeDiff<CR>", desc = "Git DiffView" },
+      -- stylua: ignore end
     },
     opts = {
       explorer = {

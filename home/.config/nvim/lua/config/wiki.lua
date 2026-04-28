@@ -1,4 +1,3 @@
--- Wiki
 local edit_file = require("config.fn").buf.edit_file
 local WIKI = vim.fn.expand("~/Documents/wiki")
 local DIARY = vim.fn.expand(WIKI .. "/diary")
@@ -12,24 +11,19 @@ local TEMPLATE = [[
 
 ]]
 
-vim.keymap.set("n", "<leader>WW", function()
-  edit_file(WIKI .. "/index.md", { chdir = true })
-end, { desc = "Open Wiki Index" })
-
-vim.keymap.set("n", "<leader>WK", function()
-  edit_file(DIARY .. os.date("/%Y/%m/w%U.md"), { initial_contents = os.date("# %Y-%m: Week %U\n\n") .. TEMPLATE })
-end, { desc = "Open Weekly Notes" })
-
+vim.keymap.set("n", "<leader>WW", function() edit_file(WIKI .. "/index.md", { chdir = true }) end, { desc = "Open Wiki Index" })
+vim.keymap.set("n", "<leader>WK", function() edit_file(DIARY .. os.date("/%Y/%m/w%U.md"), { initial_contents = os.date("# %Y-%m: Week %U\n\n") .. TEMPLATE }) end, { desc = "Open Weekly Notes" })
 vim.keymap.set("n", "<leader>WU", function()
   local Path = require("plenary.path")
   local scan = require("plenary.scandir")
   local fn = require("config.fn")
 
+  ---@module "plenary.path"
+  ---@type Path
   local path = Path:new(DIARY)
-  if not path:exists() or not path:is_dir() then
-    return
-  end
+  if not path:exists() or not path:is_dir() then return end
 
+  ---@type Path
   path = path / "index.md"
   path:write("", "w")
 
@@ -40,6 +34,7 @@ vim.keymap.set("n", "<leader>WU", function()
     local months = scan.scan_dir(tostring(year), { depth = 1, only_dirs = true })
     for _, month_dir in ipairs(fn.identity(months)) do
       local month_idx = fn.path.basename(month_dir)
+      ---@diagnostic disable-next-line: undefined-field
       path:write("## " .. month_idx .. " - " .. MONTH_NAME[tonumber(month_idx)] .. "\n\n", "a")
 
       local weeks = scan.scan_dir(tostring(month_dir), { depth = 1 })

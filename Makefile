@@ -51,22 +51,18 @@ format:  ## Formats shell scripts
 lint:  ## Lints shell scripts
 	find . -name '*.sh' -type f -exec shellcheck -x --color {} \;
 
-jvim:
+.jvim:
 	mkdir -p "${HOME}/.local/bin/"
 	echo "#!/bin/bash" > "${HOME}/.local/bin/jvim"
 	echo "export NVIM_APPNAME=jvim" >> "${HOME}/.local/bin/jvim"
 	echo 'nvim "$$@"' >> "${HOME}/.local/bin/jvim"
 	chmod +x "${HOME}/.local/bin/jvim"
 	rm -f "${HOME}/.config/jvim"
+
+jvim: .jvim
 	cp -r "${PWD}/home/.config/nvim" "${HOME}/.config/jvim"
 
-jvim.link:
-	mkdir -p "${HOME}/.local/bin/"
-	echo "#!/bin/bash" > "${HOME}/.local/bin/jvim"
-	echo "export NVIM_APPNAME=jvim" >> "${HOME}/.local/bin/jvim"
-	echo 'nvim "$$@"' >> "${HOME}/.local/bin/jvim"
-	chmod +x "${HOME}/.local/bin/jvim"
-	rm -f "${HOME}/.config/jvim"
+jvim.link: .jvim
 	ln -s "${PWD}/home/.config/nvim" "${HOME}/.config/jvim"
 
 jvim.clean:

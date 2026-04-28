@@ -1,4 +1,7 @@
 -- https://github.com/stevearc/overseer.nvim/blob/master/doc/tutorials.md#run-a-file-on-save
+---@module "overseer"
+---@type overseer.Task
+---@diagnostic disable-next-line: missing-fields
 return {
   name = "run script",
   builder = function()
@@ -13,8 +16,10 @@ return {
     elseif vim.bo.filetype == "lua" then
       cmd = { "lua", file }
     elseif vim.bo.filetype == "c" then
-      cmd = { "cc " .. file .. " && ./a.out" }
+      ---@diagnostic disable-next-line: assign-type-mismatch
+      cmd = "cc " .. file .. " && ./a.out"
     elseif vim.bo.filetype == "cpp" then
+      ---@diagnostic disable-next-line: assign-type-mismatch
       cmd = "c++ -g -std=c++23 " .. file .. " && ./a.out"
     elseif vim.bo.filetype == "nix" then
       cmd = { "nix-instantiate", "--eval", "--strict", file }

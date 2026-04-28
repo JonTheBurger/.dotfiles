@@ -55,6 +55,12 @@ vim.opt.fillchars:append({
   stl = "─",
   stlnc = "─",
 })
+vim.opt.winborder = "double"
+vim.diagnostic.config({
+  float = {
+    border = "rounded",
+  },
+})
 vim.diagnostic.config({
   signs = {
     text = {
@@ -79,11 +85,6 @@ vim.diagnostic.config({
   virtual_lines = false,
   virtual_text = true,
 })
-vim.diagnostic.config({
-  float = {
-    border = "rounded",
-  },
-})
 local hover = vim.lsp.buf.hover
 vim.lsp.buf.hover = function()
   return hover({
@@ -93,7 +94,6 @@ vim.lsp.buf.hover = function()
     border = "rounded",
   })
 end
-
 
 -- Undo File
 vim.opt.backup = false
@@ -105,7 +105,6 @@ vim.opt.undofile = true
 
 -- Gui
 -- vim.opt.guifont = "FiraCode Nerd Font Mono:h12"
-vim.o.winborder = "double"
 if vim.g.neovide then
   vim.keymap.set({ "n", "v" }, "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
   vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")

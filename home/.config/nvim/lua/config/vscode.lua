@@ -6,7 +6,7 @@ if not not vim.g.vscode then
   local zz = function()
     -- vim.cmd(":norm! *")
     local curline = vim.fn.line(".")
-    vscode.call("revealLine", { args = {lineNumber = curline, at = "center"} })
+    vscode.call("revealLine", { args = { lineNumber = curline, at = "center" } })
   end
 
   -- Cursor to Middle for Search Next/Previous

@@ -80,8 +80,8 @@ return {
       { "if", function() require("nvim-treesitter-textobjects.select").select_textobject("@function.inner", "textobjects") end,    mode = { "o", "x" }, desc = "Inside Function" },
       { "ac", function() require("nvim-treesitter-textobjects.select").select_textobject("@class.outer", "textobjects") end,       mode = { "o", "x" }, desc = "Around Class" },
       { "ic", function() require("nvim-treesitter-textobjects.select").select_textobject("@class.inner", "textobjects") end,       mode = { "o", "x" }, desc = "Inside Class" },
-      { "a#", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.outer", "textobjects") end,     mode = { "o", "x" }, desc = "Around Comment" },
-      { "i#", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.inner", "textobjects") end,     mode = { "o", "x" }, desc = "Inside Comment" },
+      { "aC", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.outer", "textobjects") end,     mode = { "o", "x" }, desc = "Around Comment" },
+      { "iC", function() require("nvim-treesitter-textobjects.select").select_textobject("@comment.inner", "textobjects") end,     mode = { "o", "x" }, desc = "Inside Comment" },
       { "aa", function() require("nvim-treesitter-textobjects.select").select_textobject("@parameter.outer", "textobjects") end,   mode = { "o", "x" }, desc = "Around Parameter/Argument" },
       { "ia", function() require("nvim-treesitter-textobjects.select").select_textobject("@parameter.inner", "textobjects") end,   mode = { "o", "x" }, desc = "Inside Parameter/Argument" },
       { "al", function() require("nvim-treesitter-textobjects.select").select_textobject("@loop.outer", "textobjects") end,        mode = { "o", "x" }, desc = "Around Loop" },
@@ -96,6 +96,8 @@ return {
       { "]f", function() require("nvim-treesitter-textobjects.move").goto_next_start("@function.outer", "textobjects") end,        mode = { "n", "x", "o" }, desc = "Next Function" },
       { "[c", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@class.outer", "textobjects") end,       mode = { "n", "x", "o" }, desc = "Previous Class" },
       { "]c", function() require("nvim-treesitter-textobjects.move").goto_next_start("@class.outer", "textobjects") end,           mode = { "n", "x", "o" }, desc = "Next Class" },
+      { "[C", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@comment.outer", "textobjects") end,     mode = { "n", "x", "o" }, desc = "Previous Comment" },
+      { "]C", function() require("nvim-treesitter-textobjects.move").goto_next_start("@comment.outer", "textobjects") end,         mode = { "n", "x", "o" }, desc = "Next Comment" },
       { "[v", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@local.scope", "locals") end,            mode = { "n", "x", "o" }, desc = "Next Local" },
       { "]v", function() require("nvim-treesitter-textobjects.move").goto_next_start("@local.scope", "locals") end,                mode = { "n", "x", "o" }, desc = "Next Local" },
       { "[z", function() require("nvim-treesitter-textobjects.move").goto_previous_start("@fold", "folds") end,                    mode = { "n", "x", "o" }, desc = "Next Fold" },
@@ -133,15 +135,16 @@ return {
     opts = {
       max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
       min_window_height = 50, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
-      multiline_threshold = 5, -- Maximum number of lines to show for a single context
+      multiline_threshold = 1, -- Maximum number of lines to show for a single context
       trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
-      mode = "cursor", -- Line used to calculate context. Choices: 'cursor', 'topline'
+      mode = "topline", -- Line used to calculate context. Choices: 'cursor', 'topline'
     },
     --- @module "treesitter-context.config"
     --- @param opts TSContext.Config
     config = function(opts)
       require("treesitter-context").setup(opts)
-      vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true })
+      vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, link = "ColorColumn" })
+      vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bold = true, link = "CursorColumn" })
     end,
   },
   {

@@ -35,6 +35,18 @@ return {
           line_up = "<S-M-k>",
         },
       },
+      operators = {
+        evaluate = { prefix = nil },
+        exchange = { prefix = "gx" },
+        multiply = { prefix = "gm" },
+        replace = { prefix = nil },
+        sort = { prefix = "go" },
+      },
+      splitjoin = {
+        mappings = {
+          toggle = "gJ",
+        },
+      },
     },
     config = function(_, opts)
       require("mini.ai").setup(opts.ai)
@@ -42,7 +54,8 @@ return {
       require("mini.comment").setup(opts.comment)
       require("mini.cursorword").setup()
       require("mini.move").setup(opts.move)
-      if not vim.g.vscode then require("mini.indentscope").setup() end
+      require("mini.operators").setup(opts.operators)
+      require("mini.splitjoin").setup(opts.splitjoin)
     end,
   },
 }

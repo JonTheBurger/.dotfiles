@@ -18,10 +18,10 @@ return {
       { "<C-S-p>", function() Snacks.picker.commands() end,                       desc = "Commands" },
       { "<C-M-i>", function() Snacks.picker.icons() end, mode = "i",              desc = "Icons/Emoji" },
       -- Top Pickers & Explorer
-      { "<leader>,",       function() Snacks.picker.buffers() end,         desc = "Buffers" },
-      { "<leader>:",       function() Snacks.picker.command_history() end, desc = "Command History" },
-      { "<leader>sn",      function() Snacks.picker.notifications() end,   desc = "Notification History" },
-      { "<leader>e",       function() Snacks.explorer() end,               desc = "File Explorer" },
+      { "<leader>,",  function() Snacks.picker.buffers() end,         desc = "Buffers" },
+      { "<leader>:",  function() Snacks.picker.command_history() end, desc = "Command History" },
+      { "<leader>sn", function() Snacks.picker.notifications() end,   desc = "Notification History" },
+      { "<leader>e",  function() Snacks.explorer() end,               desc = "File Explorer" },
       -- find
       { "<leader>fc",    function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
       { "<leader>ff",    function() Snacks.picker.smart() end,                   desc = "Find Files" },
@@ -39,6 +39,7 @@ return {
       { "<leader>gS", function() Snacks.picker.git_stash() end,    desc = "Git Pick Stash" },
       { "<leader>gi", function() Snacks.picker.git_diff() end,     desc = "Git Pick Diff (Hunks)" },
       { "<leader>go", function() Snacks.picker.git_log_file() end, desc = "Git Pick Log File" },
+      { "<leader>hb", function() Snacks.git.blame_line() end,      desc = "Git Blame Hover" },
       ---@diagnostic disable-next-line: missing-fields,param-type-mismatch
       { "<leader>gw", function() Snacks.gitbrowse({ commit = vim.fn.system("git rev-parse HEAD"), }) end, desc = "Git web view" },
       -- Grep
@@ -79,6 +80,8 @@ return {
       -- Extras
       ---@diagnostic disable-next-line: undefined-field
       { "<leader>f2", function() Snacks.picker.todo_comments() end, desc = "To Do Comments" },
+      { "<leader>z",  function() Snacks.zen.zoom() end,             desc = "Zoom Window" },
+      { "<leader>Z",  function() Snacks.zen.zen() end,              desc = "Zen Mode" },
       { "z=",         function() Snacks.picker.spelling() end,      desc = "Fix Spelling" },
       -- stylua: ignore end
     },
@@ -262,7 +265,20 @@ return {
       quickfile = { enabled = true },
       ---@type snacks.scroll.Config
       ---@diagnostic disable-next-line: missing-fields
-      scroll = { enabled = not vim.g.vscode },
+      scroll = {
+        enabled = not vim.g.vscode,
+        animate = {
+          fps = 120,
+          duration = {
+            step = 2,
+            total = 30,
+          },
+        },
+        animate_repeat = {
+          delay = 1,
+          max = 1,
+        },
+      },
       ---@type snacks.statuscolumn.Config
       ---@diagnostic disable-next-line missing-fields
       statuscolumn = {
@@ -271,6 +287,63 @@ return {
         right = { "fold", "git" },
         folds = { open = true },
         refresh = 100,
+      },
+      ---@type snacks.scope.Config
+      ---@diagnostic disable-next-line: missing-fields
+      scope = {
+        min_size = 2,
+        cursor = true,
+        siblings = true, -- expand single line scopes with single line siblings
+        treesitter = {
+          enabled = true,
+        },
+        keys = {
+          ---@type table<string, snacks.scope.TextObject|{desc?:string}|false>
+          textobject = {
+            ii = false,
+            ai = false,
+            is = {
+              cursor = true,
+              min_size = 2, -- minimum size of the scope
+              edge = false, -- inner scope
+              treesitter = { blocks = { enabled = true } },
+              desc = "inner scope",
+            },
+            as = {
+              cursor = true,
+              min_size = 2, -- minimum size of the scope
+              treesitter = { blocks = { enabled = true } },
+              desc = "full scope",
+            },
+          },
+          ---@type table<string, snacks.scope.Jump|{desc?:string}|false>
+          jump = {
+            ["[i"] = false,
+            ["]i"] = false,
+          },
+        },
+      },
+      ---@type snacks.indent.Config
+      ---@diagnostic disable-next-line: missing-fields
+      indent = {
+        enabled = not vim.g.vscode,
+        indent = { enabled = false },
+        scope = { enabled = false },
+        chunk = {
+          enabled = true,
+          hl = "@comment",
+          char = {
+            vertical = "╎",
+          },
+        },
+        ---@type snacks.indent.animate
+        ---@diagnostic disable-next-line: missing-fields
+        animate = {
+          enabled = true,
+          duration = {
+            step = 50,
+          },
+        },
       },
       ---@type snacks.terminal.Config
       terminal = { enabled = not vim.g.vscode },
@@ -284,6 +357,9 @@ return {
         -- Disable ugly header on toggle terminal
         terminal = { wo = { winbar = "" } },
       },
+      ---@type snacks.zen.Config
+      ---@diagnostic disable-next-line: missing-fields
+      zen = { enabled = true },
     },
     init = function()
       vim.g.snacks_animate = false
@@ -306,6 +382,8 @@ return {
           Snacks.toggle.option("list", { name = "Visible Whitespace" }):map("<leader>o ")
           Snacks.toggle.option("wrap", { name = "Wrap Long Lines" }):map("<leader>ow")
           Snacks.toggle.indent():map("<leader>oz")
+          Snacks.toggle.profiler():map("<leader>Lp")
+          Snacks.toggle.profiler_highlights():map("<leader>Lh")
 
           Snacks.toggle
             .new({

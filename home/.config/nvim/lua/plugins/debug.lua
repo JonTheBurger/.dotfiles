@@ -226,6 +226,7 @@ return {
         -- },
       }
 
+      dap.listeners.after.event_initialized["overseer_close"] = function() vim.cmd("silent! OverseerClose") end
       dap.listeners.after.event_stopped["center_view"] = function() vim.cmd("normal! zz") end
     end,
   },
@@ -349,6 +350,8 @@ return {
           vim.keymap.set("n", "?", "g?", { buf = 0, remap = true })
         end,
       })
+
+      vim.api.nvim_set_hl(0, "NvimDapViewFrameCurrent", { link = "DiffAdded" })
     end,
   },
   {
@@ -357,7 +360,7 @@ return {
     dependencies = "igorlfs/nvim-dap-view",
     opts = {
       dapview = {
-        label = " Disas [D]",
+        label = " Disas",
         keymap = "D",
         short_label = " [D]",
       },
@@ -406,9 +409,9 @@ return {
     end,
     keys = {
       -- stylua: ignore start
-      { "<leader>dx",  function() require("dap").terminate() require("dapui").close() end, desc = "Terminate", },
-      { "<leader>dw",  function() require("dapui").elements.watches.add() end,             desc = "Add symbol under cursor to watches", },
-      { "_d",          function() require("dapui").toggle() end,                           desc = "Toggle Debugger", },
+      { "<leader>dx",  function() require("dap").terminate() require("dapui").close() end,          desc = "Terminate", },
+      { "<leader>dw",  function() require("dapui").elements.watches.add() end, mode = { "n", "v" }, desc = "Add symbol under cursor to watches", },
+      { "_d",          function() require("dapui").toggle() end,                                    desc = "Toggle Debugger", },
       -- stylua: ignore end
     },
   },

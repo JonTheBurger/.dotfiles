@@ -103,9 +103,9 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "Go to file from output window",
   pattern = { "*output*", "*Output*", "" },
   callback = function()
-    vim.keymap.set("n", "gf", function()
-      require("config.fn").buf.gf()
-    end, { buffer = true, noremap = true, desc = "Go to file, pick split" })
+    vim.keymap.set("n", "gf", function() require("config.fn").buf.gf() end, { buffer = true, noremap = true, desc = "Go to file, pick split" })
+    vim.keymap.set("n", "]d", function() require("config.fn").buf.jump_to_diagnostic("next") end, { buffer = true })
+    vim.keymap.set("n", "[d", function() require("config.fn").buf.jump_to_diagnostic("prev") end, { buffer = true })
   end,
 })
 vim.api.nvim_create_autocmd({ "TermOpen" }, {
