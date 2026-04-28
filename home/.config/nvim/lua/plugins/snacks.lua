@@ -416,8 +416,8 @@ return {
               get = function() return vim.g.snacks_animate == true end,
               set = function(state)
                 if state then
-                  vim.g.snacks_animate = require("config.prefs").animate_scroll
-                  require("smear_cursor").enabled = require("config.prefs").animate_cursor
+                  vim.g.snacks_animate = vim.fn.has("gui_running") == 0
+                  require("smear_cursor").enabled = ((vim.fn.has("gui_running") == 0) and (vim.env.KITTY_WINDOW_ID == nil))
                 else
                   vim.g.snacks_animate = false
                   require("smear_cursor").enabled = false

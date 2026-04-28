@@ -66,6 +66,8 @@ return {
         selection_modes = {
           ["@parameter.outer"] = "v", -- charwise
           ["@class.outer"] = "V", -- linewise
+          ["@conditional.inner"] = "V",
+          ["@conditional.outer"] = "V",
           ["@function.outer"] = "V", -- <c-v> for blockwise
         },
       },

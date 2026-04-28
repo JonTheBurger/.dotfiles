@@ -4,9 +4,18 @@ return {
   {
     -- https://github.com/mason-org/mason.nvim
     "mason-org/mason.nvim",
+    enabled = #require("config.prefs").mason_packages > 0,
     ---@module "mason.settings"
     ---@type MasonSettings
     opts = {},
+    config = function(opts)
+      require("mason").setup(opts)
+      local registry = require("mason-registry")
+      for _, package in ipairs(require("config.prefs").mason_packages) do
+        local pkg = registry.get_package(package)
+        if not pkg:is_installed() then pkg:install() end
+      end
+    end,
   },
   {
     -- https://github.com/Saghen/blink.cmp

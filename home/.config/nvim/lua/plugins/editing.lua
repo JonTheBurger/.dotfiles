@@ -34,8 +34,8 @@ return {
     },
     init = function()
       -- stylua: ignore start
-      vim.keymap.set("n", "gs", "<Plug>(nvim-surround-normal)aw", { noremap = true, desc = "Surround around word" })
-      vim.keymap.set("n", "gS", "<Plug>(nvim-surround-normal)aW", { noremap = true, desc = "Surround around WORD" })
+      vim.keymap.set("n", "gs", "<Plug>(nvim-surround-normal)aw", { desc = "Surround around word" })
+      vim.keymap.set("n", "gS", "<Plug>(nvim-surround-normal)aW", { desc = "Surround around WORD" })
       -- stylua: ignore end
     end,
   },
@@ -178,7 +178,6 @@ return {
     keys = {
       -- stylua: ignore start
       { "<leader>far", function() require("grug-far").open({ transient = true }) end, desc = "Find/Replace", },
-      { "<C-M-h>",     function() require("grug-far").open({ transient = true }) end, desc = "Find/Replace", },
       { "_r",          function() require("grug-far").open({ transient = true }) end, desc = "Find/Replace", },
       -- stylua: ignore end
     },

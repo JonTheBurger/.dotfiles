@@ -12,14 +12,19 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search" })
 vim.keymap.set("n", "<leader>RR", "<cmd>restart<CR>", { desc = "Reload Neovim" })
 vim.keymap.set("n", "<leader>X", "<cmd>!chmod +x %<CR>", { silent = true, desc = "chmod +x" })
 
-vim.keymap.set("o", "F", "vF", { noremap = true, desc = "Inclusive reverse find (also delete char under cursor)" })
-vim.keymap.set("o", "T", "vT", { noremap = true, desc = "Inclusive reverse till (also delete char under cursor)" })
+vim.keymap.set("o", "F", "vF", { desc = "Inclusive reverse find (also delete char under cursor)" })
+vim.keymap.set("o", "T", "vT", { desc = "Inclusive reverse till (also delete char under cursor)" })
 
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected text down with Shift-J" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected text up with Shift-K" })
 
 vim.keymap.set("v", "<", "<gv", { desc = "Stay in indent mode after de-indenting" })
 vim.keymap.set("v", ">", ">gv", { desc = "Stay in indent mode after indenting" })
+
+vim.keymap.set("n", "<S-h>", "B", { desc = "Go back a word" })
+vim.keymap.set("n", "<S-l>", "W", { desc = "Go forward a word" })
+vim.keymap.set({ "n", "x" }, "gh", "<S-h>", { desc = "Go to the top of the screen" })
+vim.keymap.set({ "n", "x" }, "gl", "<S-l>", { desc = "Go to the bottom of the screen" })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Cursor to middle for Page Down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Cursor to middle for Page Up" })
@@ -28,12 +33,12 @@ vim.keymap.set("n", "n", "nzzzv", { desc = "Cursor to middle for search next" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "Cursor to middle for search previous" })
 
 -- Swap ' and `
-vim.keymap.set({ "n", "o" }, "'", "`", { noremap = true, desc = "Return to mark's line & column" })
-vim.keymap.set({ "n", "o" }, "`", "'", { noremap = true, desc = "Return to mark's line" })
+vim.keymap.set({ "n", "o" }, "'", "`", { desc = "Return to mark's line & column" })
+vim.keymap.set({ "n", "o" }, "`", "'", { desc = "Return to mark's line" })
 
 -- Swap gf and gF
-vim.keymap.set("n", "gf", "gF", { noremap = true, desc = "Go to file & line" })
-vim.keymap.set("n", "gF", "gf", { noremap = true, desc = "Go to file" })
+vim.keymap.set("n", "gf", "gF", { desc = "Go to file & line" })
+vim.keymap.set("n", "gF", "gf", { desc = "Go to file" })
 
 -- Easy %
 vim.keymap.set("n", "mm", "%", { desc = "Go to matching delimiter" })
@@ -48,10 +53,10 @@ vim.keymap.set("n", "k", function() return vim.v.count > 0 and "m'" .. vim.v.cou
 ----------------------------------------------------------------------------------------
 vim.keymap.set({ "n", "i" }, "<C-TAB>", ":tabnext<CR>", { desc = "Next Tab" })
 vim.keymap.set({ "n", "i" }, "<C-S-TAB>", ":tabprevious<CR>", { desc = "Previous Tab" })
-vim.keymap.set("n", "<leader><TAB>", "gt", { noremap = true, desc = "Next Tab" })
-vim.keymap.set("n", "<leader><S-TAB>", "gT", { noremap = true, desc = "Previous Tab" })
-vim.keymap.set("n", "<leader>c<TAB>", ":tabnew<CR>", { noremap = true, desc = "New Tab" })
-vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { noremap = true, desc = "Close Tab" })
+vim.keymap.set("n", "<leader><TAB>", "gt", { desc = "Next Tab" })
+vim.keymap.set("n", "<leader><S-TAB>", "gT", { desc = "Previous Tab" })
+vim.keymap.set("n", "<leader>c<TAB>", ":tabnew<CR>", { desc = "New Tab" })
+vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { desc = "Close Tab" })
 
 -- Change between buffers with >/<
 vim.keymap.set("n", "<", ":bprevious<CR>", { desc = "Shift to previous buffer" })
@@ -85,13 +90,13 @@ vim.keymap.set("n", "<S-Right>", "<C-w>r", { desc = "Rotate Windows " })
 ---@endsection
 ---@section Motions
 ----------------------------------------------------------------------------------------
-vim.keymap.set("n", "]h", "]c", { desc = "Next Hunk", noremap = true })
-vim.keymap.set("n", "[h", "[c", { desc = "Previous Hunk", noremap = true })
+vim.keymap.set("n", "]h", "]c", { desc = "Next Hunk" })
+vim.keymap.set("n", "[h", "[c", { desc = "Previous Hunk" })
 vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
 vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
-vim.keymap.set({ "o", "x" }, "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { noremap = true, silent = true, desc = "Around _underscores_" })
-vim.keymap.set({ "o", "x" }, "i_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'i')<CR>", { noremap = true, silent = true, desc = "Inside _underscores_" })
-vim.keymap.set({ "o", "x" }, "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { noremap = true, silent = true, desc = "Through next underscore_" })
+vim.keymap.set({ "o", "x" }, "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { silent = true, desc = "Around _underscores_" })
+vim.keymap.set({ "o", "x" }, "i_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'i')<CR>", { silent = true, desc = "Inside _underscores_" })
+vim.keymap.set({ "o", "x" }, "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { silent = true, desc = "Through next underscore_" })
 
 ----------------------------------------------------------------------------------------
 ---@endsection

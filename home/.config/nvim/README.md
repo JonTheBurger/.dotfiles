@@ -151,11 +151,11 @@ This section lists some of common, useful Neovim Lua API functions.
 This section contains upcoming changes to jvim.
 
 - Refactor
-- S-h S-l should be M-h and M-l
-- mason auto-install
-- disable mdview for files by default
+- ]<F9> next breakpoint
+- sort uninteresting_patterns in order of how interesting, use for scoring
 - bufdelete deletes breakpoints
 - NES C-y in insert mode
+- types in types.lua?
 
 ### Plugins
 

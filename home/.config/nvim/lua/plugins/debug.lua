@@ -27,7 +27,7 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end, desc = "Launch nvim Server",     noremap = true, },
+      { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end, desc = "Launch nvim Server", },
       { "<leader>dj",  function() require("dap").up() end,                              desc = "Go Up 1 Stack Frame", },
       { "<leader>dk",  function() require("dap").down() end,                            desc = "Go Down 1 Stack Frame", },
       { "<F5>",        function() require("dap").continue() end,                        desc = "Continue", },
@@ -190,7 +190,7 @@ return {
     },
     init = function()
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointCondition", { text = "🯄", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+      vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
       vim.fn.sign_define("DapBreakpointRejected", { text = "ⓧ", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" })
       vim.fn.sign_define("DapLogPoint", { text = "✎", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
       vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticSignWarn", linehl = "DiagnosticSignError", numhl = "DiagnosticSignError" })

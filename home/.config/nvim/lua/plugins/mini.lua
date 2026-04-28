@@ -36,10 +36,10 @@ return {
         },
       },
       operators = {
-        evaluate = { prefix = nil },
+        evaluate = { prefix = "" },
         exchange = { prefix = "gx" },
         multiply = { prefix = "gm" },
-        replace = { prefix = nil },
+        replace = { prefix = "" },
         sort = { prefix = "go" },
       },
       splitjoin = {

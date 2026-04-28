@@ -18,15 +18,15 @@ elseif vim.g.vscode then
   vim.keymap.set("n", "*", function()
     vim.cmd(":silent! :norm! *")
     zz()
-  end, { noremap = true, silent = true })
+  end, { silent = true })
   vim.keymap.set("n", "n", function()
     vim.cmd(":silent! norm! n")
     zz()
-  end, { noremap = true, silent = true })
+  end, { silent = true })
   vim.keymap.set("n", "N", function()
     vim.cmd(":silent! norm! N")
     zz()
-  end, { noremap = true, silent = true })
+  end, { silent = true })
 
   -- Undo/Redo
   vim.keymap.set("n", "u", function() vscode.call("undo") end)

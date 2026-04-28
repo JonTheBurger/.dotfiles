@@ -22,14 +22,14 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 vim.api.nvim_create_autocmd({ "FileType" }, {
   desc = "gd support for vim help",
   pattern = { "help" },
-  callback = function() vim.keymap.set("n", "gd", "<C-]>", { buffer = true, noremap = true, desc = "Go to help tag" }) end,
+  callback = function() vim.keymap.set("n", "gd", "<C-]>", { buffer = true, desc = "Go to help tag" }) end,
 })
 
 vim.api.nvim_create_autocmd({ "FileType", "TermOpen" }, {
   desc = "gd & ]d support for terminal output",
   pattern = { "*[Oo]utput*", "*/bin/*sh" },
   callback = function(ev)
-    local opts = { buffer = ev.buf, noremap = true, silent = true }
+    local opts = { buffer = ev.buf, silent = true }
     vim.keymap.set("n", "gf", function() require("config.fn").buf.gf() end, opts)
     vim.keymap.set("n", "]d", function() require("config.fn").buf.jump_to_diagnostic("next") end, opts)
     vim.keymap.set("n", "[d", function() require("config.fn").buf.jump_to_diagnostic("prev") end, opts)
