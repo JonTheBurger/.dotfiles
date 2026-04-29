@@ -23,8 +23,8 @@ vim.keymap.set("v", ">", ">gv", { desc = "Stay in indent mode after indenting" }
 
 vim.keymap.set("n", "<S-h>", "B", { desc = "Go back a word" })
 vim.keymap.set("n", "<S-l>", "W", { desc = "Go forward a word" })
-vim.keymap.set({ "n", "x" }, "gh", "<S-h>", { desc = "Go to the top of the screen" })
-vim.keymap.set({ "n", "x" }, "gl", "<S-l>", { desc = "Go to the bottom of the screen" })
+vim.keymap.set({ "n", "x" }, "gt", "<S-h>", { desc = "Go to the top of the screen" })
+vim.keymap.set({ "n", "x" }, "gb", "<S-l>", { desc = "Go to the bottom of the screen" })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Cursor to middle for Page Down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Cursor to middle for Page Up" })
@@ -51,16 +51,16 @@ vim.keymap.set("n", "k", function() return vim.v.count > 0 and "m'" .. vim.v.cou
 ---@endsection
 ---@section Tabs/Windows/Buffers
 ----------------------------------------------------------------------------------------
-vim.keymap.set({ "n", "i" }, "<C-TAB>", ":tabnext<CR>", { desc = "Next Tab" })
-vim.keymap.set({ "n", "i" }, "<C-S-TAB>", ":tabprevious<CR>", { desc = "Previous Tab" })
-vim.keymap.set("n", "<leader><TAB>", "gt", { desc = "Next Tab" })
-vim.keymap.set("n", "<leader><S-TAB>", "gT", { desc = "Previous Tab" })
-vim.keymap.set("n", "<leader>c<TAB>", ":tabnew<CR>", { desc = "New Tab" })
-vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { desc = "Close Tab" })
+vim.keymap.set({ "n", "i" }, "<C-TAB>", ":tabnext<CR>", { silent = true, desc = "Next Tab" })
+vim.keymap.set({ "n", "i" }, "<C-S-TAB>", ":tabprevious<CR>", { silent = true, desc = "Previous Tab" })
+vim.keymap.set("n", "<leader><TAB>", "gt", { silent = true, desc = "Next Tab" })
+vim.keymap.set("n", "<leader><S-TAB>", "gT", { silent = true, desc = "Previous Tab" })
+vim.keymap.set("n", "<leader>c<TAB>", ":tabnew<CR>", { silent = true, desc = "New Tab" })
+vim.keymap.set("n", "<leader>d<TAB>", ":tabclose<CR>", { silent = true, desc = "Close Tab" })
 
 -- Change between buffers with >/<
-vim.keymap.set("n", "<", ":bprevious<CR>", { desc = "Shift to previous buffer" })
-vim.keymap.set("n", ">", ":bnext<CR>", { desc = "Shift to next buffer" })
+vim.keymap.set("n", "<", ":bprevious<CR>", { silent = true, desc = "Shift to previous buffer" })
+vim.keymap.set("n", ">", ":bnext<CR>", { silent = true, desc = "Shift to next buffer" })
 
 -- Resize Splits with Arrows
 vim.keymap.set({ "n", "i" }, "<C-Left>", function()
@@ -92,8 +92,8 @@ vim.keymap.set("n", "<S-Right>", "<C-w>r", { desc = "Rotate Windows " })
 ----------------------------------------------------------------------------------------
 vim.keymap.set("n", "]h", "]c", { desc = "Next Hunk" })
 vim.keymap.set("n", "[h", "[c", { desc = "Previous Hunk" })
-vim.keymap.set("n", "]q", ":cn<CR>", { desc = "Next QuickFix Entry" })
-vim.keymap.set("n", "[q", ":cp<CR>", { desc = "Previous QuickFix Entry" })
+vim.keymap.set("n", "]q", ":cn<CR>", { silent = true, desc = "Next QuickFix Entry" })
+vim.keymap.set("n", "[q", ":cp<CR>", { silent = true, desc = "Previous QuickFix Entry" })
 vim.keymap.set({ "o", "x" }, "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { silent = true, desc = "Around _underscores_" })
 vim.keymap.set({ "o", "x" }, "i_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'i')<CR>", { silent = true, desc = "Inside _underscores_" })
 vim.keymap.set({ "o", "x" }, "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { silent = true, desc = "Through next underscore_" })
@@ -173,18 +173,18 @@ vim.keymap.set("n", "[e", function() vim.diagnostic.jump({ count = 1, float = tr
 ----------------------------------------------------------------------------------------
 vim.keymap.set("n", "<leader>LL", ":lua =", { desc = ":lua =" })
 vim.keymap.set("n", "<leader>LR", ':lua require("', { desc = ':lua require("' })
-vim.keymap.set("n", "<leader>LF", ":lua F.", { desc = ":lua F." })
+vim.keymap.set("n", "<leader>LF", ":lua =F.", { desc = ":lua F." })
 
 ----------------------------------------------------------------------------------------
 ---@endsection
 ---@section Custom
 ----------------------------------------------------------------------------------------
 -- Whitespace manipulation
-vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { desc = "Whitespace Trip" })
-vim.keymap.set("n", "<leader>wr", [[:%s/\r//<CR>]], { desc = "Remove Windows Line Endings" })
-vim.keymap.set({ "n", "v" }, "<leader>wq", [[:%s/'/"/g<CR>]], { desc = "Rewrite quotes" })
-vim.keymap.set({ "n", "v" }, "<leader>wn", ":s/\\\\n/\\r/g<CR>", { desc = "Wrap on literal \\n" })
-vim.keymap.set({ "n", "v" }, "<leader>wo", [[:s/\(\)/\1\r/g<left><left><left><left><left><left><left><left><left>]], { desc = "Wrap on" })
+vim.keymap.set("n", "<leader>wt", [[:%s/\s\+$//e<CR>]], { silent = true, desc = "Whitespace Trip" })
+vim.keymap.set("n", "<leader>wr", [[:%s/\r//<CR>]], { silent = true, desc = "Remove Windows Line Endings" })
+vim.keymap.set({ "n", "v" }, "<leader>wq", [[:%s/'/"/g<CR>]], { silent = true, desc = "Rewrite quotes" })
+vim.keymap.set({ "n", "v" }, "<leader>wn", ":s/\\\\n/\\r/g<CR>", { silent = true, desc = "Wrap on literal \\n" })
+vim.keymap.set({ "n", "v" }, "<leader>wo", [[:s/\(\)/\1\r/g<left><left><left><left><left><left><left><left><left>]], { silent = true, desc = "Wrap on" })
 vim.keymap.set("n", "<leader>wl", function()
   local pattern = vim.fn.getreg("/")
   vim.cmd([[:s/\s\+/\r/g]])
@@ -192,7 +192,7 @@ vim.keymap.set("n", "<leader>wl", function()
 end, { desc = "Wrap words across lines" })
 
 -- Word substitution
-vim.keymap.set("n", "<leader><F2>", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "Substitute word" })
+vim.keymap.set("n", "<leader><F2>", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { silent = true, desc = "Substitute word" })
 vim.keymap.set("v", "<leader><F2>", function()
   vim.cmd('normal! "zy')
   local escaped = vim.fn.escape(vim.fn.getreg("z"), "\\/")

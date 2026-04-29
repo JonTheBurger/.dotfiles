@@ -8,7 +8,7 @@
 ---@field open fun(opts: overseer.WindowOpts?)
 ---@field close fun()
 ---@field list_tasks fun(opts: overseer.ListTaskOpts?): overseer.Task[]
----@field run_task fun(opts: overseer.TemplateRunOpts?, callback: fun(task: overseer.Task?, err: string?))
+---@field run_task fun(opts: overseer.TemplateRunOpts?, callback: fun(task: overseer.Task?, err: string?)?)
 ---@field preload_task_cache fun(opts: overseer.SearchParams?, cb: fun()?)
 ---@field clear_task_cache fun(opts: overseer.SearchParams?)
 ---@field run_action fun(task: overseer.Task, name: string?)

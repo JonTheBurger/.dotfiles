@@ -1,8 +1,6 @@
 -- https://api.business.githubcopilot.com/models
 copilot_node_command = "node"
-if os.getenv("USER") == "vagrant" then
-  copilot_node_command = "/home/vagrant/.nvm/versions/node/v24.13.1/bin/node"
-end
+if os.getenv("USER") == "vagrant" then copilot_node_command = "/home/vagrant/.nvm/versions/node/v24.13.1/bin/node" end
 
 return {
   {
@@ -14,9 +12,7 @@ return {
         move_count_threshold = 3,
       },
     },
-    init = function()
-      vim.g.copilot_nes_debounce = 3000
-    end,
+    init = function() vim.g.copilot_nes_debounce = 3000 end,
   },
   {
     -- https://github.com/zbirenbaum/copilot.lua
@@ -31,7 +27,7 @@ return {
     },
     event = "InsertEnter",
     opts = {
-      copilot_node_command=copilot_node_command,
+      copilot_node_command = copilot_node_command,
       suggestion = {
         debounce = 2500,
         trigger_on_accept = true,
@@ -83,11 +79,12 @@ return {
         backward = true,
         forward = true,
       },
-    }
+    },
   },
   {
     "olimorris/codecompanion.nvim",
     dependencies = {
+      "MeanderingProgrammer/render-markdown.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "ravitemer/mcphub.nvim",
@@ -123,12 +120,10 @@ return {
       "CodeCompanionChat",
     },
     keys = {
-      { "<leader>C", "<cmd>CodeCompanionActions<CR>", desc = "Code Companion" },
+      { "<leader>ai", "<cmd>CodeCompanionActions<CR>", desc = "Code Companion" },
       { "_a", "<cmd>CodeCompanionChat toggle<CR>", desc = "Toggle AI Chat" },
       -- { "<leader>C", "<cmd>CodeCompanionActions<CR>", desc = "Code Companion" },
     },
-    init = function()
-      vim.cmd("cab ai CodeCompanion")
-    end,
+    init = function() vim.cmd("cab ai CodeCompanion") end,
   },
 }

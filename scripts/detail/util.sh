@@ -267,7 +267,7 @@ util::error() {
 ## @param msg Message to display.
 # --------------------------------------------------------------------------------------
 util::critical() {
-  if [[ -n "${NOFMT+x}" ]]; then
+  if [[ -n ${NOFMT+x} ]]; then
     util::println "${ORANGE}${1-}${NOFMT}"
   else
     util::println "${1-}"

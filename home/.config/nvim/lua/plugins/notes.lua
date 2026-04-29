@@ -26,6 +26,9 @@ return {
         markdown = {
           render_modes = false,
         },
+        codecompanion = {
+          render_modes = true,
+        },
       },
     },
   },

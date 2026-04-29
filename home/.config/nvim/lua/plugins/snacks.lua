@@ -13,10 +13,11 @@ return {
       -- stylua: ignore start
       { "<C-p>",   function() Snacks.picker.files() end,                          desc = "Find Files" },
       { "<C-f>",   function() Snacks.picker.grep() end,                           desc = "Grep" },
-      { "<C-\\>",  function() Snacks.terminal.toggle() end, mode = { "n", "t", }, desc = "Toggle Terminal", },
       { "<C-M-p>", function() Snacks.picker.lsp_workspace_symbols() end,          desc = "LSP Workspace Symbols" },
       { "<C-S-p>", function() Snacks.picker.commands() end,                       desc = "Commands" },
       { "<C-M-i>", function() Snacks.picker.icons() end, mode = "i",              desc = "Icons/Emoji" },
+      { "<C-\\>",  function() Snacks.terminal.toggle() end, mode = { "n", "t", }, desc = "Toggle Terminal", },
+      { "<M-\\>",  function() Snacks.terminal.toggle(nil, { win = { position = "float", border = "rounded" } }) end, mode = { "n", "t", }, desc = "Float Terminal", },
       -- Top Pickers & Explorer
       { "<leader>,",  function() Snacks.picker.buffers() end,         desc = "Buffers" },
       { "<leader>:",  function() Snacks.picker.command_history() end, desc = "Command History" },
@@ -100,11 +101,31 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       dashboard = {
         enabled = not vim.g.vscode,
+        preset = {
+          keys = {
+            { icon = "", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = "", key = "n", desc = "New File", action = ":ene | startinsert" },
+            { icon = "", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = "", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            {
+              icon = "",
+              key = "c",
+              desc = "Config",
+              action = function()
+                vim.fn.chdir(vim.fn.expand("~/.dotfiles/home/.config/nvim"))
+                require("persistence").load({ last = true })
+                vim.fn.chdir(vim.fn.expand("~/.dotfiles/home/.config/nvim"))
+              end,
+            },
+            { icon = "", key = "s", desc = "Restore Session", section = "session" },
+            { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
+            { icon = "", key = "q", desc = "Quit", action = ":qa" },
+          },
+        },
         sections = {
           { section = "header" },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
-          { icon = " ", pane = 2, title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
-          { icon = " ", pane = 2, title = "Projects", section = "projects", indent = 2, padding = 1 },
+          { icon = " ", pane = 2, title = "Projects", section = "projects", indent = 2, padding = 1, limit = 10 },
           { section = "startup" },
         },
       },
@@ -139,14 +160,20 @@ return {
       picker = {
         enabled = not vim.g.vscode,
         transform = function(item)
-          if item.file and item.file:match("%.test") then item.score_mul = 0.1 end
-          if item.file and item.file:match("CMake/") then item.score_mul = 0.01 end
-          if item.file and item.file:match("tools") then item.score_mul = 0.01 end
-          if item.file and item.file:match("Test") then item.score_mul = 0.001 end
-          if item.file and item.file:match("ibraries") then item.score_mul = 0.0001 end
-          if item.file and item.file:match("xternal") then item.score_mul = 0.0001 end
-          if item.file and item.file:match("%.mock") then item.score_mul = 0.00001 end
-          if item.file and item.file:match("Mock") then item.score_mul = 0.000001 end
+          if not item.file then return end
+          local factor = 1.0
+          for _, pattern in ipairs(require("config.prefs").uninteresting_patterns) do
+            if item.file:lower():match(pattern) then
+              factor = factor * 0.3
+              item.score_mul = factor
+            end
+          end
+          for _, pattern in ipairs(require("config.prefs").ignore_patterns) do
+            if item.file:lower():match(pattern) then
+              factor = factor * 0.05
+              item.score_mul = factor
+            end
+          end
         end,
         debug = {
           scores = false,
@@ -245,7 +272,7 @@ return {
           },
         },
         matcher = {
-          frecency = true,
+          frecency = jit.os ~= "Windows",
           history_bonus = false,
         },
       },
@@ -302,14 +329,14 @@ return {
           textobject = {
             ii = false,
             ai = false,
-            is = {
+            io = {
               cursor = true,
               min_size = 2, -- minimum size of the scope
               edge = false, -- inner scope
               treesitter = { blocks = { enabled = true } },
               desc = "inner scope",
             },
-            as = {
+            ao = {
               cursor = true,
               min_size = 2, -- minimum size of the scope
               treesitter = { blocks = { enabled = true } },
@@ -320,6 +347,20 @@ return {
           jump = {
             ["[i"] = false,
             ["]i"] = false,
+            ["]o"] = {
+              bottom = true,
+              cursor = true,
+              edge = true,
+              treesitter = { blocks = { enabled = true } },
+              desc = "Jump to top of scope",
+            },
+            ["[o"] = {
+              bottom = false,
+              cursor = true,
+              edge = true,
+              treesitter = { blocks = { enabled = true } },
+              desc = "Jump to bottom of scope",
+            },
           },
         },
       },
@@ -362,17 +403,17 @@ return {
       zen = { enabled = true },
     },
     init = function()
+      ---@diagnostic disable-next-line: global-in-non-module
+      _G.dd = function(...) Snacks.debug.inspect(...) end
+      ---@diagnostic disable-next-line: global-in-non-module
+      _G.bt = function() Snacks.debug.backtrace() end
+      vim.print = _G.dd
+
       vim.g.snacks_animate = false
 
       vim.api.nvim_create_autocmd("User", {
         pattern = "VeryLazy",
         callback = function()
-          ---@diagnostic disable-next-line: global-in-non-module
-          _G.dd = function(...) Snacks.debug.inspect(...) end
-          ---@diagnostic disable-next-line: global-in-non-module
-          _G.bt = function() Snacks.debug.backtrace() end
-          vim.print = _G.dd
-
           vim.api.nvim_create_user_command("Colorize", function()
             Snacks.terminal.colorize()
             vim.wo.number = true

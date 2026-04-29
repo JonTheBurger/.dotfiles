@@ -27,17 +27,17 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end, desc = "Launch nvim Server", },
-      { "<leader>dj",  function() require("dap").up() end,                              desc = "Go Up 1 Stack Frame", },
-      { "<leader>dk",  function() require("dap").down() end,                            desc = "Go Down 1 Stack Frame", },
-      { "<F5>",        function() require("dap").continue() end,                        desc = "Continue", },
-      { "<F6>",        function() require("dap").run_to_cursor() end,                   desc = "Run to Cursor", },
-      { "<F9>",        function() require("dap").toggle_breakpoint() end,               desc = "Toggle Breakpoint", },
-      { "<F10>",       function() require("dap").step_over() end,                       desc = "Step Over", },
-      { "<F11>",       function() require("dap").step_into() end,                       desc = "Step In", },
-      { "<F12>",       function() require("dap").step_out() end,                        desc = "Step Out", },
-      { "<F4>",        function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception" }) end, desc = "Set Exception Breakpoints", },
-      { "<F8>",        function() require("dap").set_breakpoint(vim.fn.input( "[Condition] > ")) end,                desc = "Conditional Breakpoint", },
+      { "<leader>dN",  function() require("osv").launch({ port = 8086, log=true }) end,   desc = "Launch nvim Server", },
+      { "<leader>dj",  function() require("dap").up() end,                                desc = "Go Up 1 Stack Frame", },
+      { "<leader>dk",  function() require("dap").down() end,                              desc = "Go Down 1 Stack Frame", },
+      { "<F5>",        function() require("dap").continue() end,                          desc = "Continue", },
+      { "<F6>",        function() require("dap").run_to_cursor() end,                     desc = "Run to Cursor", },
+      { "<F8>",        function() require("dap").set_breakpoint(vim.fn.input( "󰯲 ")) end, desc = "Conditional Breakpoint", },
+      { "<F9>",        function() require("dap").toggle_breakpoint() end,                 desc = "Toggle Breakpoint", },
+      { "<F10>",       function() require("dap").step_over() end,                         desc = "Step Over", },
+      { "<F11>",       function() require("dap").step_into() end,                         desc = "Step In", },
+      { "<F12>",       function() require("dap").step_out() end,                          desc = "Step Out", },
+      { "<leader>d<F9>", function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception", "raised", "uncaught" }) end, desc = "Set Exception Breakpoints", },
       -- stylua: ignore end
     },
     opts = {
@@ -100,7 +100,7 @@ return {
           name = "gdb: launch",
           type = "gdb",
           request = "launch",
-          program = require("config.fn").util.select_cxx_executable,
+          program = require("config.fn").pick.cxx_exe,
           cwd = "${workspaceFolder}",
           env = { ["NOCOLOR"] = "1" },
           stopOnEntry = false,
@@ -119,7 +119,7 @@ return {
           name = "cppdbg: launch",
           type = "cppdbg",
           request = "launch",
-          program = require("config.fn").util.select_cxx_executable,
+          program = require("config.fn").pick.cxx_exe,
           cwd = "${workspaceFolder}",
           env = { ["NOCOLOR"] = "1" },
           stopOnEntry = false,
@@ -138,7 +138,7 @@ return {
           type = "cppdbg",
           request = "launch",
           cwd = "${workspaceFolder}",
-          program = require("config.fn").util.select_cxx_executable,
+          program = require("config.fn").pick.cxx_exe,
           stopAtEntry = false,
           MIMode = "gdb",
           miDebuggerServerAddress = "localhost:2331",
@@ -159,7 +159,7 @@ return {
           name = "lldb: launch",
           type = "lldb", -- matches the adapter
           request = "launch", -- could also attach to a currently running process
-          program = require("config.fn").util.select_cxx_executable,
+          program = require("config.fn").pick.cxx_exe,
           cwd = "${workspaceFolder}",
           env = { ["NOCOLOR"] = "1" },
           stopOnEntry = false,
@@ -171,7 +171,7 @@ return {
           name = "cmake: debug",
           type = "cmake",
           request = "launch",
-          args = require("config.fn").util.select_cmake_args,
+          args = require("config.fn").pick.cmake_args,
         },
         python_file = {
           type = "python",
@@ -190,7 +190,7 @@ return {
     },
     init = function()
       vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
-      vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
+      vim.fn.sign_define("DapBreakpointCondition", { text = "󰯲", texthl = "DiagnosticSignError", linehl = "", numhl = "" })
       vim.fn.sign_define("DapBreakpointRejected", { text = "ⓧ", texthl = "DiagnosticSignWarn", linehl = "", numhl = "" })
       vim.fn.sign_define("DapLogPoint", { text = "✎", texthl = "DiagnosticSignInfo", linehl = "", numhl = "" })
       vim.fn.sign_define("DapStopped", { text = "→", texthl = "DiagnosticSignWarn", linehl = "DiagnosticSignError", numhl = "DiagnosticSignError" })

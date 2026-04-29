@@ -109,18 +109,12 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      { "<C-h>", function() require("smart-splits").move_cursor_left() end,  desc = "Move left one pane" },
-      { "<C-j>", function() require("smart-splits").move_cursor_down() end,  desc = "Move down one pane" },
-      { "<C-k>", function() require("smart-splits").move_cursor_up() end,    desc = "Move up one pane" },
-      { "<C-l>", function() require("smart-splits").move_cursor_right() end, desc = "Move right one pane" },
+      { "<C-h>", function() require("smart-splits").move_cursor_left() end,  mode = { "n", "v", "t" }, desc = "Move left one pane" },
+      { "<C-j>", function() require("smart-splits").move_cursor_down() end,  mode = { "n", "v", "t" }, desc = "Move down one pane" },
+      { "<C-k>", function() require("smart-splits").move_cursor_up() end,    mode = { "n", "v", "t" }, desc = "Move up one pane" },
+      { "<C-l>", function() require("smart-splits").move_cursor_right() end, mode = { "n", "v", "t" }, desc = "Move right one pane" },
       -- stylua: ignore end
     },
-    init = function()
-      vim.keymap.set("t", "<C-h>", function() require("smart-splits").move_cursor_left() end, { desc = "Move left one pane" })
-      vim.keymap.set("t", "<C-j>", function() require("smart-splits").move_cursor_down() end, { desc = "Move down one pane" })
-      vim.keymap.set("t", "<C-k>", function() require("smart-splits").move_cursor_up() end, { desc = "Move up one pane" })
-      vim.keymap.set("t", "<C-l>", function() require("smart-splits").move_cursor_right() end, { desc = "Move right one pane" })
-    end,
   },
   {
     --https://github.com/jake-stewart/multicursor.nvim

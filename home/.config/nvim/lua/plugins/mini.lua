@@ -54,6 +54,7 @@ return {
       require("mini.comment").setup(opts.comment)
       require("mini.cursorword").setup()
       require("mini.move").setup(opts.move)
+      require("mini.icons").setup()
       require("mini.operators").setup(opts.operators)
       require("mini.splitjoin").setup(opts.splitjoin)
     end,

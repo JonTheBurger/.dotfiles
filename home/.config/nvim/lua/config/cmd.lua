@@ -35,4 +35,4 @@ vim.api.nvim_create_user_command(
 
 vim.api.nvim_create_user_command("TSExplore", function() vim.cmd("InspectTree") end, { desc = "Show Parse Tree" })
 vim.api.nvim_create_user_command("Vh", "vertical help<CR>", { desc = "Vertical Help" })
-vim.api.nvim_create_user_command("QAEV", require("config.fn").buf.close_non_visible, { desc = "Quit All Except Visible" })
+vim.api.nvim_create_user_command("QAEV", require("config.fn").buf.close_non_visible, { desc = "Quit All Except Visible | Breakpoint" })

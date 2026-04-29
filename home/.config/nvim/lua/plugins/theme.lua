@@ -1,8 +1,8 @@
 ---@module "config.preferences"
----@type ConfigPreferences
-local PREFERENCES = require("config.prefs")
-local CLICKABLE_WIDGETS = PREFERENCES.clickable_status_line
-local COLORS = PREFERENCES.colors
+---@type jvim.Preferences
+local prefs = require("config.prefs")
+local CLICKABLE_WIDGETS = prefs.clickable_status_line
+local COLORS = prefs.colors
 local buffer_not_empty = function() return vim.fn.empty(vim.fn.expand("%:t")) ~= 1 end
 local hide_in_width = function() return vim.fn.winwidth(0) > 80 end
 local present = function(text) return "[" .. (text and text or "?") .. "]" end
@@ -29,10 +29,10 @@ return {
     opts = {
       sort = { "group" },
       spec = {
-        { "<leader>C", group = "Copilot", icon = "" },
         { "<leader>L", group = "Lua", icon = "" },
         { "<leader>M", group = "Markdown", icon = "" },
         { "<leader>W", group = "Wiki", icon = "" },
+        { "<leader>a", group = "AI", icon = "" },
         { "<leader>b", group = "Build", icon = "" },
         { "<leader>c", group = "Create / C++", icon = "󰙲" },
         { "<leader>d", group = "Debug / Delete", icon = "" },
@@ -92,6 +92,36 @@ return {
     },
   },
   {
+    -- https://github.com/folke/noice.nvim
+    "folke/noice.nvim",
+    ---@module "noice.config"
+    ---@type NoiceConfig
+    ---@diagnostic disable-next-line: missing-fields
+    opts = {
+      messages = {
+        view_search = false,
+      },
+      ---@diagnostic disable-next-line: missing-fields
+      presets = {
+        bottom_search = true,
+        command_palette = false,
+        long_message_to_split = true,
+        inc_rename = false,
+        lsp_doc_border = true,
+      },
+      routes = {
+        { filter = { event = "msg_show", kind = "", find = "written" }, view = "mini" },
+        { filter = { event = "msg_show", kind = "", find = "fewer lines" }, view = "mini" },
+        { filter = { event = "msg_show", find = "^E486: Pattern not found" }, view = "mini" },
+        { filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
+        { filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
+        { filter = { find = ".*inlayHint is not supported.*" }, skip = true },
+        { filter = { find = "No signature help" }, skip = true },
+      },
+    },
+  },
+  {
+    -- https://github.com/sphamba/smear-cursor.nvim
     "sphamba/smear-cursor.nvim",
     opts = {
       enabled = false,
@@ -104,13 +134,14 @@ return {
       distance_stop_animating = 0.5,
     },
   },
-  -- https://github.com/catppuccin/nvim
   {
+    -- https://github.com/catppuccin/nvim
     "catppuccin/nvim",
     name = "catppuccin",
     ---@module "catppuccin"
     ---@type CatppuccinOptions
     opts = {
+      auto_integrations = true,
       transparent_background = false,
       term_colors = true,
     },
@@ -232,16 +263,20 @@ return {
     opts = {
       extensions = { "quickfix", "trouble", "overseer" },
       options = {
+        globalstatus = true,
         component_separators = "",
         section_separators = "",
         theme = "onedark",
+        refresh = {
+          refresh_time = 33, -- ~30fps
+        },
       },
       sections = {
         lualine_a = {
           {
             "mode",
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then Snacks.picker.help() end
             end,
           },
@@ -252,7 +287,7 @@ return {
             icon = " ",
             cond = require("cmake-tools").is_cmake_project,
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("cmake-tools").select_configure_preset() end
             end,
           },
@@ -261,7 +296,7 @@ return {
             icon = " ",
             cond = require("cmake-tools").is_cmake_project,
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("cmake-tools").select_build_target() end
             end,
           },
@@ -269,7 +304,7 @@ return {
             function() return "" end,
             cond = require("cmake-tools").is_cmake_project,
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("cmake-tools").run() end
             end,
           },
@@ -277,7 +312,7 @@ return {
             function() return present(require("cmake-tools").get_launch_target()) end,
             cond = require("cmake-tools").is_cmake_project,
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("cmake-tools").select_launch_target() end
             end,
           },
@@ -288,7 +323,7 @@ return {
             color = { fg = COLORS.blue },
             padding = { left = 0, right = 1 }, -- We don't need space before this
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then Snacks.terminal.toggle() end
             end,
           },
@@ -298,7 +333,7 @@ return {
             cond = hide_in_width,
             color = { fg = COLORS.green, gui = "bold" },
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("grug-far").open({ transient = true }) end
             end,
           },
@@ -317,7 +352,7 @@ return {
             icon = "󰡱",
             color = { fg = COLORS.white },
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("outline").open() end
             end,
           },
@@ -329,7 +364,7 @@ return {
             icon = "",
             color = { fg = COLORS.violet, gui = "bold" },
             on_click = function(n, _mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if n == 1 then vim.cmd("CodeDiff") end
             end,
           },
@@ -343,7 +378,7 @@ return {
             },
             cond = hide_in_width,
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then require("gitsigns").blame() end
             end,
           },
@@ -367,14 +402,14 @@ return {
               color_info = { fg = COLORS.cyan },
             },
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then vim.cmd("Trouble diagnostics toggle win.position=right") end
             end,
           },
           {
             "overseer",
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then vim.cmd("OverseerToggle") end
             end,
           },
@@ -385,7 +420,7 @@ return {
             cond = buffer_not_empty,
             color = { gui = "bold" },
             on_click = function(n, mouse)
-              if CLICKABLE_WIDGETS ~= true then return end
+              if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then vim.cmd("UndotreeToggle") end
             end,
           },

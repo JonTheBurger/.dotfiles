@@ -12,6 +12,7 @@ This section describes the functionality in jvim not present in vanilla neovim.
 `jvim` tends to group commands behind common keymap prefixes. While not an
 exhaustive list, the groupings here should help users discover key mappings.
 
+- `<leader>a`: AI
 - `<leader>b`: Build
 - `<leader>d`: Debugger
 - `<leader>f`: Find
@@ -23,7 +24,6 @@ exhaustive list, the groupings here should help users discover key mappings.
 - `<leader>w`: Warnings (diagnostics)
 - `_`: Window and Widget Management (`__` to close all)
 
-- `<leader>C`: Code Companion
 - `<leader>L`: Lua
 - `<leader>M`: Markdown
 - `<leader>W`: Wiki (notes)
@@ -150,17 +150,10 @@ This section lists some of common, useful Neovim Lua API functions.
 
 This section contains upcoming changes to jvim.
 
-- Refactor
-- ]<F9> next breakpoint
-- sort uninteresting_patterns in order of how interesting, use for scoring
-- bufdelete deletes breakpoints
-- NES C-y in insert mode
-- types in types.lua?
-
 ### Plugins
 
 - sidekick.nvim
-- rustaceanvim v9
+    - NES C-y in insert mode
 
 ### Dev
 

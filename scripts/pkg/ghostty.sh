@@ -23,7 +23,7 @@ local::do_install() {
   chmod +x "${HOME}/.local/bin/ghostty"
 
   # desktop
-  cat <<EOF > "${HOME}/.local/share/applications/ghostty.desktop"
+  cat <<EOF >"${HOME}/.local/share/applications/ghostty.desktop"
 [Desktop Entry]
 Version=${version}
 Type=Application

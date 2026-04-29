@@ -14,7 +14,6 @@ local::do_install() {
   fi
   local URL="${URL-https://github.com/junegunn/fzf/releases/download/v${version}/fzf-${version}-linux_amd64.tar.gz}"
 
-
   # download
   curl -Lo "/tmp/fzf.tar.gz" "${URL}"
   mkdir -p "/tmp/fzf"

@@ -1,32 +1,11 @@
 ---@module "Custom utility functions"
----@diagnostic disable: duplicate-doc-field
 local M = {}
 
 ----------------------------------------------------------------------------------------
----@section Types
-----------------------------------------------------------------------------------------
-
----@class Breakpoint
----@field line integer Line number
----@field condition? string An optional condition to trigger the breakpoint
----@field hit_condition? string Number of hits a breakpoint must hit before activating
----@field log_message? string Message to log when hit
-
----@class Breakpoints
----@field [string] Breakpoint[] A table mapping file paths to arrays of breakpoints.
-
----@class SourceLocation
----@field file string Path to file on disk
----@field line integer? Line number
----@field col integer? Column number
-
-----------------------------------------------------------------------------------------
----@endsection
 ---@section Globals
 ----------------------------------------------------------------------------------------
 
 M.gbl = {
-
   ---@type string? Path to the most recently selected debug executable
   dap_executable = nil,
 
@@ -44,52 +23,15 @@ M.gbl = {
 
 ----------------------------------------------------------------------------------------
 ---@endsection
----@section Async
-----------------------------------------------------------------------------------------
-
-local awaitify = function(func, callback_index)
-  return function(...)
-    local args = { ... }
-    local coro = coroutine.running()
-    table.insert(args, callback_index, function(...)
-      coroutine.resume(coro, ...)
-    end)
-    func(unpack(args))
-    return coroutine.yield()
-  end
-end
-
-M.async = {
-  select = function(items, opts, coro)
-    local coro = coro or coroutine.running()
-    vim.ui.select(items, opts, function(choice)
-      coroutine.resume(coro, choice)
-    end)
-    return coroutine.yield()
-  end,
-
-  input = function(opts, coro)
-    local coro = coro or coroutine.running()
-    vim.ui.input(opts, function(choice)
-      coroutine.resume(coro, choice)
-    end)
-    return coroutine.yield()
-  end,
-
-  select2 = awaitify(vim.ui.select, 3),
-  input2 = awaitify(vim.ui.input, 2),
-}
-
-----------------------------------------------------------------------------------------
----@endsection
 ---@section List
 ----------------------------------------------------------------------------------------
 
 M.lst = {
 
   ---Reverses a list, in-place.
-  ---@param list List The list to reverse.
-  ---@return List The list passed in.
+  ---@generic T
+  ---@param list T[] The list to reverse.
+  ---@return T[] The list passed in.
   reverse = function(list)
     local len = #list
     for i = 1, math.floor(len / 2) do
@@ -99,8 +41,9 @@ M.lst = {
   end,
 
   ---Returns a copy of a list, reversed.
-  ---@param list List The list to reverse.
-  ---@return List A newly reversed list.
+  ---@generic T
+  ---@param list T[] The list to reverse.
+  ---@return T[] A newly reversed list.
   reversed = function(list)
     local reversed = {}
     for i = #list, 1, -1 do
@@ -116,9 +59,7 @@ M.lst = {
   ---@return integer? Index of matching value, else nil if no match was found
   find = function(list, value)
     for i, element in ipairs(list) do
-      if element == value then
-        return i
-      end
+      if element == value then return i end
     end
     return nil
   end,
@@ -150,36 +91,28 @@ M.str = {
   ---Checks if a string starts with a given prefix
   ---@param str string String to check
   ---@return boolean True if the string begins with the prefix, else false
-  starts_with = function(str, prefix)
-    return str:sub(1, #prefix) == prefix
-  end,
+  starts_with = function(str, prefix) return str:sub(1, #prefix) == prefix end,
 
   ---Removes a prefix from a string, if it starts with that prefix
   ---@param str string String to remove prefix from
   ---@param prefix string Prefix to remove
   ---@return string String with prefix removed
   remove_prefix = function(str, prefix)
-    if M.str.starts_with(str, prefix) then
-      return str:sub(1 + #prefix, #str)
-    end
+    if M.str.starts_with(str, prefix) then return str:sub(1 + #prefix, #str) end
     return str
   end,
 
   ---Checks if a string starts with a given prefix
   ---@param str string String to check
   ---@return boolean True if the string ends with the suffix, else false
-  ends_with = function(str, suffix)
-    return str:sub(-#suffix) == suffix
-  end,
+  ends_with = function(str, suffix) return str:sub(-#suffix) == suffix end,
 
   ---Removes a suffix from a string, if it ends with that suffix
   ---@param str string String to remove suffix from
   ---@param suffix string Suffix to remove
   ---@return string String with suffix removed
   remove_suffix = function(str, suffix)
-    if M.str.ends_with(str, suffix) then
-      return str:sub(1, #str - #suffix)
-    end
+    if M.str.ends_with(str, suffix) then return str:sub(1, #str - #suffix) end
     return str
   end,
 
@@ -192,9 +125,7 @@ M.str = {
     local ascii = char:byte(1)
     idx = idx or 1
     for i = idx, #str, 1 do
-      if str:byte(i) == ascii then
-        return i
-      end
+      if str:byte(i) == ascii then return i end
     end
     return nil
   end,
@@ -208,14 +139,12 @@ M.str = {
     local ascii = char:byte(1)
     idx = idx or #str
     for i = idx, 1, -1 do
-      if str:byte(i) == ascii then
-        return i
-      end
+      if str:byte(i) == ascii then return i end
     end
     return nil
   end,
 
-  --- Splits strings on \r or \n.
+  --- Splits strings on \r or \n. Use `vim.split` if you only need one delimiter.
   ---@param str string to split
   ---@return string[] List of newline-delimited strings, with newlines removed.
   split_lines = function(str)
@@ -238,7 +167,7 @@ M.str = {
     return table.concat(t, by)
   end,
 
-  ---@param by str String to strip
+  ---@param str string String to strip
   ---@return string String with leading and trailing whitespace removed
   trim = function(str)
     str = str:gsub("^%s+", "")
@@ -252,9 +181,7 @@ M.str = {
   ---@return boolean True if str matches any list items.
   match_any = function(str, list)
     for _, pattern in ipairs(list) do
-      if str:match(pattern) then
-        return true
-      end
+      if str:match(pattern) then return true end
     end
     return false
   end,
@@ -268,31 +195,29 @@ M.str = {
 M.path = {
 
   ---Gives the basename of a path "/home/Projects/main.cpp" -> "main.cpp"
-  ---@param path Path|string Path to get the basename of
+  ---@param path string Path to get the basename of
   ---@return string Basename as a string
-  basename = function(path)
-    return tostring(path):match("[/\\]([^/\\]*)$")
-  end,
+  basename = function(path) return vim.fn.fnamemodify(path, ":t") end,
+
+  ---Gives the extension for path "/home/Projects/main.cpp" -> "cpp".
+  ---If you're using a buffer name, use `vim.fn.expand("%:e")`.
+  ---@param path string Path to get the extension of
+  ---@return string extension without the dot
+  extension = function(path) return vim.fn.fnamemodify(path, ":e") end,
 
   ---Removes all extensions from a name "/home/Projects/main.test.cpp" -> "main"
-  ---@param path Path|string Path to remove extensions from
+  ---@param path string Path to remove extensions from
   ---@return string Path with extensions removed
-  remove_ext = function(path)
-    return tostring(path):match("[^.]*")
-  end,
+  remove_ext = function(path) return tostring(path):match("[^.]*") or path end,
 
   ---Returns a string representation of the current dir that can be used as a
   ---file name, such as for stdpath("data") .. "/sessions"
   ---@param rep string? Directory to convert, cwd by default
   ---@return string File path that can be used to represent a directory
   dir_as_fname = function(rep)
-    if rep == nil then
-      rep = vim.fn.getcwd()
-    end
+    if rep == nil then rep = vim.fn.getcwd() end
     local home = vim.fn.expand("~")
-    if M.str.starts_with(rep, home) then
-      rep = "@" .. M.str.remove_prefix(rep, home)
-    end
+    if M.str.starts_with(rep, home) then rep = "@" .. M.str.remove_prefix(rep, home) end
     rep, _ = rep:gsub("[/\\:]", "%%")
     return rep
   end,
@@ -305,58 +230,41 @@ M.path = {
 
 M.fs = {
 
-  ---Writes a string to a file, creating it if it doesn't exist, overwriting its contents otherwise
-  ---@param filename string Name of file
-  ---@param content string Contents of the file
-  ---@return boolean True if the file was written to, false otherwise
-  write_to_file = function(filename, content)
-    local fd = vim.loop.fs_open(filename, "w", 438) -- 0666 permissions
-    if not fd then
-      vim.notify("Failed to open file: " .. filename, vim.log.levels.ERROR)
-      return false
-    end
-    vim.loop.fs_write(fd, content, -1)
-    vim.loop.fs_close(fd)
-    return true
-  end,
+  ---A reminder that `vim.uv.fs_stat` exists
+  ---@param path string path to check
+  ---@return boolean `true` if the path exists
+  exists = function(path) return vim.uv.fs_stat(path) ~= nil end,
 
   ---Generates a per-session path name with a given suffix
   ---@param ext string? File suffix, .json by default
-  ---@return Path Per-session-directory file path
+  ---@return string Per-session-directory file path
   session_file = function(ext)
-    if ext == nil then
-      ext = ".json"
-    end
-    local Path = require("plenary.path")
+    if ext == nil then ext = ".json" end
     local rep = vim.fn.stdpath("data") .. "/sessions/" .. M.path.dir_as_fname() .. ext
-    local path = Path:new(rep)
-    path:parent():mkdir({ parents = true, exists_ok = true })
-    return Path:new(path)
+    vim.fn.mkdir(vim.fs.dirname(rep), "p")
+    return rep
   end,
 
+  ---Saves the current session to the session file
   save_session = function()
-    -- breakpoints
     M.bkpt.save()
-    -- fn.gbl
     local json = M.fs.session_file(".fn.json")
-    json:write(vim.fn.json_encode({
-      ["dap_executable"] = M.gbl.dap_executable,
-      ["dap_exe_args"] = M.gbl.dap_exe_args,
-    }), "w")
+    vim.fn.writefile({
+      vim.fn.json_encode({
+        ["dap_executable"] = M.gbl.dap_executable,
+        ["dap_exe_args"] = M.gbl.dap_exe_args,
+      }),
+    }, json)
   end,
 
+  ---Loads the session file
   load_session = function()
-    -- breakpoints
     M.bkpt.load()
-    -- fn.gbl
     local json = M.fs.session_file(".fn.json")
     local data = nil
-    if json:exists() then
-      data = vim.fn.json_decode(json:read())
-    end
-    if data == nil then
-      return
-    end
+
+    if vim.uv.fs_stat(json) then data = vim.fn.json_decode(vim.fn.readfile(json)) end
+    if data == nil then return end
     M.gbl.dap_executable = data["dap_executable"]
     M.gbl.dap_exe_args = data["dap_exe_args"] or ""
   end,
@@ -373,10 +281,7 @@ M.fs = {
   end,
 
   --- Finds executable files in the current directory down using fd.
-  ---@param opts table? Options
-  ---@class find_executable_opts
-  ---@field timeout integer? Milliseconds to search, 10'000 (10 seconds) by default
-  ---@field max_depth integer? Number of directories to search. 20 by default.
+  ---@param opts jvim.FindExecutableOpts? Options
   ---@return string[] Executables list
   find_executables = function(opts)
     opts = opts or {}
@@ -397,31 +302,34 @@ M.fs = {
       vim.notify("Finding executables timed out!", vim.log.levels.ERROR)
       return {}
     else
-      return M.str.split_lines(result.stdout)
+      return M.str.split_lines(result.stdout or "")
     end
   end,
 
   ---Finds an executable from vscode/server
   ---@param extension string VSCode extension to search
   ---@param binary string Binary name to search for
-  ---@return Path to binary on disk, else the binary name if not found
+  ---@return string Path to binary on disk, else the binary name if not found
   find_vscode_binary = function(extension, binary)
-    local Path = require("plenary.path")
-    local scan = require("plenary.scandir")
     extension = string.gsub(extension or "ms-vscode.cpptools", "%-", "[-]") -- Escape "-", which has special meaning in lua
     binary = string.gsub(binary or "OpenDebugAD7", "%-", "[-]")
 
+    ---@type string[]
     local paths = {
-      Path:new(vim.fn.expand("~/.vscode/extensions")),
-      Path:new(vim.fn.expand("~/.vscode-server/extensions")),
+      vim.fn.expand("~/.vscode/extensions"),
+      vim.fn.expand("~/.vscode-server/extensions"),
     }
 
+    local scan = require("plenary.scandir")
     while #paths > 0 do
       local extensions = table.remove(paths, 1)
-      if extensions:is_dir() then
+      ---@diagnostic disable-next-line: need-check-nil
+      if vim.uv.fs_stat(extensions) and vim.uv.fs_stat(extensions).type == "directory" then
+        ---@type string[]
         local dirs = scan.scan_dir(tostring(extensions), { depth = 1, only_dirs = true, search_pattern = extension })
         for d = #dirs, 1, -1 do -- start with last alphabetically
           local dir = dirs[d]
+          ---@type string[]
           local exe = scan.scan_dir(tostring(dir), { search_pattern = binary })
           if #exe > 0 then
             -- Try and mark as executable
@@ -434,7 +342,7 @@ M.fs = {
 
     -- Give up and hope it's on $PATH
     -- vim.notify("Could not find " .. binary, vim.log.levels.WARN)
-    return Path:new(binary)
+    return binary
   end,
 }
 
@@ -446,12 +354,10 @@ M.fs = {
 M.bkpt = {
 
   ---Removes all breakpoints
-  clear = function()
-    require("dap").clear_breakpoints()
-  end,
+  clear = function() require("dap").clear_breakpoints() end,
 
   ---Gets currently set breakpoints
-  ---@return Breakpoints
+  ---@return table<string, jvim.Breakpoint>
   get = function()
     local bkpts = {}
     local buffers = require("dap.breakpoints").get()
@@ -468,7 +374,7 @@ M.bkpt = {
   save = function()
     local bkpts = M.bkpt.get()
     local json = M.fs.session_file(".bkpt.json")
-    json:write(vim.fn.json_encode(bkpts), "w")
+    vim.fn.writefile({ vim.fn.json_encode(bkpts) }, json)
   end,
 
   ---Loads breakpoints from a per-directory session file
@@ -478,12 +384,8 @@ M.bkpt = {
 
     -- Load breakpoints from disk
     local data = nil
-    if json:exists() then
-      data = vim.fn.json_decode(json:read())
-    end
-    if data == nil then
-      return
-    end
+    if vim.uv.fs_stat(json) then data = vim.fn.json_decode(vim.fn.readfile(json)) end
+    if data == nil then return end
 
     -- Iterate through all buffers
     for _, buffer in ipairs(vim.fn.getbufinfo()) do
@@ -516,9 +418,11 @@ M.buf = {
   ---Close all buffers except those currently visible in a window, keep windows (splits).
   close_non_visible = function(_)
     local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+    local breakpoints = M.bkpt.get()
     for _, buffer in ipairs(buffers) do
       local is_visible = vim.fn.bufwinnr(buffer.bufnr) > 0
-      if not is_visible then
+      local has_breakpoint = breakpoints[vim.api.nvim_buf_get_name(buffer.bufnr)] ~= nil
+      if not is_visible and not has_breakpoint then
         if buffer ~= vim.api.nvim_get_current_buf() then
           vim.bo[buffer.bufnr].buflisted = false
           vim.api.nvim_buf_delete(buffer.bufnr, { force = true })
@@ -534,34 +438,15 @@ M.buf = {
       "prompt",
       "terminal",
     }
-    local x_filetype = {
-      -- "neotest-summary",
-      -- "snacks_picker_input",
-      -- "trouble",
-      -- "snacks_picker_list",
-      -- "undotree",
-    }
     local try_close = function(buffer)
       local winid = vim.fn.bufwinid(buffer.bufnr)
-      if vim.api.nvim_win_is_valid(winid) then
-        vim.api.nvim_win_close(winid, true)
-      end
-      if vim.api.nvim_buf_is_valid(buffer.bufnr) then
-        vim.api.nvim_buf_delete(buffer.bufnr, { force = true })
-      end
+      if vim.api.nvim_win_is_valid(winid) then vim.api.nvim_win_close(winid, true) end
+      if vim.api.nvim_buf_is_valid(buffer.bufnr) then vim.api.nvim_buf_delete(buffer.bufnr, { force = true }) end
     end
 
     local buffers = vim.fn.getbufinfo()
     for _, buffer in ipairs(buffers) do
-      if not vim.api.nvim_buf_is_valid(buffer.bufnr) then
-        goto continue
-      end
-
-      local ftype = vim.api.nvim_get_option_value("filetype", { buf = buffer.bufnr })
-      if M.lst.find(x_filetype, ftype) then
-        try_close(buffer)
-        goto continue
-      end
+      if not vim.api.nvim_buf_is_valid(buffer.bufnr) then goto continue end
 
       local btype = vim.api.nvim_get_option_value("buftype", { buf = buffer.bufnr })
       if M.lst.find(x_buftype, btype) then
@@ -575,50 +460,36 @@ M.buf = {
 
   ---Open a file for editing, creating it if it doesn't exist.
   ---@param filename string Name of file to edit
-  ---@param opts table? Options
-  ---@class edit_file_opts
-  ---@field chdir boolean? Also change to the directory
-  ---@field initial_contents string? Initial contents of file, if it did not exist
+  ---@param opts jvim.EditFileOpts? Options
   edit_file = function(filename, opts)
-    local Path = require("plenary.path")
-    local path = Path:new(vim.fn.expand(filename))
-    path:parent():mkdir({ parents = true, exists_ok = true }) -- path:touch() doesn't work
+    local path = vim.fn.expand(filename)
+    vim.fn.mkdir(vim.fs.dirname(path), "p")
 
-    if not path:exists() then
-      if opts ~= nil and opts.initial_contents ~= nil then
-        path:write(opts.initial_contents, "w")
-      end
+    if vim.uv.fs_stat(path) == nil then
+      if opts ~= nil and opts.initial_contents ~= nil then vim.fn.writefile({ opts.initial_contents }, path) end
     end
 
-    if opts ~= nil and opts.chdir then
-      vim.api.nvim_set_current_dir(tostring(path:parent()))
-    end
+    if opts ~= nil and opts.chdir then vim.api.nvim_set_current_dir(vim.fs.dirname(path)) end
 
     vim.cmd("edit " .. tostring(path))
   end,
 
-  ---@return SourceLocation Contiguous non-whitespace text under the cursor
+  ---@return jvim.SourceLocation Contiguous non-whitespace text under the cursor
   file_under_cursor = function()
-    ---@type SourceLocation
-    local loc = {file=""}
-    local row, col0 = unpack(vim.api.nvim_win_get_cursor(0)) -- row 1-based, col 0-based
+    ---@type jvim.SourceLocation
+    local loc = { file = "" }
+    local _row, col0 = unpack(vim.api.nvim_win_get_cursor(0)) -- row 1-based, col 0-based
     local text = vim.api.nvim_get_current_line()
-    if text == "" then
-      return loc
-    end
+    if text == "" then return loc end
 
     local i = col0 + 1 -- convert to 1-based index into Lua string
-    if i > #text then
-      i = #text
-    end
+    if i > #text then i = #text end
 
     -- If cursor is on whitespace, optionally step right to next non-ws (handy)
     while i <= #text and text:sub(i, i):match("%s") do
       i = i + 1
     end
-    if i > #text then
-      return loc
-    end
+    if i > #text then return loc end
 
     local left = i
     while left > 1 and not text:sub(left - 1, left - 1):match("%s") do
@@ -635,9 +506,7 @@ M.buf = {
     -- Get file name
     loc.file = text
     local sep = loc.file:find(":")
-    if sep then
-      loc.file = loc.file:sub(0, sep - 1)
-    end
+    if sep then loc.file = loc.file:sub(0, sep - 1) end
 
     -- Get Line Col
     i = 0
@@ -655,16 +524,14 @@ M.buf = {
     return loc
   end,
 
-  gf = function ()
-    local window = require("snacks").picker.util.pick_win({
-      filter = function(win, buf)
-        return not vim.bo[buf].filetype:find("^snacks") and
-               not vim.bo[buf].filetype:find("Overseer") and
-               not vim.bo[buf].filetype:find("neotest") and
-               not vim.bo[buf].filetype:find("trouble")
-      end
+  ---Open the file (and :line:column) under cursor, pick a destination
+  gf = function()
+    local window = Snacks.picker.util.pick_win({
+      ---@param _win int Window id to check filter against
+      ---@param buf int Buffer id to check filter against
+      filter = function(_win, buf) return vim.bo[buf].buftype ~= "nofile" end,
     })
-    local loc = require("config.fn").buf.file_under_cursor()
+    local loc = M.buf.file_under_cursor()
     if vim.api.nvim_win_is_valid(window) and vim.fn.filereadable(loc.file) == 1 then
       vim.api.nvim_set_current_win(window)
       vim.cmd.edit(loc.file)
@@ -675,33 +542,26 @@ M.buf = {
     end
   end,
 
+  ---Move the cursor to the GCC-style diagnostic
+  ---@param direction ("next"|"prev") Direction to move
   jump_to_diagnostic = function(direction)
-    local buf = vim.api.nvim_get_current_buf()
-
     -- Matches GCC/Clang style: file:line:col: warning/error/note: ...
     local pattern = [[\v^[^:]+:\d+:\d+:\s*(error|warning|note|hint)\s*:]]
 
     local flags = direction == "next" and "W" or "Wb"
     local result = vim.fn.search(pattern, flags)
 
-    if result == 0 then
-      vim.notify(
-        direction == "next" and "No next diagnostic" or "No previous diagnostic",
-        vim.log.levels.INFO
-      )
-    end
+    if result == 0 then vim.notify(direction == "next" and "No next diagnostic" or "No previous diagnostic", vim.log.levels.INFO) end
   end,
 
+  ---@return int[] list of all currently visible buffers
   get_visible = function()
     local visible_buffers = {}
     for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.fn.bufwinnr(bufnr) ~= -1 then
-        table.insert(visible_buffers, bufnr)
-      end
+      if vim.fn.bufwinnr(bufnr) ~= -1 then table.insert(visible_buffers, bufnr) end
     end
     return visible_buffers
   end,
-
 }
 
 ----------------------------------------------------------------------------------------
@@ -710,12 +570,6 @@ M.buf = {
 ----------------------------------------------------------------------------------------
 
 M.os = {
-
-  ---Checks if neovim is running in wsl
-  ---@return boolean True if in WSL, false otherwise
-  is_wsl = function()
-    return vim.fn.has("wsl") == 1
-  end,
 
   ---Uses a clipboard program from the Windows host in a WSL distro
   use_wsl_clip = function()
@@ -739,7 +593,7 @@ M.os = {
           },
           cache_enabled = false,
         }
-      elseif vim.fn.executable(powershell) then
+      elseif vim.fn.executable(powershell) == 1 then
         vim.notify("Using clipboard: powershell", vim.log.levels.INFO)
         vim.g.clipboard = {
           name = "powershell-windows",
@@ -778,6 +632,7 @@ M.os = {
 
 M.pick = {
 
+  ---Pick arguments to send to the debugged program, remembering the last args
   args = function()
     return coroutine.create(function(coro)
       vim.ui.input({
@@ -795,200 +650,8 @@ M.pick = {
     end)
   end,
 
-  breakpoints = function()
-    local bkps = M.bkpt.get()
-
-    ---@type snacks.picker.Item[]
-    local items = {}
-
-    for filepath, breakpoints in pairs(bkps) do
-      local short = vim.fn.fnamemodify(filepath, ":~:.")
-      for _, bp in ipairs(breakpoints) do
-        -- Build a label summarising the breakpoint type
-        local kind
-        if bp.log_message then
-          kind = "󰎛 log"
-        elseif bp.condition then
-          kind = "󰯲 cond"
-        elseif bp.hit_condition then
-          kind = "󰱷 hit"
-        else
-          kind = "● break"
-        end
-
-        -- Secondary text shown in the preview / details column
-        local detail = bp.condition
-          or bp.log_message
-          or bp.hit_condition
-          or ""
-
-        table.insert(items, {
-          -- snacks.picker required fields
-          text = ("%s:%d  %s  %s"):format(short, bp.line, kind, detail),
-          file = filepath,
-          pos  = { bp.line, 0 },
-          -- carry the raw breakpoint for the action
-          _bp  = bp,
-          _filepath = filepath,
-          -- fields used for display columns (optional but nice)
-          filename = short,
-          lnum     = bp.line,
-          kind     = kind,
-          detail   = detail,
-        })
-      end
-    end
-
-    -- Sort: file first, then line number
-    table.sort(items, function(a, b)
-      if a.file ~= b.file then return a.file < b.file end
-      return a.lnum < b.lnum
-    end)
-
-    require("snacks").picker({
-      title  = "Breakpoints",
-      items  = items,
-      format = "file",   -- uses snacks' built-in file+lnum formatter
-
-      -- Column layout shown in the picker list
-      ---@param item snacks.picker.Item
-      ---@param ctx  snacks.picker.format.ctx
-      formatter = function(item, ctx)
-        local ret = {}
-        -- filename in dim colour
-        ret[#ret+1] = { item.filename .. ":", "SnacksPickerDimmed" }
-        -- line number highlighted
-        ret[#ret+1] = { tostring(item.lnum), "SnacksPickerLnum" }
-        ret[#ret+1] = { "  " }
-        -- breakpoint kind badge
-        local hl = ({
-          ["● break"] = "DiagnosticError",
-          ["󰯲 cond"]  = "DiagnosticWarn",
-          ["󰱷 hit"]   = "DiagnosticInfo",
-          ["󰎛 log"]   = "DiagnosticHint",
-        })[item.kind] or "Normal"
-        ret[#ret+1] = { item.kind, hl }
-        -- optional detail
-        if item.detail ~= "" then
-          ret[#ret+1] = { "  " .. item.detail, "SnacksPickerDimmed" }
-        end
-        return ret
-      end,
-
-      -- Jump to the breakpoint location on confirm
-      confirm = function(picker, item)
-        picker:close()
-        if not item then return end
-        vim.schedule(function()
-          vim.cmd("edit " .. vim.fn.fnameescape(item._filepath))
-          vim.api.nvim_win_set_cursor(0, { item.lnum, 0 })
-          vim.cmd("normal! zz")
-        end)
-      end,
-
-      -- Extra keymaps
-      actions = {
-        -- <C-d> deletes the breakpoint under the cursor
-        delete_breakpoint = function(picker, item)
-          if not item then return end
-          -- delegate to your existing removal helper if you have one,
-          -- or use nvim-dap directly:
-          local ok, dap = pcall(require, "dap")
-          if ok then
-            local bps = dap.list_breakpoints()
-            for _, b in ipairs(bps) do
-              if b.line == item.lnum and b.file == item._filepath then
-                -- dap uses remove_breakpoint / toggle_breakpoint
-                dap.toggle_breakpoint(nil, nil, nil) -- position cursor first
-                break
-              end
-            end
-          end
-          picker:close()
-        end,
-      },
-
-      win = {
-        input = {
-          keys = {
-            ["<C-d>"] = { "delete_breakpoint", mode = { "i", "n" } },
-          },
-        },
-      },
-
-      -- Live preview in the right pane
-      preview = "file",
-    })
-  end
-
-}
-
-----------------------------------------------------------------------------------------
----@endsection
----@section Util
-----------------------------------------------------------------------------------------
-
-M.util = {
-
-  ---Returns the input
-  ---@generic T
-  ---@param i T Input
-  ---@return T Input
-  identity = function(i)
-    return i
-  end,
-
-  ---Selects inside of or around an ascii character within  a line. Kind of works.
-  ---@param char string ASCII character
-  ---@param grab ("i"|"a") Grab Inside or Around
-  select_motion_char = function(char, grab)
-    local text = vim.api.nvim_get_current_line()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    col = col + 1 -- Cursor columns are zero-indexed, lua strings are 1
-
-    local next = M.str.find_char(text, char, col + 1)
-    if next == nil then
-      return
-    end
-
-    local prev = M.str.rfind_char(text, char, col - 1)
-    if prev == nil then
-      prev = next
-      next = M.str.find_char(text, char, prev + 1)
-    end
-
-    if grab == "i" then
-      next = next - 1
-    elseif grab == "a" then
-      prev = prev - 1
-    end
-
-    if next ~= nil then
-      vim.api.nvim_win_set_cursor(0, { line, prev })
-      vim.cmd("normal! v")
-      vim.api.nvim_win_set_cursor(0, { line, next - 1 })
-    end
-  end,
-
-  --- Invoke the build command
-  build = function()
-    local Path = require("plenary.path")
-    local cmake_tools = require("cmake-tools")
-    local overseer = require("overseer")
-
-    if Path:new("Cargo.toml"):exists() then
-      overseer.run_template({ name = "cargo build" })
-    elseif Path:new("CMakeLists.txt"):exists() and cmake_tools.is_cmake_project() then
-      vim.cmd("CMakeBuild")
-    elseif Path:new("Makefile"):exists() then
-      overseer.run_template({ name = "make lint" })
-    else
-      vim.notify("No build task found", vim.log.levels.WARN)
-    end
-  end,
-
-  --- Searches for executables either by searching CMake targets or using fd
-  select_cxx_executable = function()
+  ---Searches for executables either by searching CMake targets or using fd
+  cxx_exe = function()
     local cmake = require("cmake-tools")
     local targets = cmake.get_launch_targets()
 
@@ -1006,20 +669,14 @@ M.util = {
       -- CMake Project Detected!
       prompt = "Pick a target:"
       choices = targets.data.abs_paths
-      format_item = function(item)
-        return M.path.basename(item)
-      end
+      format_item = function(item) return M.path.basename(item) end
     end
 
     -- Prefer current CMake launch target
     local launch_target = cmake.get_launch_target_path()
-    if launch_target ~= nil then
-      M.lst.to_front(choices, tostring(launch_target))
-    end
+    if launch_target ~= nil then M.lst.to_front(choices, tostring(launch_target)) end
     -- Prefer the most recently selected
-    if M.gbl.dap_executable ~= nil then
-      M.lst.to_front(choices, M.gbl.dap_executable)
-    end
+    if M.gbl.dap_executable ~= nil then M.lst.to_front(choices, M.gbl.dap_executable) end
 
     return coroutine.create(function(coro)
       vim.ui.select(choices, {
@@ -1033,7 +690,8 @@ M.util = {
     end)
   end,
 
-  select_cmake_args = function()
+  ---Pick arguments to send to the cmake debugger
+  cmake_args = function()
     -- Reset table to original 3 values
     -- We do NOT reassign the table because we need the reference to stay the same
     for i = 4, #M.gbl.cmake_args do
@@ -1056,7 +714,6 @@ M.util = {
     end
 
     return coroutine.create(function(coro)
-
       local enter_cmake_args = function()
         vim.ui.input({
           prompt = "Enter CMake Args: ",
@@ -1087,17 +744,143 @@ M.util = {
         end)
       else
         if vim.fn.expand("%:t") == "CMakeLists.txt" then
-          -- M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-S"
-          -- M.gbl.cmake_args[#M.gbl.cmake_args + 1] = vim.fn.expand("%:p:h")
           M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "-B"
           M.gbl.cmake_args[#M.gbl.cmake_args + 1] = "build"
         end
 
         enter_cmake_args()
       end
+    end)
+  end,
 
+  ---Pick breakpoints
+  breakpoints = function()
+    local bkps = M.bkpt.get()
+
+    ---@type snacks.picker.Item[]
+    local items = {}
+
+    for filepath, breakpoints in pairs(bkps) do
+      local short = vim.fn.fnamemodify(filepath, ":~:.")
+      for _, bp in ipairs(breakpoints) do
+        local kind = "● break"
+        if bp.log_message then
+          kind = "✎ log"
+        elseif bp.condition then
+          kind = "󰯲 cond"
+        elseif bp.hit_condition then
+          kind = " hit"
+        end
+
+        local detail = bp.condition or bp.log_message or bp.hit_condition or ""
+
+        table.insert(items, {
+          text = ("%s:%d  %s  %s"):format(short, bp.line, kind, detail),
+          file = filepath,
+          pos = { bp.line, 0 },
+          filename = short,
+          lnum = bp.line,
+          kind = kind,
+          detail = detail,
+          _bp = bp,
+        })
+      end
+    end
+
+    table.sort(items, function(a, b)
+      if a.file ~= b.file then return a.file < b.file end
+      return a.lnum < b.lnum
     end)
 
+    Snacks.picker({
+      title = "Breakpoints",
+      items = items,
+      ---@param item snacks.picker.Item
+      format = function(item)
+        local ret = {}
+        dd(M.path.extension(item.filename))
+        local icon, hl = require("nvim-web-devicons").get_icon(item.filename, M.path.extension(item.filename), { default = true })
+        ret[#ret + 1] = { icon .. " ", hl }
+        ret[#ret + 1] = { item.filename .. ":", "SnacksPickerFile" }
+        ret[#ret + 1] = { tostring(item.lnum), "SnacksPickerLnum" }
+        ret[#ret + 1] = { "  " }
+        ret[#ret + 1] = { item.kind, "DiagnosticError" }
+        if item.detail ~= "" then ret[#ret + 1] = { "  " .. item.detail, "SnacksPickerDimmed" } end
+        return ret
+      end,
+      confirm = function(picker, item)
+        picker:close()
+        if not item then return end
+        vim.schedule(function()
+          vim.cmd("edit " .. vim.fn.fnameescape(item._filepath))
+          vim.api.nvim_win_set_cursor(0, { item.lnum, 0 })
+          vim.cmd("normal! zz")
+        end)
+      end,
+      preview = "file",
+    })
+  end,
+}
+
+----------------------------------------------------------------------------------------
+---@endsection
+---@section Util
+----------------------------------------------------------------------------------------
+
+M.util = {
+
+  ---Returns the input
+  ---@generic T
+  ---@param i T Input
+  ---@return T Input
+  identity = function(i) return i end,
+
+  ---Selects inside of or around an ascii character within  a line. Kind of works.
+  ---@param char string ASCII character
+  ---@param grab ("i"|"a") Grab Inside or Around
+  select_motion_char = function(char, grab)
+    local text = vim.api.nvim_get_current_line()
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    col = col + 1 -- Cursor columns are zero-indexed, lua strings are 1
+
+    local next = M.str.find_char(text, char, col + 1)
+    if next == nil then return end
+
+    local prev = M.str.rfind_char(text, char, col - 1)
+    if prev == nil then
+      prev = next
+      next = M.str.find_char(text, char, prev + 1)
+    end
+
+    if grab == "i" then
+      next = next - 1
+    else -- grab == "a"
+      prev = prev - 1
+    end
+
+    if next ~= nil then
+      vim.api.nvim_win_set_cursor(0, { line, prev })
+      vim.cmd("normal! v")
+      vim.api.nvim_win_set_cursor(0, { line, next - 1 })
+    end
+  end,
+
+  --- Invoke the build command
+  build = function()
+    local cmake_tools = require("cmake-tools")
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    ---@type overseer.Api
+    local overseer = require("overseer")
+
+    if vim.uv.fs_stat("Cargo.toml") then
+      overseer.run_task({ name = "cargo build" })
+    elseif vim.uv.fs_stat("CMakeLists.txt") and cmake_tools.is_cmake_project() == true then
+      vim.cmd("CMakeBuild")
+    elseif vim.uv.fs_stat("Makefile") then
+      overseer.run_task({ name = "make lint" })
+    else
+      vim.notify("No build task found", vim.log.levels.WARN)
+    end
   end,
 
   ---Monkey-patch GlobalExecutableRegistry:for_dir(...) to find cmake test executables
@@ -1113,9 +896,7 @@ M.util = {
     local utils = require("neotest-gtest.utils")
 
     local normalized = utils.normalize_path(_root_dir)
-    if self._root2registry[normalized] == nil then
-      self._root2registry[normalized] = ExecutablesRegistry:new(normalized)
-    end
+    if self._root2registry[normalized] == nil then self._root2registry[normalized] = ExecutablesRegistry:new(normalized) end
 
     if cmake_tools.is_cmake_project() then
       local model_info = cmake_tools.get_model_info()
@@ -1137,7 +918,6 @@ M.util = {
 
     return self._root2registry[normalized]
   end,
-
 }
 
 ----------------------------------------------------------------------------------------

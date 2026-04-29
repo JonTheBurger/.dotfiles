@@ -38,8 +38,7 @@ M.ts_languages = {
   "yaml",
 }
 
-M.mason_packages = {
-}
+M.mason_packages = {}
 
 M.uninteresting_patterns = {
   "cmake",

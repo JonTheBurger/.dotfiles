@@ -86,6 +86,7 @@
   d = diff
   dc = diff --cached
   f = fetch --prune
+  ff = fetch --force
   g = grep
   ll = log --full-history --stat --color --graph
   pf = push --force-with-lease

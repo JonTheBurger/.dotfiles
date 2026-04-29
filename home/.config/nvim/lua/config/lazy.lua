@@ -17,6 +17,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Setup lazy.nvim (https://lazy.folke.io/configuration)
+---@module "lazy"
 ---@type LazyConfig
 ---@diagnostic disable-next-line: missing-fields
 local opts = {

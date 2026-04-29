@@ -38,7 +38,7 @@ local::do_install() {
   fi
 
   # desktop
-  cat <<EOF > "${HOME}/.local/share/applications/org.godotengine.Godot.desktop"
+  cat <<EOF >"${HOME}/.local/share/applications/org.godotengine.Godot.desktop"
 [Desktop Entry]
 Name=Godot Engine
 GenericName=Libre game engine

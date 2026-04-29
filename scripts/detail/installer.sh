@@ -62,4 +62,3 @@ local::parse_params() {
 
   return 0
 }
-

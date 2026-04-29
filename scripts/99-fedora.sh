@@ -1,3 +1,4 @@
+#!/bin/bash
 sudo dnf install \
   ShellCheck \
   nodejs-bash-language-server \
@@ -5,7 +6,7 @@ sudo dnf install \
 
 sudo dnf install \
   hatch \
-  ruff \
+  ruff
 
 sudo dnf install \
   ccache \
@@ -18,10 +19,10 @@ sudo dnf install \
   mold \
   ninja-build \
   srecord \
-  valgrind \
+  valgrind
 
 sudo dnf install \
-  thunderbird \
+  thunderbird
 
 uv tool install konsave --with setuptools
 git clone https://github.com/vinceliuice/Layan-kde.git ~/.local/src/Layan-kde
@@ -30,7 +31,7 @@ sudo dnf install \
   kvantum \
   kcron \
   kfind \
-  kde-gtk-config \
+  kde-gtk-config
 
 sudo dnf install rustup
 rustup-init
@@ -81,7 +82,7 @@ sudo dnf install \
   virt-manager \
   virt-top
 sudo systemctl enable libvirtd
-sudo usermod -aG libvirt $(whoami)
+sudo usermod -aG libvirt "$(whoami)"
 
 # sudo dnf install obs-studio xdg-desktop-portal xdg-desktop-portal-gtk pipewire
 sudo dnf install obs-studio obs-studio-plugin-vaapi gstreamer1-vaapi

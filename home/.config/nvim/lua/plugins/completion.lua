@@ -152,7 +152,7 @@ return {
           },
           buffer = {
             score_offset = -1,
-            module = "blink.cmp.sources.path",
+            module = "blink.cmp.sources.buffer",
             name = "Buffer",
             opts = {
               -- get all "normal" buffers
@@ -223,27 +223,15 @@ return {
     version = "^9",
     ft = { "rust" },
     init = function()
-      local fn = require("config.fn")
-      local codelldb = fn.fs.find_vscode_binary("vscode-lldb", "codelldb")
-      local liblldb = fn.fs.find_vscode_binary("vscode-lldb", "liblldb")
-      local cfg = require("rustaceanvim.config")
-
       ---@module "rustaceanvim.config"
       ---@type rustaceanvim.Opts
       vim.g.rustaceanvim = {
-        -- Plugin configuration
         tools = {},
-        -- LSP configuration
         server = {
-          on_attach = function(client, bufnr)
-            -- you can also put keymaps in here
+          on_attach = function(_client, bufnr)
+            vim.keymap.set("n", "K", function() vim.cmd.RustLsp({ "hover", "actions" }) end, { silent = true, buffer = bufnr })
           end,
-          default_settings = {
-            -- rust-analyzer language server configuration
-            ["rust-analyzer"] = {},
-          },
         },
-        -- DAP configuration
         dap = {},
       }
     end,
@@ -251,7 +239,7 @@ return {
   {
     -- https://github.com/cordx56/rustowl
     "cordx56/rustowl",
-    enabled = true,
+    enabled = false and jit.os ~= "Windows",
     build = "cargo install --path . --locked",
     ft = { "rust" },
     opts = {

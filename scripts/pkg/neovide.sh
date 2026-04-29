@@ -25,7 +25,7 @@ local::do_install() {
   chmod +x "${HOME}/.local/bin/neovide"
 
   # destop
-  cat<< EOF > "${HOME}/.local/share/applications/neovide.desktop"
+  cat <<EOF >"${HOME}/.local/share/applications/neovide.desktop"
 [Desktop Entry]
 Type=Application
 Exec=neovide %F
@@ -53,4 +53,3 @@ local::do_uninstall() {
 }
 
 main "$@"
-

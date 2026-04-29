@@ -1,5 +1,12 @@
 ---@module "Support for IDEs that embed neovim"
 if vim.g.neovide then
+  vim.g.neovide_opacity = 0.85
+  vim.g.neovide_progress_bar_enabled = true
+  vim.g.neovide_cursor_vfx_mode = { "sonicboom", "pixiedust" }
+
+  vim.env.PATH = vim.fn.expand("~/.local/share/devbox/global/default/.devbox/nix/profile/default/bin") .. ":" .. vim.env.PATH
+  vim.keymap.set({ "n", "i", "v", "c", "t" }, "<C-S-v>", function() vim.api.nvim_paste(vim.fn.getreg("+"), true, -1) end, { silent = true, desc = "Paste" })
+  vim.keymap.set({ "n", "i", "v", "c", "t" }, "<D-v>", function() vim.api.nvim_paste(vim.fn.getreg("+"), true, -1) end, { silent = true, desc = "Paste" })
   vim.keymap.set({ "n", "v" }, "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
   vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
   vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
