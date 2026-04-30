@@ -31,7 +31,7 @@ return {
         },
       },
     },
-    config = function(opts)
+    config = function(_, opts)
       ---@type overseer.Api
       local overseer = require("overseer")
       overseer.setup(opts)

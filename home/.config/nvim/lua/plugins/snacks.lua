@@ -13,11 +13,11 @@ return {
       -- stylua: ignore start
       { "<C-p>",   function() Snacks.picker.files() end,                          desc = "Find Files" },
       { "<C-f>",   function() Snacks.picker.grep() end,                           desc = "Grep" },
-      { "<C-M-p>", function() Snacks.picker.lsp_workspace_symbols() end,          desc = "LSP Workspace Symbols" },
+      { "<C-A-p>", function() Snacks.picker.lsp_workspace_symbols() end,          desc = "LSP Workspace Symbols" },
       { "<C-S-p>", function() Snacks.picker.commands() end,                       desc = "Commands" },
-      { "<C-M-i>", function() Snacks.picker.icons() end, mode = "i",              desc = "Icons/Emoji" },
+      { "<C-A-i>", function() Snacks.picker.icons() end, mode = "i",              desc = "Icons/Emoji" },
       { "<C-\\>",  function() Snacks.terminal.toggle() end, mode = { "n", "t", }, desc = "Toggle Terminal", },
-      { "<M-\\>",  function() Snacks.terminal.toggle(nil, { win = { position = "float", border = "rounded" } }) end, mode = { "n", "t", }, desc = "Float Terminal", },
+      { "<A-\\>",  function() Snacks.terminal.toggle(nil, { win = { position = "float", border = "rounded" } }) end, mode = { "n", "t", }, desc = "Float Terminal", },
       -- Top Pickers & Explorer
       { "<leader>,",  function() Snacks.picker.buffers() end,         desc = "Buffers" },
       { "<leader>:",  function() Snacks.picker.command_history() end, desc = "Command History" },

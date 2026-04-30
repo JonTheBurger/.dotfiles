@@ -24,15 +24,15 @@ return {
       move = {
         mappings = {
           -- Move visual selection in Visual mode
-          left = "<S-M-h>",
-          right = "<S-M-l>",
-          down = "<S-M-j>",
-          up = "<S-M-k>",
+          left = "<S-A-h>",
+          right = "<S-A-l>",
+          down = "<S-A-j>",
+          up = "<S-A-k>",
           -- Move current line in Normal mode
-          line_left = "<S-M-h>",
-          line_right = "<S-M-l>",
-          line_down = "<S-M-j>",
-          line_up = "<S-M-k>",
+          line_left = "<S-A-h>",
+          line_right = "<S-A-l>",
+          line_down = "<S-A-j>",
+          line_up = "<S-A-k>",
         },
       },
       operators = {

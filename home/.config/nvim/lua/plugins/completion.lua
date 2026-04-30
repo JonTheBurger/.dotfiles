@@ -8,7 +8,7 @@ return {
     ---@module "mason.settings"
     ---@type MasonSettings
     opts = {},
-    config = function(opts)
+    config = function(_, opts)
       require("mason").setup(opts)
       local registry = require("mason-registry")
       for _, package in ipairs(require("config.prefs").mason_packages) do

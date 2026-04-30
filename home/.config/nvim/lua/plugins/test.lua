@@ -52,7 +52,7 @@ return {
     },
     ---@module "neotest"
     ---@param opts neotest.Config
-    config = function(opts)
+    config = function(_, opts)
       opts.adapters = {
         -- https://github.com/orjangj/neotest-ctest
         -- require("neotest-ctest").setup({

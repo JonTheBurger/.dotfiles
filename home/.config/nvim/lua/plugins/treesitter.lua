@@ -38,7 +38,7 @@ return {
     end,
     --- @module "nvim-treesitter.config"
     --- @param opts TSConfig
-    config = function(opts)
+    config = function(_, opts)
       local ts = require("nvim-treesitter.config")
       ts.setup(opts)
 
@@ -135,18 +135,25 @@ return {
     -- https://github.com/nvim-treesitter/nvim-treesitter-context
     "nvim-treesitter/nvim-treesitter-context",
     enabled = not vim.g.vscode,
+    event = { "LspAttach" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
     --- @module "treesitter-context.config"
     --- @type TSContext.Config
     opts = {
       max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
-      min_window_height = 50, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+      min_window_height = 25, -- Minimum editor window height to enable context. Values <= 0 mean no limit.
       multiline_threshold = 1, -- Maximum number of lines to show for a single context
       trim_scope = "outer", -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
       mode = "topline", -- Line used to calculate context. Choices: 'cursor', 'topline'
     },
+    keys = {
+      -- stylua: ignore start
+      { "[_", function() require("treesitter-context").go_to_context(vim.v.count1) end, mode = { "n", "v", "o" }, desc = "Go to context" },
+      -- stylua: ignore end
+    },
     --- @module "treesitter-context.config"
     --- @param opts TSContext.Config
-    config = function(opts)
+    config = function(_, opts)
       require("treesitter-context").setup(opts)
       vim.api.nvim_set_hl(0, "TreesitterContext", { bold = true, link = "ColorColumn" })
       vim.api.nvim_set_hl(0, "TreesitterContextLineNumber", { bold = true, link = "CursorColumn" })

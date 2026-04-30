@@ -92,6 +92,12 @@ return {
     },
   },
   {
+    -- https://github.com/nvim-zh/colorful-winsep.nvim
+    "nvim-zh/colorful-winsep.nvim",
+    event = { "WinLeave" },
+    opts = {},
+  },
+  {
     -- https://github.com/folke/noice.nvim
     "folke/noice.nvim",
     ---@module "noice.config"

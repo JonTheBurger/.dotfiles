@@ -150,6 +150,8 @@ This section lists some of common, useful Neovim Lua API functions.
 
 This section contains upcoming changes to jvim.
 
+- winsep animate on/off
+
 ### Plugins
 
 - sidekick.nvim
