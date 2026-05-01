@@ -53,6 +53,7 @@ M.lst = {
   end,
 
   ---Finds the first occurrence of a value in a list.
+  ---Use `vim.tbl_contains` if you're just checking for existence.
   ---@generic T
   ---@param list T[] List to search
   ---@param value T Value to find
@@ -449,7 +450,7 @@ M.buf = {
       if not vim.api.nvim_buf_is_valid(buffer.bufnr) then goto continue end
 
       local btype = vim.api.nvim_get_option_value("buftype", { buf = buffer.bufnr })
-      if M.lst.find(x_buftype, btype) then
+      if vim.tbl_contains(x_buftype, btype) then
         try_close(buffer)
         goto continue
       end
@@ -798,7 +799,6 @@ M.pick = {
       ---@param item snacks.picker.Item
       format = function(item)
         local ret = {}
-        dd(M.path.extension(item.filename))
         local icon, hl = require("nvim-web-devicons").get_icon(item.filename, M.path.extension(item.filename), { default = true })
         ret[#ret + 1] = { icon .. " ", hl }
         ret[#ret + 1] = { item.filename .. ":", "SnacksPickerFile" }
@@ -812,7 +812,7 @@ M.pick = {
         picker:close()
         if not item then return end
         vim.schedule(function()
-          vim.cmd("edit " .. vim.fn.fnameescape(item._filepath))
+          vim.cmd("edit " .. vim.fn.fnameescape(item.file))
           vim.api.nvim_win_set_cursor(0, { item.lnum, 0 })
           vim.cmd("normal! zz")
         end)
@@ -883,11 +883,6 @@ M.util = {
     end
   end,
 
-  ---Monkey-patch GlobalExecutableRegistry:for_dir(...) to find cmake test executables
-  ---See: https://github.com/alfaix/neotest-gtest/issues/12
-  ---@module "neotest-gtest.executables.global_registry"
-  ---@param self neotest-gtest.GlobalExecutableRegistry
-  ---@param _root_dir string
   find_cxx_tests = function(self, _root_dir)
     local ExecutablesRegistry = require("neotest-gtest.executables.registry")
     local cmake_tools = require("cmake-tools")
@@ -924,4 +919,9 @@ M.util = {
 ---@endsection
 ----------------------------------------------------------------------------------------
 
+---Monkey-patch GlobalExecutableRegistry:for_dir(...) to find cmake test executables
+---See: https://github.com/alfaix/neotest-gtest/issues/12
+---@module "neotest-gtest.executables.global_registry"
+---@param self neotest-gtest.GlobalExecutableRegistry
+---@param _root_dir string
 return M

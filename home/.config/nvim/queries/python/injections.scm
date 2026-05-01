@@ -1,3 +1,4 @@
+; inherits: python
 ; Module Docstrings are markdown
 (
   (expression_statement

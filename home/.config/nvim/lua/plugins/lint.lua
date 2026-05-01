@@ -140,7 +140,6 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
     },
-    lazy = false,
     keys = {
       -- stylua: ignore start
       { "<leader>wb", "<cmd>Trouble buffer_diagnostics toggle<CR>", desc = "Toggle Diagnostics" },

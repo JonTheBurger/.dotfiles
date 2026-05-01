@@ -1,4 +1,3 @@
----@type vim.lsp.Config
 local cmd = {
   "clangd",
   -- "--experimental-modules-support",
@@ -20,6 +19,7 @@ if vim.fn.filereadable("compile_commands.json") == 1 then
   if require("config.fn").fs.file_contains("compile_commands.json", "arm-none-eabi") then table.insert(cmd, "--query-driver=/usr/bin/arm-none-eabi-*") end
 end
 
+---@type vim.lsp.Config
 return {
   cmd = cmd,
   filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },

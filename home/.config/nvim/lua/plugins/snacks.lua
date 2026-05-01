@@ -113,8 +113,10 @@ return {
               desc = "Config",
               action = function()
                 vim.fn.chdir(vim.fn.expand("~/.dotfiles/home/.config/nvim"))
-                require("persistence").load({ last = true })
-                vim.fn.chdir(vim.fn.expand("~/.dotfiles/home/.config/nvim"))
+                vim.schedule(function()
+                  require("persistence").load({ last = true })
+                  vim.fn.chdir(vim.fn.expand("~/.dotfiles/home/.config/nvim"))
+                end)
               end,
             },
             { icon = "", key = "s", desc = "Restore Session", section = "session" },
@@ -459,9 +461,17 @@ return {
                 if state then
                   vim.g.snacks_animate = vim.fn.has("gui_running") == 0
                   require("smear_cursor").enabled = ((vim.fn.has("gui_running") == 0) and (vim.env.KITTY_WINDOW_ID == nil))
+
+                  require("colorful-winsep.config").opts.animate.enabled = vim.g._colorful_winsep_enabled or "shift"
+                  require("colorful-winsep").setup(require("colorful-winsep.config").opts)
                 else
                   vim.g.snacks_animate = false
                   require("smear_cursor").enabled = false
+                  require("colorful-winsep").setup()
+
+                  vim.g._colorful_winsep_enabled = require("colorful-winsep.config").opts.animate.enabled
+                  require("colorful-winsep.config").opts.animate.enabled = false
+                  require("colorful-winsep").setup(require("colorful-winsep.config").opts)
                 end
               end,
             })

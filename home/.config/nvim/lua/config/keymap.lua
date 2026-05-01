@@ -15,8 +15,8 @@ vim.keymap.set("n", "<leader>X", "<cmd>!chmod +x %<CR>", { silent = true, desc =
 vim.keymap.set("o", "F", "vF", { desc = "Inclusive reverse find (also delete char under cursor)" })
 vim.keymap.set("o", "T", "vT", { desc = "Inclusive reverse till (also delete char under cursor)" })
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected text down with Shift-J" })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected text up with Shift-K" })
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true, desc = "Move selected text down with Shift-J" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selected text up with Shift-K" })
 
 vim.keymap.set("v", "<", "<gv", { desc = "Stay in indent mode after de-indenting" })
 vim.keymap.set("v", ">", ">gv", { desc = "Stay in indent mode after indenting" })

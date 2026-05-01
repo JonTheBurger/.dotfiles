@@ -1,4 +1,3 @@
----@module "lazy"
 ---@type LazyPluginSpec[]
 return {
   {
@@ -12,22 +11,16 @@ return {
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {
+      -- Disable by default
+      enabled = false,
       overrides = {
-        -- Enable by default for markdown hover content
         buftype = {
+          -- Enable by default in non-file buffers
           nofile = {
-            render_modes = true,
+            enabled = true,
             sign = { enabled = false },
+            padding = { highlight = "NormalFloat" },
           },
-        },
-      },
-      file_types = {
-        -- Don't enable by default for actual markdown files
-        markdown = {
-          render_modes = false,
-        },
-        codecompanion = {
-          render_modes = true,
         },
       },
     },

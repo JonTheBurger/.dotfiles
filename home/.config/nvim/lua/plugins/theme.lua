@@ -32,7 +32,7 @@ return {
         { "<leader>L", group = "Lua", icon = "" },
         { "<leader>M", group = "Markdown", icon = "" },
         { "<leader>W", group = "Wiki", icon = "" },
-        { "<leader>a", group = "AI", icon = "" },
+        { "<leader>a", group = "AI", icon = "󰚩" },
         { "<leader>b", group = "Build", icon = "" },
         { "<leader>c", group = "Create / C++", icon = "󰙲" },
         { "<leader>d", group = "Debug / Delete", icon = "" },
@@ -49,16 +49,24 @@ return {
       icons = {
         mappings = true,
         rules = {
+          { pattern = "next", icon = "" },
+          { pattern = "prev", icon = "" },
           { pattern = "cmake", icon = "󰙲" },
+          { pattern = "comment", icon = "󰆁" },
           { pattern = "coverage", icon = "" },
           { pattern = "cursor", icon = "󰗧" },
           { pattern = "debug", icon = "" },
           { pattern = "delete", icon = "" },
           { pattern = "diagnostic", icon = "" },
-          { pattern = "exe", icon = "" },
           { pattern = "error", icon = "" },
+          { pattern = "exe", icon = "" },
+          { pattern = "file", icon = "󰈮" },
           { pattern = "find", icon = "" },
+          { pattern = "format", icon = "" },
+          { pattern = "function", icon = "󰡱" },
           { pattern = "git", icon = "" },
+          { pattern = "jump", icon = "󱗈" },
+          { pattern = "move", icon = "󱗈" },
           { pattern = "pick", icon = "󰮫" },
           { pattern = "replace", icon = "" },
           { pattern = "run", icon = "" },
@@ -67,6 +75,7 @@ return {
           { pattern = "split", icon = "󰃻" },
           { pattern = "swap", icon = "󰓡" },
           { pattern = "test", icon = "󰂖" },
+          { pattern = "trim", icon = "" },
           { pattern = "warn", icon = "" },
           { pattern = "wrap", icon = "󰣁" },
         },
@@ -95,7 +104,12 @@ return {
     -- https://github.com/nvim-zh/colorful-winsep.nvim
     "nvim-zh/colorful-winsep.nvim",
     event = { "WinLeave" },
-    opts = {},
+    opts = {
+      animate = {
+        ---@type "shift"|"progressive"|false
+        enabled = "shift",
+      },
+    },
   },
   {
     -- https://github.com/folke/noice.nvim
@@ -129,6 +143,7 @@ return {
   {
     -- https://github.com/sphamba/smear-cursor.nvim
     "sphamba/smear-cursor.nvim",
+    event = { "BufReadPost" },
     opts = {
       enabled = false,
       stiffness = 0.8,
@@ -144,6 +159,7 @@ return {
     -- https://github.com/catppuccin/nvim
     "catppuccin/nvim",
     name = "catppuccin",
+    lazy = true,
     ---@module "catppuccin"
     ---@type CatppuccinOptions
     opts = {
@@ -257,13 +273,9 @@ return {
     dependencies = {
       { "AndreM222/copilot-lualine" },
       { "Civitasv/cmake-tools.nvim" },
-      { "MagicDuck/grug-far.nvim" },
-      { "hedyhli/outline.nvim" },
       { "lewis6991/gitsigns.nvim" },
-      { "mbbill/undotree" },
       { "mfussenegger/nvim-dap" },
       { "nvim-tree/nvim-web-devicons" },
-      { "zbirenbaum/copilot.lua" },
     },
     event = "VeryLazy",
     opts = {
@@ -359,7 +371,7 @@ return {
             color = { fg = COLORS.white },
             on_click = function(n, mouse)
               if not CLICKABLE_WIDGETS then return end
-              if (n == 1) and (mouse == "l") then require("outline").open() end
+              if (n == 1) and (mouse == "l") then require("!silent Trouble symbols") end
             end,
           },
           {
@@ -409,14 +421,14 @@ return {
             },
             on_click = function(n, mouse)
               if not CLICKABLE_WIDGETS then return end
-              if (n == 1) and (mouse == "l") then vim.cmd("Trouble diagnostics toggle win.position=right") end
+              if (n == 1) and (mouse == "l") then vim.cmd("!silent Trouble diagnostics toggle win.position=right") end
             end,
           },
           {
             "overseer",
             on_click = function(n, mouse)
               if not CLICKABLE_WIDGETS then return end
-              if (n == 1) and (mouse == "l") then vim.cmd("OverseerToggle") end
+              if (n == 1) and (mouse == "l") then vim.cmd("!silent OverseerToggle") end
             end,
           },
         },
@@ -427,7 +439,7 @@ return {
             color = { gui = "bold" },
             on_click = function(n, mouse)
               if not CLICKABLE_WIDGETS then return end
-              if (n == 1) and (mouse == "l") then vim.cmd("UndotreeToggle") end
+              if (n == 1) and (mouse == "l") then vim.cmd("!silent UndotreeToggle") end
             end,
           },
         },

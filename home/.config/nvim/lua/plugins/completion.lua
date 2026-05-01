@@ -109,7 +109,7 @@ return {
         end,
 
         per_filetype = {
-          codecompanion = { "codecompanion" },
+          codecompanion = { "codecompanion", "lsp", "buffer" },
         },
 
         providers = {
@@ -272,6 +272,7 @@ return {
   {
     -- https://github.com/seblyng/roslyn.nvim
     "seblyng/roslyn.nvim",
+    ft = { "cs" },
     ---@module 'roslyn.config'
     ---@type RoslynNvimConfig
     opts = {},

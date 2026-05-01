@@ -23,6 +23,7 @@
     "vale-ls@0.4.0",
     "vscode-langservers-extracted@latest",
     "yaml-language-server@1.18.0",
-    "ts_query_ls@3.16.0"
+    "ts_query_ls@3.16.0",
+    "tree-sitter@0.26.8"
   ]
 }
