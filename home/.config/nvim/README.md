@@ -150,6 +150,11 @@ This section lists some of common, useful Neovim Lua API functions.
 
 This section contains upcoming changes to jvim.
 
+- neovide fullscreen
+- more snippets!
+- filter more noice messages
+- Custom folds for Doxygen `{`
+
 ### Plugins
 
 - NES C-y in insert mode

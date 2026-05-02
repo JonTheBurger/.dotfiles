@@ -16,8 +16,8 @@ return {
       { "<C-A-p>", function() Snacks.picker.lsp_workspace_symbols() end,          desc = "LSP Workspace Symbols" },
       { "<C-S-p>", function() Snacks.picker.commands() end,                       desc = "Commands" },
       { "<C-A-i>", function() Snacks.picker.icons() end, mode = "i",              desc = "Icons/Emoji" },
-      { "<C-\\>",  function() Snacks.terminal.toggle() end, mode = { "n", "t", }, desc = "Toggle Terminal", },
-      { "<A-\\>",  function() Snacks.terminal.toggle(nil, { win = { position = "float", border = "rounded" } }) end, mode = { "n", "t", }, desc = "Float Terminal", },
+      { "<C-\\>",  function() Snacks.terminal.toggle(nil, { count = 1, win = { position = "bottom" }}) end, mode = { "n", "t", }, desc = "Terminal Split", },
+      { "<A-\\>",  function() Snacks.terminal.toggle(nil, { count = 2, win = { position = "float", border = "rounded" } }) end, mode = { "n", "t", }, desc = "Terminal Float", },
       -- Top Pickers & Explorer
       { "<leader>,",  function() Snacks.picker.buffers() end,         desc = "Buffers" },
       { "<leader>:",  function() Snacks.picker.command_history() end, desc = "Command History" },
@@ -40,7 +40,7 @@ return {
       { "<leader>gS", function() Snacks.picker.git_stash() end,    desc = "Git Pick Stash" },
       { "<leader>gi", function() Snacks.picker.git_diff() end,     desc = "Git Pick Diff (Hunks)" },
       { "<leader>go", function() Snacks.picker.git_log_file() end, desc = "Git Pick Log File" },
-      { "<leader>hb", function() Snacks.git.blame_line() end,      desc = "Git Blame Hover" },
+      { "<leader>hb", function() Snacks.git.blame_line() end, mode = { "n", "v" }, desc = "Git Blame Hover" },
       ---@diagnostic disable-next-line: missing-fields,param-type-mismatch
       { "<leader>gw", function() Snacks.gitbrowse({ commit = vim.fn.system("git rev-parse HEAD"), }) end, desc = "Git web view" },
       -- Grep

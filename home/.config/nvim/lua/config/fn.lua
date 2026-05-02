@@ -449,7 +449,14 @@ M.buf = {
     for _, buffer in ipairs(buffers) do
       if not vim.api.nvim_buf_is_valid(buffer.bufnr) then goto continue end
 
-      local btype = vim.api.nvim_get_option_value("buftype", { buf = buffer.bufnr })
+      -- Skip buffers not attached to any window (likely internal scratch bufs)
+      if #buffer.windows == 0 then goto continue end
+
+      -- Empty buffers like this are also used as scratch for e.g. colorful-winsep
+      local btype = vim.bo[buffer.bufnr].buftype
+      local ftype = vim.bo[buffer.bufnr].filetype
+      if btype == "nofile" and ftype == "" and #buffer.variables == 0 then goto continue end
+
       if vim.tbl_contains(x_buftype, btype) then
         try_close(buffer)
         goto continue
@@ -530,7 +537,7 @@ M.buf = {
     local window = Snacks.picker.util.pick_win({
       ---@param _win int Window id to check filter against
       ---@param buf int Buffer id to check filter against
-      filter = function(_win, buf) return vim.bo[buf].buftype ~= "nofile" end,
+      filter = function(_win, buf) return vim.bo[buf].buftype ~= "nofile" and vim.bo[buf].buftype ~= "terminal" end,
     })
     local loc = M.buf.file_under_cursor()
     if vim.api.nvim_win_is_valid(window) and vim.fn.filereadable(loc.file) == 1 then
@@ -545,14 +552,37 @@ M.buf = {
 
   ---Move the cursor to the GCC-style diagnostic
   ---@param direction ("next"|"prev") Direction to move
-  jump_to_diagnostic = function(direction)
+  ---@param severity? ("error") Severity of error to jump to (any when `nil`)
+  jump_to_diagnostic = function(direction, severity)
     -- Matches GCC/Clang style: file:line:col: warning/error/note: ...
-    local pattern = [[\v^[^:]+:\d+:\d+:\s*(error|warning|note|hint)\s*:]]
+    local severities = "fatal error|error|warning|note|hint"
+    if severity == "error" then severities = "fatal error|error" end
+    local pattern = [[\v^[^:]+:\d+:\d+:\s*(]] .. severities .. [[)\s*:]]
 
     local flags = direction == "next" and "W" or "Wb"
     local result = vim.fn.search(pattern, flags)
 
     if result == 0 then vim.notify(direction == "next" and "No next diagnostic" or "No previous diagnostic", vim.log.levels.INFO) end
+  end,
+
+  ---`<C-i>` and `<C-o>`, but only for the current buffer
+  ---@param direction ("next"|"prev") Direction to move
+  jump = function(direction)
+    local jumps, idx = unpack(vim.fn.getjumplist())
+    local current = vim.api.nvim_get_current_buf()
+    local step = (direction == "next") and 1 or -1
+    local target = idx + step
+    local ctrl_i = vim.keycode("<C-i>")
+    local ctrl_o = vim.keycode("<C-o>")
+    -- idx is 0-based from the start of the list
+    while jumps[target + 1] do
+      if jumps[target + 1].bufnr == current then
+        local count = math.abs(target - idx)
+        vim.cmd("normal! " .. count .. ((direction == "next") and ctrl_i or ctrl_o))
+        return
+      end
+      target = target + step
+    end
   end,
 
   ---@return int[] list of all currently visible buffers
@@ -883,6 +913,11 @@ M.util = {
     end
   end,
 
+  ---Monkey-patch GlobalExecutableRegistry:for_dir(...) to find cmake test executables
+  ---See: https://github.com/alfaix/neotest-gtest/issues/12
+  ---@module "neotest-gtest.executables.global_registry"
+  ---@param self neotest-gtest.GlobalExecutableRegistry
+  ---@param _root_dir string
   find_cxx_tests = function(self, _root_dir)
     local ExecutablesRegistry = require("neotest-gtest.executables.registry")
     local cmake_tools = require("cmake-tools")
@@ -914,14 +949,8 @@ M.util = {
     return self._root2registry[normalized]
   end,
 }
-
 ----------------------------------------------------------------------------------------
 ---@endsection
 ----------------------------------------------------------------------------------------
 
----Monkey-patch GlobalExecutableRegistry:for_dir(...) to find cmake test executables
----See: https://github.com/alfaix/neotest-gtest/issues/12
----@module "neotest-gtest.executables.global_registry"
----@param self neotest-gtest.GlobalExecutableRegistry
----@param _root_dir string
 return M

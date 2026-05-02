@@ -133,6 +133,7 @@ return {
         { filter = { event = "msg_show", kind = "", find = "written" }, view = "mini" },
         { filter = { event = "msg_show", kind = "", find = "fewer lines" }, view = "mini" },
         { filter = { event = "msg_show", find = "^E486: Pattern not found" }, view = "mini" },
+        { filter = { event = "msg_show", find = "copilot-lsp.*Unexpected start of column" }, view = "mini" },
         { filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
         { filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
         { filter = { find = ".*inlayHint is not supported.*" }, skip = true },

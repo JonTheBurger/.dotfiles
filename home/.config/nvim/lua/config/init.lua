@@ -1,8 +1,8 @@
 ---@module "Main Entrypoint"
 require("config.opt")
 require("config.prefs")
+require("config.autocmd") -- Create augroup before lazy
 require("config.lazy")
-require("config.autocmd")
 require("config.cmd")
 require("config.ide")
 require("config.keymap")

@@ -4,22 +4,8 @@
 ---@diagnostic disable-next-line: missing-fields
 local M = {}
 
-M.colors = {
-  bg = "#455574",
-  fg = "#bbc2cf",
-  red = "#ec5f67",
-  orange = "#ff8800",
-  yellow = "#ecbe7b",
-  green = "#78f278",
-  blue = "#51afef",
-  cyan = "#0084ff",
-  violet = "#c489ff",
-  magenta = "#ff539e",
-  purple = "#9745be",
-  white = "#cccccc",
-  dark_grey = "#20303b",
-  brown = "#885a2c",
-}
+-- "gemini-2.5-pro"
+M.ai_model = "claude-sonnet-4-6"
 
 M.ts_languages = {
   "bash",
@@ -56,5 +42,22 @@ M.ignore_patterns = {
 M.clickable_status_line = false
 
 M.use_dap_view = true
+
+M.colors = {
+  bg = "#455574",
+  fg = "#bbc2cf",
+  red = "#ec5f67",
+  orange = "#ff8800",
+  yellow = "#ecbe7b",
+  green = "#78f278",
+  blue = "#51afef",
+  cyan = "#0084ff",
+  violet = "#c489ff",
+  magenta = "#ff539e",
+  purple = "#9745be",
+  white = "#cccccc",
+  dark_grey = "#20303b",
+  brown = "#885a2c",
+}
 
 return M

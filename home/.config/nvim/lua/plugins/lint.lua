@@ -136,6 +136,7 @@ return {
     -- https://github.com/folke/trouble.nvim
     "folke/trouble.nvim",
     enabled = not vim.g.vscode,
+    lazy = false,
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons",
@@ -179,7 +180,7 @@ return {
       vim.api.nvim_create_autocmd("BufRead", {
         callback = function(ev)
           if vim.bo[ev.buf].buftype == "quickfix" then vim.schedule(function()
-            vim.cmd("cclose")
+            vim.cmd.cclose()
             vim.cmd("Trouble qflist open")
           end) end
         end,

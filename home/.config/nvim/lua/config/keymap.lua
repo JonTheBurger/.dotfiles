@@ -21,8 +21,8 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { silent = true, desc = "Move selec
 vim.keymap.set("v", "<", "<gv", { desc = "Stay in indent mode after de-indenting" })
 vim.keymap.set("v", ">", ">gv", { desc = "Stay in indent mode after indenting" })
 
-vim.keymap.set("n", "<S-h>", "B", { desc = "Go back a word" })
-vim.keymap.set("n", "<S-l>", "W", { desc = "Go forward a word" })
+vim.keymap.set("n", "<S-h>", function() require("config.fn").buf.jump("prev") end, { desc = "Current buffer back" })
+vim.keymap.set("n", "<S-l>", function() require("config.fn").buf.jump("next") end, { desc = "Current buffer forward" })
 vim.keymap.set({ "n", "x" }, "gt", "<S-h>", { desc = "Go to the top of the screen" })
 vim.keymap.set({ "n", "x" }, "gb", "<S-l>", { desc = "Go to the bottom of the screen" })
 

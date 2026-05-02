@@ -1,4 +1,3 @@
--- https://api.business.githubcopilot.com/models
 copilot_node_command = "node"
 if vim.uv.fs_stat("/home/vagrant/.nvm/versions/node/v24.13.1/bin/node") then copilot_node_command = "/home/vagrant/.nvm/versions/node/v24.13.1/bin/node" end
 
@@ -56,7 +55,7 @@ return {
           dismiss = "<Esc>",
         },
       },
-      copilot_model = "",
+      copilot_model = "gpt-41-copilot", -- Completion only has one model available
       filetypes = {
         yaml = false,
         markdown = false,
@@ -118,7 +117,7 @@ return {
         chat = {
           adapter = {
             name = "copilot",
-            model = "gpt-4.1",
+            model = require("config.prefs").ai_model,
           },
           slash_commands = {
             -- https://codecompanion.olimorris.dev/configuration/chat-buffer#slash-commands

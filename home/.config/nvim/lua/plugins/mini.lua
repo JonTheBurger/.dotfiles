@@ -52,9 +52,8 @@ return {
       require("mini.ai").setup(opts.ai)
       require("mini.align").setup(opts.align)
       require("mini.comment").setup(opts.comment)
-      require("mini.cursorword").setup()
+      require("mini.cursorword").setup(opts.cursorword)
       require("mini.move").setup(opts.move)
-      require("mini.icons").setup()
       require("mini.operators").setup(opts.operators)
       require("mini.splitjoin").setup(opts.splitjoin)
     end,
