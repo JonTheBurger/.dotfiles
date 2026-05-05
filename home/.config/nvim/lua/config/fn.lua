@@ -355,17 +355,20 @@ M.fs = {
 M.bkpt = {
 
   ---Removes all breakpoints
-  clear = function() require("dap").clear_breakpoints() end,
+  clear = require("dap").clear_breakpoints,
 
-  ---Gets currently set breakpoints
-  ---@return table<string, jvim.Breakpoint>
+  ---Gets currently set breakpoints by filename
+  ---@return table<string, dap.bp[]>
   get = function()
     local bkpts = {}
-    local buffers = require("dap.breakpoints").get()
-    if buffers ~= nil then
-      for bufnr, lines in pairs(buffers) do
-        local name = vim.api.nvim_buf_get_name(bufnr)
-        bkpts[name] = lines
+
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    ---Documented annotation for get is wrong
+    ---@type table<integer,dap.bp[]>
+    local bkpt_by_buf = require("dap.breakpoints").get()
+    if bkpt_by_buf ~= nil then
+      for buf, breakpoints in pairs(bkpt_by_buf) do
+        bkpts[vim.api.nvim_buf_get_name(buf)] = breakpoints
       end
     end
     return bkpts
@@ -419,10 +422,10 @@ M.buf = {
   ---Close all buffers except those currently visible in a window, keep windows (splits).
   close_non_visible = function(_)
     local buffers = vim.fn.getbufinfo({ buflisted = 1 })
-    local breakpoints = M.bkpt.get()
+    local breakpoints = require("dap.breakpoints").get()
     for _, buffer in ipairs(buffers) do
       local is_visible = vim.fn.bufwinnr(buffer.bufnr) > 0
-      local has_breakpoint = breakpoints[vim.api.nvim_buf_get_name(buffer.bufnr)] ~= nil
+      local has_breakpoint = breakpoints[buffer.bufnr] ~= nil
       if not is_visible and not has_breakpoint then
         if buffer ~= vim.api.nvim_get_current_buf() then
           vim.bo[buffer.bufnr].buflisted = false
@@ -786,46 +789,49 @@ M.pick = {
 
   ---Pick breakpoints
   breakpoints = function()
-    local bkps = M.bkpt.get()
+    Snacks.picker({
+      title = "Breakpoints (<F9> to delete)",
+      ---@return snacks.picker.Item[]
+      finder = function()
+        ---@type snacks.picker.Item[]
+        local items = {}
+        local bkps = M.bkpt.get()
 
-    ---@type snacks.picker.Item[]
-    local items = {}
+        for filepath, breakpoints in pairs(bkps) do
+          local short = vim.fn.fnamemodify(filepath, ":~:.")
+          for _, breakpoint in ipairs(breakpoints) do
+            local kind = "● break"
+            if breakpoint.log_message then
+              kind = "✎ log"
+            elseif breakpoint.condition then
+              kind = "󰯲 cond"
+            elseif breakpoint.hit_condition then
+              kind = " hit"
+            end
 
-    for filepath, breakpoints in pairs(bkps) do
-      local short = vim.fn.fnamemodify(filepath, ":~:.")
-      for _, bp in ipairs(breakpoints) do
-        local kind = "● break"
-        if bp.log_message then
-          kind = "✎ log"
-        elseif bp.condition then
-          kind = "󰯲 cond"
-        elseif bp.hit_condition then
-          kind = " hit"
+            local detail = breakpoint.condition or breakpoint.log_message or breakpoint.hit_condition or ""
+
+            table.insert(items, {
+              text = ("%s:%d  %s  %s"):format(short, breakpoint.line, kind, detail),
+              file = filepath,
+              pos = { breakpoint.line, 0 },
+              filename = short,
+              lnum = breakpoint.line,
+              kind = kind,
+              detail = detail,
+              _breakpoint = breakpoint,
+            })
+          end
         end
 
-        local detail = bp.condition or bp.log_message or bp.hit_condition or ""
+        table.sort(items, function(a, b)
+          if a.file ~= b.file then return a.file < b.file end
+          return a.lnum < b.lnum
+        end)
 
-        table.insert(items, {
-          text = ("%s:%d  %s  %s"):format(short, bp.line, kind, detail),
-          file = filepath,
-          pos = { bp.line, 0 },
-          filename = short,
-          lnum = bp.line,
-          kind = kind,
-          detail = detail,
-          _bp = bp,
-        })
-      end
-    end
-
-    table.sort(items, function(a, b)
-      if a.file ~= b.file then return a.file < b.file end
-      return a.lnum < b.lnum
-    end)
-
-    Snacks.picker({
-      title = "Breakpoints",
-      items = items,
+        return items
+      end,
+      preview = "file",
       ---@param item snacks.picker.Item
       format = function(item)
         local ret = {}
@@ -847,7 +853,22 @@ M.pick = {
           vim.cmd("normal! zz")
         end)
       end,
-      preview = "file",
+      win = {
+        input = {
+          keys = {
+            ["<F9>"] = { "delete_breakpoint", mode = { "i", "n" } },
+          },
+        },
+      },
+      actions = {
+        ---@param item snacks.Picker
+        ---@param item snacks.picker.Item
+        delete_breakpoint = function(picker, item)
+          if not item then return end
+          require("dap.breakpoints").remove(item._breakpoint.buf, item._breakpoint.line)
+          picker:refresh()
+        end,
+      },
     })
   end,
 }

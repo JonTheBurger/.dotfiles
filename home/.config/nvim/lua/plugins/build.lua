@@ -5,10 +5,11 @@ return {
     enabled = not vim.g.vscode,
     keys = {
       -- stylua: ignore start
-      { "<leader>bx", "<cmd>OverseerRun<CR>",    desc = "Execute" },
-      { "<leader>bo", "<cmd>OverseerToggle<CR>", desc = "Toggle Output" },
-      { "<leader>O",  "<cmd>OverseerToggle<CR>", desc = "Toggle Output" },
-      { "_o",         "<cmd>OverseerToggle<CR>", desc = "Toggle Output" },
+      { "<leader>bx", "<cmd>OverseerRun<CR>",         desc = "Execute" },
+      { "<leader>bo", "<cmd>OverseerToggle<CR>",      desc = "Toggle Output" },
+      { "<leader>ba", "<cmd>OverseerRestartLast<CR>", desc = "Build Again" },
+      { "<leader>O",  "<cmd>OverseerToggle<CR>",      desc = "Toggle Output" },
+      { "_o",         "<cmd>OverseerToggle<CR>",      desc = "Toggle Output" },
       -- stylua: ignore end
     },
     ---@module "overseer"
@@ -35,6 +36,53 @@ return {
       ---@type overseer.Api
       local overseer = require("overseer")
       overseer.setup(opts)
+
+      -- https://github.com/stevearc/overseer.nvim/blob/master/doc/recipes.md#asynchronous-make-similar-to-vim-dispatch
+      vim.api.nvim_create_user_command("Make", function(params)
+        -- Insert args at the '$*' in the makeprg
+        local cmd, num_subs = vim.o.makeprg:gsub("%$%*", params.args)
+        if num_subs == 0 then cmd = cmd .. " " .. params.args end
+        local task = require("overseer").new_task({
+          cmd = vim.fn.expandcmd(cmd),
+          components = {
+            {
+              "on_output_quickfix",
+              open = not params.bang,
+              open_height = 8,
+              errorformat = vim.o.errorformat,
+            },
+            "default",
+          },
+        })
+        task:start()
+      end, {
+        desc = "Run your makeprg as an Overseer task",
+        nargs = "*",
+        bang = true,
+      })
+
+      -- https://github.com/stevearc/overseer.nvim/blob/master/doc/recipes.md#run-a-quick-command-like-with--or-term
+      vim.cmd.cnoreabbrev("Run OverseerShell")
+
+      -- https://github.com/stevearc/overseer.nvim/blob/master/doc/recipes.md#restart-last-task
+      vim.api.nvim_create_user_command("OverseerRestartLast", function()
+        local overseer = require("overseer")
+        local task_list = require("overseer.task_list")
+        local tasks = overseer.list_tasks({
+          status = {
+            overseer.STATUS.SUCCESS,
+            overseer.STATUS.FAILURE,
+            overseer.STATUS.CANCELED,
+          },
+          sort = task_list.sort_finished_recently,
+        })
+        if vim.tbl_isempty(tasks) then
+          vim.notify("No tasks found", vim.log.levels.WARN)
+        else
+          local most_recent = tasks[1]
+          overseer.run_action(most_recent, "restart")
+        end
+      end, {})
 
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/reference.md#add_template_hookopts-hook
       overseer.add_template_hook({ name = "^make.*" }, function(task_defn, util)

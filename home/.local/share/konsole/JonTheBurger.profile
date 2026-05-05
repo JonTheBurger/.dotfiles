@@ -9,7 +9,7 @@ UseFontLineChararacters=true
 DefaultEncoding=UTF-8
 
 [General]
-Command=/usr/bin/tmux
+Command=/usr/bin/zsh
 InvertSelectionColors=true
 Name=JonTheBurger
 Parent=FALLBACK/

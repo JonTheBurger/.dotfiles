@@ -3,9 +3,76 @@
 This document explains the basics of getting started with `jvim`. If you are new
 to `vim`, consider reading the `Vim` section below for the basics.
 
+### Setup
+
+
+
 ## Features
 
 This section describes the functionality in jvim not present in vanilla neovim.
+
+### Structure
+
+```bash
+.
+├── ftdetect
+│   ├── ansible.lua
+│   └── ...
+├── init.lua
+├── lazy-lock.json
+├── lsp
+│   ├── init.lua
+│   ├── ...
+│   ├── clangd.lua
+│   └── ...
+├── lua
+│   ├── types
+│   │   └── jvim.lua
+│   ├── config
+│   │   ├── init.lua
+│   │   ├── autocmd.lua
+│   │   ├── cmd.lua
+│   │   ├── fn.lua
+│   │   ├── ide.lua
+│   │   ├── keymap.lua
+│   │   ├── lazy.lua
+│   │   ├── lsp.lua
+│   │   ├── opt.lua
+│   │   ├── prefs.lua
+│   │   ├── syms.lua
+│   │   └── wiki.lua
+│   ├── overseer
+│   │   └── ...
+│   ├── plugins
+│   │   ├── init.lua
+│   │   ├── ai.lua
+│   │   ├── build.lua
+│   │   ├── completion.lua
+│   │   ├── debug.lua
+│   │   ├── editing.lua
+│   │   ├── git.lua
+│   │   ├── lint.lua
+│   │   ├── mini.lua
+│   │   ├── notes.lua
+│   │   ├── sessions.lua
+│   │   ├── snacks.lua
+│   │   ├── test.lua
+│   │   ├── theme.lua
+│   │   └── treesitter.lua
+│   └── prompts
+│       └── ...
+├── queries
+│   ├── cpp
+│   │   └── injections.scm
+│   ├── markdown
+│   │   └── textobjects.scm
+│   └── ...
+├── README.md
+└── snippets
+    ├── package.json
+    ├── cpp.json
+    └── ...
+```
 
 ### Keymaps
 
@@ -49,6 +116,7 @@ This section describes the basics of vim.
 
 - `h/j/k/l`: Move cursor left/down/up/right
 - `<C-d>`/`<C-u>` (`Ctrl+d`/`Ctrl+u`): Page down/up
+- TODO(POVIRK): 
 
 ### Advanced
 
@@ -144,21 +212,58 @@ respectively.
 
 This section lists some of common, useful Neovim Lua API functions.
 
+// TODO(POVIRK): document
+
+- `vim.keymap.set(<modes>, <keys>, <func>, <opts>)`
+- `vim.print(<string>)`
+
+- `vim.api.nvim_create_autocmd`
+- `vim.api.nvim_create_user_command`
+- `vim.api.nvim_get_current_line()`
+- `vim.api.nvim_win_get_cursor(0)`
+- `vim.api.nvim_list_bufs()`
+- `vim.api.nvim_set_hl(0, "<Name>", { link = "<SomeOtherHighlight>" })`
+- `vim.api.nvim_feedkeys("<keys>", <modes>, false)`
+- `vim.api.nvim_win_set_cursor(0, { line, col })`
+
+- `vim.fs.dirname`
+- `vim.fs.mkdir`
+- `vim.fs.fs_stat`
+
+- `vim.fn.system(<command-string>)`
+- `vim.fn.expand("~/<some>/<path>")`
+- `vim.fn.filereadable(<file>)`
+- `vim.fn.writefile`
+- `vim.fn.readfile`
+- `vim.fn.stdpath("config"|"data"|"state"|"cache"|"log")`
+- `vim.fn.sort`
+- `vim.fn.expand()`
+- `vim.fn.has()`
+- `vim.fn.join()`
+- `vim.fn.json_encode()`
+- `vim.fn.json_decode()`
+- `vim.fn.input()`
+- `vim.fn.getcwd()`
+- `vim.fn.flattennew()`
+- `vim.fn.filter()`
+- `vim.fn.extendnew()`
+
+- `vim.opt`
+- `vim.bo`
+- `vim.env`
+- `vim.g`
+
 --------------------------------------------------------------------------------
 
 ## To Do List
 
 This section contains upcoming changes to jvim.
 
-- neovide fullscreen
+- Docs
 - more snippets!
-- filter more noice messages
 - Custom folds for Doxygen `{`
 
 ### Plugins
-
-- NES C-y in insert mode
-    - vim.keymap.set("i", "<C-y>", function() vim.cmd("stopinsert") require("copilot.nes").accept_and_goto() end, { desc = "Copilot NES accept and goto" })
 
 ### Dev
 

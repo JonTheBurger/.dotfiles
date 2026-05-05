@@ -69,6 +69,13 @@ return {
         ["."] = false,
       },
     },
+    config = function(_, opts)
+      require("copilot").setup(opts)
+      vim.keymap.set({ "n", "i" }, "<C-y>", function()
+        vim.cmd("stopinsert")
+        require("copilot.nes").accept_and_goto()
+      end, { desc = "Copilot NES accept and goto" })
+    end,
   },
   {
     "fang2hou/blink-copilot",

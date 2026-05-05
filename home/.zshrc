@@ -138,10 +138,12 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:
 # Keybinds, check with 'showkey -a', see https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Modifying-Text
 bindkey '^[e'  _expand_alias      # Alt+E
 bindkey '^[b'  backward-word      # Alt+B
-bindkey '\e[1~' beginning-of-line # Home
-bindkey '\e[4~' end-of-line       # End
+bindkey '^[OH' beginning-of-line # Home
 bindkey '^[[H' beginning-of-line # Home
+bindkey '\e[1~' beginning-of-line # Home
+bindkey '^[OF' end-of-line       # End
 bindkey '^[[F' end-of-line       # End
+bindkey '\e[4~' end-of-line       # End
 bindkey '^[f'  forward-word       # Alt+F
 bindkey '^A'   beginning-of-line  # Ctrl+A
 bindkey '^E'   end-of-line        # Ctrl+E
