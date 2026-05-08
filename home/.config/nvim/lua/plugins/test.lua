@@ -56,9 +56,10 @@ return {
       opts.adapters = {
         -- https://github.com/orjangj/neotest-ctest
         -- require("neotest-ctest").setup({
-        --   frameworks = { "catch2", "doctest", "cpputest", }, -- "gtest"
+        --   dap_adapter = "cppdbg",
+        --   frameworks = { "gtest", "catch2", "doctest", "cpputest", }, -- "gtest"
         --   is_test_file = function(file_path)
-        --     return file_path:lower():match("**test.cpp$")
+        --     return file_path:lower():match(".*test.cpp$") or file_path:match("GTest.*.cpp$")
         --   end,
         -- }),
         -- https://github.com/alfaix/neotest-gtest

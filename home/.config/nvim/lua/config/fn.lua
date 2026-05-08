@@ -410,6 +410,38 @@ M.bkpt = {
       end
     end
   end,
+
+  ---Jump to the next/prev breakpoint in the buffer
+  ---@param direction ("next"|"prev") Direction to move
+  jump = function(direction)
+    local row, _col = unpack(vim.api.nvim_win_get_cursor(0))
+    local buf = vim.api.nvim_get_current_buf()
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    ---Documented annotation for get is wrong
+    ---@type dap.bp[]
+    local breakpoints = require("dap.breakpoints").get()[buf]
+    if breakpoints ~= nil then
+      table.sort(breakpoints, function(lhs, rhs) return lhs.line < rhs.line end)
+
+      breakpoints = vim.tbl_filter(function(breakpoint)
+        if breakpoint == nil then return false end
+        if direction == "next" then return breakpoint.line > row end
+        return breakpoint.line < row
+      end, breakpoints)
+
+      local breakpoint = nil
+      if direction == "next" then
+        breakpoint = breakpoints[1]
+      else
+        breakpoint = breakpoints[#breakpoints]
+      end
+
+      if breakpoint ~= nil then
+        vim.api.nvim_win_set_cursor(0, { breakpoint.line, 0 })
+        vim.cmd("normal! zz")
+      end
+    end
+  end,
 }
 
 ----------------------------------------------------------------------------------------

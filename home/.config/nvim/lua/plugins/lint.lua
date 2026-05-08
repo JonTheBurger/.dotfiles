@@ -11,12 +11,16 @@ return {
     config = function()
       local lint = require("lint")
       lint.linters_by_ft = {
-        -- c = { "cppcheck" },
+        c = { "cppcheck" },
         cmake = { "cmakelint" },
-        -- cpp = { "cppcheck",  "clazy" }, --
+        cpp = { "cppcheck" }, -- "clazy"
         python = { "mypy", "pylint" },
         yaml = { "yamllint" },
       }
+
+      vim.list_extend(lint.linters.cppcheck.args, {
+        "--safety",
+      })
 
       -- Remove a linter if it doesn't exist
       for _, linters in pairs(lint.linters_by_ft) do
@@ -49,13 +53,12 @@ return {
         ["*"] = { "codespell" },
         ["_"] = { "trim_whitespace" },
         bash = { "shfmt" },
-        c = { "clang-format" },
+        c = { "clang-format", "uncrustify" },
         cpp = { "clang-format" },
         cmake = { "gersemi" },
         html = { "prettier" },
         json = { "jq" },
         lua = { "stylua" },
-        markdown = { "prettier", "injected" },
         python = { "ruff_format", "ruff_organize_imports" },
         sh = { "shfmt" },
         yaml = { "yamlfmt" },
@@ -72,7 +75,10 @@ return {
           prepend_args = { "-i", "2" },
         },
         prettier = {
-          prepend_args = { "--prose-wrap", "always", "--print-width", "80" },
+          prepend_args = { "--prose-wrap", "always" },
+        },
+        uncrustify = {
+          prepend_args = { "-c", vim.fn.expand("~/uncrustify.cfg"), "-l", "C", "--mtime", "--replace", "--no-backup" },
         },
       },
     },
@@ -143,16 +149,16 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      { "<leader>wb", "<cmd>Trouble buffer_diagnostics toggle<CR>", desc = "Toggle Diagnostics" },
+      { "<leader>wd", "<cmd>Trouble buffer_diagnostics toggle<CR>", desc = "Toggle Diagnostics" },
       { "_y",         "<cmd>Trouble symbols toggle<CR>",            desc = "Toggle Symbols" },
       { "<leader>y",  "<cmd>Trouble symbols toggle<CR>",            desc = "Toggle Symbols" },
       { "_q",         "<cmd>Trouble qflist toggle<CR>",             desc = "Toggle qflist" },
       { "<leader>Q",  "<cmd>Trouble qflist toggle<CR>",             desc = "Toggle qflist" },
       { "_2",         "<cmd>Trouble todo toggle<CR>",               desc = "Toggle TO DO" },
-      { "<leader>we", "<cmd>Trouble buffer_errors toggle win.position=right win.relative=win<CR>",      desc = "Toggle Errors" },
-      { "_e",         "<cmd>Trouble buffer_errors toggle win.position=right win.relative=win<CR>",      desc = "Toggle Errors" },
-      { "<leader>ww", "<cmd>Trouble buffer_diagnostics toggle win.position=right win.relative=win<CR>", desc = "Toggle Diagnostics ->" },
-      { "_w",         "<cmd>Trouble buffer_diagnostics toggle win.position=right win.relative=win<CR>", desc = "Toggle Diagnostics ->" },
+      { "<leader>we", "<cmd>Trouble buffer_errors toggle win.position=right win.relative=win<CR>", desc = "Toggle Errors" },
+      { "_e",         "<cmd>Trouble buffer_errors toggle win.position=right win.relative=win<CR>", desc = "Toggle Errors" },
+      { "<leader>ww", "<cmd>Trouble diagnostics toggle win.relative=win<CR>", desc = "Toggle All Diagnostics" },
+      { "_w",         "<cmd>Trouble diagnostics toggle win.relative=win<CR>", desc = "Toggle All Diagnostics" },
       -- stylua: ignore end
     },
     ---@module "trouble.nvim"

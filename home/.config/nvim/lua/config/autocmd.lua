@@ -14,8 +14,16 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
   pattern = require("config.prefs").ts_languages,
   callback = function()
     vim.treesitter.start()
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    -- CMake treesitter indent is bugged
+    if vim.bo.filetype ~= "cmake" then vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()" end
   end,
+})
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  desc = "Use default formatter",
+  group = "JVim",
+  pattern = { "text", "markdown", "gitcommit" },
+  callback = function() vim.bo.formatexpr = "" end,
 })
 
 vim.api.nvim_create_autocmd({ "FileType" }, {

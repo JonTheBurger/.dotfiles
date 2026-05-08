@@ -5,7 +5,7 @@ return {
   {
     -- https://github.com/copilotlsp-nvim/copilot-lsp
     "copilotlsp-nvim/copilot-lsp",
-    enabled = true,
+    enabled = require("config.prefs").ai_model ~= "",
     event = { "LspAttach" },
     config = {
       nes = {
@@ -17,7 +17,7 @@ return {
   {
     -- https://github.com/zbirenbaum/copilot.lua
     "zbirenbaum/copilot.lua",
-    enabled = true,
+    enabled = require("config.prefs").ai_model ~= "",
     dependencies = {
       "copilotlsp-nvim/copilot-lsp",
     },
@@ -79,6 +79,7 @@ return {
   },
   {
     "fang2hou/blink-copilot",
+    enabled = require("config.prefs").ai_model ~= "",
     opts = {
       max_completions = 2,
       max_attempts = 4,
@@ -91,6 +92,7 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
+    enabled = require("config.prefs").ai_model ~= "",
     dependencies = {
       "MeanderingProgrammer/render-markdown.nvim",
       "nvim-lua/plenary.nvim",

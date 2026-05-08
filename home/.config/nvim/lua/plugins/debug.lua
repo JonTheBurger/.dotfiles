@@ -38,6 +38,8 @@ return {
       { "<F11>",       function() require("dap").step_into() end,                         desc = "Step In", },
       { "<F12>",       function() require("dap").step_out() end,                          desc = "Step Out", },
       { "<leader>d<F9>", function() require("dap").set_exception_breakpoints({ "Warning", "Error", "Exception", "raised", "uncaught" }) end, desc = "Set Exception Breakpoints", },
+      { "[<F9>", function() require("config.fn").bkpt.jump("prev") end,  mode = { "n", "x", "o" }, desc = "Previous Breakpoint" },
+      { "]<F9>", function() require("config.fn").bkpt.jump("next") end,  mode = { "n", "x", "o" }, desc = "Next Breakpoint" },
       -- stylua: ignore end
     },
     opts = {
@@ -62,6 +64,18 @@ return {
           type = "executable",
           command = "/usr/bin/lldb-dap",
         },
+        -- ["cortex-debug"] = {
+        --   id = "cortex-debug",
+        --   name = "cortex-debug",
+        --   type = "executable",
+        --   command = tostring(require("config.fn").fs.find_vscode_binary("marus25.cortex-debug", "OpenDebugAD7")),
+        -- },
+        -- rr = {
+        --   id = "rr",
+        --   name = "rr",
+        --   type = "executable",
+        --   command = tostring(require("config.fn").fs.find_vscode_binary("farrese.midas", "OpenDebugAD7")),
+        -- },
         cmake = {
           id = "cmake",
           name = "cmake",

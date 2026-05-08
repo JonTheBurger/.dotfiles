@@ -15,7 +15,7 @@
 ---@field brown string
 
 ---@class jvim.Preferences
----@field ai_model string From https://models.dev/
+---@field ai_model string From https://models.dev/, set to empty string to disable
 ---@field ts_languages string[] Languages to install with treesitter
 ---@field mason_packages string[] Mason LSPs, Formatters, and Linters to auto-install (see :Mason)
 ---@field uninteresting_patterns string[] Paths to downrank in file search (later in list == more down-ranked)

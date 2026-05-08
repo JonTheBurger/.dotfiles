@@ -37,6 +37,8 @@ M.ignore_patterns = {
   "external",
   "mock",
   "build",
+  "Build",
+  ".venv",
 }
 
 M.clickable_status_line = false

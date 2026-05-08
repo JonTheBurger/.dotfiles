@@ -1,5 +1,4 @@
-.dotfiles
-=========
+# .dotfiles
 
 This repository contains all of the automation required to set up a new
 development environment with my preferred settings.
@@ -8,7 +7,8 @@ development environment with my preferred settings.
 
 The supported environments reflect the environments on which I typically work:
 
-- Ubuntu Server (or Desktop) 22.04+
+- Ubuntu 26.04+
+- Fedora 43+
 
 **Usage:**
 
@@ -18,15 +18,37 @@ The supported environments reflect the environments on which I typically work:
 git clone https://github.com/JonTheBurger/.dotfiles.git ~/.dotfiles
 # Install stow & friends
 cd ~/.dotfiles
-./scripts/10-cli.sh
-# Farm Soft Links
+# Farm Soft Links (you may need to install stow)
 make stow
 ```
 
+> [!NOTE] On windows, set the `XDG_CONFIG_HOME` environment variable to point to
+> this directory.
+
 --------------------------------------------------------------------------------
 
-Scripts
--------
+## JVim
+
+My Neovim configuration, dubbed "JVim," is provided in `home/.config/nvim`. It
+can be installed as `jvim` alongside `nvim`, without modifying your personal
+Neovim configuration. See the [JVim Readme](/home/.config/nvim/README.md) for
+more details.
+
+--------------------------------------------------------------------------------
+
+## Packages
+
+The dotfiles ship with a poor-man's "package manager." This is a python script
+that executes the scripts found in `./scripts/pkg`, and records what has been
+installed with a stamp file. The scripts in `pkg` can be run individually, or
+be managed with `./home/.local/bin/package.py --help`.
+
+These "packages" mostly just download files from github, unzip them, and put
+them in `~/.local`.
+
+--------------------------------------------------------------------------------
+
+## Scripts
 
 The scripts in this directory are designed to be user-friendly, and naively
 executable using `./scripts/*`. Some notable features include:
@@ -71,8 +93,7 @@ Simply run with (e.g.) `./script/10-cli.sh`!
 
 --------------------------------------------------------------------------------
 
-Home
-----
+## Home
 
 **Background:**
 
@@ -114,24 +135,9 @@ number of times.
 
 Notably the following programs are configured (among others):
 
-- `nvim`: Fully Lua, LazyNvim config with LSP, DAP, Telescope, and more.
 - `zsh`: Bash shell alternative with support for fuzzy completions & history.
 - `tmux`: Shell multiplexer that support tabs & splits in any terminal emulator.
 - `git`: For all of those neat aliases.
-- `vim`: For when you want that classic vanilla Vim experience.
-- `Xmodmap`: For rebinding CapsLock to ISO-3 Hyper, enabling HJKL navigation.
-- `ideavimrc`: Because when using a JetBrains IDE, you still wish you were in vim.
-- `vsvim`: Because when using Visual Studio 20XX, you still wish you were in vim.
-
-...
-
-- `kitty`: GPU-rendered terminal emulator.
-- `alacritty`: GPU-rendered terminal emulator, but also on Windows.
-- `QtCreator`: Color schemes and keyboard shortcuts. (vim mode commands!!)
-- `Dolphin`: KDE's feature-rich file manager.
-- `Latte`: KDE-based dock.
-- `Konsole`: KDE's default terminal emulator. (Gathering cobwebs)
-- `Yakuake`: Quake-style drop-down terminal emulator for KDE. (Gathering cobwebs)
 
 # Windows
 
@@ -142,14 +148,24 @@ Set-ExecutionPolicy Unrestricted -Scope Process
 ```
 
 # OpenWRT
+
 - https://openwrt.org/docs/guide-user/installation/generic.sysupgrade
 
 --------------------------------------------------------------------------------
 
-[Filesystem Hierarchy Standard]: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html
+## Lab
+
+This directory contains my homelab setup. This can be used to host a number of
+on-prem applications. It is currently under construction!
+
+--------------------------------------------------------------------------------
+
+## Upcoming
+
+Upcoming changes include...
 
 <details>
-<summary markdown="span">TODO</summary>
+<summary markdown="span">Upcoming</summary>
 
 - konsave
 - `DP-2::NW:tile,HDMI-A-1::NW:spread,::SE:floating`
@@ -158,3 +174,7 @@ Set-ExecutionPolicy Unrestricted -Scope Process
     - rustup component add rust-analyzer
 
 </details>
+
+--------------------------------------------------------------------------------
+
+[Filesystem Hierarchy Standard]: https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html

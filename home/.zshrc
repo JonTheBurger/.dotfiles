@@ -294,8 +294,10 @@ function tailog() {
 function mk() {
   if [ -f "Makefile" ]; then
     make "$@"
-  else
+  elif [ -f "build.ninja" ]; then
     ninja "$@" -k0 || ninja "$@" -j1
+  else
+    make -C .. "$@"
   fi
 }
 function lazy_load_nvm() {
