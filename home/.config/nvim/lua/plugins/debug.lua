@@ -64,17 +64,16 @@ return {
           type = "executable",
           command = "/usr/bin/lldb-dap",
         },
-        -- ["cortex-debug"] = {
-        --   id = "cortex-debug",
-        --   name = "cortex-debug",
-        --   type = "executable",
-        --   command = tostring(require("config.fn").fs.find_vscode_binary("marus25.cortex-debug", "OpenDebugAD7")),
-        -- },
         -- rr = {
         --   id = "rr",
         --   name = "rr",
         --   type = "executable",
-        --   command = tostring(require("config.fn").fs.find_vscode_binary("farrese.midas", "OpenDebugAD7")),
+        --   command = require("config.fn").fs.find_vscode_node(),
+        --   args = {
+        --     "-e",
+        --     "delete process.env.ELECTRON_RUN_AS_NODE;require(process.argv[1])",
+        --     tostring(require("config.fn").fs.find_vscode_binary("farrese.midas", "")),
+        --   },
         -- },
         cmake = {
           id = "cmake",
@@ -148,7 +147,7 @@ return {
           },
         },
         gdbserver = {
-          name = "gdb: server",
+          name = "cppdbg: server",
           type = "cppdbg",
           request = "launch",
           cwd = "${workspaceFolder}",
@@ -180,6 +179,11 @@ return {
           args = {},
           runInTerminal = false,
         },
+        -- rr = {
+        --   name = "rr",
+        --   type = "rr",
+        --   request = "launch",
+        -- },
         -- CMake https://github.com/mfussenegger/nvim-dap/pull/992
         cmake = {
           name = "cmake: debug",
@@ -219,12 +223,14 @@ return {
           opts.launchers.gdbserver,
           opts.launchers.gdb,
           opts.launchers.lldb,
+          -- opts.launchers.rr,
         },
         cpp = {
           opts.launchers.cppdbg,
           opts.launchers.gdbserver,
           opts.launchers.gdb,
           opts.launchers.lldb,
+          -- opts.launchers.rr,
         },
         cmake = {
           opts.launchers.cmake,
@@ -242,6 +248,46 @@ return {
 
       dap.listeners.after.event_initialized["overseer_close"] = function() vim.cmd("silent! OverseerClose") end
       dap.listeners.after.event_stopped["center_view"] = function() vim.cmd("normal! zz") end
+      -- dap.listeners.before["event_custom-event-ports-allocated"] = { cortex = function(_session, _body) end }
+    end,
+  },
+  {
+    -- https://github.com/jedrzejboczar/nvim-dap-cortex-debug
+    "jedrzejboczar/nvim-dap-cortex-debug",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
+    opts = {
+      debug = false,
+      extension_path = vim.fn.expand("~/.vscode-server/extensions/marus25.cortex-debug*"),
+      node_path = require("config.fn").fs.find_vscode_node(),
+      dapui_rtt = not require("config.prefs").use_dap_view, -- register nvim-dap-ui RTT element
+      dap_vscode_filetypes = { "c", "cpp" },
+      rtt = {
+        buftype = "Terminal", -- 'Terminal' or 'BufTerminal' for terminal buffer vs normal buffer
+      },
+    },
+    config = function(_, opts)
+      local cortex = require("dap-cortex-debug")
+      cortex.setup(opts)
+      local cortex_cfg = cortex.jlink_config({
+        name = "cortex: jlink",
+        request = "launch",
+        cwd = "${workspaceFolder}",
+        executable = require("config.fn").pick.cxx_exe,
+        gdbPath = vim.fn.exepath("arm-none-eabi-gdb"),
+        interface = "swd",
+        device = "CY8C6XXA_CM4_CUSTOM",
+        rtos = "FreeRTOS",
+        runToEntryPoint = "",
+        breakAfterReset = false,
+        showDevDebugOutput = false,
+        -- rttConfig = cortex.rtt_config(0),
+      })
+
+      local dap = require("dap")
+      dap.configurations.c[#dap.configurations.c + 1] = cortex_cfg
+      dap.configurations.cpp[#dap.configurations.cpp + 1] = cortex_cfg
     end,
   },
   {

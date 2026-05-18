@@ -32,7 +32,7 @@ return {
       vim.api.nvim_create_autocmd("User", {
         pattern = "BlinkCmpMenuOpen",
         callback = function()
-          require("copilot.suggestion").dismiss()
+          if require("config.prefs").ai_model ~= "" then require("copilot.suggestion").dismiss() end
           vim.b.copilot_suggestion_hidden = true
         end,
       })
@@ -100,7 +100,8 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       sources = {
         default = function()
-          local srcs = { "lsp", "path", "snippets", "copilot" }
+          local srcs = { "lsp", "path", "snippets" }
+          if require("config.prefs").ai_model ~= "" then srcs[#srcs] = "copilot" end
           if vim.startswith(vim.bo.filetype, "dap") then
             table.insert(srcs, "dap")
             table.insert(srcs, "buffer")
@@ -114,6 +115,7 @@ return {
 
         providers = {
           copilot = {
+            enabled = require("config.prefs").ai_model ~= "",
             score_offset = 10,
             module = "blink-copilot",
             name = "copilot",

@@ -156,7 +156,7 @@ vim.keymap.set({ "n", "x", "o" }, "<A-i>", function()
 end, { desc = "Select child treesitter node or inner incremental lsp selections" })
 
 -- Diagnostics
-vim.keymap.set("n", "hd", vim.diagnostic.open_float, { desc = "Hover Diagnostic" })
+vim.keymap.set("n", "<leader>hd", vim.diagnostic.open_float, { desc = "Hover Diagnostic" })
 vim.keymap.set("n", "?", function()
   if require("dap").session() then
     require("dap.ui.widgets").hover()

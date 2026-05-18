@@ -307,6 +307,21 @@ M.fs = {
     end
   end,
 
+  ---@return Node program associated with Code
+  find_vscode_node = function()
+    local paths = {
+      vim.fn.expand("~/.vscode-server/bin"),
+      vim.fn.expand("~/.vscode/bin"),
+    }
+
+    for _, path in ipairs(paths) do
+      local node = vim.fs.find({ "node" }, { limit = 1, path = path })
+      if #node > 0 then return node[1] end
+    end
+
+    return "node"
+  end,
+
   ---Finds an executable from vscode/server
   ---@param extension string VSCode extension to search
   ---@param binary string Binary name to search for

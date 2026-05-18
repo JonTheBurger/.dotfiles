@@ -27,7 +27,8 @@ allowing you to `git pull` updates directly.
 Only one variant may be installed at a time. If you switch between variants, you
 must `make jvim.clean` between switching.
 
-> [!NOTE] JVim assumes several executables are in your `$PATH`:
+> [!NOTE]
+> JVim assumes several executables are in your `$PATH`:
 > - `rg` (ripgrep)
 > - `fd` (faster find)
 > - `tree-sitter`
@@ -50,7 +51,8 @@ result diagnostics. Typical workflow resembles the following:
 5. `gf` to pick a split to open the diagnostic
 6. `<leader>wd` to open the buffer diagnostics window
 
-> [!NOTE]: When a CMake configure preset is selected, `compile_commands.json`
+> [!NOTE]
+> When a CMake configure preset is selected, `compile_commands.json`
 > is symlinked into `$(pwd)`. `clangd`, the C/C++ language server, uses this
 > file to determine which flags should be used when parsing your code. If
 > clangd is not parsing correctly, double check your compile commands and
@@ -101,7 +103,8 @@ workflow resembles the following:
 - `<leader>td` Debugs the test under cursor
 - `<leader>to` Shows output for the test under cursor
 
-> [!NOTE] `TEST_P` is not supported. You must use `<F5>` to debug parameterized
+> [!NOTE]
+> `TEST_P` is not supported. You must use `<F5>` to debug parameterized
 > tests instead of the test explorer.
 
 `python` and `rust` tests are also configured.
@@ -512,16 +515,26 @@ This section lists some of common, useful Neovim Lua API functions.
 
 This section contains upcoming changes to jvim.
 
+- snacks score order doesn't work
 - TS auto install isn't working?
-- rr debugger
-- cortex debugger
+- midas/rr debugger
+- picker+cache for Cortex Debug
 - More Snippets
 - Custom folds for Doxygen `{`
 
 ### Plugins
 
+- https://github.com/jonboh/nvim-dap-rr
+- Godbolt
+    - https://github.com/NickTsaizer/splitasm.nvim
+    - https://github.com/ii14/neobolt.nvim
+    - https://sr.ht/~chinmay/godbolt.nvim/
+
 ### Dev
 
+- nvim-dap-cortex-debug
+    - nvim-dap-view for RTT
+    - nvim-dap-view for gdbserver log
 - gtest
     - watch doesn't work
     - TEST_P
