@@ -198,7 +198,7 @@ return {
       },
     },
     init = function()
-      vim.cmd.cabbrev("ai CodeCompanion")
+      -- vim.cmd.cabbrev("ai CodeCompanion")
       require("prompts.spinner").init()
     end,
   },

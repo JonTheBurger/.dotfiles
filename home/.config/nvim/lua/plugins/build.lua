@@ -62,7 +62,7 @@ return {
       })
 
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/recipes.md#run-a-quick-command-like-with--or-term
-      vim.cmd.cnoreabbrev("Run OverseerShell")
+      -- vim.cmd.cnoreabbrev("Run OverseerShell")
 
       -- https://github.com/stevearc/overseer.nvim/blob/master/doc/recipes.md#restart-last-task
       vim.api.nvim_create_user_command("OverseerRestartLast", function()

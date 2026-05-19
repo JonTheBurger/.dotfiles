@@ -268,6 +268,15 @@ return {
       },
     },
     config = function(_, opts)
+      vim.api.nvim_create_autocmd({ "BufWinEnter", "TermOpen" }, {
+        pattern = "cortex-debug://*",
+        callback = function(ev)
+          vim.defer_fn(function()
+            vim.fn.setbufvar(ev.buf, "&buflisted", 0)
+          end, 100)
+        end,
+      })
+
       local cortex = require("dap-cortex-debug")
       cortex.setup(opts)
       local cortex_cfg = cortex.jlink_config({
@@ -320,7 +329,7 @@ return {
     opts = {
       winbar = {
         show = true,
-        sections = { "console", "watches", "scopes", "breakpoints", "threads", "repl", "exceptions", "disassembly" },
+        sections = { "console", "watches", "scopes", "breakpoints", "threads", "repl", "exceptions", "disassembly", "gdbserver" },
         default_section = "threads",
         show_keymap_hints = true,
         separators = nil,
@@ -335,7 +344,31 @@ return {
           console = { label = " Con", keymap = "C" },
         },
         -- https://igorlfs.github.io/nvim-dap-view/custom-views
-        custom_sections = {},
+        custom_sections = {
+          gdbserver = {
+            label = " GDB",
+            keymap = "Z",
+            action = function() end,
+            buffer = function()
+              local buf = -1
+              for _, b in ipairs(vim.api.nvim_list_bufs()) do
+                if vim.api.nvim_buf_get_name(b):match("gdb%-server%-console") then
+                  buf = b
+                  break
+                end
+              end
+              if buf == -1 then
+                buf = vim.api.nvim_create_buf(true, false)
+                vim.api.nvim_buf_set_lines(buf, 0, 0, false, { "No GDB Server Detected" })
+              end
+
+              vim.keymap.set("n", "<", function() require("dap-view").navigate({ count = -1, wrap = true, type = "views" }) end, { buf = buf })
+              vim.keymap.set("n", ">", function() require("dap-view").navigate({ count = 1, wrap = true, type = "views" }) end, { buf = buf })
+              vim.keymap.set("n", "?", "g?", { buf = buf, remap = true })
+              return buf
+            end,
+          },
+        },
         controls = {
           enabled = true,
           position = "right",

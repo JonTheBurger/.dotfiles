@@ -759,16 +759,21 @@ M.pick = {
     -- Prefer the most recently selected
     if M.gbl.dap_executable ~= nil then M.lst.to_front(choices, M.gbl.dap_executable) end
 
-    return coroutine.create(function(coro)
-      vim.ui.select(choices, {
-        prompt = prompt,
-        format_item = format_item,
-      }, function(choice)
-        -- Save choice for next time
-        M.gbl.dap_executable = choice
-        coroutine.resume(coro, choice)
+    if #choices == 1 then
+      M.gbl.dap_executable = choices[1]
+      return M.gbl.dap_executable
+    else
+      return coroutine.create(function(coro)
+        vim.ui.select(choices, {
+          prompt = prompt,
+          format_item = format_item,
+        }, function(choice)
+          -- Save choice for next time
+          M.gbl.dap_executable = choice
+          coroutine.resume(coro, choice)
+        end)
       end)
-    end)
+    end
   end,
 
   ---Pick arguments to send to the cmake debugger
