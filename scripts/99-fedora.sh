@@ -96,7 +96,7 @@ sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 git https://github.com/Deathbyteacup/fluentbird.git ~/.local/src/fluentbird
 
 # steam
-flatpak permission-set kde-authorized remote-desktop "" yes
-flatpak permission-set kde-authorized remote-desktop com.valvesoftware.Steam yes
-flatpak override com.valvesoftware.Steam --talk-name=org.kde.KWin
+# flatpak permission-set kde-authorized remote-desktop "" yes
+# flatpak permission-set kde-authorized remote-desktop com.valvesoftware.Steam yes
+# flatpak override com.valvesoftware.Steam --talk-name=org.kde.KWin
 # to undo: flatpak override --reset com.valvesoftware.Steam

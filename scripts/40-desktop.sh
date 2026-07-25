@@ -138,6 +138,7 @@ ${CYAN}${NERD_FONT_URL}${NOFMT}
     mkdir -p "${HOME}/.local/share/fonts"
     curl -Lo "/tmp/nerdfont.zip" "${NERD_FONT_URL}"
     unzip "/tmp/nerdfont.zip" '*.otf' -d "${HOME}/.local/share/fonts"
+    unzip "/tmp/nerdfont.zip" '*.ttf' -d "${HOME}/.local/share/fonts"
     fc-cache -f -v
 
     util::notice "-- Nerd Fonts: Installed --"

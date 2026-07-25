@@ -21,6 +21,8 @@ main() {
     "${SCRIPT_DIR}/pkg/uv.sh"
   elif grep -qi 'fedora' /etc/os-release; then
     local::install_dnf
+  elif grep -qi 'arch' /etc/os-release; then
+    local::install_pacman
   fi
 
   "${SCRIPT_DIR}/pkg/devbox.sh"
@@ -102,9 +104,7 @@ local::install_apt() {
   PKGS_APT+=(git-lfs)
   PKGS_APT+=(libfuse2) # For AppImage
   PKGS_APT+=(neovim)   # Almost certainly too out of date
-  PKGS_APT+=(pipx)
   PKGS_APT+=(python3)
-  PKGS_APT+=(python3-venv)
   PKGS_APT+=(ripgrep)
   PKGS_APT+=(ruby) # For tmux-jump
   PKGS_APT+=(software-properties-common)
@@ -148,6 +148,30 @@ local::install_dnf() {
     uv \
     zsh \
     zsh-autosuggestions \
+    zsh-syntax-highlighting
+}
+
+local::install_pacman() {
+  sudo pacman -S \
+    bat \
+    btop \
+    dos2unix \
+    fd \
+    fzf \
+    git-delta \
+    git-lfs \
+    neovim \
+    stow \
+    tig \
+    tmux \
+    trash-cli \
+    uv \
+    unzip \
+    wget \
+    zsh-autocomplete \
+    zsh-autosuggestions \
+    zsh-completions \
+    zsh-history-substring-search \
     zsh-syntax-highlighting
 }
 
