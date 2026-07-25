@@ -29,8 +29,12 @@ WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 local SCRIPTS=(
   /usr/share/doc/fzf/examples/key-bindings.zsh
   /usr/share/fzf/shell/key-bindings.zsh
+  /usr/share/fzf/key-bindings.zsh
   /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
   /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  /usr/share/zsh/plugins/zsh-autosuggestions/zsh-syntax-highlighting.zsh
+  /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
   $HOME/.local/share/zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 )
 # Later paths = higher precedence
@@ -136,6 +140,7 @@ zstyle ':completion:*' menu select
 # Case insensitive match
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
 # Keybinds, check with 'showkey -a', see https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Modifying-Text
+bindkey -e # Disable ESC for vi mode
 bindkey '^[e'  _expand_alias      # Alt+E
 bindkey '^[b'  backward-word      # Alt+B
 bindkey '^[OH' beginning-of-line # Home
@@ -155,13 +160,14 @@ bindkey '^[[3;3~' kill-word       # Alt+Delete
 bindkey '^H'   backward-kill-word # Ctrl+Backspace & Ctrl+H
 bindkey '^[^?' backward-kill-word # Alt+Backspace
 bindkey '^[^H' backward-kill-line # Ctrl+Alt+Backspace
-bindkey '^[[A' history-substring-search-up    # Up
-bindkey '^[[B' history-substring-search-down  # Down
 bindkey "$terminfo[kcuu1]" history-substring-search-up    # Up
 bindkey "$terminfo[kcud1]" history-substring-search-down  # Down
+bindkey '^[[A' history-substring-search-up    # Up
+bindkey '^[[B' history-substring-search-down  # Down
+bindkey '^[OA' history-substring-search-up    # Up
+bindkey '^[OB' history-substring-search-down  # Down
 bindkey -M menuselect '^[[Z' reverse-menu-complete  # Shift+Tab
 bindkey '^X^e' edit-command-line  # Ctrl+X, Ctrl+E
-bindkey -e # Disable ESC for vi mode
 
 # ======================================================================================
 ## Environment
