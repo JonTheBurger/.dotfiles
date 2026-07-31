@@ -4,6 +4,12 @@ sudo pacman -S
   eza \
   yazi \
   zoxide \
-  lazygit \
+  kdeconnect \
   kmonad \
-  thunderbird \
+  lazygit \
+  thunderbird
+
+# For kdeconnect
+sudo ufw allow 1714:1764/tcp
+sudo ufw allow 1714:1764/udp
+sudo ufw reload

@@ -26,6 +26,25 @@ local::do_install() {
   echo 'KERNEL=="uinput", MODE="0660", GROUP="uinput", OPTIONS+="static_node=uinput"' | sudo tee /etc/udev/rules.d/kmonad.rules
   sudo modprobe uinput
 
+  mkdir -p ~/.config/systemd/user
+  cat << EOF > ~/.config/systemd/user/kmonad@.service
+[Unit]
+Description=KMonad keyboard config
+
+[Service]
+Restart=always
+RestartSec=3
+ExecStart=/usr/bin/kmonad %E/kmonad/%i.kbd
+Nice=-20
+
+[Install]
+DefaultInstance=config
+WantedBy=default.target
+EOF
+  # TODO(JON): start each service file
+  systemctl --user enable kmonad@laptop
+  systemctl --user start kmonad@laptop
+
   util::notice "You may need to log out and back in for group changes to take effect."
 }
 

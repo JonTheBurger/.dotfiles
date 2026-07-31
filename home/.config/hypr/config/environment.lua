@@ -2,8 +2,9 @@
 -- if you use UWSM, define your variables in ~/.config/uwsm/env
 -- if you don't use UWSM, define your variables here (e.g. hl.env("QT_QPA_PLATFORM", "wayland"))
 
--- if you have an NVIDIA GPU uncomment the following lines:
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
+-- if you have an NVIDIA GPU uncomment the following lines:
 -- hl.env("GBM_BACKEND", "nvidia-drm") -- force GBM as a backend
 -- hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia") -- force GBM as a backend
 -- hl.env("LIBVA_DRIVER_NAME", "nvidia") -- Hardware acceleration on NVIDIA GPUs

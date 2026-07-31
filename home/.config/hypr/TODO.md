@@ -1,0 +1,3 @@
+- performance / game
+- volume / media
+- uninstall gnome junk
