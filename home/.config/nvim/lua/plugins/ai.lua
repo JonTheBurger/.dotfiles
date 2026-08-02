@@ -55,7 +55,7 @@ return {
           dismiss = "<Esc>",
         },
       },
-      copilot_model = "gpt-41-copilot", -- Completion only has one model available
+      copilot_model = "", -- Empty string selects the default
       filetypes = {
         yaml = false,
         markdown = false,

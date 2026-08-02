@@ -1,4 +1,27 @@
 ---@module "User-defined commands"
+
+vim.api.nvim_create_user_command("E", function(opts) vim.cmd("e " .. vim.fn.expand("%:p:h") .. "/" .. opts.args) end, {
+  desc = "Edit a file relative to the current one",
+  nargs = "+",
+  ---Auto-complete relative file paths
+  ---@param arglead string Text entered by the user so far
+  ---@param _line string Full EX command line
+  ---@param _cursor integer Cursor position
+  ---@return string[] Suggestions list
+  complete = function(arglead, _line, _cursor)
+    local dir = vim.fn.expand("%:p:h")
+    ---@type string[]
+    local matches = vim.fn.glob(dir .. "/" .. arglead .. "*", false, true)
+    return vim.tbl_map(function(m)
+      local rel = m:sub(#dir + 2) -- strip "dir/" prefix → relative path
+      if vim.fn.isdirectory(m) == 1 then
+        rel = rel .. "/" -- append / to dirs so you can keep tabbing into them
+      end
+      return rel
+    end, matches)
+  end,
+})
+
 vim.api.nvim_create_user_command("Reverse", function(opts) vim.cmd(string.format("%d,%d!tac", opts.line1, opts.line2)) end, { range = true, desc = "Reverse lines" })
 
 vim.api.nvim_create_user_command("Sort", function(opts)

@@ -4,6 +4,7 @@ Hover:
   ShowAKA: true
 Diagnostics:
   UnusedIncludes: Strict
+  MissingIncludes: Strict
   Suppress:
     - 'a'
 CompileFlags:
@@ -13,6 +14,7 @@ CompileFlags:
     - -Wextra
     - -pedantic
     - -Wno-gnu-zero-variadic-macro-arguments
+    - -Wno-unused-function
     # - -std=c++23
   Remove:
     - -f*

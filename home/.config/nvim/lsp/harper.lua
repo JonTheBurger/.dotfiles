@@ -8,7 +8,7 @@ return {
       workspaceDictPath = "",
       fileDictPath = "",
       linters = {
-        SpellCheck = true,
+        SpellCheck = false,
         SpelledNumbers = false,
         AnA = true,
         SentenceCapitalization = true,

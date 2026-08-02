@@ -40,7 +40,7 @@ return {
         exchange = { prefix = "gx" },
         multiply = { prefix = "gm" },
         replace = { prefix = "" },
-        sort = { prefix = "go" },
+        sort = { prefix = "" },
       },
       splitjoin = {
         mappings = {

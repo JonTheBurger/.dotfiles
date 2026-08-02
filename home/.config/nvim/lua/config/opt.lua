@@ -90,8 +90,15 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
     },
   },
+  virtual_text  = {
+    prefix = "●",
+    source = "if_many",
+  },
   virtual_lines = false,
-  virtual_text = true,
+  -- virtual_lines = {
+  --   current_line = true,
+  --   only_current_line = true,
+  -- },
 })
 local hover = vim.lsp.buf.hover
 vim.lsp.buf.hover = function()

@@ -114,4 +114,19 @@ return {
       auto_reload = true,
     },
   },
+  {
+    "jontheburger/nvim-neocov",
+    opts = {
+      file = {
+        {
+          path = "build/**/*sonarqube.xml",
+          kind = "sonarqube",
+        },
+        {
+          path = "../Build/tests-app-vanilla/sonar_coverage.xml",
+          kind = "sonarqube",
+        },
+      },
+    },
+  }
 }

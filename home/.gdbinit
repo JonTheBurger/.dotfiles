@@ -1,4 +1,4 @@
-# source /opt/provisioners/style/config/.gdbinit
+source /opt/provisioners/style/config/.gdbinit
 # focus cmd
 set history filename ~/.cache/gdb-history
 set history save

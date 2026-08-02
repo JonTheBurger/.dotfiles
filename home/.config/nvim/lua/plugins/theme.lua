@@ -83,8 +83,45 @@ return {
     },
   },
   {
+    -- https://github.com/rasulomaroff/reactive.nvim
+    "rasulomaroff/reactive.nvim",
+    enabled = false,
+    ---@module "reactive"
+    ---@type Reactive.Config
+    opts = {
+      -- builtin = {
+      --   cursorline = true,
+      --   cursor = true,
+      --   modemsg = true,
+      -- },
+      configs = {
+        jvim = true,
+      },
+    },
+    config = function(_, opts)
+      local reactive = require("reactive")
+      reactive.add_preset({
+        name = "jvim",
+        modes = {
+          v = {
+            winhl = {
+              CursorLine = { bg = 'green' }
+            },
+          },
+          d = {
+            hl = {
+              CursorLine = { bg = 'green' }
+            },
+          },
+        },
+      })
+      reactive.setup(opts)
+    end
+  },
+  {
     -- https://github.com/mvllow/modes.nvim
     "mvllow/modes.nvim",
+    enabled = true,
     opts = {
       colors = {
         bg = "", -- Optional bg param, defaults to Normal hl group
@@ -164,9 +201,10 @@ return {
     ---@module "catppuccin"
     ---@type CatppuccinOptions
     opts = {
+      flavour = "latte",
       auto_integrations = true,
       transparent_background = false,
-      term_colors = true,
+      term_colors = false,
     },
   },
   {
@@ -200,6 +238,12 @@ return {
       highlights = { -- Override highlight groups
         ["BlinkCmpGhostText"] = { fg = COLORS.bg },
         ["CurSearch"] = { fg = COLORS.purple },
+        ["DiagnosticVirtualTextOk"] = { bg = "none" },
+        ["DiagnosticVirtualTextUnnecessary"] = { bg = "none" },
+        ["DiagnosticVirtualTextWarn"] = { bg = "none" },
+        ["DiagnosticVirtualTextError"] = { bg = "none" },
+        ["DiagnosticVirtualTextInfo"] = { bg = "none" },
+        ["DiagnosticVirtualTextHint"] = { bg = "none" },
         ["FloatBorder"] = { bg = "none" },
         ["FloatShadowThrough"] = { bg = "none" },
         ["Folded"] = { fg = "$light_grey" },
@@ -223,6 +267,7 @@ return {
       },
     },
     config = function(_, opts)
+      vim.g.onedark_config = opts
       require("onedark").setup(opts)
       require("onedark").load()
     end,

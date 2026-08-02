@@ -194,6 +194,24 @@ return {
       },
     },
   },
+  -- {
+  --   -- https://github.com/jeangiraldoo/codedocs.nvim
+  --   "jeangiraldoo/codedocs.nvim",
+  --   enabled = true,
+  --   cmd = "CodeDocs",
+  --   keys = {
+  --     -- stylua: ignore start
+  --     { "<leader>k", "<cmd>Codedocs<CR>", desc = "Comment Item Under Cursor", },
+  --     -- stylua: ignore end
+  --   },
+  --   opts = {
+  --     languages = {
+  --       python = {
+  --         default_style = "NumPy",
+  --       },
+  --     },
+  --   },
+  -- },
   {
     -- https://github.com/chrisgrieser/nvim-lsp-endhints
     "chrisgrieser/nvim-lsp-endhints",

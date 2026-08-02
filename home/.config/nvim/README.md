@@ -515,7 +515,10 @@ This section lists some of common, useful Neovim Lua API functions.
 
 This section contains upcoming changes to jvim.
 
+- ft=neotest-output should not use fancy gf picker
 - snacks score order doesn't work
+- colorful-winsep animation should be off by default
+- save watches in session
 - TS auto install isn't working?
 - midas/rr debugger
 - picker+cache for Cortex Debug
@@ -526,9 +529,18 @@ This section contains upcoming changes to jvim.
 
 - https://github.com/jonboh/nvim-dap-rr
 - Godbolt
+    - https://github.com/krady21/compiler-explorer.nvim
     - https://github.com/NickTsaizer/splitasm.nvim
     - https://github.com/ii14/neobolt.nvim
     - https://sr.ht/~chinmay/godbolt.nvim/
+- https://github.com/antosha417/nvim-lsp-file-operations
+- https://github.com/J-Cowsert/classlayout.nvim
+- https://github.com/rossjaywill/insights.nvim
+- https://github.com/badhi/nvim-treesitter-cpp-tools
+- https://github.com/madskjeldgaard/cppman.nvim
+- https://github.com/dlyongemallo/sanity.nvim
+- https://github.com/t-troebst/perfanno.nvim
+- https://github.com/GasparVardanyan/diactions.nvim
 
 ### Dev
 
