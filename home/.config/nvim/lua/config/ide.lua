@@ -7,7 +7,7 @@ if vim.g.neovide then
   vim.env.PATH = vim.fn.expand("~/.local/share/devbox/global/default/.devbox/nix/profile/default/bin") .. ":" .. vim.env.PATH
   vim.keymap.set({ "n", "i", "v", "c", "t" }, "<C-S-v>", function() vim.api.nvim_paste(vim.fn.getreg("+"), true, -1) end, { silent = true, desc = "Paste" })
   vim.keymap.set({ "n", "i", "v", "c", "t" }, "<D-v>", function() vim.api.nvim_paste(vim.fn.getreg("+"), true, -1) end, { silent = true, desc = "Paste" })
-  vim.keymap.set({ "n", "v" }, "<C-+>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
+  vim.keymap.set({ "n", "v" }, "<C-=>", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1<CR>")
   vim.keymap.set({ "n", "v" }, "<C-->", ":lua vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1<CR>")
   vim.keymap.set({ "n", "v" }, "<C-0>", ":lua vim.g.neovide_scale_factor = 1<CR>")
   vim.api.nvim_create_user_command("Fullscreen", function() vim.g.neovide_fullscreen = not vim.g.neovide_fullscreen end, { desc = "Fullscreen" })

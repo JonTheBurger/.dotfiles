@@ -41,49 +41,6 @@ local config = wezterm.config_builder()
 ---@param key string Key to forward to neovim
 ---@return Key WezTerm Key mapping
 local function split_nav(resize_or_move, key)
-local wezterm = require("wezterm")
-local act = wezterm.action
-local HJKL2DIRECTION = { h = "Left", j = "Down", k = "Up", l = "Right" }
-local PREVIOUS_WORKSPACE = "default"
-local ROSEWATER = "#f5e0dc"
-local FLAMINGO = "#f2cdcd"
-local PINK = "#f5c2e7"
-local MAUVE = "#cba6f7"
-local RED = "#f38ba8"
-local MAROON = "#eba0ac"
-local PEACH = "#fab387"
-local YELLOW = "#f9e2af"
-local GREEN = "#a6e3a1"
-local TEAL = "#94e2d5"
-local SKY = "#89dceb"
-local SAPPHIRE = "#74c7ec"
-local BLUE = "#89b4fa"
-local LAVENDER = "#b4befe"
-local TEXT = "#cdd6f4"
-local SUBTEXT_1 = "#bac2de"
-local SUBTEXT_0 = "#a6adc8"
-local OVERLAY_2 = "#9399b2"
-local OVERLAY_1 = "#7f849c"
-local OVERLAY_0 = "#6c7086"
-local SURFACE_2 = "#585b70"
-local SURFACE_1 = "#45475a"
-local SURFACE_0 = "#313244"
-local BASE = "#1e1e2e"
-local MANTLE = "#181825"
-local CRUST = "#11111b"
-local TITLEBAR_COLOR = SURFACE_0
-
---- @type Config
-local config = wezterm.config_builder()
-
---------------------------------------------------------------------------------
--- @SECTION functions
---------------------------------------------------------------------------------
---- Smart splits integration
----@param resize_or_move "move"|"resize" action to delegate to smart-splits.nvim
----@param key string Key to forward to neovim
----@return Key WezTerm Key mapping
-local function split_nav(resize_or_move, key)
   return {
     key = key,
     mods = resize_or_move == "resize" and "META" or "CTRL",

@@ -83,6 +83,7 @@ return {
       }
       opts.consumers = {
         overseer = require("neotest.consumers.overseer"),
+        coverage = require("neotest.consumers.neocov"),
       }
       ---@diagnostic disable: undefined-field
       require("neotest").setup(opts)
@@ -105,28 +106,21 @@ return {
     -- stylua: ignore end
   },
   {
-    -- https://github.com/andythigpen/nvim-coverage
-    "andythigpen/nvim-coverage",
-    keys = {
-      { "<leader>hc", function() require("coverage").show() end, desc = "Coverage: Hover" },
-    },
-    opts = {
-      auto_reload = true,
-    },
-  },
-  {
     "jontheburger/nvim-neocov",
+    ---@module "nvim-neocov"
+    ---@type nvim-neocov.Options
     opts = {
       file = {
-        {
-          path = "build/**/*sonarqube.xml",
-          kind = "sonarqube",
-        },
-        {
-          path = "../Build/tests-app-vanilla/sonar_coverage.xml",
-          kind = "sonarqube",
-        },
+        path = "**/*.sonarqube.xml",
+        kind = "sonarqube",
       },
+      cmd = function(_file)
+        return {
+          cmd = { "make", "cov" },
+        }
+      end,
+      autoload = {'cpp'}
     },
-  }
+    cmd = "Neocov",
+  },
 }

@@ -94,9 +94,6 @@ vim.keymap.set("n", "]h", "]c", { desc = "Next Hunk" })
 vim.keymap.set("n", "[h", "[c", { desc = "Previous Hunk" })
 vim.keymap.set("n", "]q", ":cn<CR>", { silent = true, desc = "Next QuickFix Entry" })
 vim.keymap.set("n", "[q", ":cp<CR>", { silent = true, desc = "Previous QuickFix Entry" })
-vim.keymap.set({ "o", "x" }, "a_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'a')<CR>", { silent = true, desc = "Around _underscores_" })
-vim.keymap.set({ "o", "x" }, "i_", ":<C-u>lua require('config.fn').util.select_motion_char('_', 'i')<CR>", { silent = true, desc = "Inside _underscores_" })
-vim.keymap.set({ "o", "x" }, "_", ":<C-u>lua require('config.fn').util.select_motion_char('_', '')<CR>", { silent = true, desc = "Through next underscore_" })
 
 ----------------------------------------------------------------------------------------
 ---@endsection

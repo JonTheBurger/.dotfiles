@@ -53,7 +53,7 @@ return {
           { pattern = "prev", icon = "" },
           { pattern = "cmake", icon = "󰙲" },
           { pattern = "comment", icon = "󰆁" },
-          { pattern = "coverage", icon = "" },
+          { pattern = "cov", icon = "" },
           { pattern = "cursor", icon = "󰗧" },
           { pattern = "debug", icon = "" },
           { pattern = "delete", icon = "" },
@@ -151,6 +151,7 @@ return {
   {
     -- https://github.com/folke/noice.nvim
     "folke/noice.nvim",
+    enabled = true,
     ---@module "noice.config"
     ---@type NoiceConfig
     ---@diagnostic disable-next-line: missing-fields
@@ -158,6 +159,7 @@ return {
       messages = {
         view_search = false,
       },
+      -- views = { notify = { replace = true }, },
       ---@diagnostic disable-next-line: missing-fields
       presets = {
         bottom_search = true,
@@ -167,14 +169,18 @@ return {
         lsp_doc_border = true,
       },
       routes = {
-        { filter = { event = "msg_show", kind = "", find = "written" }, view = "mini" },
-        { filter = { event = "msg_show", kind = "", find = "fewer lines" }, view = "mini" },
-        { filter = { event = "msg_show", find = "^E486: Pattern not found" }, view = "mini" },
-        { filter = { event = "msg_show", find = "copilot%-lsp.*Unexpected start column" }, opts = { skip = true } },
-        { filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
-        { filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
-        { filter = { find = ".*inlayHint is not supported.*" }, skip = true },
-        { filter = { find = "No signature help" }, skip = true },
+        -- stylua: ignore start
+        -- { filter = { event = "msg_show", kind = "", find = "written" }, view = "mini" },
+        -- { filter = { event = "msg_show", kind = "", find = "fewer lines" }, view = "mini" },
+        -- { filter = { event = "msg_show", find = "^E486: Pattern not found" }, view = "mini" },
+        -- { filter = { event = "msg_show", find = "copilot%-lsp.*Unexpected start column" }, opts = { skip = true } },
+        -- { filter = { event = "msg_show", find = "search hit BOTTOM" }, skip = true },
+        -- { filter = { event = "msg_show", find = "search hit TOP" }, skip = true },
+        -- { filter = { find = ".*inlayHint is not supported.*" }, skip = true },
+        -- { filter = { find = "No signature help" }, skip = true },
+        -- { filter = { cond = function(msg) return msg.opts and msg.opts.id == "neocov" end }, opts = { replace = true }, view = "mini" },
+        -- { filter = { event = "notify", kind = "neocov" }, opts = {}, view = "mini" },
+        -- stylua: ignore end
       },
     },
   },
@@ -469,6 +475,9 @@ return {
               if not CLICKABLE_WIDGETS then return end
               if (n == 1) and (mouse == "l") then vim.cmd("!silent Trouble diagnostics toggle win.position=right") end
             end,
+          },
+          {
+            "neocov",
           },
           {
             "overseer",

@@ -126,6 +126,7 @@ keybinds clear-defaults=true {
 
     bind "t" { SwitchToMode "tab"; }
     bind "f" { SwitchToMode "scroll"; }
+    bind "[" { SwitchToMode "search"; }
     bind "space" { SwitchToMode "pane"; }
     bind "?" { SwitchToMode "entersearch"; SearchInput 0; }
 

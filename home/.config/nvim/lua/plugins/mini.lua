@@ -14,6 +14,10 @@ return {
         n_lines = 50,
         search_method = "cover_or_next",
         silent = false,
+        mappings = {
+          around_last = "aN",
+          inside_last = "iN",
+        },
       },
       align = {
         mappings = {
@@ -49,6 +53,9 @@ return {
       },
     },
     config = function(_, opts)
+      opts.ai.custom_textobjects = {
+        _ = require("mini.ai").gen_spec.pair("_", "_", { type = "greedy" })
+      }
       require("mini.ai").setup(opts.ai)
       require("mini.align").setup(opts.align)
       require("mini.comment").setup(opts.comment)

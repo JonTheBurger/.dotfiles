@@ -29,7 +29,7 @@ local opts = {
   dev = {
     path = "~/Projects/nvim",
     fallback = true, -- Fallback to git when local plugin doesn't exist
-    patterns = { "neotest-gtest", "nvim-neocov", "nvim-elf-file" }, -- Plugins that match these patterns will use your local versions
+    patterns = { "neotest-gtest", "nvim-elf-file", "nvim-neocov" }, -- Plugins that match these patterns will use your local versions
   },
 }
 require("lazy").setup(opts)

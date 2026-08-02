@@ -938,36 +938,6 @@ M.util = {
   ---@return T Input
   identity = function(i) return i end,
 
-  ---Selects inside of or around an ascii character within  a line. Kind of works.
-  ---@param char string ASCII character
-  ---@param grab ("i"|"a") Grab Inside or Around
-  select_motion_char = function(char, grab)
-    local text = vim.api.nvim_get_current_line()
-    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-    col = col + 1 -- Cursor columns are zero-indexed, lua strings are 1
-
-    local next = M.str.find_char(text, char, col + 1)
-    if next == nil then return end
-
-    local prev = M.str.rfind_char(text, char, col - 1)
-    if prev == nil then
-      prev = next
-      next = M.str.find_char(text, char, prev + 1)
-    end
-
-    if grab == "i" then
-      next = next - 1
-    else -- grab == "a"
-      prev = prev - 1
-    end
-
-    if next ~= nil then
-      vim.api.nvim_win_set_cursor(0, { line, prev })
-      vim.cmd("normal! v")
-      vim.api.nvim_win_set_cursor(0, { line, next - 1 })
-    end
-  end,
-
   --- Invoke the build command
   build = function()
     local cmake_tools = require("cmake-tools")

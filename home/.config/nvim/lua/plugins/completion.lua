@@ -234,6 +234,8 @@ return {
         { path = "snacks.nvim", words = { "Snacks" } },
         { path = "lazy.nvim", words = { "LazyVim" } },
         { path = "mini.nvim", words = { "Mini" } },
+        { path = "neotest", words = { "neotest" } },
+        { path = "overseer", words = { "overseer" } },
       },
     },
   },

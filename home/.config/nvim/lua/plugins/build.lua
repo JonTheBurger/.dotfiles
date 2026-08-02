@@ -15,7 +15,7 @@ return {
     ---@module "overseer"
     ---@type overseer.SetupOpts
     opts = {
-      templates = { "builtin", "user.run_script" },
+      templates = { "builtin", "user.run_script", "neocov.generate" },
       task_list = {
         max_width = { 100, 0.4 },
         min_width = { 30, 0.2 },

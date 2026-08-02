@@ -232,7 +232,6 @@ alias mtime='stat -c %Y'
 alias path='echo $PATH | sed "s#:#/\n#g"'
 alias splitlines="rg -oP '\S+'"
 alias sodu='sudo --preserve-env=PATH env'
-alias upd8='sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"'
 alias trust-ssh-keys="chmod 0700 ~/.ssh; chmod 0600 ~/.ssh/id_*; chmod 0644 ~/.ssh/id_*.pub; chmod 0600 ~/.ssh/config"
 alias x=trash
 alias zj=zellij
@@ -356,6 +355,14 @@ function ppe() {
 }
 function uncrust() {
   uncrustify -c ~/.config/uncrustify.cfg -l C --mtime --replace --no-backup $@
+}
+function upd8() {
+  local id="$(bash -c 'source /etc/os-release && echo $ID')"
+  if [[ "${id}" -eq "fedora" ]]; then
+    sudo bash -c "dnf -y update || dnf upgrade --refresh && flatpak update -y"
+  else
+    sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"
+  fi
 }
 function urldecode() {
   python -c 'import sys; import urllib.parse; print(urllib.parse.unquote(sys.argv[1]))' $@
