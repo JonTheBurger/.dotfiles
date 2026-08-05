@@ -9,9 +9,35 @@ hl.workspace_rule({
   no_shadow = true,
   decorate = false,
 })
-hl.workspace_rule({ workspace = "1", monitor = MONITOR1, default = true, persistent = true, layout = "monocle" })
-hl.workspace_rule({ workspace = "2", monitor = MONITOR1, default = true, persistent = true, layout = "master" })
-hl.workspace_rule({ workspace = "3", monitor = MONITOR1, default = true, persistent = true, layout = "scrolling" })
+
+hl.workspace_rule({
+  workspace = "1",
+  monitor = MONITOR1,
+  default = true,
+  persistent = true,
+  layout = "monocle"
+})
+
+hl.workspace_rule({
+  workspace = "2",
+  monitor = MONITOR1,
+  default = true,
+  persistent = true,
+  layout = "master"
+})
+
+hl.workspace_rule({
+  workspace = "3",
+  monitor = MONITOR1,
+  default = true,
+  persistent = true,
+  layout = "scrolling",
+  layout_opts = {
+    column_width = 0.75,
+    fullscreen_on_one_column = false,
+    focus_fit_method = 0,
+  },
+})
 
 hl.on("workspace.active", function(workspace)
   if not workspace then

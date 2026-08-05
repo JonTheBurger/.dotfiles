@@ -39,3 +39,7 @@ CACHYGRAY = "rgba(798bb2ff)"
 
 -- Theme
 ROUNDING = 8
+
+-- Constants
+FOCUS_FIT_METHOD_CENTER = 0
+FOCUS_FIT_METHOD_FIT = 1

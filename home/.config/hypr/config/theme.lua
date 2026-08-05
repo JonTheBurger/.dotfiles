@@ -15,8 +15,8 @@ hl.config({
     },
   },
   input = {
-    accel_profile = "flat",
-    force_no_accel = true,
+    -- accel_profile = "flat",
+    -- force_no_accel = true,
     sensitivity = 1.0,
   },
   group = {
