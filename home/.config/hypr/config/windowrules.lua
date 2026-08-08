@@ -1,4 +1,5 @@
 -- https://wiki.hypr.land/Configuring/Basics/Window-Rules/
+local cfg = require("config")
 
 -- Generic floating position
 hl.window_rule({ match = { float = true }, center = true })
@@ -52,12 +53,12 @@ hl.window_rule({
 -- Apps
 hl.window_rule({
   match = { class = "^(.*\\.exe)$", float = true },
-  monitor = PRIMARY_MONITOR,
+  monitor = cfg.primary_monitor.output,
   center = true,
   fullscreen_state = 0,
 })
-hl.window_rule({ match = { class = "^(.*[Ll]auncher.*)$" }, float = true, monitor = PRIMARY_MONITOR })
-hl.window_rule({ match = { class = "^(vesktop|discord)$" }, monitor = PRIMARY_MONITOR })
+hl.window_rule({ match = { class = "^(.*[Ll]auncher.*)$" }, float = true, monitor = cfg.primary_monitor.output })
+hl.window_rule({ match = { class = "^(vesktop|discord)$" }, monitor = cfg.primary_monitor.output })
 hl.window_rule({
   match = { class = "^(.*[Cc]alc.*)$" },
   float = true,
@@ -95,7 +96,8 @@ hl.window_rule({
 local terminals = "^(kitty|ghostty|[Kk]onsole|Alacritty|gnome-terminal|xfce[0-9]?-terminal)$"
 
 hl.window_rule({ match = { class = "^(firefox|zen)$" }, opacity = "1.0 override" })
-hl.window_rule({ match = { class = terminals }, rounding = 3, opacity = "1.0 override" }) -- Override opacity in favor of terminal settings for opacity. If your terminal doesn't support transparency, you can remove this rule.
+ -- Override opacity in favor of terminal settings for opacity. If your terminal doesn't support transparency, you can remove this rule.
+hl.window_rule({ match = { class = terminals }, rounding = 3, opacity = "1.0 override" })
 hl.window_rule({
   match = { class = "^(mpv|org.kde.haruna|.*plex.*|org\\.kde\\.gwenview|.*vlc.*)$" },
   opacity = "1.0 override",

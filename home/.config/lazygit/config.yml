@@ -5,13 +5,12 @@ git:
   overrideGpg: true
   autoFetch: false
   branchLogCmd: git log --oneline --color=always --abbrev-commit {{branchName}} --
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --dark --paging=never
+      command: delta --dark --paging=never
   commitPrefix:
     - pattern: "^\\w+\\/(\\w+-\\d+).*"
       replace: "$1 "
-
 keybinding:
   universal:
     return: h
@@ -19,54 +18,42 @@ keybinding:
     prevItem: k
     goInto: l
     focusMainView: <enter>
-
     nextBlock: <down>
     prevBlock: <up>
     nextTab: <right>
     prevTab: <left>
-
     scrollLeft: H
     scrollRight: L
     scrollUpMain-alt1: K
     scrollDownMain-alt1: J
-
     gotoBottom: G
     gotoTop: g
     nextPage: <c-d>
     prevPage: <c-u>
     select: <tab>
-
     nextScreenMode: ']'
     prevScreenMode: '['
-
     toggleRangeSelect: v
     undo: u
     redo: R
-
     increaseContextInDiffView: +
     decreaseContextInDiffView: '-'
-
     nextItem-alt: <disabled>
     prevItem-alt: <disabled>
     prevBlock-alt: <disabled>
     nextBlock-alt: <disabled>
     nextBlock-alt2: <disabled>
     prevBlock-alt2: <disabled>
-    cyclePagers: <disabled>
-
+    cycleDiffRenderers: <disabled>
   commits:
     viewResetOptions: o
     openInBrowser: x
-
   branches:
     renameBranch: <f2>
-
   stash:
     popStash: P
-
   status:
     checkForUpdate: <disabled>
-
 gui:
   tabWidth: 3
   nerdFontsVersion: "3"
@@ -83,7 +70,5 @@ gui:
   authorColors:
     'Jon Povirk': '#11aaff' # blue
     'Jonathan Povirk': '#11aaff' # blue
-    'Riccardi Dalexis': '#aa33ff' # purple
-
 os:
   editPreset: nvim

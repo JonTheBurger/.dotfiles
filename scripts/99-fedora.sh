@@ -32,6 +32,7 @@ sudo dnf install \
   kcron \
   kfind \
   kde-gtk-config
+# merkuro
 
 sudo dnf install rustup
 rustup-init

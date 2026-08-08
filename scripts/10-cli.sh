@@ -156,6 +156,7 @@ local::install_pacman() {
     bat \
     btop \
     dos2unix \
+    eza \
     fd \
     fzf \
     git-delta \
@@ -165,9 +166,11 @@ local::install_pacman() {
     tig \
     tmux \
     trash-cli \
+    tree \
     uv \
     unzip \
     wget \
+    yazi \
     zsh-autocomplete \
     zsh-autosuggestions \
     zsh-completions \

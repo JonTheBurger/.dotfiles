@@ -1,4 +1,6 @@
 -- Look and feel configuration
+local cfg = require("config")
+
 hl.config({
   general = {
     gaps_in = 3,
@@ -8,36 +10,31 @@ hl.config({
     resize_on_border = true,
     col = {
       active_border = {
-        colors = { "rgba(dd00ffcc)", "rgba(dd00ddcc)" },
+        colors = { cfg.colors.red, cfg.colors.red2 },
         angle = 45,
       },
-      inactive_border = CACHYGRAY,
+      inactive_border = cfg.colors.gray,
     },
-  },
-  input = {
-    -- accel_profile = "flat",
-    -- force_no_accel = true,
-    sensitivity = 1.0,
   },
   group = {
     col = {
-      border_active = CACHYLBLUE,
-      border_inactive = CACHYGRAY,
-      border_locked_active = CACHYDBLUE,
-      border_locked_inactive = CACHYGRAY,
+      border_active = cfg.colors.lblue,
+      border_inactive = cfg.colors.gray,
+      border_locked_active = cfg.colors.dblue,
+      border_locked_inactive = cfg.colors.gray,
     },
     groupbar = {
       col = {
-        active = CACHYLGREEN,
-        inactive = CACHYGRAY,
-        locked_active = CACHYDBLUE,
-        locked_inactive = CACHYGRAY,
+        active = cfg.colors.lgreen,
+        inactive = cfg.colors.gray,
+        locked_active = cfg.colors.dblue,
+        locked_inactive = cfg.colors.gray,
       },
     },
   },
   decoration = {
     dim_special = 0.3,
-    rounding = ROUNDING,
+    rounding = cfg.theme.rounding,
     active_opacity = 0.95,
     inactive_opacity = 0.85,
     fullscreen_opacity = 1,
@@ -59,7 +56,7 @@ hl.config({
   },
   misc = {
     col = {
-      splash = CACHYLGREEN,
+      splash = cfg.colors.lgreen,
     },
     middle_click_paste = false,
     enable_swallow = true,
