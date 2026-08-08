@@ -6,7 +6,7 @@ return {
     "nvim-neotest/neotest",
     enabled = not vim.g.vscode,
     dependencies = {
-      "alfaix/neotest-gtest",
+      "Andeshog/neotest-gtest",
       "nvim-lua/plenary.nvim",
       "nvim-neotest/neotest-python",
       "nvim-treesitter/nvim-treesitter",

@@ -55,13 +55,16 @@ hl.config({
     no_donation_nag = true,
   },
   misc = {
+    middle_click_paste = false,
+    enable_swallow = true,
+    force_default_wallpaper = 0,
+    disable_hyprland_logo = true,
+    disable_splash_rendering = true,
+    swallow_regex = "(kitty|ghostty|[Kk]onsole|Alacritty|gnome-terminal|xfce[0-9]?-terminal)",
+    vrr = 2,
     col = {
       splash = cfg.colors.lgreen,
     },
-    middle_click_paste = false,
-    enable_swallow = true,
-    swallow_regex = "(kitty|ghostty|[Kk]onsole|Alacritty|gnome-terminal|xfce[0-9]?-terminal)",
-    vrr = 3,
   },
 })
 

@@ -2,35 +2,41 @@
 
 # chsh -s /usr/bin/zsh
 
-sudo pacman -S
+sudo pacman -S \
   ark \
+  curl \
   dolphin \
-  greetd \
-  greetd \
-  greetd-tuigreet \
+  brave-bin \
+  flatpak \
+  fuse2 \
   gwenview \
   kdeconnect \
   kimageformats \
+  kitty \
   kmonad \
   lazygit \
   libheif \
-  noctalia \
+  neovide \
+  nix \
+  qt6-svg \
   spotify-launcher \
-  zoxide \
-  thunderbird
+  thunderbird \
+  uv \
+  zoxide
 
 # For kdeconnect
 sudo ufw allow 1714:1764/tcp
 sudo ufw allow 1714:1764/udp
 sudo ufw reload
 
-# /etc/greetd/config.toml
-# command = "tuigreet --time --remember --remember-session --sessions /usr/share/wayland-sessions"
-# sudo systemctl disable sddm.service  # Or gdm, lightdm, etc.
-# sudo systemctl enable --now greetd.service
+# Games
+sudo pacman -S \
+  amdgpu_top \
+  cachyos-gaming-meta \
+  discord \
+  gamescope \
+  prismlauncher \
+  steam \
+  steam-devices
 
-# neovide steam steam-devices gamescope cachyos-gaming-meta prismlauncher discord brave-bin nix uv qt6-svg
-# lmms amdgpu_top
-
-# remove
-# plasma-integration packagekit-qt6
+# lmms

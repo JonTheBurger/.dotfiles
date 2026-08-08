@@ -8,15 +8,34 @@ main() {
   util::setup_colors
 
   sudo pacman -S \
+    brightnessctl \
+    greetd \
+    greetd-tuigreet \
+    hyprland \
     hyprland-qt-support \
+    hyprpicker \
     kvantum \
     neovide \
+    noctalia \
+    noto-fonts \
+    noto-fonts-emoji \
     qogir-icon-theme \
     qt6ct \
-    sshfs
+    rtkit \
+    sshfs \
+    uwsm \
+    wl-clipboard \
+    xdg-desktop-portal-hyprland
 
   gsettings set org.gnome.desktop.interface icon-theme 'Qogir'
   flatpak override --user --filesystem=/usr/share/icons:ro
+
+# /etc/greetd/config.toml
+# command = "tuigreet --time --remember --remember-session --sessions /usr/share/wayland-sessions"
+# sudo systemctl disable sddm.service  # Or gdm, lightdm, etc.
+# sudo systemctl enable --now greetd.service
+
+  # sudo systemctl enable rtkit-daemon
 }
 
 local::usage() {

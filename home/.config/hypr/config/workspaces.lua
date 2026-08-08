@@ -21,7 +21,7 @@ hl.workspace_rule({
   monitor = cfg.primary_monitor.output,
   default = true,
   persistent = true,
-  layout = "monocle"
+  layout = "monocle",
 })
 
 hl.workspace_rule({
@@ -29,7 +29,7 @@ hl.workspace_rule({
   monitor = cfg.primary_monitor.output,
   default = true,
   persistent = true,
-  layout = "master"
+  layout = "master",
 })
 
 hl.workspace_rule({
@@ -48,9 +48,14 @@ hl.workspace_rule({
 -- Events
 hl.on("hyprland.start", function()
   hl.exec_cmd("xhost +SI:localuser:root")
-  hl.exec_cmd(cfg.app.shell)
   if not cfg.uwsm then
     hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+  else
+    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+    hl.exec_cmd("systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP")
+  end
+  for _, service in ipairs(cfg.services) do
+    hl.exec_cmd(service)
   end
 end)
 

@@ -368,9 +368,9 @@ function uncrust() {
 }
 function upd8() {
   local id="$(bash -c 'source /etc/os-release && echo $ID')"
-  if [[ "${id}" -eq "fedora" ]]; then
+  if [[ "${id}" == "fedora" ]]; then
     sudo bash -c "dnf -y update || dnf upgrade --refresh && flatpak update -y"
-  elif [[ "${id}" -eq "cachyos" ]]; then
+  elif [[ "${id}" == "cachyos" ]]; then
     sudo bash -c "pacman -Syu && flatpak update -y"
   else
     sudo bash -c "export DEBIAN_FRONTEND=noninteractive; apt-get update && apt-get upgrade -y && apt-get autoremove --purge"

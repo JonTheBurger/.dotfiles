@@ -55,16 +55,33 @@ vt = "next"
 
 > See also: ly, light-dm, plasma-login-manager
 
+## systemd
+
+The most commonly used Linux initialization system and service manager. Use
+the following to analyze long startup issues:
+
+- `systemd-analyze critical-chain`
+- `systemd-analyze blame`
+- `systemd-analyze --user blame`
+- `journalctl --user -b`
+
+You can also disable long running services:
+
+```toml
+# Copy /etc/xdg/autostart/<service>.desktop to ~/.config/autostart/
+# Add Hidden=true
+[Desktop Entry]
+Hidden=true
+```
+
 ## uwsm
 
-The Universal Wayland Session Manager handles startup through systemd, the most
-commonly used Linux initialization system and service manager. It also
+The Universal Wayland Session Manager handles startup through systemd. It also
 integrates better with XDG (Cross-Desktop Group) standards. This is optional,
 but helped me fix lagging startup and browsers "terminating unexpectedly" upon
 shutdown.
 
-Configure environment variables in `~/.config/uwsm/env`. Use `systemd-analyze
-blame` and `systemd-analyze --user blame` to analyze long startup issues.
+Configure environment variables in `~/.config/uwsm/env`.
 
 ## Wayland
 
@@ -75,7 +92,9 @@ Wayland is **the** modern display protocol on Linux, replacing X11.
 ## Hyprland
 
 Hyprland is a dynamic tiling Wayland compositor. It arranges windows in a grid
-automatically, is Lua configurable, and has a lot of colorful animations!
+automatically, is Lua configurable, and has a lot of colorful animations! The
+log can be found at
+`$XDG_RUNTIME_DIR/hypr/$(ls -t $XDG_RUNTIME_DIR/hypr/ | head -n 1)/hyprland.log`.
 
 > See also: niri, kde-plasma
 
@@ -88,12 +107,3 @@ slightly heavier and more infectious (integrated with?) to your Hyprland
 config.
 
 > See also: dms (Dank Material Shell)
-
-## TODO
-
-- disable hyprland wallpaper
-- lua cleanup
-- window overview
-- alt tab
-- WIN+SHIFT+A/D
-- Caps+Alt workspaces
