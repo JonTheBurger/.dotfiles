@@ -6,7 +6,6 @@ sudo pacman -S
   ark \
   dolphin \
   greetd \
-  greetd \
   greetd-tuigreet \
   gwenview \
   kdeconnect \

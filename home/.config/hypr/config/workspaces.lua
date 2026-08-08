@@ -49,9 +49,12 @@ hl.workspace_rule({
 hl.on("hyprland.start", function()
   hl.exec_cmd("xhost +SI:localuser:root")
   hl.exec_cmd(cfg.app.shell)
-  if not cfg.uwsm then
-    hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+  for _, service in ipairs(cfg.app.services) do
+    hl.exec_cmd(service)
   end
+  -- if not cfg.uwsm then
+  --   hl.exec_cmd("dbus-update-activation-environment --systemd --all")
+  -- end
 end)
 
 hl.on("workspace.active", function(workspace)

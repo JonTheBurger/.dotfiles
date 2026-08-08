@@ -10,44 +10,51 @@ end
 
 --- `true` when uwsm is running
 M.uwsm = not not os.getenv("UWSM_FINALIZE_VARNAMES")
-local noctalia = "noctalia msg "
+local ipc = "noctalia msg "
 
 M.prefix = ""
-if M.uwsm then
+-- if M.uwsm then
   M.prefix = "uwsm app -- "
-end
+-- end
 
 M.app = {
+  shell = "noctalia",
+  services = {
+    "qs -c overview", -- qs -c overview &
+    "/usr/lib/kdeconnectd",
+  },
   terminal = "kitty",
   file_manager = "dolphin",
   browser = "brave",
   editor = "neovide",
-  shell = "noctalia",
 
-  launcher = noctalia .. "panel-toggle launcher",
-  settings = noctalia .. "settings-toggle",
-  window_switch = noctalia .. "window-switcher",
+  overview = "qs ipc -c overview call overview toggle",
+  launcher = ipc .. "panel-toggle launcher",
+  clipboard = ipc .. "panel-toggle clipboard",
+  settings = ipc .. "settings-toggle",
+  status = ipc .. "panel-toggle control-center",
+  emoji = ipc .. "panel-toggle launcher /emo",
+  notifications = ipc .. "panel-toggle control-center notifications",
+  wallpaper = ipc .. "panel-toggle wallpaper",
+  lock = ipc .. "session lock",
+  shutdown = ipc .. "panel-toggle session",
+
+  window_switch = ipc .. "window-switcher",
+  kill = "hyprctl kill",
   color_picker = "hyprpicker -a",
-  snip = noctalia .. "screenshot-region",
-  screenshot = noctalia .. "screenshot-fullscreen",
-  clipboard = noctalia .. "panel-toggle clipboard",
-  notifications = noctalia .. "panel-toggle control-center notifications",
-  wallpaper = noctalia .. "panel-toggle wallpaper",
-  lock = noctalia .. "session lock",
-  emoji = noctalia .. "panel-toggle launcher /emo",
-  shutdown = noctalia .. "panel-toggle session",
-  status = noctalia .. "panel-toggle control-center",
+  snip = ipc .. "screenshot-region",
+  screenshot = ipc .. "screenshot-fullscreen",
 
-  volume_up = noctalia .. "volume-up",
-  volume_down = noctalia .. "volume-down",
-  volume_mute = noctalia .. "volume-mute",
-  mic_mute = noctalia .. "mic-mute",
-  media_play = noctalia .. "media toggle",
-  media_pause = noctalia .. "media toggle",
-  media_next = noctalia .. "media next",
-  media_prev = noctalia .. "media previous",
-  brightness_up = noctalia .. "brightness-up",
-  brightness_down = noctalia .. "brightness-down",
+  volume_up = ipc .. "volume-up",
+  volume_down = ipc .. "volume-down",
+  volume_mute = ipc .. "volume-mute",
+  mic_mute = ipc .. "mic-mute",
+  media_play = ipc .. "media toggle",
+  media_pause = ipc .. "media toggle",
+  media_next = ipc .. "media next",
+  media_prev = ipc .. "media previous",
+  brightness_up = ipc .. "brightness-up",
+  brightness_down = ipc .. "brightness-down",
 }
 for i, cmd in ipairs(M.app) do
   M.app[i] = M.prefix .. cmd

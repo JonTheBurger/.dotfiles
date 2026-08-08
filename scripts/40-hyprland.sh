@@ -12,11 +12,15 @@ main() {
     kvantum \
     neovide \
     qogir-icon-theme \
+    rtkit \
+    xdg-desktop-portal-hyprland \
     qt6ct \
     sshfs
 
   gsettings set org.gnome.desktop.interface icon-theme 'Qogir'
   flatpak override --user --filesystem=/usr/share/icons:ro
+
+  # sudo systemctl enable rtkit-daemon
 }
 
 local::usage() {
