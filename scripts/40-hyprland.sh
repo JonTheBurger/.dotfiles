@@ -30,10 +30,10 @@ main() {
   gsettings set org.gnome.desktop.interface icon-theme 'Qogir'
   flatpak override --user --filesystem=/usr/share/icons:ro
 
-# /etc/greetd/config.toml
-# command = "tuigreet --time --remember --remember-session --sessions /usr/share/wayland-sessions"
-# sudo systemctl disable sddm.service  # Or gdm, lightdm, etc.
-# sudo systemctl enable --now greetd.service
+  # /etc/greetd/config.toml
+  # command = "tuigreet --time --remember --remember-session --sessions /usr/share/wayland-sessions"
+  # sudo systemctl disable sddm.service  # Or gdm, lightdm, etc.
+  # sudo systemctl enable --now greetd.service
 
   # sudo systemctl enable rtkit-daemon
 }
@@ -62,17 +62,17 @@ local::parse_params() {
 
   while :; do
     case "${1-}" in
-    -h | --help) local::usage ;;
-    -v | --verbose) VERBOSE=1 ;;
-    -q | --quiet) QUIET=1 ;;
-    --no-color) NO_COLOR=1 ;;
-    -f | --flag) flag=1 ;; # example flag
-    -p | --param)          # example named parameter
-      param="${2-}"
-      shift
-      ;;
-    -?*) util::die "Unknown option: $1" ;;
-    *) break ;;
+      -h | --help) local::usage ;;
+      -v | --verbose) VERBOSE=1 ;;
+      -q | --quiet) QUIET=1 ;;
+      --no-color) NO_COLOR=1 ;;
+      -f | --flag) flag=1 ;; # example flag
+      -p | --param)          # example named parameter
+        param="${2-}"
+        shift
+        ;;
+      -?*) util::die "Unknown option: $1" ;;
+      *) break ;;
     esac
     shift
   done
@@ -87,4 +87,3 @@ local::parse_params() {
 }
 
 main "$@"
-

@@ -44,8 +44,9 @@ stow:  ## Distributes softlinks in home to dotfiles
 	@rm -f "${HOME}/.gtkrc-2.0" # Some gtk jerk keeps removing my softlink
 	stow home --no-folding --ignore='.*AppData.*' ${STOWFLAGS}
 
+fmt: format
 format:  ## Formats shell scripts
-	shfmt -s -w .
+	shfmt -i 2 -ci -s -w .
 	stylua home/.config/nvim/lua/
 
 lint:  ## Lints shell scripts

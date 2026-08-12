@@ -27,7 +27,7 @@ local::do_install() {
   sudo modprobe uinput
 
   mkdir -p ~/.config/systemd/user
-  cat << EOF > ~/.config/systemd/user/kmonad@.service
+  cat <<EOF >~/.config/systemd/user/kmonad@.service
 [Unit]
 Description=KMonad keyboard config
 

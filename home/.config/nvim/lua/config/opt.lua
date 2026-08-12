@@ -90,7 +90,7 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
     },
   },
-  virtual_text  = {
+  virtual_text = {
     prefix = "●",
     source = "if_many",
   },

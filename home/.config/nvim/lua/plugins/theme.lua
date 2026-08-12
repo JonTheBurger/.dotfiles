@@ -105,18 +105,18 @@ return {
         modes = {
           v = {
             winhl = {
-              CursorLine = { bg = 'green' }
+              CursorLine = { bg = "green" },
             },
           },
           d = {
             hl = {
-              CursorLine = { bg = 'green' }
+              CursorLine = { bg = "green" },
             },
           },
         },
       })
       reactive.setup(opts)
-    end
+    end,
   },
   {
     -- https://github.com/mvllow/modes.nvim

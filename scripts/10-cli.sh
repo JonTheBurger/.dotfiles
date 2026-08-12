@@ -48,12 +48,12 @@ EOF
 local::parse_params() {
   while :; do
     case "${1-}" in
-    -h | --help) local::usage ;;
-    -v | --verbose) VERBOSE=1 ;;
-    -q | --quiet) QUIET=1 ;;
-    --no-color) NO_COLOR=1 ;;
-    -?*) util::die "Unknown option: $1" ;;
-    *) break ;;
+      -h | --help) local::usage ;;
+      -v | --verbose) VERBOSE=1 ;;
+      -q | --quiet) QUIET=1 ;;
+      --no-color) NO_COLOR=1 ;;
+      -?*) util::die "Unknown option: $1" ;;
+      *) break ;;
     esac
     shift
   done

@@ -54,7 +54,7 @@ return {
     },
     config = function(_, opts)
       opts.ai.custom_textobjects = {
-        _ = require("mini.ai").gen_spec.pair("_", "_", { type = "greedy" })
+        _ = require("mini.ai").gen_spec.pair("_", "_", { type = "greedy" }),
       }
       require("mini.ai").setup(opts.ai)
       require("mini.align").setup(opts.align)

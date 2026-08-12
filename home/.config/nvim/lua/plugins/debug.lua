@@ -271,9 +271,7 @@ return {
       vim.api.nvim_create_autocmd({ "BufWinEnter", "TermOpen" }, {
         pattern = "cortex-debug://*",
         callback = function(ev)
-          vim.defer_fn(function()
-            vim.fn.setbufvar(ev.buf, "&buflisted", 0)
-          end, 100)
+          vim.defer_fn(function() vim.fn.setbufvar(ev.buf, "&buflisted", 0) end, 100)
         end,
       })
 

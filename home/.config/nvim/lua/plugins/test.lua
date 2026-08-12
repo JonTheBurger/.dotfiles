@@ -139,7 +139,7 @@ return {
           cmd = { "make", "cov" },
         }
       end,
-      autoload = {'cpp'}
+      autoload = { "cpp" },
     },
     cmd = "Neocov",
   },
