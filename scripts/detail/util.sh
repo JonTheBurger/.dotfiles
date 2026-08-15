@@ -151,6 +151,17 @@ util::dnf_install() {
 }
 
 # --------------------------------------------------------------------------------------
+## @fn util::pacman_install()
+## @brief Installs rpm packages.
+## @param try_install List of packages to try and install.
+# --------------------------------------------------------------------------------------
+util::pacman_install() {
+  if [ -x "/usr/bin/pacman" ]; then
+    sudo pacman -S "$@"
+  fi
+}
+
+# --------------------------------------------------------------------------------------
 ## @fn util::flatpak_install()
 ## @brief Installs flatpak packages from flathub.
 ## @param try_install List of packages to try and install.

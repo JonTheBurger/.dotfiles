@@ -28,11 +28,14 @@ uv tool install konsave --with setuptools
 git clone https://github.com/vinceliuice/Layan-kde.git ~/.local/src/Layan-kde
 sudo dnf install \
   kio-gdrive \
+  kdepim-addons \
+  kdepim-runtime \
+  kaccounts-providers \
   kvantum \
   kcron \
   kfind \
-  kde-gtk-config
-# merkuro
+  kde-gtk-config \
+  merkuro
 
 sudo dnf install rustup
 rustup-init
