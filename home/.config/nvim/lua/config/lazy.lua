@@ -27,7 +27,7 @@ local opts = {
   lockfile = vim.fn.stdpath("config") .. "/lazy-lock.json",
   spec = { { import = "plugins" } },
   dev = {
-    path = "~/Projects/nvim",
+    path = "~/Projects/neovim",
     fallback = true, -- Fallback to git when local plugin doesn't exist
     patterns = { "neotest-gtest", "nvim-elf-file", "nvim-neocov" }, -- Plugins that match these patterns will use your local versions
   },

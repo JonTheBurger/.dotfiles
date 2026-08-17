@@ -7,6 +7,7 @@ return {
     enabled = not vim.g.vscode,
     dependencies = {
       "Andeshog/neotest-gtest",
+      "MisanthropicBit/neotest-busted",
       "nvim-lua/plenary.nvim",
       "nvim-neotest/neotest-python",
       "nvim-treesitter/nvim-treesitter",
@@ -44,11 +45,14 @@ return {
         },
       },
       discovery = {
+        enabled = false,
+        concurrent = 1,
         filter_dir = function(name, _rel_path, _root) return not require("config.fn").str.match_any(name:lower(), require("config.prefs").ignore_patterns) end,
       },
       running = { concurrent = 4 },
       floating = { border = "rounded" },
       diagnostics = { enabled = true },
+      -- log_level = "trace",
     },
     ---@module "neotest"
     ---@param opts neotest.Config
@@ -59,7 +63,7 @@ return {
         --   dap_adapter = "cppdbg",
         --   frameworks = { "gtest", "catch2", "doctest", "cpputest", }, -- "gtest"
         --   is_test_file = function(file_path)
-        --     return file_path:lower():match(".*test.cpp$") or file_path:match("GTest.*.cpp$")
+        --     return file_path:lower():match(".*test.cpp$")
         --   end,
         -- }),
         -- https://github.com/alfaix/neotest-gtest
@@ -80,6 +84,22 @@ return {
           pytest_discover_instances = false,
         }),
         require("rustaceanvim.neotest"),
+        require("neotest-busted")({
+            is_test_file = function(file_path)
+              return file_path:match("spec/.*_spec%.lua$")
+            end,
+            busted_args = vim.uv.fs_stat("spec/spec_helper.lua") and { "--helper=spec/spec_helper.lua" } or {},
+            busted_cpaths = {
+              -- `luarocks path --lr-cpath`
+              -- `lx path full --no-loader`
+              vim.fn.getcwd() .. "/lua_modules/lib64/lua/5.1/?.so",
+              vim.fn.getcwd() .. "/lua_modules/lib64/lua/5.1/?/?.so",
+              vim.fn.getcwd() .. "/lua_modules/lib/lua/5.1/?.so",
+              vim.fn.getcwd() .. "/lua_modules/lib/lua/5.1/?/?.so",
+            },
+            local_luarocks_only = true,
+            parametric_test_discovery = false,
+        }),
       }
       opts.consumers = {
         overseer = require("neotest.consumers.overseer"),
