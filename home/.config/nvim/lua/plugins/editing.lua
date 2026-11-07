@@ -111,8 +111,12 @@ return {
     "mrjones2014/smart-splits.nvim",
     enabled = not vim.g.vscode,
     lazy = false,
+    opts = {
+      mux = { backend = "smart-splits-backend-tmux" },
+      -- move = { at_edge = "split" },
+    },
     dependencies = {
-      -- "hiasr/vim-zellij-navigator.nvim",
+      { "smart-splits-nvim/backend-tmux", main = "smart-splits-backend-tmux" },
     },
     keys = {
       -- stylua: ignore start

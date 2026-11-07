@@ -11,7 +11,9 @@ show_startup_tips false
 // System
 // -----------------------------------------------------------------------------
 default_shell "zsh"
-scrollback_editor "/home/vagrant/.local/bin/nvim"
+
+scrollback_editor "/home/jon/.local/bin/lvim-zcopy"
+
 support_kitty_keyboard_protocol true
 mouse_mode true
 // copy_command "xclip -selection clipboard" // x11
@@ -118,15 +120,15 @@ keybinds clear-defaults=true {
     bind "r" { SwitchToMode "renametab"; TabNameInput 0; }
     bind "z" { ToggleFocusFullscreen; SwitchToMode "locked"; }
     bind "y" { ToggleActiveSyncTab; SwitchToMode "locked"; }
-    bind "]" { EditScrollback; SwitchToMode "locked"; }
-    bind "[" { EditScrollback; SwitchToMode "locked"; }
+    bind "]" { EditScrollback { ansi true; }; SwitchToMode "locked"; }
+    bind "[" { EditScrollback { ansi true; }; SwitchToMode "locked"; }
 
     bind "d" { Detach; }
     bind "x" { CloseFocus; SwitchToMode "locked"; }
 
     bind "t" { SwitchToMode "tab"; }
     bind "f" { SwitchToMode "scroll"; }
-    bind "[" { SwitchToMode "search"; }
+    // bind "[" { SwitchToMode "search"; }
     bind "space" { SwitchToMode "pane"; }
     bind "?" { SwitchToMode "entersearch"; SearchInput 0; }
 

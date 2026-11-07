@@ -3,6 +3,9 @@ return {
     -- https://github.com/stevearc/overseer.nvim
     "stevearc/overseer.nvim",
     enabled = not vim.g.vscode,
+    dependencies = {
+      "jontheburger/nvim-neocov",
+    },
     keys = {
       -- stylua: ignore start
       { "<leader>bx", "<cmd>OverseerRun<CR>",         desc = "Execute" },

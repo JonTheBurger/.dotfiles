@@ -236,6 +236,7 @@ return {
         { path = "lazy.nvim", words = { "LazyVim" } },
         { path = "mini.nvim", words = { "Mini" } },
         { path = "neotest", words = { "neotest" } },
+        { path = "nvim-nio", words = { "nio" } },
         { path = "overseer", words = { "overseer" } },
       },
     },

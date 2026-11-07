@@ -1,7 +1,8 @@
 ################################################################################
 # Config
 ################################################################################
-theme = citruszest
+# theme = citruszest
+theme = "One Half Dark"
 background-blur = 20
 background-opacity = 0.9
 clipboard-paste-protection = true
@@ -11,7 +12,8 @@ cursor-style = block
 shell-integration-features = no-cursor
 unfocused-split-opacity = 1
 window-decoration = server
-command = tmux
+font-family = "IosevkaTermSlab NF Medium"
+# command = tmux
 
 ################################################################################
 # Keys

@@ -60,6 +60,7 @@ return {
         html = { "prettier" },
         json = { "jq" },
         lua = { "stylua" },
+        nix = { "nixfmt" },
         python = { "ruff_format", "ruff_organize_imports" },
         sh = { "shfmt" },
         yaml = { "yamlfmt" },
@@ -152,7 +153,7 @@ return {
       -- stylua: ignore start
       { "<leader>wd", "<cmd>Trouble buffer_diagnostics toggle<CR>", desc = "Toggle Diagnostics" },
       { "_y",         "<cmd>Trouble symbols toggle<CR>",            desc = "Toggle Symbols" },
-      { "<leader>y",  "<cmd>Trouble symbols toggle<CR>",            desc = "Toggle Symbols" },
+      { "<leader>Y",  "<cmd>Trouble symbols toggle<CR>",            desc = "Toggle Symbols" },
       { "_q",         "<cmd>Trouble qflist toggle<CR>",             desc = "Toggle qflist" },
       { "<leader>Q",  "<cmd>Trouble qflist toggle<CR>",             desc = "Toggle qflist" },
       { "_2",         "<cmd>Trouble todo toggle<CR>",               desc = "Toggle TO DO" },

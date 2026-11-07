@@ -86,6 +86,27 @@ autoload -U add-zsh-hook
 add-zsh-hook chpwd python_venv
 python_venv
 
+zmodload zsh/complist
+command_not_found_handler() {
+  if [[ -x /usr/lib/command-not-found ]]; then
+    /usr/lib/command-not-found -- "$1"
+    return $?
+  elif [[ -x /usr/share/command-not-found/command-not-found ]]; then
+    /usr/share/command-not-found/command-not-found -- "$1"
+    return $?
+  else
+    printf "zsh: command not found: %s\n" "$1" >&2
+    return 127
+  fi
+}
+
+autoload -Uz compinit
+if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
+  compinit
+else
+  compinit -Cu
+fi
+
 [ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
 [ -d "${HOME}/.local/share/zsh/completions" ] && fpath=(${HOME}/.local/share/zsh/completions $fpath)
 [ -d "${HOME}/.local/share/zsh/zsh-autopair" ] && source "${HOME}/.local/share/zsh/zsh-autopair/autopair.zsh" && autopair-init
@@ -107,27 +128,6 @@ python_venv
 [ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
 [ -x "$(command -v jj)" ] && eval "$(jj util completion zsh)"
 [ -x "$(command -v direnv)" ] && eval "$(direnv hook zsh)"
-
-autoload -Uz compinit
-if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
-  compinit
-else
-  compinit -Cu
-fi
-
-zmodload zsh/complist
-command_not_found_handler() {
-  if [[ -x /usr/lib/command-not-found ]]; then
-    /usr/lib/command-not-found -- "$1"
-    return $?
-  elif [[ -x /usr/share/command-not-found/command-not-found ]]; then
-    /usr/share/command-not-found/command-not-found -- "$1"
-    return $?
-  else
-    printf "zsh: command not found: %s\n" "$1" >&2
-    return 127
-  fi
-}
 
 # ======================================================================================
 ## Theme
@@ -189,6 +189,23 @@ if [[ "$(uname -a)" == *WSL* ]]; then
   export XCURSOR_SIZE=24
   export USERPROFILE=/mnt/c/Users/${WIN_USERNAME}
 fi
+# Ensure Nix dev shell paths maintain top precedence
+if [[ -n "$IN_NIX_SHELL" ]]; then
+  local NIX_PATH=()
+  local HOST_PATH=()
+  local OLD_PATH=(${(s::)PATH})
+
+  for p in "${OLD_PATH[@]}"; do
+    if [[ "$p" == /nix/store/* ]]; then
+      NIX_PATH+=("$p")
+    else
+      HOST_PATH+=("$p")
+    fi
+  done
+
+  export PATH="${(j::)NIX_PATH}:${(j::)HOST_PATH}"
+fi
+
 export CMAKE_BUILD_TYPE='Debug'
 export CMAKE_COLOR_DIAGNOSTICS='ON'
 export CMAKE_EXPORT_COMPILE_COMMANDS='ON'
@@ -204,10 +221,10 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias \$=''
-alias h='cd ..'
-alias hh='cd ../..'
-alias hhh='cd ../../..'
-alias hhhh='cd ../../../..'
+alias u='cd ..'
+alias uu='cd ../..'
+alias uuu='cd ../../..'
+alias uuuu='cd ../../../..'
 alias 1='cd -1'
 alias 2='cd -2'
 alias 3='cd -3'

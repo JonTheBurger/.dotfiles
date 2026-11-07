@@ -107,6 +107,17 @@ return {
         end,
         -- https://github.com/jbyuki/one-small-step-for-vimkind?tab=readme-ov-file#configuration
         nlua = function(callback, config) callback({ type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 }) end,
+        ["local-lua"] = {
+          id = "local-lua",
+          name = "local-lua",
+          type = "executable",
+          command = "node",
+          args = {
+            tostring(
+              require("config.fn").fs.find_vscode_binary("tomblind.local-lua-debugger-vscode", "debugAdapter.js")
+            ),
+          },
+        },
       },
       launchers = {
         gdb = {

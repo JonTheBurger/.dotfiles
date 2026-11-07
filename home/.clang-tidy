@@ -12,9 +12,9 @@ Checks:
 # https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html
 CheckOptions:
   - key: readability-identifier-length.IgnoredVariableNames
-    value: ^(it)$
+    value: ^(it|x|y|z)$
   - key: readability-identifier-length.IgnoredParameterNames
-    value: ^(e)$
+    value: ^(e|x|y|z)$
   - key: readability-identifier-naming.ClassCase
     value: CamelCase
   - key: readability-identifier-naming.AbstractClassPrefix

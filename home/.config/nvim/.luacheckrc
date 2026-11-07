@@ -1,5 +1,4 @@
 codes = true
-max_line_length = 120
 globals = {
   "Snacks",
   "assert",
@@ -8,7 +7,6 @@ globals = {
   "vim",
 }
 exclude_files = {
-  "lua/nvim-neocov/external/",
   "lua_modules/",
 }
 ignore = {

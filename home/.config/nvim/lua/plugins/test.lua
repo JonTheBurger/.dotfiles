@@ -110,6 +110,9 @@ return {
           -- busted_paths = {
           --   "/.luarocks/share/lua/5.1/?.lua",
           --   "/.luarocks/share/lua/5.1/?/init.lua",
+          --   "lua/?.lua",
+          --   "lua/?/init.lua",
+          --   vim.fs.dirname(require("config.fn").fs.find_vscode_binary("tomblind.local-lua-debugger-vscode", "lldebugger.lua")),
           -- },
           -- busted_script = vim.fn.getcwd() .. "/.luarocks/share/lua/5.1/busted/runner.lua",
         }),
@@ -144,10 +147,17 @@ return {
     ---@module "nvim-neocov"
     ---@type nvim-neocov.Options
     opts = {
-      file = {
-        path = "**/*.sonarqube.xml",
-        kind = "sonarqube",
-      },
+      ---@param src string?
+      ---@return nvim-neocov.CoverageFile
+      file = function(src)
+          -- if not src then return { "**/*.gcov.json", "gcov-json" } end
+          local name = vim.fn.fnamemodify(src or "main.cpp", ":t")
+          ---@type nvim-neocov.CoverageFile
+          return {
+            path = "**/" .. name .. "*.gcov.json",
+            kind = "gcov-json",
+          }
+      end,
       cmd = function(_file)
         return {
           cmd = { "make" },

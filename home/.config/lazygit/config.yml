@@ -16,7 +16,8 @@ git:
       replace: "$1 "
 keybinding:
   universal:
-    return: [h, <esc>]
+    return: h
+    # return: [h, "<esc>"]
     quit: q
     nextItem: j
     prevItem: k
@@ -37,8 +38,8 @@ keybinding:
     select: <tab>
     nextScreenMode: ']'
     prevScreenMode: '['
-    prevConflict: [<left>]
-    nextConflict: [<right>]
+    # prevConflict: [<left>]
+    # nextConflict: [<right>]
     toggleRangeSelect: v
     undo: u
     redo: R

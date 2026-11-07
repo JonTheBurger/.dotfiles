@@ -1061,6 +1061,92 @@ M.util = {
     return clearline
   end,
 }
+
+----------------------------------------------------------------------------------------
+---@endsection
+---@section List
+----------------------------------------------------------------------------------------
+
+M.yank = {
+
+  ---@param text string What to yank to the clipboard
+  clip = function(text)
+    for _, reg in ipairs({ '"', "+", "*" }) do
+      vim.fn.setreg(reg, text)
+    end
+  end,
+
+  abspath = function()
+    local abspath = vim.api.nvim_buf_get_name(0)
+    M.yank.clip(abspath)
+  end,
+
+  relpath = function()
+    local relpath = tostring(vim.fn.expand("%:."))
+    M.yank.clip(relpath)
+  end,
+
+  basename = function()
+    local path = tostring(vim.fn.expand("%:."))
+    local pos = require("config.fn").str.rfind_char(path, "/")
+    if pos then path = path:sub(pos + 1) end
+    M.yank.clip(path)
+  end,
+
+  git_remote = function()
+    local proc = vim.system({ "git", "rev-parse", "HEAD" }, { text = true }):wait()
+    if proc.code ~= 0 then
+      vim.notify("Could not get commit (code " .. proc.code .. "):\n" .. proc.stderr)
+      return
+    end
+    local commit = vim.trim(proc.stdout or "")
+
+    proc = vim.system({ "git", "remote", "get-url", "origin" }, { text = true }):wait()
+    if proc.code ~= 0 then
+      vim.notify("Could not deduce repository (code " .. proc.code .. "):\n" .. proc.stderr)
+      return
+    end
+
+    local file_path = vim.fn.expand("%:.")
+    local line_number = vim.fn.getpos("v")[2] -- {bufnum, lnum, col, off}
+    local line_end = vim.fn.getpos("v")[2]
+
+    local url = vim.trim(proc.stdout or "")
+    url = string.gsub(url, "git@github%.com:", "https://gitub.com/")
+    url = string.gsub(url, "%.git", "/blob/")
+    url = url .. commit .. "/" .. file_path
+
+    local mode = vim.api.nvim_get_mode().mode
+    if mode == "v" or mode == "V" or mode == "\22" then
+      url = url .. "#L" .. line_number
+      if line_number ~= line_end then
+        url = url .. "-L" .. line_end
+      end
+    end
+
+    M.yank.clip(url)
+  end,
+
+  import = function()
+    local relpath = tostring(vim.fn.expand("%:."))
+    local path, _ = string.gsub(relpath, "%..*", "")
+    M.yank.clip(path)
+  end,
+
+  bazel = function()
+    local relpath = tostring(vim.fn.expand("%:."))
+    local dirname = vim.fs.dirname(relpath)
+    local pkg = "//" .. dirname .. ":"
+
+    local line = vim.api.nvim_get_current_line()
+    local match = line:match('"(.*)"') or "all"
+    local target = pkg .. match
+
+    M.yank.clip(target)
+  end,
+
+}
+
 ----------------------------------------------------------------------------------------
 ---@endsection
 ----------------------------------------------------------------------------------------

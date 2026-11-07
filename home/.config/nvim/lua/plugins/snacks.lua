@@ -1,6 +1,75 @@
+local pinned_projects = function()
+  ---@type snacks.dashboard.Item[]
+  local pinned = {}
+  ---@diagnostic disable-next-line: param-type-mismatch
+  --- Format: [ { "path": "some-dir" }, ... ]
+  local f = io.open(vim.fn.expand("~/.pinned.json"), "r")
+  if f then
+    local content = f:read("*a")
+    f:close()
+    local ok, parsed = pcall(vim.json.decode, content)
+    if ok and type(parsed) == "table" then pinned = parsed end
+  end
+  for _, proj in ipairs(pinned) do
+    if proj.path then
+      local path = vim.fn.expand(proj.path) ---@as(string)
+
+      pinned[#pinned + 1] = {
+        icon = "󰉋 ",
+        desc = vim.fn.fnamemodify(path, ":~"),
+        autokey = true,
+        action = function()
+          vim.fn.chdir(path)
+          local has_persistence, persistence = pcall(require, "persistence")
+          if has_persistence and persistence then persistence.load() end
+        end,
+      }
+    end
+  end
+  return pinned
+end
+
 ---@module "lazy"
 ---@type LazyPluginSpec[]
 return {
+  {
+    "dmtrKovalenko/fff",
+    build = function() require("fff.download").download_or_build_binary() end,
+    opts = {
+      debug = {
+        enabled = true,
+        show_scores = true,
+      },
+    },
+    lazy = false,
+  },
+  {
+    "madmaxieee/fff-snacks.nvim",
+    lazy = false, -- lazy loaded by design
+    ---@module "fff_snacks"
+    ---@type fff_snacks.Config
+    keys = {
+      {
+        "<leader>ff",
+        function() require("fff-snacks").find_files() end,
+        desc = "FFF find files",
+      },
+      {
+        "<leader>fg",
+        function() require("fff-snacks").live_grep() end,
+        desc = "FFF live grep",
+      },
+      {
+        "<leader>fz",
+        function()
+          require("fff-snacks").live_grep({
+            grep_mode = { "fuzzy", "plain", "regex" },
+          })
+        end,
+        desc = "FFF live grep (fuzzy)",
+      },
+    },
+  },
   {
     "folke/snacks.nvim",
     priority = 1000,
@@ -26,8 +95,8 @@ return {
       { "<leader>e",  function() Snacks.explorer() end,               desc = "File Explorer" },
       -- find
       { "<leader>fc",    function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-      { "<leader>ff",    function() Snacks.picker.smart() end,                   desc = "Find Files" },
-      { "<leader>fg",    function() Snacks.picker.git_files() end,               desc = "Git Find Files" },
+      -- { "<leader>ff",    function() Snacks.picker.smart() end,                   desc = "Find Files" },
+      { "<leader>fG",    function() Snacks.picker.git_files() end,               desc = "Git Find Files" },
       { "<leader>fb",    function() Snacks.picker.buffers() end,                 desc = "Buffers" },
       { "<leader>fp",    function() Snacks.picker.projects() end,                desc = "Projects" },
       { "<leader>fr",    function() Snacks.picker.recent() end,                  desc = "Recent" },
@@ -130,6 +199,13 @@ return {
         sections = {
           { section = "header" },
           { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+          vim.tbl_extend("force", {
+            pane = 2,
+            icon = " ",
+            title = "Pinned Projects",
+            indent = 2,
+            padding = 1,
+          }, pinned_projects()),
           { icon = " ", pane = 2, title = "Projects", section = "projects", indent = 2, padding = 1, limit = 10 },
           { section = "startup" },
         },
@@ -479,6 +555,26 @@ return {
               end,
             })
             :map("<leader>oa")
+
+          Snacks.toggle
+            .new({
+              id = "virtual_lines",
+              name = "Diagnostic Virtual Lines",
+              get = function() return vim.diagnostic.config().virtual_lines end,
+              set = function(state)
+                if state then
+                  vim.diagnostic.config({
+                    virtual_lines = {
+                      current_line = true,
+                      only_current_line = true,
+                    },
+                  })
+                else
+                  vim.diagnostic.config({ virtual_lines = false })
+                end
+              end,
+            })
+            :map("<leader>oD")
 
           Snacks.toggle
             .new({
