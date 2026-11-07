@@ -100,7 +100,7 @@ return {
       ---@diagnostic disable-next-line: missing-fields
       sources = {
         default = function()
-          local srcs = { "lsp", "path", "snippets" }
+          local srcs = { "snippets", "lsp", "path" }
           if require("config.prefs").ai_model ~= "" then srcs[#srcs] = "copilot" end
           if vim.startswith(vim.bo.filetype, "dap") then
             table.insert(srcs, "dap")
@@ -188,7 +188,7 @@ return {
       languages = {
         ["python"] = {
           template = {
-            annotation_convention = "numpydoc",
+            annotation_convention = "google_docstrings",
           },
         },
       },

@@ -33,7 +33,7 @@ local M = {}
 -- "gpt-3.5-turbo"
 -- "gpt-4o-mini"
 -- "gpt-4o"
-M.ai_model = "" -- "claude-sonnet-4.6"
+M.ai_model = "yes" -- "claude-sonnet-4.6"
 
 M.ts_languages = {
   "bash",
@@ -48,6 +48,7 @@ M.ts_languages = {
   "markdown_inline",
   "python",
   "rust",
+  "starlark",
   "xml",
   "yaml",
 }
@@ -55,18 +56,22 @@ M.ts_languages = {
 M.mason_packages = {}
 
 M.uninteresting_patterns = {
-  "cmake",
-  "test",
 }
 
 M.ignore_patterns = {
-  "tools",
-  "libraries",
-  "external",
-  "mock",
-  "build",
-  "Build",
+  "*cache",
+  ".cache",
+  ".git",
   ".venv",
+  "Build",
+  "bazel-*",
+  "build",
+  "external",
+  "libraries",
+  "mock",
+  "node_modules",
+  "out",
+  "target",
 }
 
 M.clickable_status_line = false

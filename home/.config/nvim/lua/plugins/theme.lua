@@ -11,6 +11,38 @@ local present = function(text) return "[" .. (text and text or "?") .. "]" end
 ---@type LazyPluginSpec[]
 return {
   {
+    -- https://github.com/nvim-tree/nvim-web-devicons
+    "nvim-tree/nvim-web-devicons",
+    opts = {
+      default = true,
+      strict = true,
+      override_by_extension = {
+        adoc = {
+          icon = "",
+          color = COLORS.green,
+          name = "AsciiDoc",
+        },
+        inl = {
+          icon = "󰙲",
+          color = COLORS.yellow,
+          name = "CppInl",
+        },
+        proto = {
+          icon = "󰿘",
+          color = COLORS.orange,
+          name = "Proto",
+        },
+      },
+      override_by_filename = {
+        owners = {
+          icon = "",
+          color = COLORS.green,
+          name = "Owners",
+        },
+      },
+    },
+  },
+  {
     -- https://github.com/folke/which-key.nvim
     "folke/which-key.nvim",
     enabled = not vim.g.vscode,
@@ -144,7 +176,7 @@ return {
     opts = {
       animate = {
         ---@type "shift"|"progressive"|false
-        enabled = "shift",
+        enabled = false,
       },
     },
   },
@@ -297,6 +329,8 @@ return {
       { "<leader>9", function() require("bufferline").go_to(9, true) end, desc = "GoTo Ordinal Buffer 9", },
       { "<leader><", function() require("bufferline").move(-1) end,       desc = "Move buffer to the left", },
       { "<leader>>", function() require("bufferline").move(1) end,        desc = "Move buffer to the right", },
+      { ">", "<cmd>BufferLineCycleNext<CR>", desc = "Next Buffer", },
+      { "<", "<cmd>BufferLineCyclePrev<CR>", desc = "Previous Buffer", },
     },
     -- stylua: ignore end
     opts = {

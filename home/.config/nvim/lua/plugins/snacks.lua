@@ -8,10 +8,11 @@ return {
     lazy = false,
     dependencies = {
       "folke/todo-comments.nvim",
+      "nvim-tree/nvim-web-devicons",
     },
     keys = {
       -- stylua: ignore start
-      { "<C-p>",   function() Snacks.picker.files() end,                          desc = "Find Files" },
+      { "<C-p>",   function() Snacks.picker.files({}) end,                          desc = "Find Files" },
       { "<C-f>",   function() Snacks.picker.grep() end,                           desc = "Grep" },
       { "<C-A-p>", function() Snacks.picker.lsp_workspace_symbols() end,          desc = "LSP Workspace Symbols" },
       { "<C-S-p>", function() Snacks.picker.commands() end,                       desc = "Commands" },
@@ -32,6 +33,8 @@ return {
       { "<leader>fr",    function() Snacks.picker.recent() end,                  desc = "Recent" },
       { "<leader>fB",    function() require("config.fn").pick.breakpoints() end, desc = "Breakpoints" },
       { "<leader>f<F9>", function() require("config.fn").pick.breakpoints() end, desc = "Breakpoints" },
+      { "<leader>fw",    function() Snacks.picker.files({cwd = vim.fn.expand("%:p:h")}) end, desc = "Files Within" },
+      { "<leader>sw",    function() Snacks.picker.grep({cwd = vim.fn.expand("%:p:h")}) end, desc = "Search Within" },
       -- git
       { "<leader>gB", function() Snacks.picker.git_branches() end, desc = "Git Pick Branche" },
       { "<leader>gl", function() Snacks.picker.git_log() end,      desc = "Git Pick Log" },
@@ -42,7 +45,7 @@ return {
       { "<leader>go", function() Snacks.picker.git_log_file() end, desc = "Git Pick Log File" },
       { "<leader>hb", function() Snacks.git.blame_line() end, mode = { "n", "v" }, desc = "Git Blame Hover" },
       ---@diagnostic disable-next-line: missing-fields,param-type-mismatch
-      { "<leader>gw", function() Snacks.gitbrowse({ commit = vim.fn.system("git rev-parse HEAD"), }) end, desc = "Git web view" },
+      { "<leader>gW", function() Snacks.gitbrowse({ commit = vim.fn.system("git rev-parse HEAD"), }) end, desc = "Git web view" },
       -- Grep
       { "<leader>sg", function() vim.ui.input({ prompt = "Enter filetype (e.g., cpp, py): " }, function(input) if input then Snacks.picker.grep({ ft = input }) end end) end, desc = "Grep by File Type" },
       { "<leader>sb", function() Snacks.picker.lines() end,                  desc = "Buffer Lines" },

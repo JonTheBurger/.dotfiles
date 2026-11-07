@@ -1,8 +1,7 @@
 local cmd = {
   "clangd",
   -- "--experimental-modules-support",
-  -- "--query-driver=/usr/bin/arm-none-eabi-g++,/usr/bin/arm-none-eabi-gcc",
-  -- "--query-driver=/usr/bin/**/g++*,/usr/bin/**/clang++*,/usr/bin/**/gcc*,/usr/bin/**/clang*",
+  "--query-driver=**",
   "--clang-tidy",
   "--header-insertion=iwyu",
   "--header-insertion-decorators",

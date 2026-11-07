@@ -10,6 +10,7 @@ return {
       { "<leader>ba", "<cmd>OverseerRestartLast<CR>", desc = "Build Again" },
       { "<leader>O",  "<cmd>OverseerToggle<CR>",      desc = "Toggle Output" },
       { "_o",         "<cmd>OverseerToggle<CR>",      desc = "Toggle Output" },
+      { "<CR>", require("config.fn").util.hijack_bang_command, mode = { "c" }, expr = true, desc = "Hijack :! for Overseer" },
       -- stylua: ignore end
     },
     ---@module "overseer"

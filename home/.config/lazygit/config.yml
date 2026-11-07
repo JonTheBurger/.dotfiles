@@ -8,12 +8,16 @@ git:
   diffRenderers:
     - colorArg: always
       command: delta --dark --paging=never
+      name: delta
+    - type: extDiff
+      command: difft --color=always --background={{colorScheme}} --context={{diffContext}}
   commitPrefix:
     - pattern: "^\\w+\\/(\\w+-\\d+).*"
       replace: "$1 "
 keybinding:
   universal:
-    return: h
+    return: [h, <esc>]
+    quit: q
     nextItem: j
     prevItem: k
     goInto: l
@@ -33,6 +37,8 @@ keybinding:
     select: <tab>
     nextScreenMode: ']'
     prevScreenMode: '['
+    prevConflict: [<left>]
+    nextConflict: [<right>]
     toggleRangeSelect: v
     undo: u
     redo: R
@@ -44,7 +50,7 @@ keybinding:
     nextBlock-alt: <disabled>
     nextBlock-alt2: <disabled>
     prevBlock-alt2: <disabled>
-    cycleDiffRenderers: <disabled>
+    cycleDiffRenderers: "|"
   commits:
     viewResetOptions: o
     openInBrowser: x
@@ -58,17 +64,26 @@ gui:
   tabWidth: 3
   nerdFontsVersion: "3"
   filterMode: fuzzy
-  branchColorPatterns:
-    '^(main|master|trunk|develop)$': "#11cfff" # cyan
-    '^release/.*': "#aa33ff" # purple
-    '^integration/.*': "#11aaff" # blue
-    '^feature/.*': "#0dd63c" # green
-    '^bugfix/.*': "#ff3333" # red
-    '^experiment/.*': "#ff9633" # orange
-    '^(hitl|sitl)/*': "#ff33f1" # pink
-    '.*tags.*': "#ffe733" # yellow
-  authorColors:
-    'Jon Povirk': '#11aaff' # blue
-    'Jonathan Povirk': '#11aaff' # blue
+  useHunkModeInDiffView: false
+  wrapLinesInDiffView: false
+  theme:
+    authorColors:
+      'Jon Povirk': '#11aaff' # blue
+      'Jonathan Povirk': '#11aaff' # blue
+    branchColorPatterns:
+      '^(main|master|trunk|develop)$': "#11cfff" # cyan
+      '^release/.*': "#aa33ff" # purple
+      '^integration/.*': "#11aaff" # blue
+      '^feature/.*': "#0dd63c" # green
+      '^bugfix/.*': "#ff3333" # red
+      '^experiment/.*': "#ff9633" # orange
+      '^(hitl|sitl)/*': "#ff33f1" # pink
+      '.*tags.*': "#ffe733" # yellow
 os:
   editPreset: nvim
+customCommands:
+  - key: "<c-f>"
+    context: "commits"
+    command: "git show {{.SelectedLocalCommit.Sha}}"
+    description: "Show selected commit"
+    output: terminal

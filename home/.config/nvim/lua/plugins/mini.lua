@@ -39,13 +39,6 @@ return {
           line_up = "<S-A-k>",
         },
       },
-      operators = {
-        evaluate = { prefix = "" },
-        exchange = { prefix = "gx" },
-        multiply = { prefix = "gm" },
-        replace = { prefix = "" },
-        sort = { prefix = "" },
-      },
       splitjoin = {
         mappings = {
           toggle = "gJ",
@@ -61,7 +54,6 @@ return {
       require("mini.comment").setup(opts.comment)
       require("mini.cursorword").setup(opts.cursorword)
       require("mini.move").setup(opts.move)
-      require("mini.operators").setup(opts.operators)
       require("mini.splitjoin").setup(opts.splitjoin)
     end,
   },

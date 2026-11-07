@@ -82,28 +82,41 @@ return {
           args = { "-s", "--log-level", "DEBUG" },
           dap = { justMyCode = true },
           pytest_discover_instances = false,
+          cwd = vim.fn.getcwd,
+          env = function()
+            return {
+              PYTHONPATH = (vim.env.PYTHONPATH or vim.fn.getcwd),
+            }
+          end,
         }),
         require("rustaceanvim.neotest"),
         require("neotest-busted")({
-            is_test_file = function(file_path)
-              return file_path:match("spec/.*_spec%.lua$")
-            end,
-            busted_args = vim.uv.fs_stat("spec/spec_helper.lua") and { "--helper=spec/spec_helper.lua" } or {},
-            busted_cpaths = {
-              -- `luarocks path --lr-cpath`
-              -- `lx path full --no-loader`
-              vim.fn.getcwd() .. "/lua_modules/lib64/lua/5.1/?.so",
-              vim.fn.getcwd() .. "/lua_modules/lib64/lua/5.1/?/?.so",
-              vim.fn.getcwd() .. "/lua_modules/lib/lua/5.1/?.so",
-              vim.fn.getcwd() .. "/lua_modules/lib/lua/5.1/?/?.so",
-            },
-            local_luarocks_only = true,
-            parametric_test_discovery = false,
+          is_test_file = function(file_path)
+            return file_path:match("spec/.*_spec%.lua$")
+          end,
+          busted_args = vim.uv.fs_stat("spec/spec_helper.lua") and { "--helper=spec/spec_helper.lua" } or {},
+          busted_cpaths = {
+            -- `luarocks path --lr-cpath`
+            -- `lx path full --no-loader`
+            vim.fn.getcwd() .. "/lua_modules/lib64/lua/5.1/?.so",
+            vim.fn.getcwd() .. "/lua_modules/lib64/lua/5.1/?/?.so",
+            vim.fn.getcwd() .. "/lua_modules/lib/lua/5.1/?.so",
+            vim.fn.getcwd() .. "/lua_modules/lib/lua/5.1/?/?.so",
+          },
+          local_luarocks_only = true,
+          parametric_test_discovery = false,
+          -- busted_command = vim.fn.getcwd() .. "/.luarocks/bin/busted",
+          -- no_nvim = true,
+          -- busted_paths = {
+          --   "/.luarocks/share/lua/5.1/?.lua",
+          --   "/.luarocks/share/lua/5.1/?/init.lua",
+          -- },
+          -- busted_script = vim.fn.getcwd() .. "/.luarocks/share/lua/5.1/busted/runner.lua",
         }),
       }
       opts.consumers = {
         overseer = require("neotest.consumers.overseer"),
-        coverage = require("neotest.consumers.neocov"),
+        -- coverage = require("neotest.consumers.neocov"),
       }
       ---@diagnostic disable: undefined-field
       require("neotest").setup(opts)
@@ -127,6 +140,7 @@ return {
   },
   {
     "jontheburger/nvim-neocov",
+    enabled = false,
     ---@module "nvim-neocov"
     ---@type nvim-neocov.Options
     opts = {
@@ -136,7 +150,7 @@ return {
       },
       cmd = function(_file)
         return {
-          cmd = { "make", "cov" },
+          cmd = { "make" },
         }
       end,
       autoload = { "cpp" },

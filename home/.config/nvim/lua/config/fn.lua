@@ -19,6 +19,9 @@ M.gbl = {
 
   ---@type string Default <custom> arguments used for cmake; remembered across runs
   default_cmake_args = "",
+
+  last_shell_cmd = "",
+  last_shell_cmds = {},
 }
 
 ----------------------------------------------------------------------------------------
@@ -310,7 +313,7 @@ M.fs = {
   ---@return Node program associated with Code
   find_vscode_node = function()
     local paths = {
-      vim.fn.expand("~/.vscode-server/bin"),
+      vim.fn.expand("~/.vscode-server/cli"),
       vim.fn.expand("~/.vscode/bin"),
     }
 
@@ -370,7 +373,7 @@ M.fs = {
 M.bkpt = {
 
   ---Removes all breakpoints
-  clear = require("dap").clear_breakpoints,
+  clear = function() require("dap").clear_breakpoints() end,
 
   ---Gets currently set breakpoints by filename
   ---@return table<string, dap.bp[]>
@@ -560,6 +563,7 @@ M.buf = {
     end
 
     text = text:sub(left, right - 1)
+    text = text:gsub("['\"]", "")
 
     -- Get file name
     loc.file = text
@@ -990,6 +994,71 @@ M.util = {
     end
 
     return self._root2registry[normalized]
+  end,
+
+  _exec_bang_cmd = function(cmd)
+    vim.schedule(function()
+      -- Save last command
+      if not vim.tbl_contains(M.gbl.last_shell_cmds, cmd) then
+        M.gbl.last_shell_cmds[#M.gbl.last_shell_cmds + 1] = cmd
+      end
+      M.gbl.last_shell_cmd = cmd
+
+      local expanded = vim.fn.expandcmd(cmd)
+      local overseer = require("overseer")
+      overseer.new_task({
+        cmd = expanded,
+        components = {
+          "default",
+          { "on_output_parse", problem_matcher = "$gcc" },
+          { "on_result_diagnostics", remove_on_restart = true },
+        }
+      }):start()
+      overseer.open({ enter = false })
+    end)
+  end,
+
+  hijack_bang_command = function()
+    if vim.fn.getcmdtype() ~= ":" then return "<CR>" end
+    local cmd = vim.fn.getcmdline():match("^!(.*)$")
+    if not cmd then return "<CR>" end
+    local clearline = "<C-e><C-u><CR>"
+
+    if cmd == "?" then -- :!? for query commands
+      vim.schedule(function()
+        local commands = string.format("0: %s\n", M.gbl.last_shell_cmd or "<nil>")
+        for idx, command in ipairs(M.gbl.last_shell_cmds) do
+          commands = commands .. string.format("%d: %s\n", idx, command)
+        end
+        vim.notify(commands)
+      end)
+      return clearline
+    elseif cmd == "!" then -- support :!! to rerun
+      if M.gbl.last_shell_cmd == "" then return "<CR>" end
+      cmd = M.gbl.last_shell_cmd
+    elseif cmd == ":" then -- :!: for vim.ui.select
+      vim.schedule(function()
+        vim.ui.select(M.gbl.last_shell_cmds, {
+          prompt = "Shell Command:",
+        }, function(choice)
+          if choice and choice ~= "" then
+            M.util._exec_bang_cmd(choice)
+          end
+        end)
+      end)
+      return clearline
+    elseif cmd:match("%s*0%s*$") then -- :!0 reruns last
+      cmd = M.gbl.last_shell_cmds[#M.gbl.last_shell_cmds]
+    elseif cmd:match("%s*%d+%s*$") then -- :!# reruns command #
+      local idx = tonumber(cmd:match("%d+"))
+      if idx > #M.gbl.last_shell_cmds then
+        return tostring(idx) .. "<CR>"
+      end
+      cmd = M.gbl.last_shell_cmds[idx]
+    end
+
+    M.util._exec_bang_cmd(cmd)
+    return clearline
   end,
 }
 ----------------------------------------------------------------------------------------

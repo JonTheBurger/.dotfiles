@@ -5,6 +5,47 @@
 """Distro-agnostic "package manager" for installing user-local programs."""
 # ruff: noqa: D107, E501, EM102, S602, S603, TRY003
 
+# TODO(JON): wrong package version written to stamp
+# TODO(JON) query github for releases
+# import json
+# from urllib.request import Request, urlopen
+#
+#
+# def get_latest_version(owner: str, repo: str) -> str:
+#     url = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+#
+#     # GitHub API requires a User-Agent header
+#     req = Request(url, headers={"User-Agent": "Python-Stdlib-Script"})
+#
+#     with urlopen(req) as response:
+#         data = json.loads(response.read().decode("utf-8"))
+#         return data["tag_name"]
+#
+#
+# # Example usage
+# version = get_latest_version("python", "cpython")
+# print(f"Latest version tag: {version}")
+
+# import json
+# from urllib.request import Request, urlopen
+#
+#
+# def get_last_n_releases(owner: str, repo: str, count: int = 5) -> list[str]:
+#     # Query parameter per_page controls how many releases to fetch (max 100)
+#     url = f"https://api.github.com/repos/{owner}/{repo}/releases?per_page={count}"
+#
+#     req = Request(url, headers={"User-Agent": "Python-Stdlib-Script"})
+#
+#     with urlopen(req) as response:
+#         releases = json.loads(response.read().decode("utf-8"))
+#         # Extract tag_name from each release object
+#         return [release["tag_name"] for release in releases]
+#
+#
+# # Example: Get the last 5 release tags for Python CPython
+# tags = get_last_n_releases("python", "cpython", count=5)
+# print("Latest tags:", tags)
+
 # -------------------------------------------------------------------------------------#
 # region imports
 # -------------------------------------------------------------------------------------#
@@ -32,7 +73,7 @@ if TYPE_CHECKING:
 # endregion
 # region globals
 # -------------------------------------------------------------------------------------#
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 HOME = Path(os.environ.get("HOME", os.environ.get("USERPROFILE", "")))
 SHARE = HOME / ".local/share/jontheburger/package"
 
@@ -41,6 +82,27 @@ SHARE = HOME / ".local/share/jontheburger/package"
 # endregion
 # region types
 # -------------------------------------------------------------------------------------#
+@dataclass
+class PackageSpec:
+    """Represents a package installation."""
+
+    name: str
+    version: str = ""
+
+    def __str__(self) -> str:
+        return f"{self.name}@{self.version or 'latest'}"
+
+    @staticmethod
+    def from_string(string: str) -> PackageSpec:
+        """Parse a spec from 'name@version' or 'name=version'"""
+        delimiter = "@" if "@" in string else "="
+        tokens = string.split(delimiter)
+        spec = PackageSpec(name=tokens[0])
+        if len(tokens) > 1:
+            spec.version = tokens[-1]
+        return spec
+
+
 class UserError(Exception):
     """The user misused the command line."""
 
@@ -52,7 +114,7 @@ class Cli:
     root: Path = Path()
     share: Path = Path()
     command: str | None = None
-    packages: list[str] = field(default_factory=list)
+    packages: list[PackageSpec] = field(default_factory=list)
 
     def __init__(self, args: Namespace | None = None) -> None:
         if args is None:
@@ -60,7 +122,10 @@ class Cli:
         self.root = args.root
         self.share = args.share
         self.command = args.command
-        self.packages = getattr(args, "packages", [])
+        self.packages = [
+            PackageSpec.from_string(e)
+            for e in getattr(args, "packages", [])
+        ]
 
     @staticmethod
     def from_args(argv: list[str] | None = None) -> Cli:
@@ -155,30 +220,33 @@ class App:
     def install(self) -> None:
         """Install the packages requested by the user."""
         for pkg in self.requested_packages():
-            stamp = self._cli.share / pkg
+            stamp = self._cli.share / pkg.name
             if stamp.exists():
-                print(f"Package {pkg} is already installed, skipping")
+                print(f"Package {pkg.name} is already installed, skipping")
                 continue
-            script = self._cli.root / (f"{pkg}.sh")
+            script = self._cli.root / (f"{pkg.name}.sh")
             if not script.exists():
-                raise UserError(f'Package "{pkg}" does not exist')
-            subprocess.run([script], check=False)
+                raise UserError(f'Package "{pkg.name}" does not exist')
+            cmd = [str(script)]
+            if pkg.version:
+                cmd += ["--version", pkg.version]
+            subprocess.run(cmd, check=False)
             stamp.parent.mkdir(parents=True, exist_ok=True)
-            version = self.get_package_version(pkg)
+            version = self.get_package_version(pkg.name)
             stamp.write_text(version)
 
     def uninstall(self) -> None:
         """Uninstall the packages requested by the user."""
         for pkg in self.requested_packages():
-            stamp = self._cli.share / pkg
+            stamp = self._cli.share / pkg.name
             if stamp.exists():
                 subprocess.run(
-                    [str(self._cli.root / (f"{pkg}.sh")), "--remove"],
+                    [str(self._cli.root / (f"{pkg.name}.sh")), "--remove"],
                     check=False,
                 )
                 stamp.unlink()
             else:
-                raise UserError(f'Package "{pkg}" is not installed')
+                raise UserError(f'Package "{pkg.name}" is not installed')
 
     def show_list(self) -> None:
         """List the installed package versions."""
@@ -199,15 +267,15 @@ class App:
                 fmt = "[green]"
             if not query:
                 print(f"{fmt}{pkg}")
-            if any(e for e in query if re.search(e, pkg)):
+            if any(e for e in query if re.search(e.name, pkg)):
                 print(f"{fmt}{pkg}")
 
     def info(self) -> None:
         """Display metadata for the packages requested by the user."""
         for pkg in self.requested_packages():
             print(f"[green]{pkg}")
-            version = self.get_package_version(pkg)
-            installed = self.installed_version(pkg)
+            version = self.get_package_version(pkg.name)
+            installed = self.installed_version(pkg.name)
             if installed:
                 print(
                     f"  [green]installed[/green]: [[bold green]I[/bold green]] <{installed}>",
@@ -215,19 +283,19 @@ class App:
             else:
                 print("  [green]installed:[/green] [bold red][ ][/bold red]")
             print(f"  [green]version[/green]: {version}")
-            url = self.get_package_url(pkg, version)
+            url = self.get_package_url(pkg.name, version)
             print(f"  [green]url[/green]: {url}")
             print("  [green]files[/green]:")
-            for file in self.get_package_files(pkg):
+            for file in self.get_package_files(pkg.name):
                 print(f"  - {file}")
 
     # ---------------------------------------------------------------------------------#
     # endregion
     # ---------------------------------------------------------------------------------#
-    def requested_packages(self) -> Iterable[str]:
+    def requested_packages(self) -> Iterable[PackageSpec]:
         """List of package queries provided by the user."""
         for pkg in self._cli.packages:
-            if pkg not in self.available_packages:
+            if pkg.name not in (p for p in self.available_packages):
                 raise UserError(f'Invalid package "{pkg}"')
             yield pkg
 

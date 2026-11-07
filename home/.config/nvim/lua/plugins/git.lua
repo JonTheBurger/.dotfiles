@@ -88,4 +88,44 @@ return {
       end, { desc = "Git Blame" })
     end,
   },
+  {
+    "emrearmagan/atlas.nvim",
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+      "esmuellert/codediff.nvim",
+    },
+    ---@type AtlasConfig
+    opts = {
+      providers = {
+        github = {
+          cache_ttl = 300,
+        },
+      },
+      ---@type AtlasGitHubPullsConfig
+      pulls = {
+        github = {
+          ---@type AtlasGitHubViewsConfig[]
+          views = {
+            {
+              name = "My PRs",
+              key = "1",
+              layout = "plain", -- "compact" | "grouped" | "plain"
+              -- current_repo = true, -- Limit this view to the local repository.
+              search = "author:@me sort:updated-desc",
+            },
+          },
+        },
+
+        bookmarks = {
+          key = "S",
+          label = "Search",
+          items = {
+            ["Drafts"] = "is:pr is:draft author:@me",
+            ["Recently merged"] = "is:pr is:mered author:@me sort:updated-desc",
+            ["Review requested"] = "is:pr is:open review-requested:@me",
+          },
+        }
+      }
+    },
+  },
 }

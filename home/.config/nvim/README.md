@@ -515,6 +515,7 @@ This section lists some of common, useful Neovim Lua API functions.
 
 This section contains upcoming changes to jvim.
 
+- nvim local nvim lua debug for unit tests
 - ft=neotest-output should not use fancy gf picker
 - snacks score order doesn't work
 - colorful-winsep animation should be off by default

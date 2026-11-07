@@ -196,7 +196,8 @@ return {
           request = "launch",
           name = "python launch file",
           program = "${file}",
-          pythonPath = require("config.fn").os.find_python,
+          cwd = "${workspaceFolder}",
+          -- pythonPath = require("config.fn").os.find_python,
         },
         -- https://github.com/jbyuki/one-small-step-for-vimkind?tab=readme-ov-file#configuration
         nlua = {

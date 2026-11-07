@@ -39,7 +39,7 @@ vim.opt.tabstop = 3
 vim.opt.textwidth = 0
 
 -- Host System Integration
-if vim.fn.executable("zsh") == 1 then vim.opt.shell = "/usr/bin/zsh" end
+if vim.fn.executable("zsh") == 1 then vim.opt.shell = "/bin/zsh" end
 vim.opt.mouse = "a"
 vim.schedule(function() vim.opt.clipboard = "unnamedplus" end)
 

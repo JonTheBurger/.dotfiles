@@ -13,7 +13,7 @@ vim.api.nvim_create_user_command("E", function(opts) vim.cmd("e " .. vim.fn.expa
     ---@type string[]
     local matches = vim.fn.glob(dir .. "/" .. arglead .. "*", false, true)
     return vim.tbl_map(function(m)
-      local rel = m:sub(#dir + 2) -- strip "dir/" prefix → relative path
+      local rel = m:sub(#dir + 2) -- strip "dir/" prefix -> relative path
       if vim.fn.isdirectory(m) == 1 then
         rel = rel .. "/" -- append / to dirs so you can keep tabbing into them
       end

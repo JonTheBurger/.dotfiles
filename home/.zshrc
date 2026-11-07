@@ -13,6 +13,7 @@ autoload edit-command-line
 zle -N edit-command-line
 setopt auto_pushd
 setopt hist_ignore_all_dups
+setopt hist_ignore_space
 setopt interactive_comments
 setopt pushd_ignore_dups
 setopt pushd_minus
@@ -73,32 +74,46 @@ fzcmakeb-widget() {
 }
 zle -N fzcmakeb-widget
 
-[ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
-# unset XDG_DATA_DIRS
-[ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
-[ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
-[ -x "$(command -v bat)" ] && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-[ -x "$(command -v bat)" ] && export MANROFFOPT="-c"
-[ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
-[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude .git'
-[ -x "$(command -v fd)" ] && export FZF_CTRL_T_COMMAND='fd . -t file --hidden --exclude .git'
-[ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
-[ -x "$(command -v fzf)" ] && bindkey "^T" fzcmakec-widget
-[ -x "$(command -v fzf)" ] && bindkey "^Y" fzcmakeb-widget
-[ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
-[ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
+python_venv() {
+  local MYVENV=./.venv
+  # when you cd into a folder that contains $MYVENV
+  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
+  # when you cd into a folder that doesn't
+  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
+  rehash
+}
+autoload -U add-zsh-hook
+add-zsh-hook chpwd python_venv
+python_venv
+
 [ -d "${HOME}/.local/share/zsh/zsh-completions" ] && fpath=(${HOME}/.local/share/zsh/zsh-completions/src $fpath)
 [ -d "${HOME}/.local/share/zsh/completions" ] && fpath=(${HOME}/.local/share/zsh/completions $fpath)
 [ -d "${HOME}/.local/share/zsh/zsh-autopair" ] && source "${HOME}/.local/share/zsh/zsh-autopair/autopair.zsh" && autopair-init
 [ -f "${HOME}/.local/bin/fzf-git.sh" ] && source "${HOME}/.local/bin/fzf-git.sh"
 # [ -f "/home/linuxbrew/.linuxbrew/bin/brew" ] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+[ -x "$(command -v devbox)" ] && eval "$(devbox global shellenv)"
+[ -x "$(command -v bat)" ] && alias batcat='bat'
+[ -x "$(command -v bat)" ] && export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+[ -x "$(command -v bat)" ] && export MANROFFOPT="-c"
+[ -x "$(command -v batcat)" ] && export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
+[ -x "$(command -v batcat)" ] && export MANROFFOPT="-c"
+[ -x "$(command -v dircolors)" ] && eval "$(dircolors -b)"
+[ -x "$(command -v fd)" ] && export FZF_DEFAULT_COMMAND='fd . --hidden --exclude .git'
+[ -x "$(command -v fd)" ] && export FZF_CTRL_T_COMMAND='fd . -t file --hidden --exclude .git'
+[ -x "$(command -v fzf)" ] && bindkey "^P" fzf-file-widget
+# [ -x "$(command -v fzf)" ] && bindkey "^T" fzcmakec-widget
+# [ -x "$(command -v fzf)" ] && bindkey "^Y" fzcmakeb-widget
+[ -x "$(command -v starship)" ] && eval "$(starship init zsh)"
+[ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
+[ -x "$(command -v jj)" ] && eval "$(jj util completion zsh)"
+[ -x "$(command -v direnv)" ] && eval "$(direnv hook zsh)"
+
 autoload -Uz compinit
 if [[ ! -f ~/.zcompdump || ~/.zcompdump -ot ~/.zshrc ]]; then
   compinit
 else
   compinit -Cu
 fi
-[ -x "$(command -v jj)" ] && eval "$(jj util completion zsh)"
 
 zmodload zsh/complist
 command_not_found_handler() {
@@ -114,17 +129,6 @@ command_not_found_handler() {
   fi
 }
 
-python_venv() {
-  local MYVENV=./.venv
-  # when you cd into a folder that contains $MYVENV
-  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
-  # when you cd into a folder that doesn't
-  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
-}
-autoload -U add-zsh-hook
-add-zsh-hook chpwd python_venv
-python_venv
-
 # ======================================================================================
 ## Theme
 # ======================================================================================
@@ -137,6 +141,8 @@ fi
 # Colorize completions using default `ls` colors.
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu select
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.cache/zsh
 # Case insensitive match
 zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]-_}={[:upper:][:lower:]_-}' 'r:|=*' 'l:|=* r:|=*'
 # Keybinds, check with 'showkey -a', see https://zsh.sourceforge.io/Doc/Release/Zsh-Line-Editor.html#Modifying-Text
@@ -216,7 +222,7 @@ alias :qa='tmux kill-window'
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 alias bigvim='vim -c "syntax off"'
 alias c='z'
-alias cat='bat -pP'
+alias cat='batcat -pP'
 alias copy='rsync -ahpruzvP'
 alias d='dirs -v'
 alias e="$EDITOR"
@@ -298,7 +304,7 @@ function fsmon() {
   done
 }
 function tailog() {
-  tail -f "$@" | bat --paging=never -p -l log
+  tail -F "$@" | batcat --paging=never -p -l log
 }
 function mk() {
   if [ -f "Makefile" ]; then

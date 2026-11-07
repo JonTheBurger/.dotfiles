@@ -18,6 +18,7 @@ return {
     ---@module "nvim-surround"
     ---@type user_options
     opts = {
+      move_cursor = "sticky", -- Keep cursor on original text after adding surround
       aliases = {
         ["d"] = '"', -- double quotes
       },
@@ -52,6 +53,12 @@ return {
           augend.date.alias["%Y/%m/%d"], -- date (2022/02/19, etc.)
           augend.constant.alias.bool,
           augend.semver.alias.semver,
+          augend.constant.new({ elements = { "ON", "OFF" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "on", "off" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "yes", "no" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "TRUE", "FALSE" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "True", "False" }, word = true, cyclic = true }),
+          augend.constant.new({ elements = { "[ ]", "[.]", "[x]" }, word = false, cyclic = true }),
         },
       })
     end,

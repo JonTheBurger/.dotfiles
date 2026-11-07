@@ -35,6 +35,47 @@ return {
       vim.opt.foldlevelstart = 99
 
       vim.g._ts_force_sync_parsing = false
+
+      vim.treesitter.language.register("starlark", "bzl")
+      vim.api.nvim_create_autocmd("User", {
+          pattern = "TSUpdate",
+          callback = function ()
+              require("nvim-treesitter.parsers").asciidoc = {
+                  install_info = {
+                      -- branch = "master",
+                      revision = "b6a7121c668cb62bf3e4106d2344fec6e517b340",
+                      location = "tree-sitter-asciidoc",
+                      queries = "queries/asciidoc/",
+                      requires = { "asciidoc_inline" },
+                      url = "https://github.com/cathaysia/tree-sitter-asciidoc"
+                  }
+              };
+              require("nvim-treesitter.parsers").asciidoc_inline = {
+                  install_info = {
+                      -- branch = "master",
+                      revision = "b6a7121c668cb62bf3e4106d2344fec6e517b340",
+                      location = "tree-sitter-asciidoc_inline",
+                      queries = "queries/asciidoc_inline",
+                      url = "https://github.com/cathaysia/tree-sitter-asciidoc"
+                  }
+              };
+          end
+      })
+
+      -- vim.api.nvim_create_autocmd('User', {
+      --   pattern = 'TSUpdate',
+      --   callback = function()
+      --     require("nvim-treesitter.parsers").asciidoc = {
+      --       install_info = {
+      --         url = "https://github.com/cpkio/tree-sitter-asciidoc",
+      --         revision = "0adab3201e5fc85cc2eb1d5772a976da27689422",
+      --         queries = 'queries'
+      --       },
+      --       tier = 2
+      --     }
+      --   end,
+      -- })
+
     end,
     --- @module "nvim-treesitter.config"
     --- @param opts TSConfig
@@ -52,7 +93,7 @@ return {
     end,
   },
   {
-    -- https://github.com/nvim-treesitter/nvim-treesitter
+    -- https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     "nvim-treesitter/nvim-treesitter-textobjects",
     lazy = false,
     branch = "main",
@@ -112,8 +153,8 @@ return {
       { "[l", function() require("nvim-treesitter-textobjects.move").goto_previous_start({ "@loop.inner", "@loop.outer" }, "textobjects") end, mode = { "n", "x", "o" }, desc = "Next Loop" },
       { "]l", function() require("nvim-treesitter-textobjects.move").goto_next_start({ "@loop.inner", "@loop.outer" }, "textobjects") end,     mode = { "n", "x", "o" }, desc = "Next Loop" },
       -- Swap
-      { "gw", function() require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner") end,     mode = { "n" }, desc = "Swap Next Argument" },
-      { "gW", function() require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner") end, mode = { "n" }, desc = "Swap Previous Argument" },
+      { "gp", function() require("nvim-treesitter-textobjects.swap").swap_next("@parameter.inner") end,     mode = { "n" }, desc = "Swap Next Argument" },
+      { "gP", function() require("nvim-treesitter-textobjects.swap").swap_previous("@parameter.inner") end, mode = { "n" }, desc = "Swap Previous Argument" },
       -- Repeat Move
       { ";", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_next()     vim.cmd("normal! zz") end, mode = { "n", "x", "o" }, desc = "Repeat Next Move" },
       { ",", function() require("nvim-treesitter-textobjects.repeatable_move").repeat_last_move_previous() vim.cmd("normal! zz") end, mode = { "n", "x", "o" }, desc = "Repeat Previous Move" },

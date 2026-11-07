@@ -20,16 +20,7 @@ try:
         sys.exit(0)
 
     branch = (proc.stdout or "").strip()
-    prefixes = [
-        "",  # Nothing
-        "bugfix/",
-        "feature/",
-        "hotfix/",
-        "integration/",
-        "release/",
-    ]
-    prefix = "(" + "|".join(prefixes) + ")"
-    match = re.match(f"^{prefix}([A-Z0-9]+-[0-9]+).*", branch)
+    match = re.match("^([^/]+/)?([A-Z0-9]+-[0-9]+).*", branch)
 
     if match and len(match.groups()) >= 2:
         ticket = match[2]
@@ -39,8 +30,8 @@ try:
             # Don't prepend if ticket number is there, or if e.g. "fixup!" is used
             if not message.startswith(ticket) and not re.match("^[a-z]!", message):
                 f.seek(0, 0)
-                f.write(f"{ticket} {message}")
+                f.write(f"{ticket}: {message}")
                 if commit_type != "":
-                    print(f'{__file__}: Prepended ticket "{ticket}"')
+                    print(f'{__file__}: Prepended ticket "{ticket}:"')
 except:
     sys.exit(0)

@@ -14,7 +14,7 @@ return {
         c = { "cppcheck" },
         cmake = { "cmakelint" },
         cpp = { "cppcheck" }, -- "clazy"
-        python = { "mypy", "pylint" },
+        python = { "mypy", "flake8", "pylint" },
         lua = { "luacheck" },
         yaml = { "yamllint" },
       }

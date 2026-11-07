@@ -25,6 +25,7 @@ vim.keymap.set("n", "<S-h>", function() require("config.fn").buf.jump("prev") en
 vim.keymap.set("n", "<S-l>", function() require("config.fn").buf.jump("next") end, { desc = "Current buffer forward" })
 vim.keymap.set({ "n", "x" }, "gt", "<S-h>", { desc = "Go to the top of the screen" })
 vim.keymap.set({ "n", "x" }, "gb", "<S-l>", { desc = "Go to the bottom of the screen" })
+vim.keymap.set({ "n", "x" }, "gm", "<S-m>", { desc = "Go to the middle of the screen" })
 
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Cursor to middle for Page Down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Cursor to middle for Page Up" })
@@ -46,6 +47,9 @@ vim.keymap.set({ "v", "o", "x" }, "m", "%", { desc = "Go to matching delimiter" 
 
 vim.keymap.set("n", "j", function() return vim.v.count > 0 and "m'" .. vim.v.count .. "j" or "gj" end, { expr = true, desc = "Save <#>j to the jumplist" })
 vim.keymap.set("n", "k", function() return vim.v.count > 0 and "m'" .. vim.v.count .. "k" or "gk" end, { expr = true, desc = "Save <#>k to the jumplist" })
+
+vim.keymap.set("n", "ZK", "<cmd>qa!<CR>", { desc = "Quit all without saving" })
+vim.keymap.set("n", "ZV", require("config.fn").buf.close_non_visible, { desc = "Quit All Except Visible | Breakpoint" })
 
 ----------------------------------------------------------------------------------------
 ---@endsection
@@ -99,21 +103,19 @@ vim.keymap.set("n", "[q", ":cp<CR>", { silent = true, desc = "Previous QuickFix 
 ---@endsection
 ---@section Yanks
 ----------------------------------------------------------------------------------------
-vim.keymap.set("n", "yd", "yyp", { desc = "Duplicate line" })
-
 vim.keymap.set("n", "yA", "gg0yG<C-o>", { desc = "Yank all" })
 
 vim.keymap.set("n", "yF", function()
-  local path = vim.api.nvim_buf_get_name(0)
+  local abspath = vim.api.nvim_buf_get_name(0)
   for _, reg in ipairs({ '"', "+", "*" }) do
-    vim.fn.setreg(reg, path)
+    vim.fn.setreg(reg, abspath)
   end
 end, { desc = "Yank File Path, Full" })
 
 vim.keymap.set("n", "yR", function()
-  local path = vim.fn.expand("%:.")
+  local relpath = vim.fn.expand("%:.")
   for _, reg in ipairs({ '"', "+", "*" }) do
-    vim.fn.setreg(reg, path)
+    vim.fn.setreg(reg, relpath)
   end
 end, { desc = "Yank File Path, Relative" })
 
@@ -125,6 +127,65 @@ vim.keymap.set("n", "yN", function()
     vim.fn.setreg(reg, path)
   end
 end, { desc = "Yank File Path, Basename" })
+
+vim.keymap.set("n", "yI", function()
+  local relpath = vim.fn.expand("%:.")
+  local path, _ = string.gsub(relpath, "%..*", "")
+  for _, reg in ipairs({ '"', "+", "*" }) do
+    vim.fn.setreg(reg, path)
+  end
+end, { desc = "Yank Import Path" })
+
+vim.keymap.set("n", "yB", function()
+  local relpath = vim.fn.expand("%:.")
+  local dirname = vim.fs.dirname(relpath)
+  local pkg = "//" .. dirname .. ":"
+
+  local line = vim.api.nvim_get_current_line()
+  local match = line:match('"(.*)"') or "all"
+  local target = pkg .. match
+
+  for _, reg in ipairs({ '"', "+", "*" }) do
+    vim.fn.setreg(reg, target)
+  end
+end, { desc = "Yank Bazel Target" })
+
+vim.keymap.set({ "n", "x" }, "<leader>yg", function()
+  local proc = vim.system({ "git", "rev-parse", "HEAD" }, { text = true }):wait()
+  if proc.code ~= 0 then
+    vim.notify("Could not get commit (code " .. proc.code .. "):\n" .. proc.stderr)
+    return
+  end
+  local commit = vim.trim(proc.stdout or "")
+
+  proc = vim.system({ "git", "remote", "get-url", "origin" }, { text = true }):wait()
+  if proc.code ~= 0 then
+    vim.notify("Could not deduce repository (code " .. proc.code .. "):\n" .. proc.stderr)
+    return
+  end
+
+  local file_path = vim.fn.expand("%:.")
+  local line_number = vim.fn.getpos("v")[2] -- {bufnum, lnum, col, off}
+  local line_end = vim.fn.getpos("v")[2]
+
+  local url = vim.trim(proc.stdout or "")
+  url = string.gsub(url, "git@github%.com:", "https://gitub.com/")
+  url = string.gsub(url, "%.git", "/blob/")
+  url = url .. commit .. "/" .. file_path
+
+  local mode = vim.api.nvim_get_mode().mode
+  if mode == "v" or mode == "V" or mode == "\22" then
+    url = url .. "#L" .. line_number
+    if line_number ~= line_end then
+      url = url .. "-L" .. line_end
+    end
+  end
+
+  vim.notify(url)
+  for _, reg in ipairs({ '"', "+", "*" }) do
+    vim.fn.setreg(reg, url)
+  end
+end, { desc = "Yank Git(hub) link" })
 
 ----------------------------------------------------------------------------------------
 ---@endsection

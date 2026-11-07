@@ -29,10 +29,17 @@
   colorMoved = plain
   mnemonicPrefix = true
   renames = true
+  tool = codediff
+[difftool]
+  prompt = false
+[difftool "codediff"]
+  cmd = nvim \"$LOCAL\" \"$REMOTE\" +\"CodeDiff --exit-on-close file $LOCAL $REMOTE\"
+[difftool "difftastic"]
+  cmd = difft "$MERGED" "$LOCAL" "abcef1" "100644" "$REMOTE" "abcdef2" "100644"
 [fetch]
   prune = true
   pruneTags = true
-  all = true
+  ; all = true
 [filter]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
@@ -42,6 +49,8 @@
   pretty = format:%C(yellow)%h%Creset %Cblue%as%Creset %an %Cgreen%s%Creset
 [help]
   autocorrect = prompt
+[init]
+  defaultBranch = main
 [interactive]
   diffFilter = delta --color-only
 [log]
@@ -58,6 +67,8 @@
 [rerere]
   autoupdate = true
   enabled = true
+[safe]
+  directory = /opt/vcpkg
 [tag]
   sort = version:refname
 [tig]
@@ -69,6 +80,8 @@
 [alias]
   ## Aliases
   a = add
+  ai = add --interactive
+  ap = add -p
   aa = add -A
   b = branch
   br = branch -vva
@@ -84,7 +97,11 @@
   cob = checkout -b
   cp = cherry-pick
   d = diff
+  gdiff = diff --no-ext-diff
   dc = diff --cached
+  delta = -c core.pager=delta diff
+  dt = -c diff.external=difft diff
+  dtc = -c diff.external=difft diff --cached
   f = fetch --prune
   ff = fetch --force
   g = grep
@@ -101,6 +118,7 @@
   tree = log --graph --decorate --pretty=oneline --abbrev-commit
   unstage = restore --staged
   w = whatchanged
+  dmain = range-diff main @{u} HEAD
 
   # Misspelling
   stauts = status
@@ -146,6 +164,7 @@
   # Remove last commit, maintain working tree
   uncommit = reset --soft HEAD^
   staash = stash --all
+  wt = worktree
 
     ; git checkout $(awk '{print $2}' <<<\"$target\"); \
   ## fzf
@@ -155,5 +174,3 @@
     target=$( (echo \"$branches\"; echo \"$tags\") | fzf --no-hscroll --no-multi -n 2 --ansi --preview=\"git --no-pager log -150 --pretty=format:%s '..{2}'\") || return; \
     git checkout $(echo \"$target\" | awk '{print $2}'); \
   }; f"
-[safe]
-	directory = /opt/vcpkg

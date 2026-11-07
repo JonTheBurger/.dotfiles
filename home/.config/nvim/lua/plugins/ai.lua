@@ -1,6 +1,3 @@
-copilot_node_command = "node"
-if vim.uv.fs_stat("/home/vagrant/.nvm/versions/node/v24.13.1/bin/node") then copilot_node_command = "/home/vagrant/.nvm/versions/node/v24.13.1/bin/node" end
-
 return {
   {
     -- https://github.com/copilotlsp-nvim/copilot-lsp
@@ -32,7 +29,7 @@ return {
       -- stylua: ignore end
     },
     opts = {
-      copilot_node_command = copilot_node_command,
+      copilot_node_command = require("config.fn").fs.find_vscode_node(),
       suggestion = {
         debounce = 2500,
         trigger_on_accept = true,
@@ -125,12 +122,13 @@ return {
       interactions = {
         chat = {
           adapter = {
-            name = "copilot",
-            model = require("config.prefs").ai_model,
+            name = "opencode",
           },
           slash_commands = {
             -- https://codecompanion.olimorris.dev/configuration/chat-buffer#slash-commands
             ["file"] = { opts = { provider = "snacks" } },
+            ["skills"] = { opts = { provider = "snacks" } },
+            ["skills-group"] = { opts = { provider = "snacks" } },
           },
           opts = {
             context_management = {
