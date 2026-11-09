@@ -48,6 +48,7 @@ vim.keymap.set({ "v", "o", "x" }, "m", "%", { desc = "Go to matching delimiter" 
 vim.keymap.set("n", "j", function() return vim.v.count > 0 and "m'" .. vim.v.count .. "j" or "gj" end, { expr = true, desc = "Save <#>j to the jumplist" })
 vim.keymap.set("n", "k", function() return vim.v.count > 0 and "m'" .. vim.v.count .. "k" or "gk" end, { expr = true, desc = "Save <#>k to the jumplist" })
 
+vim.keymap.set("n", "ZF", "<cmd>w<CR>", { desc = "Save file" })
 vim.keymap.set("n", "ZA", "<cmd>wqa<CR>", { desc = "Save and quit all" })
 vim.keymap.set("n", "ZK", "<cmd>qa!<CR>", { desc = "Quit all without saving" })
 vim.keymap.set("n", "ZV", require("config.fn").buf.close_non_visible, { desc = "Quit All Except Visible | Breakpoint" })

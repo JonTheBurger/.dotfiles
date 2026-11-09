@@ -1,3 +1,3 @@
-; inherits: cmake
-((bracket_comment) @injection.content
+; extends
+((bracket_comment_content) @injection.content
  (#set! injection.language "rst"))

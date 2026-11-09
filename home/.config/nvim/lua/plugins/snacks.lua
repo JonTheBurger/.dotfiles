@@ -591,16 +591,42 @@ return {
             })
             :map("<leader>ol")
 
+          local markdown_active = true
           Snacks.toggle
             .new({
               id = "markdown",
               name = "Markdown Preview",
-              get = function() return require("render-markdown").get() end,
+              get = function()
+                local ok, markdown = pcall(require, "render-markdown")
+                if ok and markdown then
+                  return markdown.get()
+                end
+
+                return markdown_active
+              end,
               set = function(state)
+                markdown_active = state
+
                 if state then
-                  require("render-markdown").enable()
+                  local ok, markdown = pcall(require, "render-markdown")
+                  if ok and markdown then
+                    markdown.enable()
+                    return
+                  end
+
+                  local markview
+                  ok, markview = pcall(require, "markview")
+                  if ok and markview then vim.cmd("Markview enable") end
                 else
-                  require("render-markdown").disable()
+                  local ok, markdown = pcall(require, "render-markdown")
+                  if ok and markdown then
+                    markdown.disable()
+                    return
+                  end
+
+                  local markview
+                  ok, markview = pcall(require, "markview")
+                  if ok and markview then vim.cmd("Markview disable") end
                 end
               end,
             })

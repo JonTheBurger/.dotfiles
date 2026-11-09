@@ -27,7 +27,7 @@ vim.opt.showmode = false
 vim.opt.wildmode = { "longest:full", "full" }
 
 -- Document Spacing
-vim.opt.colorcolumn = "80,88,120"
+vim.opt.colorcolumn = "120" -- 80,88,120
 vim.opt.shiftwidth = 2
 vim.opt.signcolumn = "yes"
 vim.opt.expandtab = true
@@ -36,7 +36,7 @@ vim.opt.breakindent = true
 vim.opt.list = true
 vim.opt.smarttab = true
 vim.opt.tabstop = 3
-vim.opt.textwidth = 0
+vim.opt.textwidth = 120
 
 -- Host System Integration
 if vim.fn.executable("zsh") == 1 then vim.opt.shell = "/bin/zsh" end

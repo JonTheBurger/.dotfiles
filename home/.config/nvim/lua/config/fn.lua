@@ -1129,7 +1129,7 @@ M.yank = {
 
   import = function()
     local relpath = tostring(vim.fn.expand("%:."))
-    local path, _ = string.gsub(relpath, "%..*", "")
+    local path = relpath:gsub("^src/", ""):gsub("%..*", ""):gsub("/", ".")
     M.yank.clip(path)
   end,
 
