@@ -86,11 +86,11 @@ vim.keymap.set({ "n", "i" }, "<C-Right>", function()
   vim.cmd("vertical resize +2")
 end, { desc = "Resize Window " })
 
--- Move Splits with Shift+Arrows
-vim.keymap.set("n", "<S-Left>", "<C-w>R", { desc = "Rotate Windows " })
-vim.keymap.set("n", "<S-Down>", "<C-w>r", { desc = "Rotate Windows " })
-vim.keymap.set("n", "<S-Up>", "<C-w>R", { desc = "Rotate Windows " })
-vim.keymap.set("n", "<S-Right>", "<C-w>r", { desc = "Rotate Windows " })
+-- Move Splits with Ctrl+Shift+Arrows
+vim.keymap.set("n", "<C-S-Left>", "<C-w>R", { desc = "Rotate Windows " })
+vim.keymap.set("n", "<C-S-Down>", "<C-w>r", { desc = "Rotate Windows " })
+vim.keymap.set("n", "<C-S-Up>", "<C-w>R", { desc = "Rotate Windows " })
+vim.keymap.set("n", "<C-S-Right>", "<C-w>r", { desc = "Rotate Windows " })
 
 ----------------------------------------------------------------------------------------
 ---@endsection

@@ -15,7 +15,9 @@
 ---@field brown string
 
 ---@class jvim.Preferences
----@field ai_model string From https://models.dev/, set to empty string to disable. Pricing at https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing
+---@field ai_model string From https://models.dev/, set to empty string to use default. Pricing at https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing
+---@field ai_chat "" | "opencode" | "llama" Which chat adapter to use. Set this and ai_inline to `""` string to disable.
+---@field ai_inline "" | "copilot" | "opencode" Which code suggestions / tool running adapter to use. Set this and ai_chat to `""` to disable.
 ---@field ts_languages string[] Languages to install with treesitter
 ---@field mason_packages string[] Mason LSPs, Formatters, and Linters to auto-install (see :Mason)
 ---@field uninteresting_patterns string[] Paths to downrank in file search (later in list == more down-ranked)

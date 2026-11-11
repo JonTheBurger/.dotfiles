@@ -2,7 +2,7 @@ return {
   {
     -- https://github.com/copilotlsp-nvim/copilot-lsp
     "copilotlsp-nvim/copilot-lsp",
-    enabled = require("config.prefs").ai_model ~= "",
+    enabled = require("config.prefs").ai_inline ~= "",
     event = { "LspAttach" },
     config = {
       nes = {
@@ -14,7 +14,7 @@ return {
   {
     -- https://github.com/zbirenbaum/copilot.lua
     "zbirenbaum/copilot.lua",
-    enabled = require("config.prefs").ai_model ~= "",
+    enabled = require("config.prefs").ai_inline ~= "",
     dependencies = {
       "copilotlsp-nvim/copilot-lsp",
     },
@@ -76,7 +76,7 @@ return {
   },
   {
     "fang2hou/blink-copilot",
-    enabled = require("config.prefs").ai_model ~= "",
+    enabled = require("config.prefs").ai_inline ~= "",
     opts = {
       max_completions = 2,
       max_attempts = 4,
@@ -89,9 +89,10 @@ return {
   },
   {
     "olimorris/codecompanion.nvim",
-    enabled = require("config.prefs").ai_model ~= "",
+    enabled = require("config.prefs").ai_chat ~= "" or require("config.prefs").ai_inline ~= "" ,
     dependencies = {
-      "MeanderingProgrammer/render-markdown.nvim",
+      -- "MeanderingProgrammer/render-markdown.nvim",
+      "OXY2DEV/markview.nvim",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       -- "ravitemer/mcphub.nvim",
@@ -119,11 +120,42 @@ return {
       -- stylua: ignore end
     },
     opts = {
+      adapters = {
+        http = {
+          llama = function()
+            return require("codecompanion.adapters").extend("openai_compatible", {
+              env = {
+                url = "http://localhost:9931", -- Your llama.cpp local address
+              },
+              schema = {
+                model = {
+                  default = "local-model", -- llama.cpp ignores this name and runs your loaded GGUF
+                },
+              },
+            })
+          end,
+        },
+
+        -- llama = function()
+        --   return require("codecompanion.adapters").extend("openai_compatible", {
+        --     env = {
+        --       url = "http://localhost:9931",
+        --     },
+        --     schema = {
+        --       model = {
+        --         default = require("config.prefs").ai_model, -- llama.cpp ignores this name and uses whatever GGUF is loaded
+        --       },
+        --     },
+        --   })
+        -- end,
+      },
+      strategies = {
+        chat = { adapter = require("config.prefs").ai_chat },
+        inline = { adapter = require("config.prefs").ai_inline },
+        cmd = { adapter = require("config.prefs").ai_chat },
+      },
       interactions = {
         chat = {
-          adapter = {
-            name = "opencode",
-          },
           slash_commands = {
             -- https://codecompanion.olimorris.dev/configuration/chat-buffer#slash-commands
             ["file"] = { opts = { provider = "snacks" } },
@@ -136,13 +168,14 @@ return {
             },
             prompt_decorator = function(message, _adapter, _context)
               ---https://codecompanion.olimorris.dev/configuration/chat-buffer#prompt-decorator
-              return string.format([[<prompt>%s</prompt>]], message)
+              if require("config.prefs").ai_chat == "opencode" then
+                return string.format([[<prompt>%s</prompt>]], message)
+              end
+              return message
             end,
           },
         },
-        inline = { adapter = "copilot" },
-        cmd = { adapter = "copilot" },
-        background = { adapter = "copilot" },
+        background = { adapter = require("config.prefs").ai_inline },
       },
       prompt_library = {
         -- https://codecompanion.olimorris.dev/configuration/prompt-library#basic-structure

@@ -66,6 +66,8 @@ return {
         menu = { auto_show = true, draw = { treesitter = { "lsp" } } },
         ---@diagnostic disable-next-line: missing-fields
         ghost_text = { enabled = true },
+        ---@diagnostic disable-next-line: missing-fields
+        list = { selection = { preselect = false, auto_insert = false } },
       },
 
       cmdline = {
@@ -101,7 +103,7 @@ return {
       sources = {
         default = function()
           local srcs = { "snippets", "lsp", "path" }
-          if require("config.prefs").ai_model ~= "" then srcs[#srcs] = "copilot" end
+          if require("config.prefs").ai_inline ~= "" then srcs[#srcs] = require("config.prefs").ai_inline end
           if vim.startswith(vim.bo.filetype, "dap") then
             table.insert(srcs, "dap")
             table.insert(srcs, "buffer")
@@ -120,6 +122,20 @@ return {
             module = "blink-copilot",
             name = "copilot",
             async = true,
+          },
+          llama = {
+            score_offset = 10,
+            module = "blink-copilot",
+            name = "llama",
+            async = true,
+            opts = {
+              endpoint = "http://localhost:9931/v1/chat/completions",
+              model = "local-model",
+              labels = {
+                request = "    llama...",
+                suggestion = "   llama",
+              },
+            },
           },
           dap = {
             score_offset = 4,

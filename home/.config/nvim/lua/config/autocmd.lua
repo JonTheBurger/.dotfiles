@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd({ "TextYankPost" }, {
 vim.api.nvim_create_autocmd({ "BufReadPost", "FileType" }, {
   desc = "Enable TreeSitter Highlights",
   group = "JVim",
-  pattern = require("config.prefs").ts_languages,
+  pattern = vim.list_extend({"sh"}, require("config.prefs").ts_languages),
   callback = function()
     vim.treesitter.start()
     -- CMake treesitter indent is bugged

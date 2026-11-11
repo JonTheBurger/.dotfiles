@@ -33,7 +33,9 @@ local M = {}
 -- "gpt-3.5-turbo"
 -- "gpt-4o-mini"
 -- "gpt-4o"
-M.ai_model = "yes" -- "claude-sonnet-4.6"
+M.ai_model = "" -- "claude-sonnet-4.6"
+M.ai_chat = "llama" -- "opencode", "copilot"
+M.ai_inline = "llama" -- "copilot"
 
 M.ts_languages = {
   "bash",

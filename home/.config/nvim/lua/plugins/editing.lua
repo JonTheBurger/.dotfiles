@@ -58,7 +58,7 @@ return {
           augend.constant.new({ elements = { "yes", "no" }, word = true, cyclic = true }),
           augend.constant.new({ elements = { "TRUE", "FALSE" }, word = true, cyclic = true }),
           augend.constant.new({ elements = { "True", "False" }, word = true, cyclic = true }),
-          augend.constant.new({ elements = { "[ ]", "[.]", "[x]" }, word = false, cyclic = true }),
+          augend.constant.new({ elements = { "[ ]", "[.]", "[x]" }, word = false, cyclic = false }),
         },
       })
     end,
